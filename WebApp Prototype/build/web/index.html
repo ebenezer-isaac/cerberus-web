@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project Cerberus</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript">
+        </script>  
+    </head>
+
+    <body>
+        <div align="center">
+            <h3>Project Cerberus</h3>
+            <button type="submit" value="Login" onclick="var b = document.querySelector('button');b.setAttribute('flag', '0');window.location.href = 'login.html';" >Teacher's Login</button>
+            <h3>Home Page</h3>
+
+        </div>
+        <br>
+        <div align = "center">
+            <form action="disStudAtt" method="post">
+                Class : <select name ="class" id = "class">
+                    <option value="fy">First Year</option>
+                    <option value="sy">Second Year</option>
+                    <option value="ty">Third Year</option>
+                </select>
+                <br><br>
+                Roll Number : <input type = "number" name = "roll" min="1" max="120" value="1">
+                <br><br>
+                Sort By :<select name = "sort" id ="sort" onchange="change()">
+                    <option value="sum">Summary</option>
+                    <option value="sub">Subject</option>
+                </select>
+                <br><br>
+                <input type="submit" value="Display">
+            </form>
+        </div>
+    </body>
+</html>
+
