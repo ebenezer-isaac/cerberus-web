@@ -39,6 +39,13 @@ This is server-side coding of the whole attendance system.
 * Teacher(here admins) can login and manipulate attendance, add timetable, manage subjects, manage student_details, manage admin.
 * The WebApp is in alpha state currently.
 
+### ScreenShot of index.html ###
+<h1 align="center">
+	<img width="600" src="https://raw.githubusercontent.com/Cerberus-Biometric/cerberus-web/master/Documentation/index.png">
+	<br>
+	<br>
+</h1>
+
 To know more about hardware-side kindly check cerberus-ard (and cerberus-rpi) repo.
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
