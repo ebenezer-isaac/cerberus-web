@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 09, 2019 at 06:32 AM
--- Server version: 5.7.24
--- PHP Version: 7.2.14
+-- Generation Time: Sep 09, 2019 at 09:13 AM
+-- Server version: 5.7.26
+-- PHP Version: 7.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -67,27 +67,6 @@ CREATE TABLE IF NOT EXISTS `class` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `credential`
---
-
-DROP TABLE IF EXISTS `credential`;
-CREATE TABLE IF NOT EXISTS `credential` (
-  `username` bigint(16) NOT NULL,
-  `password` varchar(256) NOT NULL,
-  `access` tinyint(1) NOT NULL,
-  PRIMARY KEY (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `credential`
---
-
-INSERT INTO `credential` (`username`, `password`, `access`) VALUES
-(2017033800107501, 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec', 1);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `datestore`
 --
 
@@ -122,8 +101,16 @@ CREATE TABLE IF NOT EXISTS `faculty` (
   `facultyID` int(6) NOT NULL,
   `email` varchar(40) NOT NULL,
   `name` varchar(120) NOT NULL,
+  `password` varchar(256) NOT NULL,
   PRIMARY KEY (`facultyID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `faculty`
+--
+
+INSERT INTO `faculty` (`facultyID`, `email`, `name`, `password`) VALUES
+(101, 'ebenezerv99@gmail.com', 'Vraj Kotwala', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 
 -- --------------------------------------------------------
 
@@ -226,6 +213,7 @@ CREATE TABLE IF NOT EXISTS `student` (
   `PRN` bigint(16) NOT NULL,
   `name` varchar(120) NOT NULL,
   `email` varchar(40) NOT NULL,
+  `password` varchar(256) NOT NULL,
   PRIMARY KEY (`PRN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -233,8 +221,8 @@ CREATE TABLE IF NOT EXISTS `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`PRN`, `name`, `email`) VALUES
-(2017033800107501, 'Vraj Kotwala', 'iamkotwala@gmail.com');
+INSERT INTO `student` (`PRN`, `name`, `email`, `password`) VALUES
+(2017033800107501, 'Vraj Kotwala', 'iamkotwala@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 
 -- --------------------------------------------------------
 

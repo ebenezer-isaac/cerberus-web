@@ -1,6 +1,6 @@
 <%@ page import = "java.io.*,java.util.*" %>
 <%if ((request.getAttribute("redirect")).equals("true")) {
-        response.setHeader("Refresh", "6;url=" + request.getAttribute("url"));
+        response.setHeader("Refresh", request.getAttribute("sec")+";url=" + request.getAttribute("url"));
     } %>
 
 <!DOCTYPE html>
