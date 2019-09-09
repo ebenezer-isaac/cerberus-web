@@ -36,7 +36,7 @@ This is server-side coding of the whole attendance system.
 * WebApp is the main netbeans project.
 * WebApp Prototype is without GUI. (It's Database file is attendance.sql)
 * Students can login and view their respective attendance.
-* Teacher(here admins) can login can manipulate attendance, add timetable, manage subjects, manage student_details, manage admin.
+* Teacher(here admins) can login and manipulate attendance, add timetable, manage subjects, manage student_details, manage admin.
 * The WebApp is in alpha state currently.
 
 To know more about hardware-side kindly check cerberus-ard (and cerberus-rpi) repo.
