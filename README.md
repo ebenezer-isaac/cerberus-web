@@ -17,6 +17,18 @@ Before reading this kindly read cerberus-ard (and cerberus-rpi) repo.
 
 This is server-side coding of the whole attendance system.
 
+### Tools & Technology Used: ###
+* Netbeans
+* PHPMyAdmin
+* Git
+
+### Languages ###
+* Java (Servlets)
+* AJAX
+* PHP
+* MySQL (for Database)
+
+
 ### Highlights ###
 * The raspberryPi will collect and store attendance according to lab session(Stores Time, Date, Student Roll Number)
 * The raspberryPi will forward the collected data to server (and then to database)
