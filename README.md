@@ -43,5 +43,4 @@ To know more about hardware-side kindly check cerberus-ard (and cerberus-rpi) re
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/uses-git.svg)](https://forthebadge.com)
 [![Uses SQL](https://img.shields.io/badge/uses-SQL-yellowgreen)](http://shields.io/#your-badge)
