@@ -215,7 +215,7 @@ public class otp extends HttpServlet implements Runnable {
                 new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("cerberus.msubca@gmail.com", "cerberus123");
+                return new PasswordAuthentication("cerberus.msubca@gmail.com", "cerberu$@123");
             }
         });
         MimeMessage msg = new MimeMessage(session);
@@ -225,7 +225,7 @@ public class otp extends HttpServlet implements Runnable {
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to));
             msg.setText(this.body);
             Transport transport = session.getTransport("smtps");
-            transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberus123");
+            transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
             transport.sendMessage(msg, msg.getAllRecipients());
             transport.close();
         } catch (AddressException e) {
