@@ -1,2 +1,4 @@
 * linguist-vendored
+*.java linguist-detectable=true
+*.js linguist-detectable=false
 *.java linguist-vendored=false
