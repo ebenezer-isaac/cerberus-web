@@ -2,5 +2,6 @@
 *.java linguist-detectable=true
 *.tsql linguist-detectable=true
 *.php linguist-detectable=true
+*.html linguist-detectable=true
 *.js linguist-detectable=false
 
