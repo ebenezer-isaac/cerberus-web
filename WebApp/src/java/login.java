@@ -60,6 +60,15 @@ public class login extends HttpServlet {
                     while (rs.next()) {
                         corrpass = rs.getString(1);
                     }
+                    if (corrpass == null) {
+                        ps = con.prepareStatement("select password from faculty where email=?");
+                        ps.setString(1, us);
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            corrpass = rs.getString(1);
+                        }
+                        access = 1;
+                    }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -70,30 +79,6 @@ public class login extends HttpServlet {
                     request.setAttribute("sec", "2");
                     rd.forward(request, response);
                 }
-                if (corrpass == null) {
-                    try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("select password from faculty where email=?");
-                        ps.setString(1, us);
-                        ResultSet rs = ps.executeQuery();
-                        while (rs.next()) {
-                            corrpass = rs.getString(1);
-                        }
-                        access = 1;
-                        con.close();
-                    } catch (ClassNotFoundException | SQLException e) {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
-                        request.setAttribute("head", "Database Error");
-                        request.setAttribute("body", e.getMessage());
-                        request.setAttribute("url", "index.html");
-                        request.setAttribute("sec", "2");
-                        rd.forward(request, response);
-                    }
-
-                }
-
                 if (corrpass.equals(pass)) {
                     HttpSession session = request.getSession();
                     session.setAttribute("email", us);
