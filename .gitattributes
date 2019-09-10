@@ -1,4 +1,6 @@
 * linguist-vendored
 *.java linguist-detectable=true
+*.tsql linguist-detectable=true
+*.php linguist-detectable=true
 *.js linguist-detectable=false
-*.java linguist-vendored=false
+
