@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 09, 2019 at 09:13 AM
+-- Generation Time: Sep 10, 2019 at 06:49 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -150,9 +150,18 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `logID` int(4) NOT NULL AUTO_INCREMENT,
   `logType` varchar(15) NOT NULL,
+  `dateID` int(11) NOT NULL,
+  `timeID` int(5) NOT NULL,
   `comments` varchar(256) NOT NULL,
   PRIMARY KEY (`logID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`logID`, `logType`, `dateID`, `timeID`, `comments`) VALUES
+(1, 'fingerprints', 0, 0, 'enrolled finger 1 for 2017033800104472');
 
 -- --------------------------------------------------------
 
@@ -276,16 +285,45 @@ CREATE TABLE IF NOT EXISTS `timedata` (
 
 DROP TABLE IF EXISTS `timetable`;
 CREATE TABLE IF NOT EXISTS `timetable` (
-  `scheduleID` varchar(2) NOT NULL,
+  `scheduleID` varchar(4) NOT NULL,
   `sessionID` varchar(5) NOT NULL,
   `labID` varchar(2) NOT NULL,
   `subjectID` varchar(8) NOT NULL,
   `batchID` varchar(2) NOT NULL,
   `facultyID` varchar(6) NOT NULL,
+  `weekID` int(3) NOT NULL,
   `dayID` varchar(4) NOT NULL,
   PRIMARY KEY (`scheduleID`),
   KEY `sessionID` (`sessionID`,`labID`,`subjectID`,`batchID`,`facultyID`,`dayID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `timetable`
+--
+
+INSERT INTO `timetable` (`scheduleID`, `sessionID`, `labID`, `subjectID`, `batchID`, `facultyID`, `weekID`, `dayID`) VALUES
+('s1', 'sess1', 'L1', 'BCA1538', 'b1', '116', 0, '1'),
+('s10', 'sess5', 'L2', 'BCA1001', 'b2', '109', 0, '1'),
+('s11', 'sess5', 'L3', 'BCA1001', 'b3', '110', 0, '1'),
+('s12', 'sess1', 'L1', 'BCA1538', 'b2', '116', 0, '2'),
+('s13', 'sess2', 'L1', 'BCA1539', 'b2', '116', 0, '2'),
+('s14', 'sess2', 'L2', 'BCA1530', 'b3', '102', 0, '2'),
+('s15', 'sess2', 'L3', 'BCA1501', 'b2', '103', 0, '2'),
+('s16', 'sess3', 'L1', 'BCA1403', 'b3', '104', 0, '2'),
+('s17', 'sess4', 'L1', 'BCA1010', 'b2', '105', 0, '2'),
+('s18', 'sess4', 'L2', 'BCA1307', 'b3', '106', 0, '2'),
+('s19', 'sess4', 'L3', 'BCA1208', 'b2', '107', 0, '2'),
+('s2', 'sess2', 'L1', 'BCA1301', 'b2', '116', 0, '1'),
+('s20', 'sess5', 'L1', 'BCA1105', 'b3', '108', 0, '2'),
+('s21', 'sess5', 'L2', 'BCA1106', 'b2', '109', 0, '2'),
+('s22', 'sess5', 'L3', 'BCA1001', 'b3', '110', 0, '2'),
+('s3', 'sess2', 'L2', 'BCA1308', 'b3', '102', 0, '1'),
+('s4', 'sess2', 'L3', 'BCA1303', 'b2', '103', 0, '1'),
+('s5', 'sess3', 'L1', 'BCA1539', 'b3', '104', 0, '1'),
+('s6', 'sess4', 'L1', 'BCA1105', 'b2', '105', 0, '1'),
+('s7', 'sess4', 'L2', 'BCA1106', 'b3', '106', 0, '1'),
+('s8', 'sess4', 'L3', 'BCA1208', 'b2', '107', 0, '1'),
+('s9', 'sess5', 'L1', 'BCA1001', 'b3', '108', 0, '1');
 
 -- --------------------------------------------------------
 

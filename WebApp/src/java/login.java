@@ -45,13 +45,13 @@ public class login extends HttpServlet {
                 request.setAttribute("head", "Nice Try!");
                 request.setAttribute("body", "You're smart.<br>But not half as smart enough.<br><br>" + new String(Character.toChars(0x1F60F)));
                 request.setAttribute("url", "index.html");
+                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
                 pass = hashIt(pass);
                 int access = 0;
                 String corrpass = null;
                 try {
-
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     PreparedStatement ps = con.prepareStatement("select password from student where email=?");
@@ -59,15 +59,6 @@ public class login extends HttpServlet {
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
                         corrpass = rs.getString(1);
-                    }
-                    if (corrpass == null) {
-                        ps = con.prepareStatement("select password from faculty where email=?");
-                        ps.setString(1, us);
-                        rs = ps.executeQuery();
-                        while (rs.next()) {
-                            corrpass = rs.getString(1);
-                        }
-                        access = 1;
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
@@ -78,6 +69,27 @@ public class login extends HttpServlet {
                     request.setAttribute("url", "index.html");
                     request.setAttribute("sec", "2");
                     rd.forward(request, response);
+                }
+                if (corrpass == null) {
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        PreparedStatement ps = con.prepareStatement("select password from faculty where email=?");
+                        ps.setString(1, us);
+                        ResultSet rs = ps.executeQuery();
+                        while (rs.next()) {
+                            corrpass = rs.getString(1);
+                        }
+                        access = 1;
+                        con.close();
+                    } catch (ClassNotFoundException | SQLException e) {
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        request.setAttribute("redirect", "true");
+                        request.setAttribute("head", "Database Error");
+                        request.setAttribute("body", e.getMessage());
+                        request.setAttribute("url", "index.html");
+                        request.setAttribute("sec", "2");
+                    }
                 }
                 if (corrpass.equals(pass)) {
                     HttpSession session = request.getSession();
@@ -117,6 +129,7 @@ public class login extends HttpServlet {
         request.setAttribute("head", "Security Firewall");
         request.setAttribute("body", "Unauthorized access to this page has been detected.");
         request.setAttribute("url", "index.html");
+        request.setAttribute("sec", "2");
         rd.forward(request, response);
     }
 

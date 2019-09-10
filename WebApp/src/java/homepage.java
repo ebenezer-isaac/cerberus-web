@@ -1,5 +1,8 @@
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +37,9 @@ public class homepage extends HttpServlet {
                         + "<div class=\"col-md-12\">\n"
                         + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
                         + "");*/
+                Date date = new Date();
+                SimpleDateFormat ft = new SimpleDateFormat("w");
+                System.out.println("Current Week: " + ft.format(date));
 
             } else {
                 out.print("Student Panel </li>"
