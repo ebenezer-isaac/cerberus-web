@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 10, 2019 at 08:39 AM
+-- Generation Time: Sep 10, 2019 at 12:39 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -37,8 +37,17 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   `timeID` int(5) NOT NULL,
   PRIMARY KEY (`attendanceID`),
   KEY `PRN` (`PRN`,`scheduleID`,`timeID`),
-  KEY `dateID` (`dateID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `dateID` (`dateID`),
+  KEY `scheduleID` (`scheduleID`),
+  KEY `timeID` (`timeID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`attendanceID`, `PRN`, `scheduleID`, `dateID`, `timeID`) VALUES
+(1, 2017033800107501, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -49,9 +58,18 @@ CREATE TABLE IF NOT EXISTS `attendance` (
 DROP TABLE IF EXISTS `batch`;
 CREATE TABLE IF NOT EXISTS `batch` (
   `batchID` tinyint(1) NOT NULL,
-  `name` varchar(6) NOT NULL,
+  `name` varchar(7) NOT NULL,
   PRIMARY KEY (`batchID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `batch`
+--
+
+INSERT INTO `batch` (`batchID`, `name`) VALUES
+(1, 'Batch 1'),
+(2, 'Batch 2'),
+(3, 'Batch 3');
 
 -- --------------------------------------------------------
 
@@ -62,9 +80,18 @@ CREATE TABLE IF NOT EXISTS `batch` (
 DROP TABLE IF EXISTS `class`;
 CREATE TABLE IF NOT EXISTS `class` (
   `classID` tinyint(1) NOT NULL,
-  `class` varchar(12) NOT NULL,
+  `class` varchar(8) NOT NULL,
   PRIMARY KEY (`classID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `class`
+--
+
+INSERT INTO `class` (`classID`, `class`) VALUES
+(1, 'BCA FY'),
+(2, 'BCA SY'),
+(3, 'BCA TY');
 
 -- --------------------------------------------------------
 
@@ -77,7 +104,14 @@ CREATE TABLE IF NOT EXISTS `datedata` (
   `dateID` int(3) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   PRIMARY KEY (`dateID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `datedata`
+--
+
+INSERT INTO `datedata` (`dateID`, `date`) VALUES
+(1, '2019-09-10');
 
 -- --------------------------------------------------------
 
@@ -91,6 +125,18 @@ CREATE TABLE IF NOT EXISTS `daydata` (
   `dayOfWeek` varchar(9) NOT NULL,
   PRIMARY KEY (`dayID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `daydata`
+--
+
+INSERT INTO `daydata` (`dayID`, `dayOfWeek`) VALUES
+('fri', 'Friday'),
+('mon', 'Monday'),
+('sat', 'Saturday'),
+('thu', 'Thursday'),
+('tue', 'Tuesday'),
+('wed', 'Wednesday');
 
 -- --------------------------------------------------------
 
@@ -112,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `faculty` (
 --
 
 INSERT INTO `faculty` (`facultyID`, `name`, `email`, `password`) VALUES
-(101, 'ebenezerv99@gmail.com', 'Vraj Kotwala', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
+(1, 'Ebenezer Isaac', 'ebenezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 
 -- --------------------------------------------------------
 
@@ -127,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `facultyfingerprint` (
   `template` blob NOT NULL,
   PRIMARY KEY (`FacultyID`,`templateID`),
   KEY `PRN` (`FacultyID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -138,9 +184,18 @@ CREATE TABLE IF NOT EXISTS `facultyfingerprint` (
 DROP TABLE IF EXISTS `lab`;
 CREATE TABLE IF NOT EXISTS `lab` (
   `labID` tinyint(1) NOT NULL,
-  `name` varchar(4) NOT NULL,
+  `name` varchar(5) NOT NULL,
   PRIMARY KEY (`labID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `lab`
+--
+
+INSERT INTO `lab` (`labID`, `name`) VALUES
+(1, 'Lab 1'),
+(2, 'Lab 2'),
+(3, 'Lab 3');
 
 -- --------------------------------------------------------
 
@@ -157,7 +212,8 @@ CREATE TABLE IF NOT EXISTS `log` (
   `comments` varchar(200) NOT NULL,
   PRIMARY KEY (`logID`),
   KEY `dateID` (`dateID`,`timeID`),
-  KEY `logTypeID` (`logTypeID`)
+  KEY `logTypeID` (`logTypeID`),
+  KEY `timeID` (`timeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -169,9 +225,17 @@ CREATE TABLE IF NOT EXISTS `log` (
 DROP TABLE IF EXISTS `logtype`;
 CREATE TABLE IF NOT EXISTS `logtype` (
   `logTypeID` tinyint(1) NOT NULL,
-  `logType` varchar(15) NOT NULL,
+  `logType` varchar(25) NOT NULL,
   PRIMARY KEY (`logTypeID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logtype`
+--
+
+INSERT INTO `logtype` (`logTypeID`, `logType`) VALUES
+(1, 'Fingerprint'),
+(2, 'Manual Attendance');
 
 -- --------------------------------------------------------
 
@@ -187,13 +251,6 @@ CREATE TABLE IF NOT EXISTS `otp` (
   PRIMARY KEY (`OTPID`),
   KEY `PRN` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `otp`
---
-
-INSERT INTO `otp` (`OTPID`, `email`, `OTP`) VALUES
-(1, '2017033800107501', '223465');
 
 -- --------------------------------------------------------
 
@@ -211,6 +268,13 @@ CREATE TABLE IF NOT EXISTS `rollcall` (
   KEY `classID` (`classID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `rollcall`
+--
+
+INSERT INTO `rollcall` (`classID`, `rollNo`, `PRN`) VALUES
+(3, '82', 2017033800107501);
+
 -- --------------------------------------------------------
 
 --
@@ -224,6 +288,17 @@ CREATE TABLE IF NOT EXISTS `slot` (
   `endTime` time NOT NULL,
   PRIMARY KEY (`slotID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `slot`
+--
+
+INSERT INTO `slot` (`slotID`, `startTime`, `endTime`) VALUES
+(1, '08:00:00', '10:00:00'),
+(2, '10:00:00', '12:00:00'),
+(3, '13:00:00', '15:00:00'),
+(4, '15:00:00', '17:00:00'),
+(5, '17:30:00', '19:30:00');
 
 -- --------------------------------------------------------
 
@@ -260,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `studentfingerprint` (
   `template` blob NOT NULL,
   PRIMARY KEY (`PRN`,`templateID`),
   KEY `PRN` (`PRN`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -271,12 +346,20 @@ CREATE TABLE IF NOT EXISTS `studentfingerprint` (
 DROP TABLE IF EXISTS `studentsubject`;
 CREATE TABLE IF NOT EXISTS `studentsubject` (
   `PRN` bigint(16) NOT NULL,
-  `subjectID` int(7) NOT NULL,
+  `subjectID` varchar(7) NOT NULL,
   `batchID` tinyint(1) NOT NULL,
   PRIMARY KEY (`PRN`,`subjectID`),
   KEY `batchID` (`batchID`),
-  KEY `PRN` (`PRN`,`subjectID`)
+  KEY `PRN` (`PRN`,`subjectID`),
+  KEY `subjectID` (`subjectID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `studentsubject`
+--
+
+INSERT INTO `studentsubject` (`PRN`, `subjectID`, `batchID`) VALUES
+(2017033800107501, 'BCA1538', 1);
 
 -- --------------------------------------------------------
 
@@ -289,10 +372,17 @@ CREATE TABLE IF NOT EXISTS `subject` (
   `subjectID` varchar(7) NOT NULL,
   `sem` tinyint(1) NOT NULL,
   `subject` varchar(40) NOT NULL,
-  `classID` int(1) NOT NULL,
+  `classID` tinyint(1) NOT NULL,
   PRIMARY KEY (`subjectID`,`sem`),
   KEY `classID` (`classID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `subject`
+--
+
+INSERT INTO `subject` (`subjectID`, `sem`, `subject`, `classID`) VALUES
+('BCA1538', 5, 'Artificial Intelligence', 3);
 
 -- --------------------------------------------------------
 
@@ -305,7 +395,14 @@ CREATE TABLE IF NOT EXISTS `timedata` (
   `timeID` int(5) NOT NULL AUTO_INCREMENT,
   `time` time NOT NULL,
   PRIMARY KEY (`timeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `timedata`
+--
+
+INSERT INTO `timedata` (`timeID`, `time`) VALUES
+(1, '10:10:00');
 
 -- --------------------------------------------------------
 
@@ -316,16 +413,29 @@ CREATE TABLE IF NOT EXISTS `timedata` (
 DROP TABLE IF EXISTS `timetable`;
 CREATE TABLE IF NOT EXISTS `timetable` (
   `scheduleID` int(4) NOT NULL AUTO_INCREMENT,
-  `slotID` int(1) NOT NULL,
-  `labID` int(1) NOT NULL,
+  `slotID` tinyint(1) NOT NULL,
+  `labID` tinyint(1) NOT NULL,
   `subjectID` varchar(7) NOT NULL,
-  `batchID` int(1) NOT NULL,
+  `batchID` tinyint(1) NOT NULL,
   `facultyID` int(3) NOT NULL,
   `weekID` int(2) NOT NULL,
   `dayID` varchar(3) NOT NULL,
   PRIMARY KEY (`scheduleID`),
-  KEY `sessionID` (`slotID`,`labID`,`subjectID`,`batchID`,`facultyID`,`dayID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `sessionID` (`slotID`,`labID`,`subjectID`,`batchID`,`facultyID`),
+  KEY `labID` (`labID`),
+  KEY `facultyID` (`facultyID`),
+  KEY `batchID` (`batchID`),
+  KEY `weekID` (`weekID`),
+  KEY `dayID` (`dayID`),
+  KEY `subjectID` (`subjectID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `timetable`
+--
+
+INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`, `facultyID`, `weekID`, `dayID`) VALUES
+(1, 1, 1, 'BCA1538', 1, 1, 1, 'mon');
 
 -- --------------------------------------------------------
 
@@ -338,7 +448,80 @@ CREATE TABLE IF NOT EXISTS `week` (
   `weekID` int(2) NOT NULL AUTO_INCREMENT,
   `week` int(2) NOT NULL,
   PRIMARY KEY (`weekID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `week`
+--
+
+INSERT INTO `week` (`weekID`, `week`) VALUES
+(1, 37);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`PRN`) REFERENCES `student` (`PRN`),
+  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`dateID`) REFERENCES `datedata` (`dateID`),
+  ADD CONSTRAINT `attendance_ibfk_3` FOREIGN KEY (`scheduleID`) REFERENCES `timetable` (`scheduleID`),
+  ADD CONSTRAINT `attendance_ibfk_4` FOREIGN KEY (`timeID`) REFERENCES `timedata` (`timeID`);
+
+--
+-- Constraints for table `facultyfingerprint`
+--
+ALTER TABLE `facultyfingerprint`
+  ADD CONSTRAINT `facultyfingerprint_ibfk_1` FOREIGN KEY (`FacultyID`) REFERENCES `faculty` (`facultyID`);
+
+--
+-- Constraints for table `log`
+--
+ALTER TABLE `log`
+  ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`logTypeID`) REFERENCES `logtype` (`logTypeID`),
+  ADD CONSTRAINT `log_ibfk_2` FOREIGN KEY (`timeID`) REFERENCES `timedata` (`timeID`),
+  ADD CONSTRAINT `log_ibfk_3` FOREIGN KEY (`dateID`) REFERENCES `datedata` (`dateID`);
+
+--
+-- Constraints for table `rollcall`
+--
+ALTER TABLE `rollcall`
+  ADD CONSTRAINT `rollcall_ibfk_1` FOREIGN KEY (`classID`) REFERENCES `class` (`classID`),
+  ADD CONSTRAINT `rollcall_ibfk_2` FOREIGN KEY (`PRN`) REFERENCES `student` (`PRN`);
+
+--
+-- Constraints for table `studentfingerprint`
+--
+ALTER TABLE `studentfingerprint`
+  ADD CONSTRAINT `studentfingerprint_ibfk_1` FOREIGN KEY (`PRN`) REFERENCES `student` (`PRN`);
+
+--
+-- Constraints for table `studentsubject`
+--
+ALTER TABLE `studentsubject`
+  ADD CONSTRAINT `studentsubject_ibfk_1` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`),
+  ADD CONSTRAINT `studentsubject_ibfk_2` FOREIGN KEY (`batchID`) REFERENCES `batch` (`batchID`),
+  ADD CONSTRAINT `studentsubject_ibfk_3` FOREIGN KEY (`PRN`) REFERENCES `student` (`PRN`);
+
+--
+-- Constraints for table `subject`
+--
+ALTER TABLE `subject`
+  ADD CONSTRAINT `subject_ibfk_1` FOREIGN KEY (`classID`) REFERENCES `class` (`classID`);
+
+--
+-- Constraints for table `timetable`
+--
+ALTER TABLE `timetable`
+  ADD CONSTRAINT `timetable_ibfk_1` FOREIGN KEY (`slotID`) REFERENCES `slot` (`slotID`),
+  ADD CONSTRAINT `timetable_ibfk_2` FOREIGN KEY (`labID`) REFERENCES `lab` (`labID`),
+  ADD CONSTRAINT `timetable_ibfk_3` FOREIGN KEY (`facultyID`) REFERENCES `faculty` (`facultyID`),
+  ADD CONSTRAINT `timetable_ibfk_4` FOREIGN KEY (`batchID`) REFERENCES `batch` (`batchID`),
+  ADD CONSTRAINT `timetable_ibfk_5` FOREIGN KEY (`weekID`) REFERENCES `week` (`weekID`),
+  ADD CONSTRAINT `timetable_ibfk_6` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`),
+  ADD CONSTRAINT `timetable_ibfk_7` FOREIGN KEY (`dayID`) REFERENCES `daydata` (`dayID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
