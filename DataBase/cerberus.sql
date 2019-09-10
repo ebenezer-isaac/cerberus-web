@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 10, 2019 at 08:28 AM
+-- Generation Time: Sep 10, 2019 at 08:39 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -163,11 +163,11 @@ CREATE TABLE IF NOT EXISTS `log` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `logtypeid`
+-- Table structure for table `logtype`
 --
 
-DROP TABLE IF EXISTS `logtypeid`;
-CREATE TABLE IF NOT EXISTS `logtypeid` (
+DROP TABLE IF EXISTS `logtype`;
+CREATE TABLE IF NOT EXISTS `logtype` (
   `logTypeID` tinyint(1) NOT NULL,
   `logType` varchar(15) NOT NULL,
   PRIMARY KEY (`logTypeID`)
@@ -182,18 +182,18 @@ CREATE TABLE IF NOT EXISTS `logtypeid` (
 DROP TABLE IF EXISTS `otp`;
 CREATE TABLE IF NOT EXISTS `otp` (
   `OTPID` int(4) NOT NULL AUTO_INCREMENT,
-  `PRN` bigint(16) NOT NULL,
+  `email` varchar(50) NOT NULL,
   `OTP` varchar(256) NOT NULL,
   PRIMARY KEY (`OTPID`),
-  KEY `PRN` (`PRN`)
+  KEY `PRN` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `otp`
 --
 
-INSERT INTO `otp` (`OTPID`, `PRN`, `OTP`) VALUES
-(1, 2017033800107501, '223465');
+INSERT INTO `otp` (`OTPID`, `email`, `OTP`) VALUES
+(1, '2017033800107501', '223465');
 
 -- --------------------------------------------------------
 
