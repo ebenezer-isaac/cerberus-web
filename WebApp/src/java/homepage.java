@@ -23,9 +23,7 @@ public class homepage extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             request.getRequestDispatcher("nav.html").include(request, response);
-            System.out.println("teacher");
             HttpSession session = request.getSession(true);
-            System.out.println("teacher1");
             int access = (int) session.getAttribute("access");
             if (access == 1) {
                 out.print("Faculty Panel </li>"

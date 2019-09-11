@@ -20,12 +20,12 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 public class otp extends HttpServlet implements Runnable {
 
-    String to = null;
     String body = null;
-    String username = null;
+    String email = null;
     String hashotp = null;
 
     public String trimSQLInjection(String str) {
@@ -74,8 +74,12 @@ public class otp extends HttpServlet implements Runnable {
         }
         String userInfo = request.getHeader("User-Agent");
         String os = userInfo.substring(userInfo.indexOf("(") + 1, userInfo.indexOf(")"));
-        this.username = request.getParameter("username");
-        if (trimSQLInjection(this.username).equals("'''='")) {
+        this.email = request.getParameter("email");
+        if (this.email == null) {
+            HttpSession session = request.getSession(true);
+            this.email = (String) session.getAttribute("email");
+        }
+        if (trimSQLInjection(this.email).equals("'''='")) {
             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
             request.setAttribute("redirect", "true");
             request.setAttribute("head", "Nice Try!");
@@ -95,29 +99,27 @@ public class otp extends HttpServlet implements Runnable {
                 request.setAttribute("url", "index.html");
                 rd.forward(request, response);
             }
-            String toadd = "";
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("SELECT email from `student` WHERE PRN=?");
-                ps.setString(1, this.username);
+                PreparedStatement ps = con.prepareStatement("SELECT email from `student` WHERE email=?");
+                ps.setString(1, this.email);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    toadd = rs.getString(1);
+                    this.email = rs.getString(1);
                 }
-                if (toadd == null) {
+                if (this.email == null) {
                     try {
                         ps = con.prepareStatement("SELECT email from `faculty` WHERE facultyID=?");
-                        ps.setString(1, this.username);
+                        ps.setString(1, this.email);
                         rs = ps.executeQuery();
                         while (rs.next()) {
-                            toadd = rs.getString(1);
+                            this.email = rs.getString(1);
                         }
                         con.close();
                     } catch (SQLException ee) {
                     }
                 }
-                this.to = toadd;
                 con.close();
             } catch (ClassNotFoundException | SQLException ee) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -127,18 +129,18 @@ public class otp extends HttpServlet implements Runnable {
                 request.setAttribute("url", "index.html");
                 rd.forward(request, response);
             }
-            if (toadd != null) {
+            if (this.email != null) {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     PreparedStatement ps = con.prepareStatement("DELETE * from `otp` where username=?;");
-                    ps.setString(1, this.username);
+                    ps.setString(1, this.email);
                     try {
                         ps.executeUpdate();
                     } catch (SQLException e) {
                     }
                     ps = con.prepareStatement("INSERT INTO `otp` VALUES (?,?);");
-                    ps.setString(1, this.username);
+                    ps.setString(1, this.email);
                     ps.setString(2, this.hashotp);
                     ps.executeUpdate();
                     con.close();
@@ -222,7 +224,7 @@ public class otp extends HttpServlet implements Runnable {
         try {
             msg.setSubject("Password Reset for Cerberus");
             msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com"));
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.email));
             msg.setText(this.body);
             Transport transport = session.getTransport("smtps");
             transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
@@ -245,7 +247,7 @@ public class otp extends HttpServlet implements Runnable {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
             PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE username=? and otp=?;");
-            ps.setString(1, this.username);
+            ps.setString(1, this.email);
             ps.setString(2, this.hashotp);
             ps.executeUpdate();
             con.close();

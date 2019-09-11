@@ -37,9 +37,10 @@ public class login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String us = request.getParameter("username");
-            String pass = request.getParameter("password");
-            if (trimSQLInjection(us).equals("'''='") || trimSQLInjection(pass).equals("'''='")) {
+            String email = request.getParameter("email");
+            String rawpass = request.getParameter("password");
+            int id = 0;
+            if (trimSQLInjection(email).equals("'''='") || trimSQLInjection(rawpass).equals("'''='")) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Nice Try!");
@@ -48,17 +49,18 @@ public class login extends HttpServlet {
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
-                pass = hashIt(pass);
+                String pass = hashIt(rawpass);
                 int access = 0;
                 String corrpass = null;
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select password from student where email=?");
-                    ps.setString(1, us);
+                    PreparedStatement ps = con.prepareStatement("select prn, password from student where email=?");
+                    ps.setString(1, email);
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
-                        corrpass = rs.getString(1);
+                        id = rs.getInt(1);
+                        corrpass = rs.getString(2);
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
@@ -74,11 +76,12 @@ public class login extends HttpServlet {
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("select password from faculty where email=?");
-                        ps.setString(1, us);
+                        PreparedStatement ps = con.prepareStatement("select facultyID, password from faculty where email=?");
+                        ps.setString(1, email);
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
-                            corrpass = rs.getString(1);
+                            id = rs.getInt(1);
+                            corrpass = rs.getString(2);
                         }
                         access = 1;
                         con.close();
@@ -92,8 +95,19 @@ public class login extends HttpServlet {
                     }
                 }
                 if (corrpass.equals(pass)) {
+                    if (email.equals(""+id)) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("email", email);
+                        session.setAttribute("access", access);
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        request.setAttribute("redirect", "false");
+                        request.setAttribute("head", "Login Successfull");
+                        request.setAttribute("body", "You need to change your password on first login. An OTP has been sent to your registered email address");
+                        request.setAttribute("url", "otp");
+                        rd.forward(request, response);
+                    }
                     HttpSession session = request.getSession();
-                    session.setAttribute("email", us);
+                    session.setAttribute("email", email);
                     session.setAttribute("access", access);
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                     request.setAttribute("redirect", "true");
