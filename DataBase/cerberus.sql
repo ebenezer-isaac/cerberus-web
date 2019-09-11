@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 10, 2019 at 12:39 PM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Generation Time: Sep 11, 2019 at 08:34 AM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `faculty` (
 --
 
 INSERT INTO `faculty` (`facultyID`, `name`, `email`, `password`) VALUES
-(1, 'Ebenezer Isaac', 'ebenezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
+(1, 'Mr. Krishnanand Rastogi', 'ebenezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 
 -- --------------------------------------------------------
 
@@ -215,6 +215,13 @@ CREATE TABLE IF NOT EXISTS `log` (
   KEY `logTypeID` (`logTypeID`),
   KEY `timeID` (`timeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `log`
+--
+
+INSERT INTO `log` (`logID`, `logTypeID`, `dateID`, `timeID`, `comments`) VALUES
+(1, 1, 1, 1, '2017033800107501-1 enroll');
 
 -- --------------------------------------------------------
 
@@ -382,7 +389,29 @@ CREATE TABLE IF NOT EXISTS `subject` (
 --
 
 INSERT INTO `subject` (`subjectID`, `sem`, `subject`, `classID`) VALUES
-('BCA1538', 5, 'Artificial Intelligence', 3);
+('BCA1001', 2, 'Desktop Publishing LAB', 1),
+('BCA1009', 4, 'Web Publishing', 2),
+('BCA1010', 4, 'Introduction to Multimedia', 2),
+('BCA1105', 1, 'PC Software and Database Lab', 1),
+('BCA1106', 1, 'Programming Lab', 1),
+('BCA1205', 2, 'OOP Lab', 1),
+('BCA1206', 2, 'Data Structures Lab', 1),
+('BCA1207', 2, 'SQL Lab', 1),
+('BCA1208', 1, 'HTML-I Lab', 1),
+('BCA1301', 3, 'Java Lab', 2),
+('BCA1303', 4, '.NET Programming LAB', 2),
+('BCA1304', 3, 'Shell Programming Lab', 2),
+('BCA1305', 3, 'Database Application Programming Lab', 2),
+('BCA1306', 3, 'Computer Networks-I Lab', 2),
+('BCA1307', 3, 'HTML-II Lab', 2),
+('BCA1308', 3, 'Data Exploration Lab', 2),
+('BCA1401', 4, 'Advanced Java Programming Lab', 2),
+('BCA1403', 4, 'Web technology Lab', 2),
+('BCA1405', 4, 'Computer Networks-II Lab', 2),
+('BCA1501', 5, 'XML Lab', 3),
+('BCA1530', 5, 'Web Application Development Lab', 3),
+('BCA1538', 5, 'Artificial Intelligence', 3),
+('BCA1539', 5, 'Mobile Computing Lab', 3);
 
 -- --------------------------------------------------------
 
