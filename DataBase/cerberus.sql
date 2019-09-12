@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 12, 2019 at 09:54 AM
+-- Generation Time: Sep 12, 2019 at 12:55 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -41,13 +41,6 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   KEY `scheduleID` (`scheduleID`),
   KEY `timeID` (`timeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `attendance`
---
-
-INSERT INTO `attendance` (`attendanceID`, `PRN`, `scheduleID`, `dateID`, `timeID`) VALUES
-(1, 2017033800107501, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -151,14 +144,26 @@ CREATE TABLE IF NOT EXISTS `faculty` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   PRIMARY KEY (`facultyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `faculty`
 --
 
 INSERT INTO `faculty` (`facultyID`, `name`, `email`, `password`) VALUES
-(1, 'Mr. Krishnanand Rastogi', 'ebenezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
+(1, 'Mr.Krishnanad', 'ebenezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(2, 'Mr.Ksitij', 'asdfasdfasdf@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(3, 'Mrs.Pooja', 'esdfgdgff@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(4, 'Mrs.Preeti', 'ebenadfgsadezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(5, 'Ms.Krishna', 'ebefgndneasdfvzerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(6, 'Mrs.Mitali', 'ebfweneeaszdvzerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(7, 'Mrs.Heta', 'ebedtenezexcvrv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(8, 'Mrs.Meghna', 'ebeasdfnerdeasdfczerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(9, 'Mr.Tejas', 'ebenezerasdfcv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(10, 'Mrs.Hetal', 'ebenezxcfzerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(11, 'Ms.Divya', 'ebendezdfcsdferv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(12, 'Ms.Riya', 'ebenezsdrerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec'),
+(13, 'Ms.Ankita', 'ebeasdfnqwerdezerv99@gmail.com', 'de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 
 -- --------------------------------------------------------
 
@@ -471,28 +476,20 @@ CREATE TABLE IF NOT EXISTS `timetable` (
 --
 
 INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`, `facultyID`, `weekID`, `dayID`) VALUES
-(1, 1, 1, 'BCA1538', 1, 1, 1, 'mon'),
-(2, 1, 1, 'BCA1538', 2, 1, 1, 'mon'),
-(3, 2, 1, 'BCA1539', 2, 1, 1, 'mon'),
-(4, 2, 2, 'BCA1530', 3, 1, 1, 'mon'),
-(5, 2, 3, 'BCA1501', 2, 1, 1, 'mon'),
-(6, 3, 1, 'BCA1403', 3, 1, 1, 'mon'),
-(7, 4, 1, 'BCA1010', 2, 1, 1, 'mon'),
-(8, 4, 2, 'BCA1307', 2, 1, 1, 'mon'),
-(9, 4, 3, 'BCA1208', 2, 1, 1, 'mon'),
-(10, 5, 1, 'BCA1105', 3, 1, 1, 'mon'),
-(11, 5, 2, 'BCA1106', 1, 1, 1, 'tue'),
-(12, 1, 1, 'BCA1538', 2, 1, 1, 'tue'),
-(13, 2, 1, 'BCA1539', 2, 1, 1, 'tue'),
-(14, 2, 2, 'BCA1530', 3, 1, 1, 'tue'),
-(15, 2, 3, 'BCA1501', 2, 1, 1, 'tue'),
-(16, 3, 1, 'BCA1403', 3, 1, 1, 'tue'),
-(17, 4, 1, 'BCA1010', 1, 1, 1, 'tue'),
-(18, 4, 2, 'BCA1307', 3, 1, 1, 'tue'),
-(19, 4, 3, 'BCA1208', 2, 1, 1, 'tue'),
-(20, 5, 1, 'BCA1105', 3, 1, 1, 'tue'),
-(21, 5, 2, 'BCA1106', 2, 1, 1, 'tue'),
-(22, 5, 3, 'BCA1001', 3, 1, 1, 'tue');
+(1, 1, 1, 'BCA1538', 1, 11, 1, 'mon'),
+(2, 2, 1, 'BCA1301', 1, 3, 1, 'mon'),
+(3, 2, 2, 'BCA1308', 2, 1, 1, 'mon'),
+(4, 2, 3, 'BCA1303', 3, 5, 1, 'mon'),
+(5, 3, 1, 'BCA1539', 1, 3, 1, 'mon'),
+(6, 4, 1, 'BCA1105', 1, 6, 1, 'mon'),
+(7, 4, 2, 'BCA1106', 2, 1, 1, 'mon'),
+(8, 4, 3, 'BCA1208', 3, 5, 1, 'mon'),
+(9, 5, 1, 'BCA1001', 1, 10, 1, 'mon'),
+(10, 5, 2, 'BCA1001', 2, 10, 1, 'mon'),
+(11, 5, 3, 'BCA1001', 3, 10, 1, 'mon'),
+(12, 1, 1, 'BCA1538', 2, 11, 1, 'tue'),
+(13, 1, 2, 'BCA1530', 1, 8, 1, 'tue'),
+(14, 2, 1, 'BCA1304', 1, 2, 1, 'tue');
 
 -- --------------------------------------------------------
 

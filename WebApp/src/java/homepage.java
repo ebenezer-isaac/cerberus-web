@@ -36,12 +36,14 @@ public class homepage extends HttpServlet {
                         + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Device OTP </a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Profile </a> </li>\n"
                         + "</ul></div>");
-                /*out.print("<div class=\"page-content-wrapper\">\n"
+                out.print("<div class=\"page-content-wrapper\">\n"
                         + "<button class=\"btn btn-link\" id=\"menu-toggle\" style=\"background-color: #0d0d0d;\"> <i class=\"fas fa-align-justify\" style=\"color: white;\"></i> </button>\n"
                         + "<div class=\"row\">"
                         + "<div class=\"col-md-12\">\n"
                         + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
-                        + "");*/
+                        + "");
+                out.println("hello");
+                out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
                 String[][] slots = null;
                 int no_of_slots = 0;
                 try {
@@ -49,11 +51,10 @@ public class homepage extends HttpServlet {
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     PreparedStatement ps = con.prepareStatement("select * from slot order by startTime");
                     ResultSet rs = ps.executeQuery();
-                    while(rs.next())
-                    {
-                        slots[no_of_slots][0]=rs.getString(1);
-                        slots[no_of_slots][1]=rs.getString(2);
-                        slots[no_of_slots][2]=rs.getString(3);
+                    while (rs.next()) {
+                        slots[no_of_slots][0] = rs.getString(1);
+                        slots[no_of_slots][1] = rs.getString(2);
+                        slots[no_of_slots][2] = rs.getString(3);
                         no_of_slots++;
                     }
                     con.close();
@@ -68,16 +69,15 @@ public class homepage extends HttpServlet {
                 }
                 Date date = new Date();
                 SimpleDateFormat ft = new SimpleDateFormat("w");
-                int weekID=Integer.parseInt(ft.format(date));
+                int weekID = Integer.parseInt(ft.format(date));
                 String[][] timetable = new String[8][no_of_slots];
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     PreparedStatement ps = con.prepareStatement("select * from timetable where weekID=?");
-                    ps.setInt(1,weekID);
+                    ps.setInt(1, weekID);
                     ResultSet rs = ps.executeQuery();
-                    while(rs.next())
-                    {
+                    while (rs.next()) {
                         no_of_slots++;
                     }
                     con.close();
@@ -90,14 +90,13 @@ public class homepage extends HttpServlet {
                     request.setAttribute("sec", "2");
                     rd.forward(request, response);
                 }
-                
+
             } else {
                 out.print("Student Panel </li>"
                         + "<li> <a href=\"#\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Attendance</a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"fas fa-list\"></i> &nbsp; Profile </a> </li>\n"
                         + "</ul></div>");
             }
-
         }
     }
 
@@ -111,10 +110,5 @@ public class homepage extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

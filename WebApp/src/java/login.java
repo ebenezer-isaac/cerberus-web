@@ -142,7 +142,7 @@ public class login extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
         request.setAttribute("redirect", "true");
         request.setAttribute("head", "Security Firewall");
-        request.setAttribute("body", "Unauthorized access to this page has been detected.");
+        request.setAttribute("body", "Unauthorized access detected.");
         request.setAttribute("url", "index.html");
         request.setAttribute("sec", "2");
         rd.forward(request, response);

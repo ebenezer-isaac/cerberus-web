@@ -1,20 +1,4 @@
-	
-    <div id="wrapper">
-        <div id="sidebar-wrapper" style="background-color: #0d0d0d;">
-            <ul class="sidebar-nav">
-                <li class="sidebar-brand text-light mx-5 text-uppercase"> Admin Panel </li>
-                	<li> <a href="#"> <i class="far fa-calendar-alt"></i> &nbsp;  Edit Timetable </a> </li>
-                	<li> <a href="#"> <i class="fas fa-list"></i> &nbsp;  Manage Subjects </a> </li>
-                	<li> <a href="#"> <i class="far fa-list-alt"></i> &nbsp;  Manage Student Details </a> </li>
-                	<li> <a href="#"> <i class="far fa-folder-open"></i> &nbsp;  Manage Attendance </a> </li>
-                	<li> <a href="#"> <i class="fas fa-upload"></i> &nbsp; Upload New Data </a> </li>
-                	<li> <a href="#"> <i class="fas fa-user-cog"></i> &nbsp;  Manage Admins </a> </li>
-                	<li> <a href="#"> <i class="fas fa-braille"></i> &nbsp;  View Pincode </a> </li>
-            </ul>
-        </div>
-        <div class="page-content-wrapper">
-           
-               <button class="btn btn-link" id="menu-toggle" style="background-color: #0d0d0d;"> <i class="fas fa-align-justify" style="color: white;"></i> </button>
+              <button class="btn btn-link" id="menu-toggle" style="background-color: #0d0d0d;"> <i class="fas fa-align-justify" style="color: white;"></i> </button>
                 <div class="row">
                    
                     <div class="col-md-12">
