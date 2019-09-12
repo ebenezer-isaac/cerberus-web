@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 11, 2019 at 08:34 AM
--- Server version: 5.7.24
--- PHP Version: 7.2.14
+-- Generation Time: Sep 12, 2019 at 09:54 AM
+-- Server version: 5.7.26
+-- PHP Version: 7.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `faculty` (
   `email` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   PRIMARY KEY (`facultyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `faculty`
@@ -257,7 +257,14 @@ CREATE TABLE IF NOT EXISTS `otp` (
   `OTP` varchar(256) NOT NULL,
   PRIMARY KEY (`OTPID`),
   KEY `PRN` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `otp`
+--
+
+INSERT INTO `otp` (`OTPID`, `email`, `OTP`) VALUES
+(5, 'ebenezerv99@gmail.com', '7df5999ae1b0cbaaededbe7ea7bb3ddeadef6b91c16071e69069a2464f3f1809');
 
 -- --------------------------------------------------------
 
@@ -457,14 +464,35 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   KEY `weekID` (`weekID`),
   KEY `dayID` (`dayID`),
   KEY `subjectID` (`subjectID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timetable`
 --
 
 INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`, `facultyID`, `weekID`, `dayID`) VALUES
-(1, 1, 1, 'BCA1538', 1, 1, 1, 'mon');
+(1, 1, 1, 'BCA1538', 1, 1, 1, 'mon'),
+(2, 1, 1, 'BCA1538', 2, 1, 1, 'mon'),
+(3, 2, 1, 'BCA1539', 2, 1, 1, 'mon'),
+(4, 2, 2, 'BCA1530', 3, 1, 1, 'mon'),
+(5, 2, 3, 'BCA1501', 2, 1, 1, 'mon'),
+(6, 3, 1, 'BCA1403', 3, 1, 1, 'mon'),
+(7, 4, 1, 'BCA1010', 2, 1, 1, 'mon'),
+(8, 4, 2, 'BCA1307', 2, 1, 1, 'mon'),
+(9, 4, 3, 'BCA1208', 2, 1, 1, 'mon'),
+(10, 5, 1, 'BCA1105', 3, 1, 1, 'mon'),
+(11, 5, 2, 'BCA1106', 1, 1, 1, 'tue'),
+(12, 1, 1, 'BCA1538', 2, 1, 1, 'tue'),
+(13, 2, 1, 'BCA1539', 2, 1, 1, 'tue'),
+(14, 2, 2, 'BCA1530', 3, 1, 1, 'tue'),
+(15, 2, 3, 'BCA1501', 2, 1, 1, 'tue'),
+(16, 3, 1, 'BCA1403', 3, 1, 1, 'tue'),
+(17, 4, 1, 'BCA1010', 1, 1, 1, 'tue'),
+(18, 4, 2, 'BCA1307', 3, 1, 1, 'tue'),
+(19, 4, 3, 'BCA1208', 2, 1, 1, 'tue'),
+(20, 5, 1, 'BCA1105', 3, 1, 1, 'tue'),
+(21, 5, 2, 'BCA1106', 2, 1, 1, 'tue'),
+(22, 5, 3, 'BCA1001', 3, 1, 1, 'tue');
 
 -- --------------------------------------------------------
 

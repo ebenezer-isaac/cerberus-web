@@ -31,10 +31,10 @@ public class otp extends HttpServlet implements Runnable {
     String userInfo = null;
 
     public static String generateOTP() throws NoSuchAlgorithmException {
-        String otpchars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        String otpchars = "1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
-        while (salt.length() < 8) {
+        while (salt.length() < 6) {
             int index = (int) (rnd.nextFloat() * otpchars.length());
             salt.append(otpchars.charAt(index));
         }
@@ -209,9 +209,8 @@ public class otp extends HttpServlet implements Runnable {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE username=? and otp=?;");
+            PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
             ps.setString(1, this.email);
-            ps.setString(2, this.hashotp);
             ps.executeUpdate();
             con.close();
         } catch (ClassNotFoundException | SQLException e) {

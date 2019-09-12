@@ -104,7 +104,7 @@ public class resetpass extends HttpServlet {
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                         request.setAttribute("redirect", "false");
                         request.setAttribute("head", "Security Firewall");
-                        request.setAttribute("body", "Please cheack your username and the OTP you provided and try again.");
+                        request.setAttribute("body", "Please cheack your Email and the OTP you provided and try again.");
                         request.setAttribute("url", "resetpassword.html");
                         request.setAttribute("button", "Redirect");
                         rd.forward(request, response);
@@ -113,7 +113,7 @@ public class resetpass extends HttpServlet {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                     request.setAttribute("redirect", "false");
                     request.setAttribute("head", "Security Firewall");
-                    request.setAttribute("body", "An OTP was not found for the provided email address.");
+                    request.setAttribute("body", "An OTP was not found for the provided Email address.");
                     request.setAttribute("url", "index.html");
                     request.setAttribute("button", "Redirect");
                     rd.forward(request, response);
