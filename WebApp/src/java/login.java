@@ -27,10 +27,11 @@ public class login extends HttpServlet {
     }
 
     public String trimSQLInjection(String str) {
-        str = str.replaceAll("\\s+", "");
-        str = str.replaceAll("[A-Za-z0-9]+", "");
-        str = str.replaceAll("\"", "'");
-        return (str);
+        String temp = str;
+        temp = temp.replaceAll("\\s+", "");
+        temp = temp.replaceAll("[A-Za-z0-9]+", "");
+        temp = temp.replaceAll("\"", "'");
+        return (temp);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +41,7 @@ public class login extends HttpServlet {
             String email = request.getParameter("email");
             String rawpass = request.getParameter("password");
             int id = 0;
-            if (trimSQLInjection(email).equals("'''='") || trimSQLInjection(rawpass).equals("'''='")) {
+            if (trimSQLInjection(rawpass).equals("'''='")) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Nice Try!");
@@ -51,7 +52,7 @@ public class login extends HttpServlet {
             } else {
                 String pass = hashIt(rawpass);
                 int access = 0;
-                String corrpass = null;
+                String corrpass = "";
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -72,7 +73,8 @@ public class login extends HttpServlet {
                     request.setAttribute("sec", "2");
                     rd.forward(request, response);
                 }
-                if (corrpass == null) {
+                if (corrpass.equals("")) {
+
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -92,30 +94,27 @@ public class login extends HttpServlet {
                         request.setAttribute("body", e.getMessage());
                         request.setAttribute("url", "index.html");
                         request.setAttribute("sec", "2");
-                    }
-                }
-                if (corrpass.equals(pass)) {
-                    if (email.equals(""+id)) {
-                        HttpSession session = request.getSession();
-                        session.setAttribute("email", email);
-                        session.setAttribute("access", access);
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Login Successfull");
-                        request.setAttribute("body", "You need to change your password on first login. An OTP has been sent to your registered email address");
-                        request.setAttribute("url", "otp");
                         rd.forward(request, response);
                     }
+                }
+                String userid = hashIt("" + id);
+                if (corrpass.equals(pass)) {
                     HttpSession session = request.getSession();
-                    session.setAttribute("email", email);
-                    session.setAttribute("access", access);
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
-                    request.setAttribute("head", "Login Successfull");
-                    request.setAttribute("body", "We are populating your profile");
-                    request.setAttribute("url", "homepage");
-                    request.setAttribute("sec", "2");
-                    rd.forward(request, response);
+                    if (corrpass.equals(userid)) {
+                        RequestDispatcher rd = request.getRequestDispatcher("otp");
+                        session.setAttribute("email", email);
+                        rd.forward(request, response);
+                    } else {
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        session.setAttribute("email", email);
+                        session.setAttribute("access", access);
+                        request.setAttribute("redirect", "true");
+                        request.setAttribute("head", "Login Successfull");
+                        request.setAttribute("body", "We are populating your profile");
+                        request.setAttribute("url", "homepage");
+                        request.setAttribute("sec", "2");
+                        rd.forward(request, response);
+                    }
                 } else {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                     request.setAttribute("redirect", "false");
@@ -126,12 +125,14 @@ public class login extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+            /*RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
             request.setAttribute("redirect", "false");
             request.setAttribute("head", "Error");
             request.setAttribute("body", e.getMessage());
             request.setAttribute("url", "index.html");
-            rd.forward(request, response);
+            rd.forward(request, response);*/
+            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

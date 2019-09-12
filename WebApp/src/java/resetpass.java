@@ -36,64 +36,85 @@ public class resetpass extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String us = request.getParameter("username");
+            String email = request.getParameter("email");
             String otp = request.getParameter("otp");
             String pass = request.getParameter("conpass");
-            if (trimSQLInjection(us).equals("'''='") || trimSQLInjection(otp).equals("'''='") || trimSQLInjection(pass).equals("'''='")) {
+            if (trimSQLInjection(otp).equals("'''='") || trimSQLInjection(pass).equals("'''='")) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Nice Try!");
                 request.setAttribute("body", "You're smart.<br>But not half as smart enough.<br><br>" + new String(Character.toChars(0x1F60F)));
                 request.setAttribute("url", "index.html");
+                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
+                int otp_count = 0;
                 String corrotp = null;
                 pass = hashIt(pass);
+                otp = otp.toUpperCase();
                 otp = hashIt(otp);
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select otp from `otp` where username=?");
-                    ps.setString(1, us);
+                    PreparedStatement ps = con.prepareStatement("select otp from `otp` where email=?");
+                    ps.setString(1, email);
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
+                        otp_count++;
                         corrotp = rs.getString(1);
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
-                    corrotp = "null";
+                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                    request.setAttribute("redirect", "false");
+                    request.setAttribute("head", "Error");
+                    request.setAttribute("body", e.getMessage());
+                    request.setAttribute("url", "resetpassword.html");
+                    rd.forward(request, response);
                 }
-                if (corrotp.equals(otp)) {
-                    try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("UPDATE `credential` SET password = ? where username=?;");
-                        ps.setString(1, pass);
-                        ps.setString(2, us);
-                        ps.executeUpdate();
-                    } catch (ClassNotFoundException | SQLException e) {
+                if (otp_count == 1) {
+                    if (corrotp.equals(otp)) {
+                        try {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            PreparedStatement ps = con.prepareStatement("UPDATE `student` SET password = ? where email=?");
+                            ps.setString(1, pass);
+                            ps.setString(2, email);
+                            ps.executeUpdate();
+                            ps = con.prepareStatement("UPDATE `faculty` SET password = ? where email=?");
+                            ps.setString(1, pass);
+                            ps.setString(2, email);
+                            ps.executeUpdate();
+                            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                            request.setAttribute("redirect", "true");
+                            request.setAttribute("head", "Security Message");
+                            request.setAttribute("body", "Your password has been updated.<br> Please login with your new credentials");
+                            request.setAttribute("url", "index.html");
+                            request.setAttribute("sec", "2");
+                            rd.forward(request, response);
+                        } catch (ClassNotFoundException | SQLException e) {
+                            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                            request.setAttribute("redirect", "false");
+                            request.setAttribute("head", "Error");
+                            request.setAttribute("body", e.getMessage());
+                            request.setAttribute("url", "resetpassword.html");
+                            rd.forward(request, response);
+                        }
+                    } else {
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                         request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Error");
-                        request.setAttribute("body", e.getMessage());
+                        request.setAttribute("head", "Security Firewall");
+                        request.setAttribute("body", "Please cheack your username and the OTP you provided and try again.");
                         request.setAttribute("url", "resetpassword.html");
+                        request.setAttribute("button", "Redirect");
                         rd.forward(request, response);
                     }
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
-                    request.setAttribute("head", "Security Message");
-                    request.setAttribute("body", "Your password has been updated.<br> Please login with your new credentials");
-                    request.setAttribute("url", "index.html");
-                    request.setAttribute("method", "post");
-                    request.setAttribute("button", "Redirect");
-                    rd.forward(request, response);
                 } else {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                     request.setAttribute("redirect", "false");
                     request.setAttribute("head", "Security Firewall");
-                    request.setAttribute("body", "Please cheack your username and the OTP you provided and try again.");
-                    request.setAttribute("url", "resetpassword.html");
-                    request.setAttribute("method", "post");
+                    request.setAttribute("body", "An OTP was not found for the provided email address.");
+                    request.setAttribute("url", "index.html");
                     request.setAttribute("button", "Redirect");
                     rd.forward(request, response);
                 }
@@ -111,6 +132,7 @@ public class resetpass extends HttpServlet {
         request.setAttribute("head", "Security Firewall");
         request.setAttribute("body", "Unauthorized access to this page has been detected.");
         request.setAttribute("url", "index.html");
+        request.setAttribute("sec", "2");
         rd.forward(request, response);
     }
 

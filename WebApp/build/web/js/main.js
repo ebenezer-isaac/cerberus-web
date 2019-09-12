@@ -29,8 +29,8 @@ $(document).ready(function () {
             form.action = "otp";
             var textbox = document.createElement("input");
             textbox.type = "hidden";
-            textbox.value = document.getElementById("user").value;
-            textbox.name = "username";
+            textbox.value = document.getElementById("emailid").value;
+            textbox.name = "emailadd";
             form.appendChild(textbox);
             document.body.appendChild(form);
             form.submit();

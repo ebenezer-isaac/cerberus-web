@@ -87,7 +87,7 @@
     <body style="background-color: #black;">
         <nav class="navbar navbar-expand navbar-light" style="background-color: black;">
             <div class="container">
-                <a class="navbar-brand" href="homepage.html"><img class="custom_logo" src="images/logo-circle.png"></a>
+                <img class="custom_logo" src="images/logo-circle.png"></a>
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
