@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
@@ -44,52 +45,9 @@ public class homepage extends HttpServlet {
                         + "");
                 out.println("hello");
                 out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
-                String[][] slots = null;
-                int no_of_slots = 0;
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select * from slot order by startTime");
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        slots[no_of_slots][0] = rs.getString(1);
-                        slots[no_of_slots][1] = rs.getString(2);
-                        slots[no_of_slots][2] = rs.getString(3);
-                        no_of_slots++;
-                    }
-                    con.close();
-                } catch (ClassNotFoundException | SQLException e) {
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
-                    request.setAttribute("head", "Database Error");
-                    request.setAttribute("body", e.getMessage());
-                    request.setAttribute("url", "index.html");
-                    request.setAttribute("sec", "2");
-                    rd.forward(request, response);
-                }
-                Date date = new Date();
-                SimpleDateFormat ft = new SimpleDateFormat("w");
-                int weekID = Integer.parseInt(ft.format(date));
-                String[][] timetable = new String[8][no_of_slots];
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select * from timetable where weekID=?");
-                    ps.setInt(1, weekID);
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        no_of_slots++;
-                    }
-                    con.close();
-                } catch (ClassNotFoundException | SQLException e) {
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
-                    request.setAttribute("head", "Database Error");
-                    request.setAttribute("body", e.getMessage());
-                    request.setAttribute("url", "index.html");
-                    request.setAttribute("sec", "2");
-                    rd.forward(request, response);
-                }
+                //lab1 = null;
+                String output = printTimetable(1);
+                out.println(output);
 
             } else {
                 out.print("Student Panel </li>"
@@ -98,6 +56,58 @@ public class homepage extends HttpServlet {
                         + "</ul></div>");
             }
         }
+    }
+
+    public String printTimetable(int labid) {
+        Date date = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("w");
+        String timetable = "";
+        int week = Integer.parseInt(ft.format(date));
+        timetable += ("<table class=\"table table-striped table-bordered\"><thead>");
+        timetable += ("<tr align = center>");
+        timetable += ("<th>Start_Time</th>");
+        timetable += ("<th>End_Time</th>");
+        timetable += ("<th>Monday</th>");
+        timetable += ("<th>Tuesday</th>");
+        timetable += ("<th>Wednesday</th>");
+        timetable += ("<th>Thursday</th>");
+        timetable += ("<th>Friday</th>");
+        timetable += ("<th>Saturday</th>");
+        timetable += ("</tr></thead><tbody>");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps = con.prepareStatement("SELECT slot.startTime, slot.endTime,"
+                    + "MAX(CASE WHEN dayID = 'mon' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Monday,"
+                    + "MAX(CASE WHEN dayID = 'tue' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Tuesday,"
+                    + "MAX(CASE WHEN dayID = 'wed' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Wednesday,"
+                    + "MAX(CASE WHEN dayID = 'thu' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Thursday,"
+                    + "MAX(CASE WHEN dayID = 'fri' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Friday,"
+                    + "MAX(CASE WHEN dayID = 'sat' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Saturday "
+                    + "FROM timetable "
+                    + "INNER JOIN slot "
+                    + "ON timetable.slotID = slot.slotID "
+                    + "where labID=? and weekID=(select weekID from week where week = ?) "
+                    + "GROUP BY slot.startTime, slot.endTime;");
+            ps.setInt(1, labid);
+            ps.setInt(2, week);
+            ResultSet lab1 = ps.executeQuery();
+            while (lab1.next()) {
+                timetable += ("<tr align='center'>");
+                timetable += ("<th>" + lab1.getString(1).substring(0, 5) + "</th>");
+                timetable += ("<th>" + lab1.getString(2).substring(0, 5) + "</th>");
+                for (int j = 1; j <= 6; j++) {
+                    timetable += ("<td>" + lab1.getString(j + 2) + "</td>");
+                }
+                timetable += ("</tr>");
+            }
+            timetable += ("</td></tr></tbody></table><br><br>");
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            timetable = e.getMessage();
+        }
+        return timetable;
     }
 
     @Override

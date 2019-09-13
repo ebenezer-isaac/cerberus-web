@@ -1,0 +1,12 @@
+SELECT slot.startTime, slot.endTime,
+MAX(CASE WHEN dayID = 'mon' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Monday,
+MAX(CASE WHEN dayID = 'tue' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Tuesday,
+MAX(CASE WHEN dayID = 'wed' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Wednesday,
+MAX(CASE WHEN dayID = 'thu' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Thursday,
+MAX(CASE WHEN dayID = 'fri' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Friday,
+MAX(CASE WHEN dayID = 'sat' THEN concat(timetable.subjectID,' - ',timetable.batchID) END) as Saturday
+FROM timetable
+INNER JOIN slot
+ON timetable.slotID = slot.slotID
+where labID=1 and weekID=(select weekID from week where week = 37)
+GROUP BY slot.startTime, slot.endTime;
