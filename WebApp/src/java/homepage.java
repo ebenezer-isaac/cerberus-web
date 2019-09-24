@@ -45,10 +45,9 @@ public class homepage extends HttpServlet {
                         + "");
                 out.println("hello");
                 out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
-                //lab1 = null;
-                String output = printTimetable(1);
-                out.println(output);
-
+                out.println(printTimetable(1));
+                out.println(printTimetable(1));
+                out.println(printTimetable(1));
             } else {
                 out.print("Student Panel </li>"
                         + "<li> <a href=\"#\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Attendance</a> </li>\n"

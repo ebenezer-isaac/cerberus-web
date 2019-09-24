@@ -56,7 +56,7 @@ public class login extends HttpServlet {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select prn password from student where email=?");
+                    PreparedStatement ps = con.prepareStatement("select prn,password from student where email=?");
                     ps.setString(1, email);
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
@@ -97,15 +97,15 @@ public class login extends HttpServlet {
                         rd.forward(request, response);
                     }
                 }
-                String userid = "";
-                System.out.println(email);
-                int index = email.indexOf("@");
-                System.out.println(index);
-                if (index != -1) {
-                    userid = email.substring(0, index);
-                }
-                System.out.println(userid);
                 if (corrpass.equals(pass)) {
+                    String userid = "";
+                    System.out.println(email);
+                    int index = email.indexOf("@");
+                    System.out.println(index);
+                    System.out.println(userid);
+                    if (index != -1) {
+                        userid = email.substring(0, index);
+                    }
                     HttpSession session = request.getSession();
                     if (corrpass.equals(userid)) {
                         RequestDispatcher rd = request.getRequestDispatcher("otp");
