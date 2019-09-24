@@ -139,7 +139,7 @@ a:hover
     position: absolute;
     background: #FFFFFF;
     width: 360px;
-    margin: auto;
+    margin: 20px;
     padding: 45px;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -165,16 +165,7 @@ a:hover
     background: #000000;
 }
 
-.form_message
-{
-    position:absolute;
-    background: #FFFFFF;
-    max-width: 400px;
-    min-width: 290px;
-    padding: 55px;
-    text-align: center;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-}
+
 
 .form_message button
 {

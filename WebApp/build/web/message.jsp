@@ -99,9 +99,9 @@
         </nav>
         <div class="container" >
             <div class="reset_page" >
-                <div class="form_message">
+                <div class="form_reset">
                     <div class="row">
-                        <div class="col-1g-16" >
+                        <div class="col-1g-12" >
                             <h2 style="font-family: arno pro caption"> <%out.print((request.getAttribute("head")).toString());%> </h2>
                             <br>
                             <p><%out.print((request.getAttribute("body")).toString());%></p>
