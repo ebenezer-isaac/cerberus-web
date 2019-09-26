@@ -41,7 +41,7 @@ This is server-side coding of the whole attendance system.
 
 ### ScreenShot of index.html ###
 <h1 align="center">
-	<img width="600" src="https://raw.githubusercontent.com/Cerberus-Biometric/cerberus-web/master/Documentation/index.png">
+	<img width="600" src="https://raw.githubusercontent.com/Cerberus-Biometric/cerberus-web/master/Documentation/index.PNG">
 	<br>
 	<br>
 </h1>
