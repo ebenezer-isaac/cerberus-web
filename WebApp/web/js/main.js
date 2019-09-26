@@ -37,7 +37,7 @@ $(document).ready(function () {
         }
         event.preventDefault();
         $.post("grecaptcha.php", {
-            "secret": "6LdcSrIUAAAAAC_PvOrb_Z1m6U_8tr6PmoYqn-cQ",
+            "secret": "6Ldki7oUAAAAAHU3TS5YFupA1E3Kiuuno3ge8uO7",
             "response": recaptcha
         }, function (ajaxResponse) {
             console.log(ajaxResponse);

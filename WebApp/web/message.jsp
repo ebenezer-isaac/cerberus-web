@@ -100,12 +100,12 @@
         <div class="container" >
             <div class="reset_page" >
                 <div class="form_reset">
-                    <div class="row">
-                        <div class="col-1g-12" >
+                            
+                            <div align="center">
                             <h2 style="font-family: arno pro caption"> <%out.print((request.getAttribute("head")).toString());%> </h2>
                             <br>
                             <p><%out.print((request.getAttribute("body")).toString());%></p>
-                            <div align="center">
+                            
                                 <%if ((request.getAttribute("redirect")).equals("true")) {
                                         out.println("<small><b>You will be redirected shortly</b></small>"
                                                 + "<div class=\"loader\">"
@@ -129,8 +129,6 @@
                                     }
                                 %>
                             </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

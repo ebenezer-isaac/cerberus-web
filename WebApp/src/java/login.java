@@ -117,7 +117,7 @@ public class login extends HttpServlet {
                         session.setAttribute("access", access);
                         session.setAttribute("id", id);
                         request.setAttribute("redirect", "true");
-                        request.setAttribute("head", "Login Successfull");
+                        request.setAttribute("head", "Login Successful");
                         request.setAttribute("body", "We are populating your profile");
                         request.setAttribute("url", "homepage");
                         request.setAttribute("sec", "2");

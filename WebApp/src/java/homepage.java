@@ -43,11 +43,12 @@ public class homepage extends HttpServlet {
                         + "<div class=\"col-md-12\">\n"
                         + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
                         + "");
-                out.println("hello");
+                
+                out.println(printTimetable(1));
+                out.println(printTimetable(1));
+                out.println(printTimetable(1));
                 out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
-                out.println(printTimetable(1));
-                out.println(printTimetable(1));
-                out.println(printTimetable(1));
+                
             } else {
                 out.print("Student Panel </li>"
                         + "<li> <a href=\"#\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Attendance</a> </li>\n"
