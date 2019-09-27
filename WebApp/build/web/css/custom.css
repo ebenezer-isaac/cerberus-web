@@ -243,7 +243,7 @@ a:hover
     left: 0;
 }
 
-.inner_Wrap
+/*.inner_Wrap
 {
     position: relative;
     z-index: 0;
@@ -253,4 +253,4 @@ a:hover
 {
     position: absolute;
     z-index: 1;
-}
+}*/
