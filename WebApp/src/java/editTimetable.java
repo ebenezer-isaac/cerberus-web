@@ -1,31 +1,60 @@
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class editTimetable extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         try (PrintWriter out = response.getWriter()) {
-            out.print("<head><title>TimeTable</title></head>");
+            request.getRequestDispatcher("nav.html").include(request, response);
+            HttpSession session = request.getSession(true);
+            int access = (int) session.getAttribute("access");
+            if (access == 1) {
+                out.print("Faculty Panel </li>"
+                        + "<li> <a href=\"/Cerberus/editTimetable\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Timetable Management </a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"fas fa-list\"></i> &nbsp;  Subjects Management</a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"far fa-list-alt\"></i> &nbsp;  Student Management</a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"far fa-folder-open\"></i> &nbsp;  Attendance Management </a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"fas fa-user-cog\"></i> &nbsp; Admin Management </a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"fas fa-upload\"></i> &nbsp; Student Progression </a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Device OTP </a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Profile </a> </li>\n"
+                        + "</ul></div>");
+                out.print("<div class=\"page-content-wrapper\">\n"
+                        + "<button class=\"btn btn-link\" id=\"menu-toggle\" style=\"background-color: #0d0d0d;\"> <i class=\"fas fa-align-justify\" style=\"color: white;\"></i> </button>\n"
+                        + "<div class=\"row\">"
+                        + "<div class=\"col-md-12\">\n"
+                        + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
+                        + "");
+              
             String subs[] = new String[30];
             int no_of_subs = 0;
-            int selesem = Integer.parseInt(request.getParameter("SeleSem"));
-            int lab = Integer.parseInt(request.getParameter("lab"));
+            Date date = new Date();
+            SimpleDateFormat ft = new SimpleDateFormat("w");
+            int week = Integer.parseInt(ft.format(date));
+            int selesem = 1;
+            int lab = 1;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT `code` from `subjects` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ");");
+                ResultSet rs = stmt.executeQuery("SELECT `subjectID` from `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ");");
                 while (rs.next()) {
                     subs[no_of_subs] = rs.getString(1);
                     no_of_subs++;
@@ -33,7 +62,7 @@ public class editTimetable extends HttpServlet {
                 no_of_subs--;
                 out.println("<style>"
                         + "input[type=number]{"
-                        + "width: 35px;"
+                        + "width: 65px;"
                         + "} "
                         + "</style>");
                 out.println("<style>"
@@ -63,7 +92,21 @@ public class editTimetable extends HttpServlet {
                 out.print("<th>Friday</th>");
                 out.print("<th>Saturday</th>");
                 out.print("</tr>");
-                rs = stmt.executeQuery("Select * from `timetable" + lab + "`");
+                PreparedStatement ps = con.prepareStatement("SELECT slot.startTime, slot.endTime, "
+                        + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Monday, "
+                        + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Tuesday, "
+                        + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Wednesday, "
+                        + "MAX(CASE WHEN dayID = 'thu' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Thursday, "
+                        + "MAX(CASE WHEN dayID = 'fri' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Friday, "
+                        + "MAX(CASE WHEN dayID = 'sat' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Saturday "
+                        + "FROM timetable "
+                        + "INNER JOIN slot "
+                        + "ON timetable.slotID = slot.slotID "
+                        + "where labID=? and weekID=(select weekID from week where week = ?) "
+                        + "GROUP BY slot.startTime, slot.endTime;");
+                ps.setInt(1, 1);
+                ps.setInt(2, week);
+                rs = ps.executeQuery();
                 int line = 1;
                 while (rs.next()) {
                     out.print("<tr align='center'>");
@@ -82,6 +125,11 @@ public class editTimetable extends HttpServlet {
                             }
                             out.print(">" + subs[k] + "</option>");
                         }
+                        out.print("</select>");
+                         out.print("<select name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'>");
+                        out.print("<option name='A' value='-'>Batch-A</option>");
+                        out.print("<option name='B' value='-'>Batch-B</option>");
+                        out.print("<option name='C' value='-'>Batch-C</option>");
                         out.print("</select>");
                         out.print("</td>");
                     }
@@ -104,12 +152,13 @@ public class editTimetable extends HttpServlet {
             }
         }
     }
-
+    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);

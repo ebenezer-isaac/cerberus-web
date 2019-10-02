@@ -28,7 +28,7 @@ public class homepage extends HttpServlet {
             int access = (int) session.getAttribute("access");
             if (access == 1) {
                 out.print("Faculty Panel </li>"
-                        + "<li> <a href=\"#\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Timetable Management</a> </li>\n"
+                        + "<li> <a href=\"/Cerberus/editTimetable\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Timetable Management </a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"fas fa-list\"></i> &nbsp;  Subjects Management</a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"far fa-list-alt\"></i> &nbsp;  Student Management</a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"far fa-folder-open\"></i> &nbsp;  Attendance Management </a> </li>\n"
