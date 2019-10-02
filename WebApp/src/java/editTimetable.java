@@ -109,10 +109,10 @@ public class editTimetable extends HttpServlet {
                 rs = ps.executeQuery();
                 int line = 1;
                 while (rs.next()) {
-                    out.print("<tr align='center'>");
-                    out.print("<th><input type='number' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(0, 2))) + "'>");
+                    out.print("<tr align='center'> ");
+                    out.print("<th style=overflow:'hidden'><input type='number' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(0, 2))) + "'>");
                     out.print(":<input type='number' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(3, 5))) + "'></th>");
-                    out.print("<th><input type='number' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
+                    out.print("<th ><input type='number' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
                     out.print(":<input type='number' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
                     for (int j = 1; j <= 6; j++) {
                         out.print("<td>");

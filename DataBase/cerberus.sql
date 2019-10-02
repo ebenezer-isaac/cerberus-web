@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 12, 2019 at 12:55 PM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Generation Time: Oct 02, 2019 at 05:16 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -36,11 +36,11 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   `dateID` int(3) NOT NULL,
   `timeID` int(5) NOT NULL,
   PRIMARY KEY (`attendanceID`),
-  KEY `PRN` (`PRN`,`scheduleID`,`timeID`),
-  KEY `dateID` (`dateID`),
-  KEY `scheduleID` (`scheduleID`),
-  KEY `timeID` (`timeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `scheduleID` (`scheduleID`),
+  UNIQUE KEY `dateID` (`dateID`),
+  UNIQUE KEY `timeID` (`timeID`),
+  KEY `PRN` (`PRN`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -173,11 +173,25 @@ INSERT INTO `faculty` (`facultyID`, `name`, `email`, `password`) VALUES
 
 DROP TABLE IF EXISTS `facultyfingerprint`;
 CREATE TABLE IF NOT EXISTS `facultyfingerprint` (
-  `FacultyID` int(3) NOT NULL,
+  `ffID` int(2) NOT NULL AUTO_INCREMENT,
+  `facultyID` int(3) NOT NULL,
   `templateID` tinyint(1) NOT NULL,
   `template` blob NOT NULL,
-  PRIMARY KEY (`FacultyID`,`templateID`),
-  KEY `PRN` (`FacultyID`)
+  PRIMARY KEY (`ffID`),
+  KEY `facultyID_2` (`facultyID`,`templateID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `facultytimetable`
+--
+
+DROP TABLE IF EXISTS `facultytimetable`;
+CREATE TABLE IF NOT EXISTS `facultytimetable` (
+  `scheduleID` int(4) NOT NULL,
+  `facultyID` int(3) NOT NULL,
+  KEY `scheduleID` (`scheduleID`,`facultyID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -262,14 +276,14 @@ CREATE TABLE IF NOT EXISTS `otp` (
   `OTP` varchar(256) NOT NULL,
   PRIMARY KEY (`OTPID`),
   KEY `PRN` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `otp`
 --
 
 INSERT INTO `otp` (`OTPID`, `email`, `OTP`) VALUES
-(5, 'ebenezerv99@gmail.com', '7df5999ae1b0cbaaededbe7ea7bb3ddeadef6b91c16071e69069a2464f3f1809');
+(10, 'ebenezerv99@gmail.com', '6c4513aa93220cf39fd8c051ca95e7cd7b6f4f4f3905e07b9546b27a5ff4b990');
 
 -- --------------------------------------------------------
 
@@ -349,11 +363,12 @@ INSERT INTO `student` (`PRN`, `name`, `email`, `password`) VALUES
 
 DROP TABLE IF EXISTS `studentfingerprint`;
 CREATE TABLE IF NOT EXISTS `studentfingerprint` (
+  `sfID` int(3) NOT NULL AUTO_INCREMENT,
   `PRN` bigint(16) NOT NULL,
   `templateID` tinyint(1) NOT NULL,
   `template` blob NOT NULL,
-  PRIMARY KEY (`PRN`,`templateID`),
-  KEY `PRN` (`PRN`)
+  PRIMARY KEY (`sfID`),
+  KEY `PRN` (`PRN`,`templateID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -401,29 +416,29 @@ CREATE TABLE IF NOT EXISTS `subject` (
 --
 
 INSERT INTO `subject` (`subjectID`, `sem`, `subject`, `classID`) VALUES
-('BCA1001', 2, 'Desktop Publishing LAB', 1),
+('BCA1001', 2, 'Desktop Publishing', 1),
 ('BCA1009', 4, 'Web Publishing', 2),
 ('BCA1010', 4, 'Introduction to Multimedia', 2),
-('BCA1105', 1, 'PC Software and Database Lab', 1),
-('BCA1106', 1, 'Programming Lab', 1),
-('BCA1205', 2, 'OOP Lab', 1),
-('BCA1206', 2, 'Data Structures Lab', 1),
-('BCA1207', 2, 'SQL Lab', 1),
-('BCA1208', 1, 'HTML-I Lab', 1),
-('BCA1301', 3, 'Java Lab', 2),
-('BCA1303', 4, '.NET Programming LAB', 2),
-('BCA1304', 3, 'Shell Programming Lab', 2),
-('BCA1305', 3, 'Database Application Programming Lab', 2),
-('BCA1306', 3, 'Computer Networks-I Lab', 2),
-('BCA1307', 3, 'HTML-II Lab', 2),
-('BCA1308', 3, 'Data Exploration Lab', 2),
-('BCA1401', 4, 'Advanced Java Programming Lab', 2),
-('BCA1403', 4, 'Web technology Lab', 2),
-('BCA1405', 4, 'Computer Networks-II Lab', 2),
-('BCA1501', 5, 'XML Lab', 3),
-('BCA1530', 5, 'Web Application Development Lab', 3),
+('BCA1105', 1, 'PC Software and Database', 1),
+('BCA1106', 1, 'Programming', 1),
+('BCA1205', 2, 'OOP', 1),
+('BCA1206', 2, 'Data Structures', 1),
+('BCA1207', 2, 'SQL', 1),
+('BCA1208', 1, 'HTML-I', 1),
+('BCA1301', 3, 'Java', 2),
+('BCA1303', 4, '.NET Programming', 2),
+('BCA1304', 3, 'Shell Programming', 2),
+('BCA1305', 3, 'Database Application Programming', 2),
+('BCA1306', 3, 'Computer Networks-I ', 2),
+('BCA1307', 3, 'HTML-II', 2),
+('BCA1308', 3, 'Data Exploration', 2),
+('BCA1401', 4, 'Advanced Java Programming', 2),
+('BCA1403', 4, 'Web technology', 2),
+('BCA1405', 4, 'Computer Networks-II', 2),
+('BCA1501', 5, 'XML', 3),
+('BCA1530', 5, 'Web Application Development', 3),
 ('BCA1538', 5, 'Artificial Intelligence', 3),
-('BCA1539', 5, 'Mobile Computing Lab', 3);
+('BCA1539', 5, 'Mobile Computing', 3);
 
 -- --------------------------------------------------------
 
@@ -458,38 +473,36 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   `labID` tinyint(1) NOT NULL,
   `subjectID` varchar(7) NOT NULL,
   `batchID` tinyint(1) NOT NULL,
-  `facultyID` int(3) NOT NULL,
   `weekID` int(2) NOT NULL,
   `dayID` varchar(3) NOT NULL,
   PRIMARY KEY (`scheduleID`),
-  KEY `sessionID` (`slotID`,`labID`,`subjectID`,`batchID`,`facultyID`),
+  KEY `slotID` (`slotID`),
   KEY `labID` (`labID`),
-  KEY `facultyID` (`facultyID`),
+  KEY `subjectID` (`subjectID`),
   KEY `batchID` (`batchID`),
   KEY `weekID` (`weekID`),
-  KEY `dayID` (`dayID`),
-  KEY `subjectID` (`subjectID`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+  KEY `dayID` (`dayID`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timetable`
 --
 
-INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`, `facultyID`, `weekID`, `dayID`) VALUES
-(1, 1, 1, 'BCA1538', 1, 11, 1, 'mon'),
-(2, 2, 1, 'BCA1301', 1, 3, 1, 'mon'),
-(3, 2, 2, 'BCA1308', 2, 1, 1, 'mon'),
-(4, 2, 3, 'BCA1303', 3, 5, 1, 'mon'),
-(5, 3, 1, 'BCA1539', 1, 3, 1, 'mon'),
-(6, 4, 1, 'BCA1105', 1, 6, 1, 'mon'),
-(7, 4, 2, 'BCA1106', 2, 1, 1, 'mon'),
-(8, 4, 3, 'BCA1208', 3, 5, 1, 'mon'),
-(9, 5, 1, 'BCA1001', 1, 10, 1, 'mon'),
-(10, 5, 2, 'BCA1001', 2, 10, 1, 'mon'),
-(11, 5, 3, 'BCA1001', 3, 10, 1, 'mon'),
-(12, 1, 1, 'BCA1538', 2, 11, 1, 'tue'),
-(13, 1, 2, 'BCA1530', 1, 8, 1, 'tue'),
-(14, 2, 1, 'BCA1304', 1, 2, 1, 'tue');
+INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`, `weekID`, `dayID`) VALUES
+(1, 1, 1, 'BCA1538', 1, 1, 'mon'),
+(2, 2, 1, 'BCA1301', 1, 1, 'mon'),
+(3, 2, 2, 'BCA1308', 2, 1, 'mon'),
+(4, 2, 3, 'BCA1303', 3, 1, 'mon'),
+(5, 3, 1, 'BCA1539', 1, 1, 'mon'),
+(6, 4, 1, 'BCA1105', 1, 1, 'mon'),
+(7, 4, 2, 'BCA1106', 2, 1, 'mon'),
+(8, 4, 3, 'BCA1208', 3, 1, 'mon'),
+(9, 5, 1, 'BCA1001', 1, 1, 'mon'),
+(10, 5, 2, 'BCA1001', 2, 1, 'mon'),
+(11, 5, 3, 'BCA1001', 3, 1, 'mon'),
+(12, 1, 1, 'BCA1538', 2, 1, 'tue'),
+(13, 1, 2, 'BCA1530', 1, 1, 'tue'),
+(14, 2, 1, 'BCA1304', 1, 1, 'tue');
 
 -- --------------------------------------------------------
 
@@ -501,15 +514,17 @@ DROP TABLE IF EXISTS `week`;
 CREATE TABLE IF NOT EXISTS `week` (
   `weekID` int(2) NOT NULL AUTO_INCREMENT,
   `week` int(2) NOT NULL,
-  PRIMARY KEY (`weekID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`weekID`),
+  UNIQUE KEY `week` (`week`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `week`
 --
 
 INSERT INTO `week` (`weekID`, `week`) VALUES
-(1, 37);
+(1, 39),
+(2, 40);
 
 --
 -- Constraints for dumped tables
@@ -519,16 +534,16 @@ INSERT INTO `week` (`weekID`, `week`) VALUES
 -- Constraints for table `attendance`
 --
 ALTER TABLE `attendance`
-  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`PRN`) REFERENCES `student` (`PRN`),
-  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`dateID`) REFERENCES `datedata` (`dateID`),
-  ADD CONSTRAINT `attendance_ibfk_3` FOREIGN KEY (`scheduleID`) REFERENCES `timetable` (`scheduleID`),
+  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`scheduleID`) REFERENCES `timetable` (`scheduleID`),
+  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`PRN`) REFERENCES `student` (`PRN`),
+  ADD CONSTRAINT `attendance_ibfk_3` FOREIGN KEY (`dateID`) REFERENCES `datedata` (`dateID`),
   ADD CONSTRAINT `attendance_ibfk_4` FOREIGN KEY (`timeID`) REFERENCES `timedata` (`timeID`);
 
 --
 -- Constraints for table `facultyfingerprint`
 --
 ALTER TABLE `facultyfingerprint`
-  ADD CONSTRAINT `facultyfingerprint_ibfk_1` FOREIGN KEY (`FacultyID`) REFERENCES `faculty` (`facultyID`);
+  ADD CONSTRAINT `facultyfingerprint_ibfk_1` FOREIGN KEY (`facultyID`) REFERENCES `faculty` (`facultyID`);
 
 --
 -- Constraints for table `log`
@@ -571,11 +586,10 @@ ALTER TABLE `subject`
 ALTER TABLE `timetable`
   ADD CONSTRAINT `timetable_ibfk_1` FOREIGN KEY (`slotID`) REFERENCES `slot` (`slotID`),
   ADD CONSTRAINT `timetable_ibfk_2` FOREIGN KEY (`labID`) REFERENCES `lab` (`labID`),
-  ADD CONSTRAINT `timetable_ibfk_3` FOREIGN KEY (`facultyID`) REFERENCES `faculty` (`facultyID`),
-  ADD CONSTRAINT `timetable_ibfk_4` FOREIGN KEY (`batchID`) REFERENCES `batch` (`batchID`),
-  ADD CONSTRAINT `timetable_ibfk_5` FOREIGN KEY (`weekID`) REFERENCES `week` (`weekID`),
-  ADD CONSTRAINT `timetable_ibfk_6` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`),
-  ADD CONSTRAINT `timetable_ibfk_7` FOREIGN KEY (`dayID`) REFERENCES `daydata` (`dayID`);
+  ADD CONSTRAINT `timetable_ibfk_3` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`),
+  ADD CONSTRAINT `timetable_ibfk_4` FOREIGN KEY (`weekID`) REFERENCES `week` (`weekID`),
+  ADD CONSTRAINT `timetable_ibfk_5` FOREIGN KEY (`batchID`) REFERENCES `batch` (`batchID`),
+  ADD CONSTRAINT `timetable_ibfk_6` FOREIGN KEY (`dayID`) REFERENCES `daydata` (`dayID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
