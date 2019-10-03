@@ -85,7 +85,7 @@ public class homepage extends HttpServlet {
                 ps2.setInt(1, weekid);
                 ps2.setInt(2, week);
                 ps2.executeUpdate();
-                PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, facultyID, weekID, dayID) select slotID, labID, subjectID, batchID, facultyID, ?, dayID from timetable where weekID = ?");
+                PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = ?");
                 ps3.setInt(1, weekid);
                 ps3.setInt(2, maxweekid);
                 ps3.executeUpdate();

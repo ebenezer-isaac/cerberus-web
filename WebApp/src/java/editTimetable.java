@@ -42,7 +42,6 @@ public class editTimetable extends HttpServlet {
                         + "<div class=\"col-md-12\">\n"
                         + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
                         + "");
-              
             String subs[] = new String[30];
             int no_of_subs = 0;
             Date date = new Date();
@@ -65,25 +64,19 @@ public class editTimetable extends HttpServlet {
                         + "width: 65px;"
                         + "} "
                         + "</style>");
-                out.println("<style>"
-                        + "table.fixed { table-layout:fixed; }"
-                        + "table.fixed th { overflow: hidden; }"
-                        + "table.fixed th {width:80px;}"
-                        + "table.fixed th:nth-of-type(1) {width:60px;}"
-                        + "table.fixed th:nth-of-type(2) {width:60px;}"
-                        + "</style>");
-                out.print("<script>"
-                        + "function zeroPad(num) {"
-                        + "var s = num+'';"
-                        + "while (s.length < 2) s = '0' + s;"
-                        + "return(s);"
-                        + "}"
-                        + "</script>");
+                out.println("<style> th { white-space: nowrap; } </style>");
+//                out.print("<script>"
+//                        + "function zeroPad(num) {"
+//                        + "var s = num+'';"
+//                        + "while (s.length < 2) s = '0' + s;"
+//                        + "return(s);"
+//                        + "}"
+//                        + "</script>");
                 out.print("<body align = 'center'><br><br>");
                 out.print("<form action='editTimetable' method='post'>");
-                out.print("<table cellpadding='5' border ='1' align = 'center'>");
+                out.print("<table class=\"table table-bordered\"><thead>");
                 out.print("<tr align = center>");
-                out.print("<th>Start_Time</th>");
+                out.print("<th style=\"white-space:nowrap;\" >Start_Time</th>");
                 out.print("<th>End_Time</th>");
                 out.print("<th>Monday</th>");
                 out.print("<th>Tuesday</th>");
@@ -91,7 +84,7 @@ public class editTimetable extends HttpServlet {
                 out.print("<th>Thursday</th>");
                 out.print("<th>Friday</th>");
                 out.print("<th>Saturday</th>");
-                out.print("</tr>");
+                out.print("</tr></thead><tbody>");
                 PreparedStatement ps = con.prepareStatement("SELECT slot.startTime, slot.endTime, "
                         + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Monday, "
                         + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.subject from subject where timetable.subjectID=subject.subjectID),' - ',timetable.batchID) END) as Tuesday, "
@@ -109,13 +102,13 @@ public class editTimetable extends HttpServlet {
                 rs = ps.executeQuery();
                 int line = 1;
                 while (rs.next()) {
-                    out.print("<tr align='center'> ");
-                    out.print("<th style=overflow:'hidden'><input type='number' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(0, 2))) + "'>");
-                    out.print(":<input type='number' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(3, 5))) + "'></th>");
-                    out.print("<th ><input type='number' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
-                    out.print(":<input type='number' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
+                    out.print("<tr> ");
+                    out.print("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(0, 2))) + "'>");
+                    out.print(" : <input type='number'  style='border:1px solid ;' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(3, 5))) + "'></th>");
+                    out.print("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
+                    out.print(" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
                     for (int j = 1; j <= 6; j++) {
-                        out.print("<td>");
+                        out.print("<td valign='middle'>");
                         out.print("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'>");
                         out.print("<option name='Sub' value='-'>No Lab</option>");
                         for (int k = 0; k <= no_of_subs; k++) {
@@ -136,13 +129,14 @@ public class editTimetable extends HttpServlet {
                     out.print("</tr>");
                     line++;
                 }
-                out.print("</table><br><br>");
+                out.print("</tbody></table><br><br>");
                 out.print("<input type='text' name='lab' value='" + lab + "' hidden>");
                 out.print("<input type='submit' value='Submit' align='center'>");
                 out.print("</form>");
                 out.println("<form action='menu' method='post'>");
                 out.println("<input type='submit' value='Back'>");
                 out.println("</form>");
+                out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");

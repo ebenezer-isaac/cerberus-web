@@ -64,10 +64,10 @@ public class editSubject extends HttpServlet {
                             + "{alert('hola');}"
                             + "</script>");
                     out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='7'>"
-                            + "<tr><td>Subject Code</td><td> : </td><td><input type='text' name='code'/></td></tr>"
-                            + "<tr><td>Subject Name</td><td> : </td><td><input type='text' name='name'/></td></tr>"
-                            + "<tr><td>Semester</td><td> : </td><td><input type='number' min = '1' max = '5' value = '01' onchange='this.value = zeroPad(this.value)' name='sem'/></td></tr>"
-                            + "<tr><td>No of Labs Conducted</td><td> : </td><td><input type='number' min = '0' max = '30' value = '00' onchange='this.value = zeroPad(this.value)' name='labs'/></td></tr>"
+                            + "<tr><td>Subject Code</td><td> : </td><td><input type='text' name='subjectID'/></td></tr>"
+                            + "<tr><td>Subject Name</td><td> : </td><td><input type='text' name='subject'/></td></tr>"
+                            + "<tr><td>Semester</td><td> : </td><td><input type='number' min = '1' max = '5' value = '01' onchange='this.value = zeroPad(this.value)' name='sem' style='width: 40%;'/></td></tr>"
+                            + "<tr><td>No of Labs Conducted</td><td> : </td><td><input type='number' min = '0' max = '30' value = '00' onchange='this.value = zeroPad(this.value)' name='classID' style='width: 40%;'/></td></tr>"
                             + "</table><br><button type='submit'>Submit</button>"
                             + "</form>");
                 } else {
