@@ -25,7 +25,6 @@
         <servlet-class>editTimetable</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
         <servlet-name>dispSubject</servlet-name>
         <servlet-class>dispSubject</servlet-class>
     </servlet>
@@ -36,10 +35,10 @@
     <servlet>
         <servlet-name>addSubject</servlet-name>
         <servlet-class>addSubject</servlet-class>
-=======
+    </servlet>
+    <servlet>
         <servlet-name>saveTimetable</servlet-name>
         <servlet-class>saveTimetable</servlet-class>
->>>>>>> 1fe6c78bcfb613403010327ae131056959c6696d
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -66,7 +65,6 @@
         <url-pattern>/editTimetable</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>dispSubject</servlet-name>
         <url-pattern>/dispSubject</url-pattern>
     </servlet-mapping>
@@ -77,10 +75,10 @@
     <servlet-mapping>
         <servlet-name>addSubject</servlet-name>
         <url-pattern>/addSubject</url-pattern>
-=======
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>saveTimetable</servlet-name>
         <url-pattern>/saveTimetable</url-pattern>
->>>>>>> 1fe6c78bcfb613403010327ae131056959c6696d
     </servlet-mapping>
     <session-config>
         <session-timeout>
