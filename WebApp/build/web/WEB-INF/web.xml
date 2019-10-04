@@ -17,10 +17,6 @@
         <servlet-class>homepage</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>subject</servlet-name>
-        <servlet-class>subject</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>editTimetable</servlet-name>
         <servlet-class>editTimetable</servlet-class>
     </servlet>
@@ -63,10 +59,6 @@
     <servlet-mapping>
         <servlet-name>homepage</servlet-name>
         <url-pattern>/homepage</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>subject</servlet-name>
-        <url-pattern>/subject</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>editTimetable</servlet-name>

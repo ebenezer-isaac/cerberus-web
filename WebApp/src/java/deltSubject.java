@@ -19,53 +19,30 @@ public class deltSubject extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String sub = request.getParameter("subject");
-            String division = "";
-            int sem = 0;
-
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("Select `sem` from `subject` where `subjectID`='" + sub + "'");
-                while (rs.next()) {
-                    sem = Integer.parseInt(rs.getString(1));
-                }
-
-                switch (sem) {
-                    case 1:
-                        division = "fy";
-                        break;
-                    case 2:
-                        division = "fy";
-                        break;
-                    case 3:
-                        division = "sy";
-                        break;
-                    case 4:
-                        division = "sy";
-                        break;
-                    case 5:
-                        division = "ty";
-                        break;
-                }
-
                 stmt.executeUpdate("Delete from `subject` where `subjectID` = '" + sub + "';");
-                stmt.executeUpdate("DROP TABLE `" + sub + "`");
-                stmt.executeUpdate("ALTER TABLE `details_" + division + "` DROP COLUMN `" + sub + "`");
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("message", "The subject `" + sub + "` has been successfully deleted");
-                request.setAttribute("redirect", "disSubject");
-                rd.forward(request, response);
-                con.close();
             } catch (ClassNotFoundException | SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("message", e.getMessage());
-                request.setAttribute("redirect", "menu");
+                request.setAttribute("redirect", "true");
+                request.setAttribute("head", "Database Error");
+                request.setAttribute("body", e.getMessage());
+                request.setAttribute("url", "dispSubject");
+                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }
+            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+            request.setAttribute("redirect", "true");
+            request.setAttribute("head", "Subject Deleted");
+            request.setAttribute("body", "The subject was deleted successfully<br>SubjectID : "+sub);
+            request.setAttribute("url", "dispSubject");
+            request.setAttribute("sec", "2");
+            rd.forward(request, response);
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

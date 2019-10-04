@@ -52,7 +52,7 @@ public class dispSubject extends HttpServlet {
                 out.print("<th>Subject Code</th>");
                 out.print("<th>Semester</th>");
                 out.print("<th>Subject Name</th>");
-                out.print("<th>classID</th></tr>");
+                out.print("<th>Class</th></tr>");
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -61,7 +61,25 @@ public class dispSubject extends HttpServlet {
                     while (rs.next()) {
                         out.print("</tr>");
                         for (int i = 1; i <= 4; i++) {
-                            out.print("<td>" + rs.getString(i) + "</td>");
+                            if (i != 4) {
+                                out.print("<td>" + rs.getString(i) + "</td>");
+                            } else {
+                                int sem = rs.getInt(i);
+                                String div = "";
+                                switch (sem) {
+                                    case 1:
+                                        div = "FY";
+                                        break;
+                                    case 2:
+                                        div = "SY";
+                                        break;
+                                    case 3:
+                                        div = "TY";
+                                        break;
+                                }
+                                out.print("<td>" + div + "</td>");
+                            }
+
                         }
                         out.print("</tr>");
                     }

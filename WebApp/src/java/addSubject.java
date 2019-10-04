@@ -17,8 +17,24 @@ public class addSubject extends HttpServlet {
             String sid = request.getParameter("subjectID").toUpperCase();
             String name = request.getParameter("subject");
             int sem = Integer.parseInt(request.getParameter("sem"));
-            int div = Integer.parseInt(request.getParameter("classID"));
-
+            int div = 0;
+            switch (sem) {
+                case 1:
+                    div=1;
+                    break;
+                case 2:
+                    div = 1;
+                    break;
+                case 3:
+                    div = 2;
+                    break;
+                case 4:
+                    div = 2;
+                    break;
+                case 5:
+                    div = 3;
+                    break;
+            }
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -30,15 +46,15 @@ public class addSubject extends HttpServlet {
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Database Error");
                 request.setAttribute("body", e.getMessage());
-                request.setAttribute("url", "index.html");
+                request.setAttribute("url", "dispSubject");
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }
-            RequestDispatcher rd = request.getRequestDispatcher("disSubject");
+            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
             request.setAttribute("redirect", "true");
             request.setAttribute("head", "Subject Added");
-            request.setAttribute("body", "The subject was added successfully");
-            request.setAttribute("url", "homepage");
+            request.setAttribute("body", "The subject was added successfully<br>SubjectID : "+sid);
+            request.setAttribute("url", "dispSubject");
             request.setAttribute("sec", "2");
             rd.forward(request, response);
         }
