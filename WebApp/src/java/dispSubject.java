@@ -88,7 +88,7 @@ public class dispSubject extends HttpServlet {
                     out.print("<form action='editSubject' method='post' align='center'>");
                     out.print("<input type='radio' name='flow' value='add'> Add Subject<br>");
                     out.print("<input type='radio' name='flow' value='delete'> Delete  Subject<br><br>");
-                    out.print("<input type='submit' value='Submit'>");
+                    out.print("<input type='submit' value='Add Subject' onClick='/'>");
                     out.print("</form>");
                     out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
                     con.close();

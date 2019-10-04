@@ -26,22 +26,9 @@ public class editTimetable extends HttpServlet {
             HttpSession session = request.getSession(true);
             int access = (int) session.getAttribute("access");
             if (access == 1) {
-                out.print("Faculty Panel </li>"
-                        + "<li> <a href=\"/Cerberus/editTimetable\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Timetable Management </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-list\"></i> &nbsp;  Subjects Management</a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"far fa-list-alt\"></i> &nbsp;  Student Management</a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"far fa-folder-open\"></i> &nbsp;  Attendance Management </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-user-cog\"></i> &nbsp; Admin Management </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-upload\"></i> &nbsp; Student Progression </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Device OTP </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Profile </a> </li>\n"
-                        + "</ul></div>");
-                out.print("<div class=\"page-content-wrapper\">\n"
-                        + "<button class=\"btn btn-link\" id=\"menu-toggle\" style=\"background-color: #0d0d0d;\"> <i class=\"fas fa-align-justify\" style=\"color: white;\"></i> </button>\n"
-                        + "<div class=\"row\">"
-                        + "<div class=\"col-md-12\">\n"
-                        + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
-                        + "");
+           request.getRequestDispatcher("nav.html").include(request, response);
+           request.getRequestDispatcher("side-faculty.html").include(request, response);
+            }
             String subs[] = new String[30];
             int no_of_subs = 0;
             Date date = new Date();
