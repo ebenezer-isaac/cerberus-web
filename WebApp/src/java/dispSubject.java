@@ -47,12 +47,12 @@ public class dispSubject extends HttpServlet {
                         + "} \n"
                         + "</style>");
 
-                out.print("<table cellpadding='5' border ='1' align = 'center'>");
+                out.print("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
                 out.print("<tr>");
                 out.print("<th>Subject Code</th>");
                 out.print("<th>Semester</th>");
                 out.print("<th>Subject Name</th>");
-                out.print("<th>Class</th></tr>");
+                out.print("<th>Class</th></tr></thead><tbody>");
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -83,12 +83,14 @@ public class dispSubject extends HttpServlet {
                         }
                         out.print("</tr>");
                     }
-                    out.print("</table><br>");
+                    out.print("</tbody></table><br>");
+                    
                     out.print("<form action='editSubject' method='post' align='center'>");
                     out.print("<input type='radio' name='flow' value='add'> Add Subject<br>");
                     out.print("<input type='radio' name='flow' value='delete'> Delete  Subject<br><br>");
                     out.print("<input type='submit' value='Submit'>");
                     out.print("</form>");
+                    out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -96,9 +98,6 @@ public class dispSubject extends HttpServlet {
                     request.setAttribute("redirect", "menu");
                     rd.forward(request, response);
                 }
-                out.println("<form action='menu' method='post' align='center'>"
-                        + "<input type='submit' value='Back'>"
-                        + "</form>");
             }
         }
     }
