@@ -80,7 +80,7 @@ public class editSubject extends HttpServlet {
                                 + "else"
                                 + "{document.getElementById('butt').style.display = 'none';}}"
                                 + "</script>");
-                        out.print("<form action='delSubject' method='post'>");
+                        out.print("<form action='deltSubject' method='post'>");
                         out.print("<div align='center'><br>Select the subject you want to delete : <br><br>");
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
