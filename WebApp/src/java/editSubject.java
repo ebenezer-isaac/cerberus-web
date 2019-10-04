@@ -63,10 +63,10 @@ public class editSubject extends HttpServlet {
                             + "function myFuntion()"
                             + "{alert('hola');}"
                             + "</script>");
-                    out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='7'>"
-                            + "<tr><td>Subject Code</td><td> : </td><td><input type='text' name='subjectID'/></td></tr>"
-                            + "<tr><td>Subject Name</td><td> : </td><td><input type='text' name='subject'/></td></tr>"
-                            + "<tr><td>Semester</td><td> : </td><td><input type='number' min = '1' max = '5' value = '01' onchange='this.value = zeroPad(this.value)' name='sem' style='width: 40%;'/></td></tr>"
+                    out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
+                            + "<tr><td>Subject Code</td><td> : </td><td><input type='text' name='subjectID' pattern='^BCA\\d\\d\\d\\d$' style=\"text-transform:uppercase\"/></td></tr>"
+                            + "<tr><td>Subject Name</td><td> : </td><td><input type='text' name='subject'/> *Please do NOT use abbreviations </td></tr> "
+                            + "<tr><td>Semester</td><td> : </td><td><input type='number' min = '1' max = '5' value = '01' onchange='this.value = zeroPad(this.value)' name='sem' style='width: 100%;'/></td></tr>"
                             + "</table><br><button type='submit'>Submit</button>"
                             + "</form>");
                 } else {
