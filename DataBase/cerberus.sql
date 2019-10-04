@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 02, 2019 at 05:16 PM
+-- Generation Time: Oct 04, 2019 at 06:05 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.14
 
@@ -482,7 +482,7 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   KEY `batchID` (`batchID`),
   KEY `weekID` (`weekID`),
   KEY `dayID` (`dayID`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timetable`
@@ -502,7 +502,21 @@ INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`
 (11, 5, 3, 'BCA1001', 3, 1, 'mon'),
 (12, 1, 1, 'BCA1538', 2, 1, 'tue'),
 (13, 1, 2, 'BCA1530', 1, 1, 'tue'),
-(14, 2, 1, 'BCA1304', 1, 1, 'tue');
+(14, 2, 1, 'BCA1304', 1, 1, 'tue'),
+(15, 1, 1, 'BCA1538', 1, 2, 'mon'),
+(16, 2, 1, 'BCA1301', 1, 2, 'mon'),
+(17, 2, 2, 'BCA1308', 2, 2, 'mon'),
+(18, 2, 3, 'BCA1303', 3, 2, 'mon'),
+(19, 3, 1, 'BCA1539', 1, 2, 'mon'),
+(20, 4, 1, 'BCA1105', 1, 2, 'mon'),
+(21, 4, 2, 'BCA1106', 2, 2, 'mon'),
+(22, 4, 3, 'BCA1208', 3, 2, 'mon'),
+(23, 5, 1, 'BCA1001', 1, 2, 'mon'),
+(24, 5, 2, 'BCA1001', 2, 2, 'mon'),
+(25, 5, 3, 'BCA1001', 3, 2, 'mon'),
+(26, 1, 1, 'BCA1538', 2, 2, 'tue'),
+(27, 1, 2, 'BCA1530', 1, 2, 'tue'),
+(28, 2, 1, 'BCA1304', 1, 2, 'tue');
 
 -- --------------------------------------------------------
 
