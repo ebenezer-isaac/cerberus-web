@@ -28,7 +28,7 @@ public class editTimetable extends HttpServlet {
             if (access == 1) {
                 out.print("Faculty Panel </li>"
                         + "<li> <a href=\"/Cerberus/editTimetable\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Timetable Management </a> </li>\n"
-                        + "<li> <a href=\"/Cerberus/dispSubject\"> <i class=\"fas fa-list\"></i> &nbsp;  Subjects Management</a> </li>\n"
+                        + "<li> <a href=\"#\"> <i class=\"fas fa-list\"></i> &nbsp;  Subjects Management</a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"far fa-list-alt\"></i> &nbsp;  Student Management</a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"far fa-folder-open\"></i> &nbsp;  Attendance Management </a> </li>\n"
                         + "<li> <a href=\"#\"> <i class=\"fas fa-user-cog\"></i> &nbsp; Admin Management </a> </li>\n"
@@ -73,7 +73,7 @@ public class editTimetable extends HttpServlet {
 //                        + "}"
 //                        + "</script>");
                 out.print("<body align = 'center'><br><br>");
-                out.print("<form action='editTimetable' method='post'>");
+                out.print("<form action='saveTimetable' method='post'>");
                 out.print("<table class=\"table table-bordered\"><thead>");
                 out.print("<tr align = center>");
                 out.print("<th style=\"white-space:nowrap;\" >Start_Time</th>");
@@ -108,7 +108,7 @@ public class editTimetable extends HttpServlet {
                     out.print("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
                     out.print(" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
                     for (int j = 1; j <= 6; j++) {
-                        out.print("<td valign='middle'>");
+                        out.print("<td align='center'>");
                         out.print("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'>");
                         out.print("<option name='Sub' value='-'>No Lab</option>");
                         for (int k = 0; k <= no_of_subs; k++) {
@@ -133,7 +133,7 @@ public class editTimetable extends HttpServlet {
                 out.print("<input type='text' name='lab' value='" + lab + "' hidden>");
                 out.print("<input type='submit' value='Submit' align='center'>");
                 out.print("</form>");
-                out.println("<form action='menu' method='post'>");
+                out.println("<form action='homepage' method='post'>");
                 out.println("<input type='submit' value='Back'>");
                 out.println("</form>");
                 out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
