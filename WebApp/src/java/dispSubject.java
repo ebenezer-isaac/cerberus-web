@@ -57,7 +57,7 @@ public class dispSubject extends HttpServlet {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("Select * from `subject`  ORDER BY `subjectID` ASC");
+                    ResultSet rs = stmt.executeQuery("Select * from `subject` ORDER BY `sem` ASC");
                     while (rs.next()) {
                         out.print("</tr>");
                         for (int i = 1; i <= 4; i++) {
