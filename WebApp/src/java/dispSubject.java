@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,11 +17,17 @@ import javax.servlet.http.HttpSession;
 
 public class dispSubject extends HttpServlet {
 
+    int week;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession(true);
+            Date date = new Date();
+            SimpleDateFormat ft = new SimpleDateFormat("w");
+            week = Integer.parseInt(ft.format(date));
+            HttpSession session = request.getSession();
+            session.setAttribute("week", week);
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
@@ -44,8 +52,16 @@ public class dispSubject extends HttpServlet {
                     break;
             }
 
-        }
+        } catch (Exception e) {
+            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+            request.setAttribute("redirect", "true");
+            request.setAttribute("head", "Security Firewall");
+            request.setAttribute("body", "Please login to continue");
+            request.setAttribute("url", "index.html");
+            request.setAttribute("sec", "2");
+            rd.forward(request, response);
 
+        }
     }
 
     public String printSubtable() {
