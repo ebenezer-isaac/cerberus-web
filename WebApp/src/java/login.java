@@ -99,10 +99,7 @@ public class login extends HttpServlet {
                 }
                 if (corrpass.equals(pass)) {
                     String userid = "";
-                    System.out.println(email);
                     int index = email.indexOf("@");
-                    System.out.println(index);
-                    System.out.println(userid);
                     if (index != -1) {
                         userid = email.substring(0, index);
                     }
@@ -112,15 +109,10 @@ public class login extends HttpServlet {
                         session.setAttribute("email", email);
                         rd.forward(request, response);
                     } else {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        RequestDispatcher rd = request.getRequestDispatcher("homepage");
                         session.setAttribute("email", email);
                         session.setAttribute("access", access);
                         session.setAttribute("id", id);
-                        request.setAttribute("redirect", "true");
-                        request.setAttribute("head", "Login Successful");
-                        request.setAttribute("body", "We are populating your profile");
-                        request.setAttribute("url", "homepage");
-                        request.setAttribute("sec", "2");
                         rd.forward(request, response);
                     }
                 } else {

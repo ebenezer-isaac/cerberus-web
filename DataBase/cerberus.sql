@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 04, 2019 at 06:05 AM
--- Server version: 5.7.24
--- PHP Version: 7.2.14
+-- Generation Time: Oct 07, 2019 at 01:17 PM
+-- Server version: 5.7.26
+-- PHP Version: 7.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS `batch` (
 --
 
 INSERT INTO `batch` (`batchID`, `name`) VALUES
-(1, 'Batch 1'),
-(2, 'Batch 2'),
-(3, 'Batch 3');
+(1, 'Batch A'),
+(2, 'Batch B'),
+(3, 'Batch C');
 
 -- --------------------------------------------------------
 
@@ -406,6 +406,7 @@ CREATE TABLE IF NOT EXISTS `subject` (
   `subjectID` varchar(7) NOT NULL,
   `sem` tinyint(1) NOT NULL,
   `subject` varchar(40) NOT NULL,
+  `Abbreviation` varchar(10) NOT NULL,
   `classID` tinyint(1) NOT NULL,
   PRIMARY KEY (`subjectID`,`sem`),
   KEY `classID` (`classID`)
@@ -415,30 +416,30 @@ CREATE TABLE IF NOT EXISTS `subject` (
 -- Dumping data for table `subject`
 --
 
-INSERT INTO `subject` (`subjectID`, `sem`, `subject`, `classID`) VALUES
-('BCA1001', 2, 'Desktop Publishing', 1),
-('BCA1009', 4, 'Web Publishing', 2),
-('BCA1010', 4, 'Introduction to Multimedia', 2),
-('BCA1105', 1, 'PC Software and Database', 1),
-('BCA1106', 1, 'Programming', 1),
-('BCA1205', 2, 'OOP', 1),
-('BCA1206', 2, 'Data Structures', 1),
-('BCA1207', 2, 'SQL', 1),
-('BCA1208', 1, 'HTML-I', 1),
-('BCA1301', 3, 'Java', 2),
-('BCA1303', 4, '.NET Programming', 2),
-('BCA1304', 3, 'Shell Programming', 2),
-('BCA1305', 3, 'Database Application Programming', 2),
-('BCA1306', 3, 'Computer Networks-I ', 2),
-('BCA1307', 3, 'HTML-II', 2),
-('BCA1308', 3, 'Data Exploration', 2),
-('BCA1401', 4, 'Advanced Java Programming', 2),
-('BCA1403', 4, 'Web technology', 2),
-('BCA1405', 4, 'Computer Networks-II', 2),
-('BCA1501', 5, 'XML', 3),
-('BCA1530', 5, 'Web Application Development', 3),
-('BCA1538', 5, 'Artificial Intelligence', 3),
-('BCA1539', 5, 'Mobile Computing', 3);
+INSERT INTO `subject` (`subjectID`, `sem`, `subject`, `Abbreviation`, `classID`) VALUES
+('BCA1001', 2, 'Desktop Publishing', 'DTP', 1),
+('BCA1009', 4, 'Web Publishing', 'Web Pub', 2),
+('BCA1010', 4, 'Introduction to Multimedia', 'IM', 2),
+('BCA1105', 1, 'PC Software and Database', 'PCDB', 1),
+('BCA1106', 1, 'Programming', 'Python', 1),
+('BCA1205', 2, 'Object Oriented Programming', 'OOP', 1),
+('BCA1206', 2, 'Data Structures', 'DS', 1),
+('BCA1207', 2, 'Structured Query Language', 'SQL', 1),
+('BCA1208', 1, 'HTML-I', 'HTML-1', 1),
+('BCA1301', 3, 'Java', 'JAVA', 2),
+('BCA1303', 4, '.NET Programming', '.NET', 2),
+('BCA1304', 3, 'Shell Programming', 'SHELL', 2),
+('BCA1305', 3, 'Database Application Programming', 'DAP', 2),
+('BCA1306', 3, 'Computer Networks-I ', 'CN-1', 2),
+('BCA1307', 3, 'HTML-II', 'HTML-2', 2),
+('BCA1308', 3, 'Data Exploration', 'DE', 2),
+('BCA1401', 4, 'Advanced Java Programming', 'Adv. JAVA', 2),
+('BCA1403', 4, 'Web technology', 'WT', 2),
+('BCA1405', 4, 'Computer Networks-II', 'CN-2', 2),
+('BCA1501', 5, 'XML', 'XML', 3),
+('BCA1530', 5, 'Web Application Development', 'WAD', 3),
+('BCA1538', 5, 'Artificial Intelligence', 'AI', 3),
+('BCA1539', 5, 'Mobile Computing', 'MC', 3);
 
 -- --------------------------------------------------------
 
@@ -482,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   KEY `batchID` (`batchID`),
   KEY `weekID` (`weekID`),
   KEY `dayID` (`dayID`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timetable`
@@ -516,7 +517,36 @@ INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`
 (25, 5, 3, 'BCA1001', 3, 2, 'mon'),
 (26, 1, 1, 'BCA1538', 2, 2, 'tue'),
 (27, 1, 2, 'BCA1530', 1, 2, 'tue'),
-(28, 2, 1, 'BCA1304', 1, 2, 'tue');
+(28, 2, 1, 'BCA1304', 1, 2, 'tue'),
+(200, 1, 1, 'BCA1538', 1, 5, 'mon'),
+(201, 1, 1, 'BCA1538', 2, 5, 'tue'),
+(202, 1, 1, 'BCA1106', 2, 5, 'thu'),
+(203, 1, 1, 'BCA1106', 2, 5, 'fri'),
+(204, 1, 1, 'BCA1305', 3, 5, 'sat'),
+(205, 2, 1, 'BCA1301', 1, 5, 'mon'),
+(206, 2, 1, 'BCA1304', 1, 5, 'tue'),
+(207, 2, 1, 'BCA1307', 1, 5, 'wed'),
+(208, 2, 1, 'BCA1306', 2, 5, 'thu'),
+(209, 2, 1, 'BCA1305', 1, 5, 'fri'),
+(210, 2, 1, 'BCA1307', 2, 5, 'sat'),
+(211, 3, 1, 'BCA1539', 1, 5, 'mon'),
+(212, 3, 1, 'BCA1307', 2, 5, 'tue'),
+(213, 3, 1, 'BCA1305', 1, 5, 'wed'),
+(214, 3, 1, 'BCA1304', 2, 5, 'thu'),
+(215, 3, 1, 'BCA1208', 2, 5, 'fri'),
+(216, 3, 1, 'BCA1304', 1, 5, 'sat'),
+(217, 4, 1, 'BCA1105', 1, 5, 'mon'),
+(218, 4, 1, 'BCA1306', 2, 5, 'tue'),
+(219, 4, 1, 'BCA1305', 1, 5, 'wed'),
+(220, 4, 1, 'BCA1208', 2, 5, 'thu'),
+(221, 4, 1, 'BCA1106', 3, 5, 'fri'),
+(222, 4, 1, 'BCA1208', 1, 5, 'sat'),
+(223, 5, 1, 'BCA1301', 1, 5, 'mon'),
+(224, 5, 1, 'BCA1304', 3, 5, 'tue'),
+(225, 5, 1, 'BCA1304', 3, 5, 'wed'),
+(226, 5, 1, 'BCA1106', 2, 5, 'thu'),
+(227, 5, 1, 'BCA1304', 2, 5, 'fri'),
+(228, 5, 1, 'BCA1301', 1, 5, 'sat');
 
 -- --------------------------------------------------------
 
@@ -530,7 +560,7 @@ CREATE TABLE IF NOT EXISTS `week` (
   `week` int(2) NOT NULL,
   PRIMARY KEY (`weekID`),
   UNIQUE KEY `week` (`week`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `week`
@@ -538,7 +568,8 @@ CREATE TABLE IF NOT EXISTS `week` (
 
 INSERT INTO `week` (`weekID`, `week`) VALUES
 (1, 39),
-(2, 40);
+(2, 40),
+(5, 41);
 
 --
 -- Constraints for dumped tables

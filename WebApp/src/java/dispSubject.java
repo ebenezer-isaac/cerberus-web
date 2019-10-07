@@ -18,88 +18,81 @@ public class dispSubject extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         try (PrintWriter out = response.getWriter()) {
-            request.getRequestDispatcher("nav.html").include(request, response);
             HttpSession session = request.getSession(true);
             int access = (int) session.getAttribute("access");
-            if (access == 1) {
-
-                out.print("Faculty Panel </li>"
-                        + "<li> <a href=\"/Cerberus/editTimetable\"> <i class=\"far fa-calendar-alt\"></i> &nbsp; Timetable Management </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-list\"></i> &nbsp;  Subjects Management</a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"far fa-list-alt\"></i> &nbsp;  Student Management</a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"far fa-folder-open\"></i> &nbsp;  Attendance Management </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-user-cog\"></i> &nbsp; Admin Management </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-upload\"></i> &nbsp; Student Progression </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Device OTP </a> </li>\n"
-                        + "<li> <a href=\"#\"> <i class=\"fas fa-braille\"></i> &nbsp; Profile </a> </li>\n"
-                        + "</ul></div>");
-                out.print("<div class=\"page-content-wrapper\">\n"
-                        + "<button class=\"btn btn-link\" id=\"menu-toggle\" style=\"background-color: #0d0d0d;\"> <i class=\"fas fa-align-justify\" style=\"color: white;\"></i> </button>\n"
-                        + "<div class=\"row\">"
-                        + "<div class=\"col-md-12\">\n"
-                        + "<div class=\"container my-5\" style=\"padding: 0 70px;\">\n"
-                        + "");
-                out.println("<style>\n"
-                        + "input[type=number]{\n"
-                        + "    width: 35px;\n"
-                        + "} \n"
-                        + "</style>");
-
-                out.print("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
-                out.print("<tr>");
-                out.print("<th>Subject Code</th>");
-                out.print("<th>Semester</th>");
-                out.print("<th>Subject Name</th>");
-                out.print("<th>Class</th></tr></thead><tbody>");
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("Select * from `subject` ORDER BY `sem` ASC");
-                    while (rs.next()) {
-                        out.print("</tr>");
-                        for (int i = 1; i <= 4; i++) {
-                            if (i != 4) {
-                                out.print("<td>" + rs.getString(i) + "</td>");
-                            } else {
-                                int sem = rs.getInt(i);
-                                String div = "";
-                                switch (sem) {
-                                    case 1:
-                                        div = "FY";
-                                        break;
-                                    case 2:
-                                        div = "SY";
-                                        break;
-                                    case 3:
-                                        div = "TY";
-                                        break;
-                                }
-                                out.print("<td>" + div + "</td>");
-                            }
-
-                        }
-                        out.print("</tr>");
-                    }
-                    out.print("</tbody></table><br>");
-                    
+            switch (access) {
+                case 1:
+                    request.getRequestDispatcher("nav.html").include(request, response);
+                    request.getRequestDispatcher("side-faculty.html").include(request, response);
+                    out.println(printSubtable());
                     out.print("<form action='editSubject' method='post' align='center'>");
                     out.print("<input type='radio' name='flow' value='add'> Add Subject<br>");
                     out.print("<input type='radio' name='flow' value='delete'> Delete  Subject<br><br>");
-                    out.print("<input type='submit' value='Add Subject' onClick='/'>");
+                    out.print("<input type='submit' value='Submit' onClick='/'>");
                     out.print("</form>");
                     out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
-                    con.close();
-                } catch (ClassNotFoundException | SQLException e) {
+                    break;
+                default:
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("message", e.getMessage());
-                    request.setAttribute("redirect", "menu");
+                    request.setAttribute("redirect", "true");
+                    request.setAttribute("head", "Security Firewall");
+                    request.setAttribute("body", "Please login to continue");
+                    request.setAttribute("url", "index.html");
+                    request.setAttribute("sec", "2");
                     rd.forward(request, response);
-                }
+                    break;
             }
+
         }
+
+    }
+
+    public String printSubtable() {
+        String table = "";
+        table += ("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
+        table += ("<tr>");
+        table += ("<th>Subject Code</th>");
+        table += ("<th>Semester</th>");
+        table += ("<th>Subject Name</th>");
+        table += ("<th>Abbreviation</th><th>Class</th></tr></thead><tbody>");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("Select * from `subject` ORDER BY `sem` ASC");
+            while (rs.next()) {
+                table += ("</tr>");
+                for (int i = 1; i <= 5; i++) {
+                    if (i != 5) {
+                        table += ("<td>" + rs.getString(i) + "</td>");
+                    } else {
+                        int sem = rs.getInt(i);
+                        String div = "";
+                        switch (sem) {
+                            case 1:
+                                div = "FY";
+                                break;
+                            case 2:
+                                div = "SY";
+                                break;
+                            case 3:
+                                div = "TY";
+                                break;
+                        }
+                        table += ("<td>" + div + "</td>");
+                    }
+
+                }
+                table += ("</tr>");
+            }
+            table += ("</tbody></table><br>");
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            table = e.getMessage();
+
+        }
+        return table;
     }
 
     @Override
@@ -108,6 +101,7 @@ public class dispSubject extends HttpServlet {
         processRequest(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
