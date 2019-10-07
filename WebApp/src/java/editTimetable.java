@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -24,7 +25,7 @@ public class editTimetable extends HttpServlet {
 
     int week;
     int no_of_subs = 0;
-    String subs[] = new String[30];
+    String subs[];
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -45,6 +46,12 @@ public class editTimetable extends HttpServlet {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT `abbreviation` from `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ");");
                 while (rs.next()) {
+                    no_of_subs++;
+                }
+                rs.first();
+                subs = new String[no_of_subs];
+                no_of_subs = 0;
+                while (rs.next()) {
                     subs[no_of_subs] = rs.getString(1);
                     no_of_subs++;
                 }
@@ -60,23 +67,18 @@ public class editTimetable extends HttpServlet {
                         + "function zeroPad(num) {"
                         + "var s = num+'';"
                         + "while (s.length < 2) s = '0' + s;"
-                        + "return(s);"
-                        + "}"
-                        + "function batchdisable(id) {"
+                        + "return(s);}");
+                out.println("function batchdisable(id) {"
                         + "var index = document.getElementById(id).selectedIndex;"
-                        + "if(index == 0){"
-                        + "id = id.substr(1);"
-                        + "document.getElementById('batch' + id).selectedIndex=0;"
-                        + "  document.getElementById('batch' + id).disabled=true;"
-                        + "document.getElementById('batch' + id).classList.add('not-allowed');"
-                        + "}"
-                        + "else"
+                        + "if(index == 0)"
                         + "{id = id.substr(1);"
+                        + "document.getElementById('batch' + id).selectedIndex=0;"
+                        + "document.getElementById('batch' + id).disabled=true;"
+                        + "document.getElementById('batch' + id).classList.add('not-allowed');}"
+                        + "else{id = id.substr(1);"
                         + "document.getElementById('batch' + id).disabled=false;"
-                        + "document.getElementById('batch' + id).classList.remove('not-allowed');}"
-                        + "}"
+                        + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
                         + "</script>");
-
                 out.println("<style> th { white-space: nowrap; } </style>");
                 LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                 LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
@@ -86,13 +88,13 @@ public class editTimetable extends HttpServlet {
                 out.print("<input type='text' name='lab' value='1' hidden>");
                 out.print("<input type='submit' value='Submit' align='center'>");
                 out.print("</form>");
-                out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
+                out.print("LAB 2. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
                 out.print("<form action='saveTimetable' method='post'>");
                 out.print(printTimetable(2));
                 out.print("<input type='text' name='lab' value='2' hidden>");
                 out.print("<input type='submit' value='Submit' align='center'>");
                 out.print("</form>");
-                out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
+                out.print("LAB 3. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
                 out.print("<form action='saveTimetable' method='post'>");
                 out.print(printTimetable(3));
                 out.print("<input type='text' name='lab' value='3' hidden>");
@@ -110,7 +112,7 @@ public class editTimetable extends HttpServlet {
     }
 
     public String printTimetable(int labID) {
-        no_of_subs = 0;
+
         String table = "";
         table += ("<table class=\"table table-striped table-bordered\"> <thead>");
         table += ("<tr align = center>");
@@ -127,7 +129,7 @@ public class editTimetable extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
 
-            PreparedStatement ps = con.prepareStatement("SELECT slot.startTime, slot.endTime, "
+            PreparedStatement ps = con.prepareStatement("SELECT slot.slotID, slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
                     + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
                     + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
@@ -142,66 +144,101 @@ public class editTimetable extends HttpServlet {
             ps.setInt(1, labID);
             ps.setInt(2, week);
             ResultSet rs = ps.executeQuery();
+            PreparedStatement ps1 = con.prepareStatement("SELECT count(slotID) from slot");
+            ResultSet rs1 = ps1.executeQuery();
+            int no_of_slots = 0;
+            while (rs1.next()) {
+                no_of_slots = rs1.getInt(1);
+            }
             int line = 1;
-            while (rs.next()) {
-                table += ("<tr> ");
-                table += ("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(0, 2))) + "'>");
-                table += (" : <input type='number'  style='border:1px solid ;' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1).substring(3, 5))) + "'></th>");
-                table += ("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
-                table += (" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
-                for (int j = 1; j <= 6; j++) {
-                    table += ("<td align='center'>");
-                    table += ("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'  onchange = 'batchdisable(this.id)'>");
-                    table += ("<option name='Sub' value='-'");
-                    String[] arrOfsub = null;
-                    int flag = 0;
-                    if (rs.getString(j + 2) == null) {
-                        table += ("selected ");
-                        flag = 0;
-                    } else {
-                        arrOfsub = rs.getString(j + 2).split(" - ");
-                        flag = 1;
-                    }
-                    table += (">No Lab</option>");
+            rs.next();
+            while (line <= no_of_slots) {
+                System.out.println(rs.getInt(1) + " " + line);
+                if (rs.getInt(1) == line) {
+                    table += ("<tr> ");
+                    table += ("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
+                    table += (" : <input type='number'  style='border:1px solid ;' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
+                    table += ("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
+                    table += (" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
+                    for (int j = 1; j <= 6; j++) {
+                        table += ("<td align='center'>");
+                        table += ("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'  onchange = 'batchdisable(this.id)'>");
+                        table += ("<option name='Sub' value='-'");
+                        String[] arrOfsub = null;
+                        int flag;
+                        if (rs.getString(j + 3) == null) {
+                            table += ("selected ");
+                            flag = 0;
+                        } else {
+                            arrOfsub = rs.getString(j + 3).split(" - ");
+                            flag = 1;
+                        }
+                        table += (">No Lab</option>");
 
-                    for (int k = 0; k <= no_of_subs; k++) {
-                        table += ("<option name='Sub' value='" + subs[k] + "' ");
-                        if (flag == 1) {
-                            if (subs[k].equals(arrOfsub[0])) {
-                                table += ("selected ");
+                        for (int k = 0; k <= no_of_subs; k++) {
+                            table += ("<option name='Sub' value='" + subs[k] + "' ");
+                            if (flag == 1) {
+                                if (subs[k].equals(arrOfsub[0])) {
+                                    table += ("selected ");
+                                }
                             }
+                            table += (">" + subs[k] + "</option>");
                         }
-                        table += (">" + subs[k] + "</option>");
-                    }
-                    String batch[] = {"Batch A", "Batch B", "Batch C"};
-                    table += ("</select>");
-                    table += ("<select name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
-                    if (flag == 0) {
-                        table += ("disabled class='not-allowed';");
-                    }
-                    table += ("><option name='-' value='-'");
-                    if (flag == 0) {
-                        table += ("selected");
-                    }
-                    table += (">No Batch</option>");
-                    for (int x = 0; x <= batch.length - 1; x++) {
-                        table += ("<option name='A' value='" + batch[x] + "'");
-                        if (flag == 1) {
-                            if (batch[x].equals(arrOfsub[1])) {
-                                table += ("selected ");
+                        String batch[] = {"Batch A", "Batch B", "Batch C"};
+                        table += ("</select>");
+                        table += ("<select name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
+                        if (flag == 0) {
+                            table += ("disabled class='not-allowed';");
+                        }
+                        table += ("><option name='-' value='-'");
+                        if (flag == 0) {
+                            table += ("selected");
+                        }
+                        table += (">No Batch</option>");
+                        for (int x = 0; x <= batch.length - 1; x++) {
+                            table += ("<option name='A' value='" + batch[x] + "'");
+                            if (flag == 1) {
+                                if (batch[x].equals(arrOfsub[1])) {
+                                    table += ("selected ");
+                                }
                             }
+                            table += (">" + batch[x] + "</option>");
                         }
-                        table += (">" + batch[x] + "</option>");
+                        table += ("</select>");
+                        table += ("</td>");
                     }
-                    table += ("</select>");
-                    table += ("</td>");
+                    table += ("</tr>");
+                    rs.next();
+                } else {
+                    table += ("<tr> ");
+                    table += ("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
+                    table += (" : <input type='number'  style='border:1px solid ;' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
+                    table += ("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
+                    table += (" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
+                    for (int j = 1; j <= 6; j++) {
+                        table += ("<td align='center'>");
+                        table += ("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "' onchange = 'batchdisable(this.id)'>");
+                        table += ("<option name='Sub' value='-' selected>No Lab</option>");
+                        for (int k = 0; k <= no_of_subs; k++) {
+                            table += ("<option name='Sub' value='" + subs[k] + "'>" + subs[k] + "</option>");
+                        }
+                        String batch[] = {"Batch A", "Batch B", "Batch C"};
+                        table += ("</select>");
+                        table += ("<select name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "' disabled class='not-allowed'>");
+                        table += ("<option name='-' value='-' selected>No Batch</option>");
+                        for (int x = 0; x <= batch.length - 1; x++) {
+                            table += ("<option name='A' value='" + batch[x] + "'>" + batch[x] + "</option>");
+                        }
+                        table += ("</select>");
+                        table += ("</td>");
+                    }
+                    table += ("</tr>");
                 }
-                table += ("</tr>");
                 line++;
             }
             table += ("</tbody></table><br><br>");
-        } catch (Exception e) {
-            table=e.getMessage();
+        } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+            table = e.getMessage();
         }
         return table;
     }
@@ -212,6 +249,7 @@ public class editTimetable extends HttpServlet {
         processRequest(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
