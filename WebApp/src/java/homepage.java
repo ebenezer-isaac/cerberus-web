@@ -7,9 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.*;
-import java.time.temporal.IsoFields;
-import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,23 +33,20 @@ public class homepage extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-                        //request.getRequestDispatcher("nav.html").include(request, response);
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                        LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                        out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                        out.println(fac_printTimetable(1));
-                        /*out.print("LAB 2");
-                        out.println(fac_printTimetable(2));
-                        out.print("LAB 3");
-                        out.println(fac_printTimetable(3));*/
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
                     case 0:
-                        request.getRequestDispatcher("nav.html").include(request, response);
                         request.getRequestDispatcher("side-student.html").include(request, response);
                         break;
                     default:
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        request.setAttribute("redirect", "true");
+                        request.setAttribute("head", "Security Firewall");
+                        request.setAttribute("body", "Please login to continue");
+                        request.setAttribute("url", "index.html");
+                        request.setAttribute("sec", "2");
+                        rd.forward(request, response);
 
                 }
             } catch (IOException | ServletException e) {
@@ -102,91 +96,6 @@ public class homepage extends HttpServlet {
             }
         } catch (ClassNotFoundException | SQLException e) {
         }
-    }
-
-    public String fac_printTimetable(int labid) {
-        String timetable = "";
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            timetable += ("<table class=\"table table-striped table-bordered\"><thead>");
-            timetable += ("<tr align = center>");
-            timetable += ("<th>Start_Time</th>");
-            timetable += ("<th>End_Time</th>");
-            timetable += ("<th>Monday</th>");
-            timetable += ("<th>Tuesday</th>");
-            timetable += ("<th>Wednesday</th>");
-            timetable += ("<th>Thursday</th>");
-            timetable += ("<th>Friday</th>");
-            timetable += ("<th>Saturday</th>");
-            timetable += ("</tr></thead><tbody>");
-            PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
-                    + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
-                    + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
-                    + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
-                    + "MAX(CASE WHEN dayID = 'thu' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday, "
-                    + "MAX(CASE WHEN dayID = 'fri' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday, "
-                    + "MAX(CASE WHEN dayID = 'sat' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday "
-                    + "FROM timetable "
-                    + "INNER JOIN slot "
-                    + "ON timetable.slotID = slot.slotID "
-                    + "where labID=? and weekID=(select weekID from week where week = ?) "
-                    + "GROUP BY slot.startTime, slot.endTime;");
-            ps4.setInt(1, labid);
-            ps4.setInt(2, week);
-            ResultSet lab1 = ps4.executeQuery();
-            PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
-            ResultSet rs1 = ps7.executeQuery();
-            String slots[][];
-            int no_of_slots = 0;
-            while (rs1.next()) {
-                    no_of_slots++;
-                }
-                rs1.first();
-                rs1.previous();
-                slots = new String[no_of_slots][2];
-                no_of_slots = 0;
-                while (rs1.next()) {
-                    slots[no_of_slots][0] = rs1.getString(2).substring(0, 5);
-                    slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
-                    no_of_slots++;
-                }
-                no_of_slots--;
-            int line = 0;
-            lab1.next();
-            while (line <= no_of_slots) {
-                if (lab1.getInt(1) == (line+1)) {
-                    timetable += ("<tr align='center'>");
-                    timetable += ("<th>" + slots[line][0] + "</th>");
-                    timetable += ("<th>" + slots[line][1] + "</th>");
-                    for (int j = 1; j <= 6; j++) {
-                        if (lab1.getString(j + 3) != null) {
-                            timetable += ("<td>" + lab1.getString(j + 3) + "</td>");
-                        } else {
-                            timetable += ("<td> <b>No Lab </b></td>");
-                        }
-
-                    }
-                    timetable += ("</tr>");
-                    lab1.next();
-                } else {
-                    timetable += ("<tr align='center'>");
-                    timetable += ("<th>" + slots[line][0] + "</th>");
-                    timetable += ("<th>" + slots[line][1] + "</th>");
-                    for (int j = 1; j <= 6; j++) {
-                        timetable += ("<td> <b>No Lab <br>&nbsp</b></td>");
-                    }
-                    timetable += ("</tr>");
-                }
-                line++;
-            }
-            timetable += ("</tbody></table><br><br>");
-            con.close();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            timetable = e.getMessage();
-        }
-        return timetable;
     }
 
     @Override
