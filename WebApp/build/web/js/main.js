@@ -69,3 +69,5 @@ function closemodalrecaptcha()
 {
     document.getElementById("modalrecaptcha").style.display = "none";
 }
+
+//javascript for showing dropdown items in homepage
