@@ -117,7 +117,7 @@ public class editTimetable extends HttpServlet {
                         request.setAttribute("redirect", "true");
                         request.setAttribute("head", "Hey 'Kid'!");
                         request.setAttribute("body", "You are not authorized to view this page");
-                        request.setAttribute("url", "index.html");
+                        request.setAttribute("url", "homepage");
                         request.setAttribute("sec", "2");
                         rd.forward(request, response);
 
