@@ -192,16 +192,13 @@ public class otp extends HttpServlet implements Runnable {
             transport.sendMessage(msg, msg.getAllRecipients());
             transport.close();
         } catch (AddressException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (MessagingException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         try {
             sleep(600000);
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         try {
@@ -212,7 +209,6 @@ public class otp extends HttpServlet implements Runnable {
             ps.executeUpdate();
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }

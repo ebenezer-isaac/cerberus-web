@@ -35,8 +35,10 @@ public class dispSubject extends HttpServlet {
                     request.getRequestDispatcher("side-faculty.html").include(request, response);
                     out.println(printSubtable());
                     out.print("<form action='editSubject' method='post' align='center'>");
-                    out.print("<input type='radio' name='flow' value='add'> Add Subject<br>");
-                    out.print("<input type='radio' name='flow' value='delete'> Delete  Subject<br><br>");
+                    out.print("<input id='349' type='radio' name='flow' value='add'>"
+                            + "<label for=\"349\">Add Subject &nbsp </label>");
+                    out.print("<input id='350' type='radio' name='flow' value='delete'>"
+                            + "<label for=\"350\">  Delete  Subject </label><br><br>");
                     out.print("<input type='submit' value='Submit' onClick='/'>");
                     out.print("</form>");
                     out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
