@@ -26,17 +26,16 @@ public class deltSubject extends HttpServlet {
                 stmt.executeUpdate("Delete from `subject` where `subjectID` = '" + sub + "';");
             } catch (ClassNotFoundException | SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
+                request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Database Error");
                 request.setAttribute("body", e.getMessage());
                 request.setAttribute("url", "dispSubject");
-                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }
             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
             request.setAttribute("redirect", "true");
             request.setAttribute("head", "Subject Deleted");
-            request.setAttribute("body", "The subject was deleted successfully<br>SubjectID : "+sub);
+            request.setAttribute("body", "The subject was deleted successfully<br>SubjectID : " + sub);
             request.setAttribute("url", "dispSubject");
             request.setAttribute("sec", "2");
             rd.forward(request, response);

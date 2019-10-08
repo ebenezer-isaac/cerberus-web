@@ -43,11 +43,10 @@ public class addSubject extends HttpServlet {
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
+                request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Database Error");
                 request.setAttribute("body", e.getMessage());
                 request.setAttribute("url", "dispSubject");
-                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }
             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");

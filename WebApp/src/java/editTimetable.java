@@ -5,15 +5,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,7 +33,6 @@ public class editTimetable extends HttpServlet {
                 request.getRequestDispatcher("nav.html").include(request, response);
                 request.getRequestDispatcher("side-faculty.html").include(request, response);
             }
-
             week = (int) session.getAttribute("week");
             int selesem = 1;
             int lab = 1;
@@ -153,7 +149,6 @@ public class editTimetable extends HttpServlet {
             int line = 1;
             rs.next();
             while (line <= no_of_slots) {
-                System.out.println(rs.getInt(1) + " " + line);
                 if (rs.getInt(1) == line) {
                     table += ("<tr> ");
                     table += ("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");

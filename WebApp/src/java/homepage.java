@@ -39,9 +39,8 @@ public class homepage extends HttpServlet {
                         request.getRequestDispatcher("nav.html").include(request, response);
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
                         LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                        LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week+1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                        out.print("LAB 1. <b>Week: " + week+ "</b> from <b>"+ weekstart + "</b> to <b>"+ endweek  + "</b>");
-                        
+                        LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+                        out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
                         out.println(fac_printTimetable(1));
                         out.print("LAB 2");
                         out.println(fac_printTimetable(2));
@@ -56,7 +55,7 @@ public class homepage extends HttpServlet {
                     default:
 
                 }
-            } catch (Exception e) {
+            } catch (IOException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");
@@ -98,11 +97,10 @@ public class homepage extends HttpServlet {
             if (flag == 0) {
                 PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = (select weekID from week where week = ?)");
                 ps3.setInt(1, weekid);
-                ps3.setInt(2, week-1);
+                ps3.setInt(2, week - 1);
                 ps3.executeUpdate();
             }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
     }
 
@@ -111,7 +109,6 @@ public class homepage extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-
             timetable += ("<table class=\"table table-striped table-bordered\"><thead>");
             timetable += ("<tr align = center>");
             timetable += ("<th>Start_Time</th>");
@@ -123,7 +120,7 @@ public class homepage extends HttpServlet {
             timetable += ("<th>Friday</th>");
             timetable += ("<th>Saturday</th>");
             timetable += ("</tr></thead><tbody>");
-            PreparedStatement ps4 = con.prepareStatement("SELECT slot.startTime, slot.endTime, "
+            PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
                     + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
                     + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
@@ -138,22 +135,54 @@ public class homepage extends HttpServlet {
             ps4.setInt(1, labid);
             ps4.setInt(2, week);
             ResultSet lab1 = ps4.executeQuery();
-            while (lab1.next()) {
-                timetable += ("<tr align='center'>");
-                timetable += ("<th>" + lab1.getString(1).substring(0, 5) + "</th>");
-                timetable += ("<th>" + lab1.getString(2).substring(0, 5) + "</th>");
-                for (int j = 1; j <= 6; j++) {
-                    if (lab1.getString(j + 2) !=  null){
-                        timetable += ("<td>" + lab1.getString(j + 2) + "</td>");
-                    }
-                    else{
-                        timetable += ("<td> <b>No Lab </b></td>");
-                    }
-                 
+            PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
+            ResultSet rs1 = ps7.executeQuery();
+            String slots[][];
+            int no_of_slots = 0;
+            while (rs1.next()) {
+                    no_of_slots++;
                 }
-                timetable += ("</tr>");
+                rs1.first();
+                rs1.previous();
+                slots = new String[no_of_slots][2];
+                no_of_slots = 0;
+                while (rs1.next()) {
+                    slots[no_of_slots][0] = rs1.getString(2).substring(0, 5);
+                    slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
+                    System.out.println(no_of_slots+" "+slots[no_of_slots][0]+" "+slots[no_of_slots][1]);
+                    no_of_slots++;
+                }
+                no_of_slots--;
+            int line = 0;
+            lab1.next();
+            while (line <= no_of_slots) {
+                System.out.println(line+" "+no_of_slots);
+                if (lab1.getInt(1) == (line+1)) {
+                    timetable += ("<tr align='center'>");
+                    timetable += ("<th>" + slots[line][0] + "</th>");
+                    timetable += ("<th>" + slots[line][1] + "</th>");
+                    for (int j = 1; j <= 6; j++) {
+                        if (lab1.getString(j + 3) != null) {
+                            timetable += ("<td>" + lab1.getString(j + 3) + "</td>");
+                        } else {
+                            timetable += ("<td> <b>No Lab </b></td>");
+                        }
+
+                    }
+                    timetable += ("</tr>");
+                    lab1.next();
+                } else {
+                    timetable += ("<tr align='center'>");
+                    timetable += ("<th>" + slots[line][0] + "</th>");
+                    timetable += ("<th>" + slots[line][1] + "</th>");
+                    for (int j = 1; j <= 6; j++) {
+                        timetable += ("<td> <b>No Lab <br>&nbsp</b></td>");
+                    }
+                    timetable += ("</tr>");
+                }
+                line++;
             }
-            timetable += ("</td></tr></tbody></table><br><br>");
+            timetable += ("</tbody></table><br><br>");
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
             timetable = e.getMessage();

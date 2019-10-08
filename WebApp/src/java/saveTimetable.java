@@ -44,11 +44,10 @@ public class saveTimetable extends HttpServlet {
                     no_of_subs--;
                 } catch (SQLException e) {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
+                    request.setAttribute("redirect", "false");
                     request.setAttribute("head", "Database Error");
                     request.setAttribute("body", e.getMessage());
                     request.setAttribute("url", "dispSubject");
-                    request.setAttribute("sec", "2");
                     rd.forward(request, response);
 
                 }
@@ -60,87 +59,82 @@ public class saveTimetable extends HttpServlet {
                             int batchID = 0;
                             int weekid = 0;
                             PreparedStatement ps6 = con.prepareStatement("SELECT weekID FROM WEEK where week = ?");
-                                ps6.setInt(1, week);
-                                ResultSet rs = ps6.executeQuery();
-                                while (rs.next()) {
-                                    weekid = rs.getInt(1);
-                                }
-                                for (int k = 0; k <= batch.length - 1; k++) {
-                                    if (batch[k].equals(request.getParameter("batch" + i + j))) {
-                                        batchID = k + 1;
-                                    }
-                                }
-                                String subjectID = "";
-                                for (int k = 0; k <= subs.length && subs[k][0] != null; k++) {
-                                    if (subs[k][0].equals(request.getParameter("c" + i + j))) {
-                                        subjectID = subs[k][1];
-                                    }
-                                }
-                                String dayOfWeek = "";
-                                switch (j) {
-                                    case 1:
-                                        dayOfWeek = "mon";
-                                        break;
-                                    case 2:
-                                        dayOfWeek = "tue";
-                                        break;
-                                    case 3:
-                                        dayOfWeek = "wed";
-                                        break;
-                                    case 4:
-                                        dayOfWeek = "thu";
-                                        break;
-                                    case 5:
-                                        dayOfWeek = "fri";
-                                        break;
-                                    case 6:
-                                        dayOfWeek = "sat";
-                                        break;
-                                }
-                                ps1.setInt(1, i);
-                                ps1.setInt(2, labID);
-                                ps1.setString(3, subjectID);
-                                ps1.setInt(4, batchID);
-                                ps1.setInt(5, weekid);
-                                ps1.setString(6, dayOfWeek);
-                                ps1.execute();
+                            ps6.setInt(1, week);
+                            ResultSet rs = ps6.executeQuery();
+                            while (rs.next()) {
+                                weekid = rs.getInt(1);
                             }
+                            for (int k = 0; k <= batch.length - 1; k++) {
+                                if (batch[k].equals(request.getParameter("batch" + i + j))) {
+                                    batchID = k + 1;
+                                }
+                            }
+                            String subjectID = "";
+                            for (int k = 0; k <= subs.length && subs[k][0] != null; k++) {
+                                if (subs[k][0].equals(request.getParameter("c" + i + j))) {
+                                    subjectID = subs[k][1];
+                                }
+                            }
+                            String dayOfWeek = "";
+                            switch (j) {
+                                case 1:
+                                    dayOfWeek = "mon";
+                                    break;
+                                case 2:
+                                    dayOfWeek = "tue";
+                                    break;
+                                case 3:
+                                    dayOfWeek = "wed";
+                                    break;
+                                case 4:
+                                    dayOfWeek = "thu";
+                                    break;
+                                case 5:
+                                    dayOfWeek = "fri";
+                                    break;
+                                case 6:
+                                    dayOfWeek = "sat";
+                                    break;
+                            }
+                            ps1.setInt(1, i);
+                            ps1.setInt(2, labID);
+                            ps1.setString(3, subjectID);
+                            ps1.setInt(4, batchID);
+                            ps1.setInt(5, weekid);
+                            ps1.setString(6, dayOfWeek);
+                            ps1.execute();
                         }
                     }
+                }
 
-                }catch (IOException | ClassNotFoundException | NumberFormatException | SQLException | ServletException e) {
+            } catch (IOException | ClassNotFoundException | NumberFormatException | SQLException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
+                request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Database Error");
                 request.setAttribute("body", e.getMessage());
                 request.setAttribute("url", "dispSubject");
-                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }
-                RequestDispatcher rd = request.getRequestDispatcher("homepage");
-                rd.forward(request, response);
+            RequestDispatcher rd = request.getRequestDispatcher("homepage");
+            rd.forward(request, response);
 
-            }
-        }
-
-        @Override
-        protected void doGet
-        (HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            processRequest(request, response);
-        }
-
-        @Override
-        protected void doPost
-        (HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            processRequest(request, response);
-        }
-
-        @Override
-        public String getServletInfo
-        
-            () {
-        return "Short description";
         }
     }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+}

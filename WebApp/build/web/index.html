@@ -1,1 +1,111 @@
-<htmllang="en"><head><metacharset="utf-8"><metahttp-equiv="X-UA-Compatible"content="IE=edge"><metaname="viewport"content="width=device-width,initial-scale=1"><title>Login</title><style>html{overflow:hidden;}</style><linkrel="stylesheet"href="css/bootstrap.css"type="text/css"><linkrel="stylesheet"href="css/bootstrap.min.css"type="text/css"><linkrel="stylesheet"href="css/bootstrap-grid.css"type="text/css"><linkrel="stylesheet"href="css/bootstrap-grid.min.css"type="text/css"><linkrel="stylesheet"href="css/custom.css"type="text/css"><linkrel="icon"href="images/logo-circle-removebg.png"type="image/gif"><scriptsrc="https://www.google.com/recaptcha/api.js"asyncdefer></script></head><body><navclass="navbarnavbar-expand"style="background-color:#24292E;"><divclass="container"><imgclass="custom_logo"src="images/logo-circle-removebg-preview.png"><divclass="collapsenavbar-collapse"><ulclass="navbar-navml-auto"><liclass="nav-item"><ahref="aboutus.html"><buttonclass="aboutus-button">Aboutus</button></a></li></ul></div></divav><divclass="main_body"><divclass="containercustom_container"><divclass="rowcustom_row"><divclass="col-lg-6my-auto"><divclass="main_contentmx-auto"><h1style="font-family:arnoprocaption">CERBERUS</h1><!--<h2style="font-size:14.3px;">C<small><fontstyle="color:darkgray">OGNITIVE</font></small>E<small><fontstyle="color:darkgray">FFICIENT</font></small>R<small><fontstyle="color:darkgray">OBUST</font></small>B<small><fontstyle="color:darkgray">IOMETRIC</font></small>E<small><fontstyle="color:darkgray">VALUATION</font></small>R<small><fontstyle="color:darkgray">EPORTING</font></small>U<small><fontstyle="color:darkgray">TILITY</font></small>S<small><fontstyle="color:darkgray">YSTEM</font></small></h2>--><h3>TheAttendanceInitiative</h3></div></div><divclass="col-lg-6my-auto"><divclass="form_container"><formmethod="post"action="login"><divclass="form-group"><inputtype="email"placeholder="Email"name="email"id="email"required></div><divclass="form-group"><inputtype="password"placeholder="Password"name="password"title=Mnmum8charactersandmaximum12characters"required></div><buttontype="submit">Login</button><pclass="message">Forgotyourpassword?<ahref="#"onclick="returntransfer_data()"><b>Createanewpassword</b></a></p></form><formmethod="post"class="recaptcha_form"style="display:none;"><divclass="form-group"><inputtype="email"placeholder="Email"name="emailid"id="emailid"required></div><divclass="form-groupcustom_group"><divclass="g-recaptcha"data-sitekey="6Ldki7oUAAAAALfLMRYy4n45X2jxl1r7dol3BbDM"></div></div><pclass="link"><ahref="resetpassword.html"><b>IalreadyhaveanOTP</b></a></p><buttontype="submit">SendOTP</button><pclass="message">Wanttosignin?<ahref="#"><b>Signin</b></a></p></form></div></div></div></div></div><divid="particles-js"></div><divclass="container"><divclass="modalcustom_modal_recaptcha"id="modalrecaptcha"><divclass="modal-dialogmodal-sm"><divclass="modal-content"><divclass="modal-body"><h4style="font-size:14px;">Wethinkyouarearobot.Proveuswrongifyouthinkifyouarenot.</h4></div><divclass="modal-footer"><buttntpe"button"class="btnbtn-success"onclick="closemodalrecaptcha()">OK</button></div></div></div></div></div><scriptsrc="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script><scriptsrc="js/main.js"></script><scriptsrc="js/particles.js"></script><scriptsrc="js/app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title> Login </title>
+        <style> html {overflow: hidden;} </style>
+        <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
+        <link rel="stylesheet" href="css/custom.css" type="text/css">
+        <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand" style="background-color: #24292E;">
+            <div class="container">
+                <img class="custom_logo" src="images/logo-circle-removebg-preview.png">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="aboutus.html"> <button class="aboutus-button"> About us </button> </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="main_body">
+            <div class="container custom_container">
+                <div class="row custom_row">
+                    <div class="col-lg-6 my-auto">
+                        <div class="main_content mx-auto">
+                            <h1 style="font-family: arno pro caption"> C E R B E R U S </h1>
+                          <!--  <h2 style="font-size: 14.3px;">
+                                C<small><font style="color: darkgray">OGNITIVE</font></small>
+                                E<small><font style="color: darkgray">FFICIENT</font></small>
+                                R<small><font style="color: darkgray">OBUST</font></small>
+                                B<small><font style="color: darkgray">IOMETRIC</font></small>
+                                E<small><font style="color: darkgray">VALUATION</font></small>
+                                R<small><font style="color: darkgray">EPORTING</font></small>
+                                U<small><font style="color: darkgray">TILITY</font></small>
+                                S<small><font style="color: darkgray">YSTEM</font></small> </h2>
+                          -->
+                            <h3> The Attendance Initiative </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 my-auto">
+                        <div class="form_container">
+                            <form method="post" action="login">
+                                <div class="form-group">
+                                    <input type="email" placeholder="Email" name="email" id="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Password" name="password" title="Minimum 8 characters and maximum 12 characters" required>
+                                </div>
+                                <button type="submit"> Login </button>
+                                <p class="message"> Forgot your password? 
+                                    <a href="#" onclick="return transfer_data()"> 
+                                        <b> Create a new password </b> 
+                                    </a>
+                                </p>
+                            </form>
+                            <form method="post" class="recaptcha_form" style="display: none;">
+                                <div class="form-group">
+                                    <input type="email" placeholder="Email" name="emailid" id="emailid" required>
+                                </div>
+                                <div class="form-group custom_group">
+                                    <div class="g-recaptcha" data-sitekey="6Ldki7oUAAAAALfLMRYy4n45X2jxl1r7dol3BbDM"></div>
+                                </div>
+                                <p class="link"> 
+                                    <a href="resetpassword.html"> 
+                                        <b> I already have an OTP </b> 
+                                    </a> 
+                                </p>
+                                <button type="submit"> Send OTP </button>
+                                <p class="message"> Want to sign in?
+                                    <a href="#"> 
+                                        <b> Sign in </b>
+                                    </a> 
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="particles-js"></div>
+        <div class="container">
+            <div class="modal custom_modal_recaptcha" id="modalrecaptcha">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h4 style="font-size: 14px;"> We think you are a robot. Prove us wrong if you think if you are not. </h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" onclick="closemodalrecaptcha()"> OK </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/particles.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>

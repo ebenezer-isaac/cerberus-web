@@ -66,11 +66,10 @@ public class login extends HttpServlet {
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
+                    request.setAttribute("redirect", "false");
                     request.setAttribute("head", "Database Error");
                     request.setAttribute("body", e.getMessage());
-                    request.setAttribute("url", "index.html");
-                    request.setAttribute("sec", "2");
+                    request.setAttribute("url", "dispSubject");
                     rd.forward(request, response);
                 }
                 if (corrpass.equals("")) {
@@ -89,11 +88,10 @@ public class login extends HttpServlet {
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
+                        request.setAttribute("redirect", "false");
                         request.setAttribute("head", "Database Error");
                         request.setAttribute("body", e.getMessage());
-                        request.setAttribute("url", "index.html");
-                        request.setAttribute("sec", "2");
+                        request.setAttribute("url", "dispSubject");
                         rd.forward(request, response);
                     }
                 }

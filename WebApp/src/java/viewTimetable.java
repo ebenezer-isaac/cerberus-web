@@ -57,7 +57,7 @@ public class viewTimetable extends HttpServlet {
                     default:
 
                 }
-            } catch (Exception e) {
+            } catch (IOException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");
