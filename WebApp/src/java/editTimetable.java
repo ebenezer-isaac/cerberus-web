@@ -40,11 +40,13 @@ public class editTimetable extends HttpServlet {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT `abbreviation` from `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ");");
+                ResultSet rs = stmt.executeQuery("SELECT `Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
                 while (rs.next()) {
                     no_of_subs++;
                 }
                 rs.first();
+                rs.previous();
+                no_of_subs++;
                 subs = new String[no_of_subs];
                 no_of_subs = 0;
                 while (rs.next()) {
@@ -79,11 +81,11 @@ public class editTimetable extends HttpServlet {
                 LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                 LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                 out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                out.print("<form action='saveTimetable' method='post'>");
+                out.print("<form action='saveTimetable' method='post' align='center'>");
                 out.print(printTimetable(1));
                 out.print("<input type='text' name='lab' value='1' hidden>");
                 out.print("<input type='submit' value='Submit' align='center'>");
-                out.print("</form>");
+                out.print("</form>");/*
                 out.print("LAB 2. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
                 out.print("<form action='saveTimetable' method='post'>");
                 out.print(printTimetable(2));
@@ -95,7 +97,7 @@ public class editTimetable extends HttpServlet {
                 out.print(printTimetable(3));
                 out.print("<input type='text' name='lab' value='3' hidden>");
                 out.print("<input type='submit' value='Submit' align='center'>");
-                out.print("</form>");
+                out.print("</form>");*/
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -169,7 +171,6 @@ public class editTimetable extends HttpServlet {
                             flag = 1;
                         }
                         table += (">No Lab</option>");
-
                         for (int k = 0; k <= no_of_subs; k++) {
                             table += ("<option name='Sub' value='" + subs[k] + "' ");
                             if (flag == 1) {

@@ -25,6 +25,7 @@ public class editSubject extends HttpServlet {
             switch (access) {
                 case 1:
                     request.getRequestDispatcher("nav.html").include(request, response);
+                    request.getRequestDispatcher("side-faculty.html").include(request, response);
                     out.println("<style>\n"
                             + "input[type=number]{\n"
                             + "    width: 15px;\n"
@@ -50,7 +51,21 @@ public class editSubject extends HttpServlet {
                         out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
                                 + "<tr><td>Subject Code</td><td> : </td><td><input type='text' name='subjectID' pattern='^BCA\\d\\d\\d\\d$' style=\"text-transform:uppercase\"/></td></tr>"
                                 + "<tr><td>Subject Name</td><td> : </td><td><input type='text' name='subject'/> *Please do NOT use abbreviations </td></tr> "
-                                + "<tr><td>Semester</td><td> : </td><td><input type='number' min = '1' max = '5' value = '01' onchange='this.value = zeroPad(this.value)' name='sem' style='width: 100%;'/></td></tr>"
+                                + "<tr><td>Subject Abbreviation</td><td> : </td><td align='center'><input type='text' name='abbr' /> </td></tr>"
+                                + "<tr><td>Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\" value=\"odd\" checked> Odd\n" +
+"  <input type=\"radio\" name=\"sem\" value=\"even\"> Even<br></td></tr>"
+                                + "<tr><td>Select Class</td><td> : </td><td><select name = 'class' id = 'class'>");
+                        try {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Statement stmt = con.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                            while (rs.next()) {
+                                out.print("<option name='Sub' value= '"+rs.getString(1)+"'>"+rs.getString(1)+"</option>");
+                            }out.println("</select>");
+                            } catch (Exception e) {
+                        }
+                        out.print("</td></tr>"
                                 + "</table><br><button type='submit'>Submit</button>"
                                 + "</form>");
                     } else {

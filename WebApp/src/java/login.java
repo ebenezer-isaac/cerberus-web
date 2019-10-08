@@ -129,7 +129,6 @@ public class login extends HttpServlet {
             request.setAttribute("body", e.getMessage());
             request.setAttribute("url", "index.html");
             rd.forward(request, response);
-            System.out.println(e.getMessage());
         }
     }
 

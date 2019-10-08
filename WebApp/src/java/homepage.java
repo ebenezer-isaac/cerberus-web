@@ -42,10 +42,10 @@ public class homepage extends HttpServlet {
                         LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                         out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
                         out.println(fac_printTimetable(1));
-                        out.print("LAB 2");
+                        /*out.print("LAB 2");
                         out.println(fac_printTimetable(2));
                         out.print("LAB 3");
-                        out.println(fac_printTimetable(3));
+                        out.println(fac_printTimetable(3));*/
                         out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
                         break;
                     case 0:
@@ -149,14 +149,12 @@ public class homepage extends HttpServlet {
                 while (rs1.next()) {
                     slots[no_of_slots][0] = rs1.getString(2).substring(0, 5);
                     slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
-                    System.out.println(no_of_slots+" "+slots[no_of_slots][0]+" "+slots[no_of_slots][1]);
                     no_of_slots++;
                 }
                 no_of_slots--;
             int line = 0;
             lab1.next();
             while (line <= no_of_slots) {
-                System.out.println(line+" "+no_of_slots);
                 if (lab1.getInt(1) == (line+1)) {
                     timetable += ("<tr align='center'>");
                     timetable += ("<th>" + slots[line][0] + "</th>");
@@ -185,6 +183,7 @@ public class homepage extends HttpServlet {
             timetable += ("</tbody></table><br><br>");
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             timetable = e.getMessage();
         }
         return timetable;
