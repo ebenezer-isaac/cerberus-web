@@ -1,13 +1,141 @@
-Faculty Panel </li>
-<li> <i class="far fa-calendar-alt"></i> &nbsp; Timetable Management <i class="fa fa-caret-down"></i> </a> </li>
-<li> <a href="/Cerberus/dispSubject"> <i class="fas fa-list"></i> &nbsp;  Subjects Management</a> </li>
-<li> <a href="#"> <i class="far fa-list-alt"></i> &nbsp;  Student Management</a> </li>
-<li> <a href="#"> <i class="far fa-folder-open"></i> &nbsp;  Attendance Management </a> </li>
-<li> <a href="#"> <i class="fas fa-user-cog"></i> &nbsp; Admin Management </a> </li>
-<li> <a href="#"> <i class="fas fa-upload"></i> &nbsp; Student Progression </a> </li>
-<li> <a href="#"> <i class="fas fa-braille"></i> &nbsp; Device OTP </a> </li>
-<li> <a href="#"> <i class="fas fa-braille"></i> &nbsp; Profile </a> </li>
-</ul></div><div class="page-content-wrapper">
-    <button class="btn btn-link" id="menu-toggle" style="background-color: #0d0d0d; position: "> <i class="fas fa-align-justify" style="color: white;"></i> </button>
-    <div class="row"><div class="col-md-12">
-            <div class="container my-5" style="padding: 0 70px;">
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Collapsible sidebar using Bootstrap 4</title>
+        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.12.1-web/css/all.css">
+
+        <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href="css/style2.css">
+        <!-- Scrollbar Custom CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+        <!-- Font Awesome JS -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <!-- Sidebar --> 
+            <nav id="sidebar" >
+                <!-- <div class="sidebar-header">
+                     <h3>Bootstrap Sidebar</h3>
+                 </div>
+                -->
+                <ul class="list-unstyled components">
+                    <p align="center"><br>FACULTY PANEL</p>
+                    <li>
+                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;Timetable Management</a>
+                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                            <li>
+                                <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
+                            </li>
+                            <li>
+                                <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
+                                <ul class="collapse list-unstyled" id="homeSubmenu1">
+                                    <li>
+                                        <a href="#">Lab 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Lab 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Lab 3</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#subSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Subject Management</a>
+                        <ul class="collapse list-unstyled" id="subSubmenu">
+                            <li>
+                                <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
+                        <ul class="collapse list-unstyled" id="stuSubmenu">
+                            <li>
+                                <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fi"></i>&nbsp;&nbsp;Attendance Management</a>
+                    </li>
+                    <li>
+                        <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="far fa-eye"></i>&nbsp;&nbsp;Admin Management</a>
+                        <ul class="collapse list-unstyled" id="admSubmenu">
+                            <li>
+                                <a href="#">Add Admin</a>
+                            </li>
+                            <li>
+                                <a href="#">Delete Admin</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Student Progression</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="far fa-user-o"></i>&nbsp;&nbsp;Profile</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Page Content  -->
+            <div id="content">
+
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <i class="fas fa-align-left"></i>
+                            <span>Toggle Sidebar</span>
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="#">Page</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Page</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Page</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Page</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+

@@ -36,7 +36,7 @@ public class homepage extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-                        request.getRequestDispatcher("nav.html").include(request, response);
+                        //request.getRequestDispatcher("nav.html").include(request, response);
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
                         LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                         LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
@@ -46,7 +46,7 @@ public class homepage extends HttpServlet {
                         out.println(fac_printTimetable(2));
                         out.print("LAB 3");
                         out.println(fac_printTimetable(3));*/
-                        out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
+                        request.getRequestDispatcher("end.html").include(request, response);
                         break;
                     case 0:
                         request.getRequestDispatcher("nav.html").include(request, response);
