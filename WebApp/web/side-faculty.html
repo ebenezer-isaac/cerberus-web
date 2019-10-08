@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
         <title>Collapsible sidebar using Bootstrap 4</title>
-        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.12.1-web/css/all.css">
+        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
 
         <!-- Bootstrap CSS CDN -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -32,7 +32,7 @@
                  </div>
                 -->
                 <ul class="list-unstyled components">
-                    <p align="center"><br>FACULTY PANEL</p>
+                    <p align="center"><br><a href="/Cerberus/homepage">FACULTY PANEL</a></p>
                     <li>
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;Timetable Management</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -41,16 +41,18 @@
                             </li>
                             <li>
                                 <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
-                                <ul class="collapse list-unstyled" id="homeSubmenu1">
-                                    <li>
-                                        <a href="#">Lab 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Lab 2</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Lab 3</a>
-                                    </li>
+                                <ul>
+                                    <ul class="collapse list-unstyled" id="homeSubmenu1">
+                                        <li>
+                                            <a href="#"><i class="fas fa-dice-one"></i>&nbsp;&nbsp;Lab 1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fas fa-dice-two"></i>&nbsp;&nbsp;Lab 2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"><i class="fas fa-dice-three"></i>&nbsp;&nbsp;Lab 3</a>
+                                        </li>
+                                    </ul>
                                 </ul>
                             </li>
                         </ul>
@@ -58,51 +60,51 @@
                     <li>
                         <a href="#subSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Subject Management</a>
                         <ul class="collapse list-unstyled" id="subSubmenu">
-                            <li>
-                                <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete</a>
-                            </li>
-                        </ul>
+                    </li<li>
+                        <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View</a>
                     </li>
                     <li>
-                        <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
-                        <ul class="collapse list-unstyled" id="stuSubmenu">
-                            <li>
-                                <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete</a>
-                            </li>
-                        </ul>
+                        <a href="#"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fi"></i>&nbsp;&nbsp;Attendance Management</a>
+                        <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete</a>
                     </li>
-                    <li>
-                        <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="far fa-eye"></i>&nbsp;&nbsp;Admin Management</a>
-                        <ul class="collapse list-unstyled" id="admSubmenu">
-                            <li>
-                                <a href="#">Add Admin</a>
-                            </li>
-                            <li>
-                                <a href="#">Delete Admin</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Student Progression</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="far fa-user-o"></i>&nbsp;&nbsp;Profile</a>
-                    </li>
+                </ul>
+                </li>
+                <li>
+                    <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
+                    <ul class="collapse list-unstyled" id="stuSubmenu">
+                        <li>
+                            <a href="#"><i class="fa fa-eye"></i>&nbsp;&nbsp;View</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-fi"></i>&nbsp;&nbsp;Attendance Management</a>
+                </li>
+                <li>
+                    <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-chalkboard-teacher"></i>&nbsp;&nbsp;Faculty Management</a>
+                    <ul class="collapse list-unstyled" id="admSubmenu">
+                        <li>
+                            <a href="#"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-address-card"></i>&nbsp;&nbsp;Student Progression</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-address-card"></i>&nbsp;&nbsp;Profile</a>
+                </li>
                 </ul>
             </nav>
 
