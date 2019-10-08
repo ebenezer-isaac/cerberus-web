@@ -89,6 +89,7 @@ public class editTimetable extends HttpServlet {
                                     + "document.getElementById('batch' + id).disabled=true;"
                                     + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                     + "else{id = id.substr(1);"
+                                    + "document.getElementById('batch' + id).selectedIndex=1;"
                                     + "document.getElementById('batch' + id).disabled=false;"
                                     + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
                                     + "</script>");
