@@ -18,29 +18,52 @@ import javax.servlet.http.HttpSession;
 
 public class viewTimetable extends HttpServlet {
 
-    int week;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            new_week();
+            int week = 0;
+            try {
+                week = Integer.parseInt(request.getParameter("week"));
+            } catch (NumberFormatException e) {
+
+            }
             try {
                 int access = (int) session.getAttribute("access");
-                week = (int) session.getAttribute("week");
+                if (week == 0) {
+                    week = (int) session.getAttribute("week");
+                }
+
                 switch (access) {
                     case 1:
-                        //request.getRequestDispatcher("nav.html").include(request, response);
+                        new_week(week);
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
                         LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                         LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                        out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                        out.println(fac_printTimetable(1));
-                        out.print("LAB 2. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                        out.println(fac_printTimetable(2));
-                        out.print("LAB 3. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                        out.println(fac_printTimetable(3));
+                        out.print("<table width = 100%>"
+                                + "<tr><td width = 33% align='center'><form action='viewTimetable' method='post'>"
+                                + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
+                                + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
+                                + "<span>Previous</span>"
+                                + "</button>"
+                                + "</form></td>"
+                                + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>"
+                                 + "<td width = 33% align='center'><form action='viewTimetable' method='post'>"
+                                + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
+                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\">"
+                                + "<span>Next</span>"
+                                + "</button>"
+                                + "</form></td>"
+                                + "</tr></table><br><br>");
+                        if((Integer.parseInt(session.getAttribute("week").toString()))!=week)
+                        {out.print("<p align='center'>Displaying Timetable of Week : "+week+"</p>");}
+                        out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                        out.println(fac_printTimetable(1, week));
+                        out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                        out.println(fac_printTimetable(2, week));
+                        out.print("<p align='center'>LAB 3 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                        out.println(fac_printTimetable(3, week));
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
                     default:
@@ -64,7 +87,7 @@ public class viewTimetable extends HttpServlet {
         }
     }
 
-    public void new_week() {
+    public void new_week(int week) {
         int weekid = 0;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -125,21 +148,27 @@ public class viewTimetable extends HttpServlet {
         }
     }
 
-    public String fac_printTimetable(int labid) {
+    public String fac_printTimetable(int labid, int week) {
         String timetable = "";
+        LocalDate mon = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+        LocalDate tue = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(2)));
+        LocalDate wed = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(3)));
+        LocalDate thu = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(4)));
+        LocalDate fri = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(5)));
+        LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
             timetable += ("<table class=\"table table-striped table-bordered\"><thead>");
             timetable += ("<tr align = center>");
-            timetable += ("<th>Start_Time</th>");
-            timetable += ("<th>End_Time</th>");
-            timetable += ("<th>Monday</th>");
-            timetable += ("<th>Tuesday</th>");
-            timetable += ("<th>Wednesday</th>");
-            timetable += ("<th>Thursday</th>");
-            timetable += ("<th>Friday</th>");
-            timetable += ("<th>Saturday</th>");
+            timetable += ("<th>Start Time</th>");
+            timetable += ("<th>End Time</th>");
+            timetable += ("<th>Monday<br>" + mon + "</th>");
+            timetable += ("<th>Tuesday<br>" + tue + "</th>");
+            timetable += ("<th>Wednesday<br>" + wed + "</th>");
+            timetable += ("<th>Thursday<br>" + thu + "</th>");
+            timetable += ("<th>Friday<br>" + fri + "</th>");
+            timetable += ("<th>Saturday<br>" + sat + "</th>");
             timetable += ("</tr></thead><tbody>");
             PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
