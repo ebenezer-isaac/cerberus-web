@@ -198,6 +198,7 @@ a.article:hover {
 .editSelect
 {
      padding: 4px 78px;
+     border-radius: 4px;
      border: none;
      background-color: #e6e6e6;
      outline: none;
