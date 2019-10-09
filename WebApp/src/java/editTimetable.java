@@ -28,84 +28,171 @@ public class editTimetable extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(true);
-            int access = (int) session.getAttribute("access");
-            if (access == 1) {
-                request.getRequestDispatcher("nav.html").include(request, response);
-                request.getRequestDispatcher("side-faculty.html").include(request, response);
-            }
-            week = (int) session.getAttribute("week");
-            int selesem = 1;
-            int lab = 1;
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT `Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
-                while (rs.next()) {
-                    no_of_subs++;
+                int access = (int) session.getAttribute("access");
+                switch (access) {
+                    case 1:
+                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+                        week = (int) session.getAttribute("week");
+                        int labid = Integer.parseInt(request.getParameter("lab"));
+                        System.out.println(labid);
+                        if (labid >= 4 || labid <= 0) {
+                            labid = 1;
+                        }
+                        System.out.println("new " + labid);
+                        new_week();
+                        try {
+                            int selesem = 1;
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
+                            st.setInt(1, week);
+                            ResultSet rs2 = st.executeQuery();
+                            while (rs2.next()) {
+                                selesem = (rs2.getInt(1) % 2);
+                                if (selesem == 0) {
+                                    selesem += 2;
+                                }
+                            }
+                            Statement stmt = con.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT `Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
+                            while (rs.next()) {
+                                no_of_subs++;
+                            }
+                            rs.first();
+                            rs.previous();
+                            no_of_subs++;
+                            subs = new String[no_of_subs];
+                            no_of_subs = 0;
+                            while (rs.next()) {
+                                subs[no_of_subs] = rs.getString(1);
+                                no_of_subs++;
+                            }
+                            no_of_subs--;
+                            out.println("<style>"
+                                    + "input[type=number]{"
+                                    + "width: 62px;"
+                                    + "height: 40px;"
+                                    + "} "
+                                    + ".not-allowed {cursor: not-allowed;}"
+                                    + "</style>");
+                            out.print("<script>"
+                                    + "function zeroPad(num) {"
+                                    + "var s = num+'';"
+                                    + "while (s.length < 2) s = '0' + s;"
+                                    + "return(s);}");
+                            out.println("function batchdisable(id) {"
+                                    + "var index = document.getElementById(id).selectedIndex;"
+                                    + "if(index == 0)"
+                                    + "{id = id.substr(1);"
+                                    + "document.getElementById('batch' + id).selectedIndex=0;"
+                                    + "document.getElementById('batch' + id).disabled=true;"
+                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}"
+                                    + "else{id = id.substr(1);"
+                                    + "document.getElementById('batch' + id).selectedIndex=1;"
+                                    + "document.getElementById('batch' + id).disabled=false;"
+                                    + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
+                                    + "</script>");
+                            out.println("<style> th { white-space: nowrap; } </style>");
+                            LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+                            LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+                            out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
+                            out.print("<form action='saveTimetable' method='post' align='center'>");
+                            out.print(printTimetable(labid));
+                            out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
+                            out.print("<input type='submit' value='Submit' align='center'>");
+                            out.print("</form>");
+                            con.close();
+                        } catch (ClassNotFoundException | SQLException e) {
+                            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                            request.setAttribute("message", e.getMessage());
+                            request.setAttribute("redirect", "menu");
+                            rd.forward(request, response);
+                        }
+
+                        request.getRequestDispatcher("end.html").include(request, response);
+                        break;
+                    default:
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        request.setAttribute("redirect", "true");
+                        request.setAttribute("head", "Hey 'Kid'!");
+                        request.setAttribute("body", "You are not authorized to view this page");
+                        request.setAttribute("url", "homepage");
+                        request.setAttribute("sec", "2");
+                        rd.forward(request, response);
+
                 }
-                rs.first();
-                rs.previous();
-                no_of_subs++;
-                subs = new String[no_of_subs];
-                no_of_subs = 0;
-                while (rs.next()) {
-                    subs[no_of_subs] = rs.getString(1);
-                    no_of_subs++;
-                }
-                no_of_subs--;
-                out.println("<style>"
-                        + "input[type=number]{"
-                        + "width: 62px;"
-                        + "height: 40px;"
-                        + "} "
-                        + ".not-allowed {cursor: not-allowed;}"
-                        + "</style>");
-                out.print("<script>"
-                        + "function zeroPad(num) {"
-                        + "var s = num+'';"
-                        + "while (s.length < 2) s = '0' + s;"
-                        + "return(s);}");
-                out.println("function batchdisable(id) {"
-                        + "var index = document.getElementById(id).selectedIndex;"
-                        + "if(index == 0)"
-                        + "{id = id.substr(1);"
-                        + "document.getElementById('batch' + id).selectedIndex=0;"
-                        + "document.getElementById('batch' + id).disabled=true;"
-                        + "document.getElementById('batch' + id).classList.add('not-allowed');}"
-                        + "else{id = id.substr(1);"
-                        + "document.getElementById('batch' + id).disabled=false;"
-                        + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
-                        + "</script>");
-                out.println("<style> th { white-space: nowrap; } </style>");
-                LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                out.print("<form action='saveTimetable' method='post' align='center'>");
-                out.print(printTimetable(1));
-                out.print("<input type='text' name='lab' value='1' hidden>");
-                out.print("<input type='submit' value='Submit' align='center'>");
-                out.print("</form>");/*
-                out.print("LAB 2. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                out.print("<form action='saveTimetable' method='post'>");
-                out.print(printTimetable(2));
-                out.print("<input type='text' name='lab' value='2' hidden>");
-                out.print("<input type='submit' value='Submit' align='center'>");
-                out.print("</form>");
-                out.print("LAB 3. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                out.print("<form action='saveTimetable' method='post'>");
-                out.print(printTimetable(3));
-                out.print("<input type='text' name='lab' value='3' hidden>");
-                out.print("<input type='submit' value='Submit' align='center'>");
-                out.print("</form>");*/
-                con.close();
-            } catch (ClassNotFoundException | SQLException e) {
+            } catch (IOException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("message", e.getMessage());
-                request.setAttribute("redirect", "menu");
+                request.setAttribute("redirect", "true");
+                request.setAttribute("head", "Security Firewall");
+                request.setAttribute("body", "Please login to continue");
+                request.setAttribute("url", "index.html");
+                request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }
-            out.println("</div></div></div></div></div><script src=\"js/Sidebar-Menu.js\"></script><script src=\"js/main.js\"></script>");
+
+        }
+    }
+
+    public void new_week() {
+        int weekid = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps6 = con.prepareStatement("SELECT weekID FROM WEEK where week = ?");
+            ps6.setInt(1, week);
+            ResultSet rs = ps6.executeQuery();
+            while (rs.next()) {
+                weekid = rs.getInt(1);
+            }
+            if (weekid == 0) {
+                PreparedStatement ps2 = con.prepareStatement("insert into week(`week`) values(?)");
+                ps2.setInt(1, week);
+                ps2.executeUpdate();
+            }
+            rs = ps6.executeQuery();
+            while (rs.next()) {
+                weekid = rs.getInt(1);
+            }
+            int labcount = 0;
+            PreparedStatement ps8 = con.prepareStatement("SELECT count(labID) FROM lab");
+            ps6.setInt(1, week);
+            rs = ps8.executeQuery();
+            while (rs.next()) {
+                labcount = rs.getInt(1);
+            }
+            for (int i = 1; i <= labcount; i++) {
+                PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ? and labID=?");
+                ps5.setInt(1, weekid);
+                ps5.setInt(2, i);
+                rs = ps5.executeQuery();
+                int flag = 0;
+                while (rs.next()) {
+                    flag = 1;
+                    break;
+                }
+                if (flag == 0) {
+                    PreparedStatement ps10 = con.prepareStatement("SELECT weekID FROM `week` ORDER BY `week`.`weekID` DESC");
+                    rs = ps10.executeQuery();
+                    while (rs.next()) {
+                        PreparedStatement ps9 = con.prepareStatement("SELECT * FROM timetable where weekID = ? and labID=?");
+                        ps9.setInt(1, rs.getInt(1));
+                        ps9.setInt(2, i);
+                        ResultSet rs1 = ps9.executeQuery();
+                        flag = 0;
+                        while (rs1.next() && flag == 0) {
+                            flag = 1;
+                        }
+                        PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = ? and labID=?");
+                        ps3.setInt(1, weekid);
+                        ps3.setInt(2, rs.getInt(1));
+                        ps3.setInt(3, i);
+                        ps3.executeUpdate();
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
         }
     }
 
