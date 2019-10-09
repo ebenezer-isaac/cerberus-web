@@ -74,13 +74,7 @@ public class dispSubject extends HttpServlet {
 
                         }
                         out.println(table);
-                        out.print("<form action='editSubject' method='post' align='center'>");
-                        out.print("<input id='349' type='radio' name='flow' value='add'>"
-                                + "<label for=\"349\">Add Subject &nbsp </label>");
-                        out.print("<input id='350' type='radio' name='flow' value='delete'>"
-                                + "<label for=\"350\">  Delete  Subject </label><br><br>");
-                        out.print("<input type='submit' value='Submit' onClick='/'>");
-                        out.print("</form>");
+                        
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
                     default:
