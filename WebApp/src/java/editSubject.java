@@ -55,25 +55,27 @@ public class editSubject extends HttpServlet {
                                     + "{alert('hola');}"
                                     + "</script>");
                             out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
-                                    + "<tr><td>Subject Code</td><td> : </td><td><input type='text' name='subjectID'  style=\"text-transform:uppercase\"/></td></tr>"
-                                    + "<tr><td>Subject Name</td><td> : </td><td><input type='text' name='subject'/> *Please do NOT use abbreviations </td></tr> "
-                                    + "<tr><td>Subject Abbreviation</td><td> : </td><td align=''><input type='text' name='abbr' /> </td></tr>"
-                                    + "<tr><td>Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\" value=\"odd\" checked> Odd\n"
-                                    + "  <input type=\"radio\" name=\"sem\" value=\"even\"> Even<br></td></tr>"
-                                    + "<tr><td>Select Class</td><td> : </td><td><select name = 'class' id = 'class'>");
+                                    + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input type='text' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' placeholder='BCAxxxx' style=\"text-transform:uppercase\"/></td></tr>"
+                                    + "<tr><td class=\"editSubjectStyle\">Subject Name</td><td> : </td><td><input type='text' name='subject' class=\"editSubjectForm\" placeholder='Artificial Intelligence'/> <font style=\"font-size: 12.5px; color: red;\"> *Please do NOT use abbreviations </font> </td></tr> "
+                                    + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI' style=\"text-transform:uppercase\"/> </td></tr>"
+                                    + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"odd\" checked> Odd\n"
+                                    + "  <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"even\"> Even<br></td></tr>"
+                                    + "<tr><td class=\"editSubjectStyle\">Select Class</td><td> : </td><td><select name = 'class' id = 'class' class=\"editSelect\">");
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                                int index = 0;
                                 while (rs.next()) {
-                                    out.print("<option name='Sub' value= '" + rs.getString(1) + "'>" + rs.getString(1) + "</option>");
+                                    index++;
+                                    out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>"); 
                                 }
                                 out.println("</select>");
                             } catch (ClassNotFoundException | SQLException e) {
                             }
                             out.print("</td></tr>"
-                                    + "</table><br><button type='submit'>Submit</button>"
+                                    + "</table><br><button type='submit' class='btn btn-info'>Submit</button>"
                                     + "</form>");
                         } else if (flow.equals("del")) {
                             try {
