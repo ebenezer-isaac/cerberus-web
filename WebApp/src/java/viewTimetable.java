@@ -48,16 +48,18 @@ public class viewTimetable extends HttpServlet {
                                 + "<span>Previous</span>"
                                 + "</button>"
                                 + "</form></td>"
-                                + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>"
-                                 + "<td width = 33% align='center'><form action='viewTimetable' method='post'>"
+                                + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
+                        out.print("<td width = 33% align='center'><form action='viewTimetable' method='post'>"
                                 + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
-                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\">"
-                                + "<span>Next</span>"
+                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
+                        if (week > Integer.parseInt(session.getAttribute("week").toString())) {
+                            out.println("disabled");
+                        }
+                        out.println("><span>Next</span>"
                                 + "</button>"
-                                + "</form></td>"
-                                + "</tr></table><br><br>");
-                        if((Integer.parseInt(session.getAttribute("week").toString()))!=week)
-                        {out.print("<p align='center'>Displaying Timetable of Week : "+week+"</p>");}
+                                + "</form></td>");
+                        out.print("</tr></table><br><br>");
+                        out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
                         out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                         out.println(fac_printTimetable(1, week));
                         out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
@@ -66,14 +68,16 @@ public class viewTimetable extends HttpServlet {
                         out.println(fac_printTimetable(3, week));
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
+
                     default:
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                         request.setAttribute("redirect", "true");
                         request.setAttribute("head", "Hey 'Kid'!");
                         request.setAttribute("body", "You are not authorized to view this page");
-                        request.setAttribute("url", "index.html");
+                        request.setAttribute("url", "homepage");
                         request.setAttribute("sec", "2");
                         rd.forward(request, response);
+                        break;
                 }
             } catch (IOException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");

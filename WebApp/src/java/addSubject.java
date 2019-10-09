@@ -13,9 +13,9 @@ public class addSubject extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
             String sid = request.getParameter("subjectID").toUpperCase();
             String name = request.getParameter("subject");
+            String abbr = request.getParameter("abbr");
             int sem = Integer.parseInt(request.getParameter("sem"));
             int div = 0;
             switch (sem) {
