@@ -23,12 +23,8 @@ public class homepage extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            Date date = new Date();
-            SimpleDateFormat ft = new SimpleDateFormat("w");
-            week = Integer.parseInt(ft.format(date));
-            HttpSession session = request.getSession();
-            session.setAttribute("week", week);
             new_week();
+            HttpSession session = request.getSession();
             try {
                 int access = (int) session.getAttribute("access");
                 switch (access) {

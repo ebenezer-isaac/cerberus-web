@@ -18,6 +18,19 @@ ON student.PRN = studentsubject.PRN
 where student.PRN in (2017033800107501) 
 GROUP BY studentsubject.PRN
 
+ SELECT student.PRN, student.name, student.email,
+ MAX(CASE WHEN studentsubject.subjectID = 'BCA1501' THEN concat(' 1 ',' ') END) as XML, 
+ MAX(CASE WHEN studentsubject.subjectID = 'BCA1530' THEN concat(' 1 ',' ') END) as WAD, 
+ MAX(CASE WHEN studentsubject.subjectID = 'BCA1538' THEN concat(' 1 ',' ') END) as AI, 
+ MAX(CASE WHEN studentsubject.subjectID = 'BCA1539' THEN concat(' 1 ',' ') END) as MC 
+ FROM student 
+ INNER JOIN studentsubject 
+ ON student.PRN = studentsubject.PRN 
+ where student.PRN 
+ in (2017033800107501) 
+ GROUP BY studentsubject.PRN
+
+
 INSERT INTO `faculty` values (1,'Mr.Krishnanad','ebenezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (2,'Mr.Ksitij','asdfasdfasdf@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (3,'Mrs.Pooja','esdfgdgff@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');

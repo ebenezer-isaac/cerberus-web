@@ -23,5 +23,6 @@
 hs_err_pid*
 /WebApp/dist/
 /WebApp/web/js/
-/WebApp Prototype/nbproject/private/
+/WebApp Prototype/nbproject/
 /WebApp Prototype/build/
+/WebApp/build/

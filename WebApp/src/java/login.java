@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -102,6 +103,9 @@ public class login extends HttpServlet {
                         userid = email.substring(0, index);
                     }
                     HttpSession session = request.getSession();
+                    java.util.Date date = new java.util.Date();
+                    SimpleDateFormat ft = new SimpleDateFormat("w");
+                    int week = Integer.parseInt(ft.format(date));
                     if (corrpass.equals(userid)) {
                         RequestDispatcher rd = request.getRequestDispatcher("otp");
                         session.setAttribute("email", email);
@@ -111,6 +115,7 @@ public class login extends HttpServlet {
                         session.setAttribute("email", email);
                         session.setAttribute("access", access);
                         session.setAttribute("id", id);
+                        session.setAttribute("week", week);
                         rd.forward(request, response);
                     }
                 } else {

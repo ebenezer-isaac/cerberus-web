@@ -34,7 +34,6 @@ public class viewTimetable extends HttpServlet {
                 if (week == 0) {
                     week = (int) session.getAttribute("week");
                 }
-
                 switch (access) {
                     case 1:
                         new_week(week);
@@ -79,7 +78,7 @@ public class viewTimetable extends HttpServlet {
                         rd.forward(request, response);
                         break;
                 }
-            } catch (IOException | ServletException e) {
+            } catch (IOException | NumberFormatException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");
