@@ -35,7 +35,6 @@ public class editTimetable extends HttpServlet {
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
                         week = (int) session.getAttribute("week");
                         int labid = Integer.parseInt(request.getParameter("lab"));
-                        System.out.println(labid);
                         if (labid >= 4 || labid <= 0) {
                             labid = 1;
                         }
@@ -96,11 +95,13 @@ public class editTimetable extends HttpServlet {
                             out.println("<style> th { white-space: nowrap; } </style>");
                             LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                             LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                            out.print("LAB 1. <b>Week: " + week + "</b> from <b>" + weekstart + "</b> to <b>" + endweek + "</b>");
-                            out.print("<form action='saveTimetable' method='post' align='center'>");
+                            out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                            out.print("<form action='saveTimetable' method='post' align='right'>");
                             out.print(printTimetable(labid));
                             out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
-                            out.print("<input type='submit' value='Submit' align='center'>");
+                            out.print("<button type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
+                                    + "<span>Save</span>"
+                                    + "</button>");
                             out.print("</form>");
                             con.close();
                         } catch (ClassNotFoundException | SQLException e) {
