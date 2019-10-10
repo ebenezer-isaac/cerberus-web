@@ -58,8 +58,8 @@ public class editSubject extends HttpServlet {
                                     + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input type='text' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' placeholder='BCAxxxx'/></td></tr>"
                                     + "<tr><td class=\"editSubjectStyle\">Subject Name</td><td> : </td><td><input type='text' name='subject' class=\"editSubjectForm\" placeholder='Artificial Intelligence'/></td></tr></tr><td colspan=2></td><td align='center'><font style=\"font-size: 12.5px; color: red;\"> *Please do not use abbreviations in Subject Name </font> </td></tr> "
                                     + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI'/> </td></tr>"
-                                    + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> Odd\n"
-                                    + "  <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"0\"> Even<br></td></tr>"
+                                    + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> <font style=\"font-size: 14.5px;\"> Odd </font>\n"
+                                    + "  <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"0\"><font style=\"font-size: 14.5px;\"> Even </font> <br></td></tr>"
                                     + "<tr><td class=\"editSubjectStyle\">Select Class</td><td> : </td><td><select name = 'class' id = 'class' class=\"editSelect\">");
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -88,26 +88,26 @@ public class editSubject extends HttpServlet {
                                         + "{document.getElementById('butt').style.display = 'none';}}"
                                         + "</script>");
                                 out.print("<form action='deltSubject' method='post'>");
-                                out.print("<div align='center'><br>Select the subject you want to delete : <br><br>");
+                                out.print("<div align='center'><br><font style=\"font-size: 17px; color: red;\"> Select the subject you want to delete : </font> <br><br>");
                                 Class.forName("com.mysql.cj.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                                 Statement stmt = con.createStatement();
                                 String sql = "SELECT `subjectID`,`subject` from `subject`;";
                                 ResultSet rs = stmt.executeQuery(sql);
-                                String select = "<select name = 'subject'>";
+                                String select = "<select name = 'subject' class=\"editSelect\">";
                                 while (rs.next()) {
                                     select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(1) + " - " + rs.getString(2) + " </option>";
                                 }
                                 select += "</select>";
                                 out.print(select);
-                                out.print("<br><br><fieldset>"
-                                        + "<legend><br>Warning - The following changes will be made:<br></legend>"
-                                        + "<p>1. All Attendance Records for the Subject will be deleted.</p>"
-                                        + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
-                                        + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
-                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
-                                        + "<br><br></fieldset>");
-                                out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
+                                out.print("<br><fieldset>"
+                                        + "<legend><br> <font style=\"font-size: 20px;\"> Warning - The following changes will be made: </font> <br></legend>"
+                                        + "<p> <font style=\"font-size: 15.5px;\"> 1. All Attendance Records for the Subject will be deleted. </font> </p>"
+                                        + "<p> <font style=\"font-size: 15.5px;\"> 2. Subject Selection of all Students will be erased for this subject. </font> </p>"
+                                        + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
+                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>" 
+                                        + "<br></fieldset>");
+                                out.print("<br><div id = 'butt' ><button type='submit' class='btn btn-info'>Submit</button></div>");
                                 out.print("</form></div>");
                                 con.close();
 
