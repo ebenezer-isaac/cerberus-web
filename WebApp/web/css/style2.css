@@ -204,5 +204,6 @@ a.article:hover {
      background-color: #e6e6e6;
      outline: none;
      margin: 6px;
+     height: auto;
      font-size: 14.5px;
 }

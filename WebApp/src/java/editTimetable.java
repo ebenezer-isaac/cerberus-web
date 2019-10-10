@@ -94,7 +94,7 @@ public class editTimetable extends HttpServlet {
                             out.println("<style> th { white-space: nowrap; } </style>");
                             LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                             LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                            out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                            out.print("<p align='center'>LAB "+labid+" <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                             out.print("<form action='saveTimetable' method='post' align='right'>");
                             out.print(printTimetable(labid));
                             out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
