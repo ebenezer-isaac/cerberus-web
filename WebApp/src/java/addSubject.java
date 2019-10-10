@@ -18,49 +18,18 @@ public class addSubject extends HttpServlet {
             String name = request.getParameter("subject");
             String abbreviation = request.getParameter("abbr");
 
-            String sem = request.getParameter("sem");
-            int grade = Integer.parseInt(request.getParameter("class"));
-            System.out.println(sem);
-            System.out.println(grade);
+            int oddeve = Integer.parseInt(request.getParameter("sem"));
+            int classID = Integer.parseInt(request.getParameter("class"));;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                 PreparedStatement ps = con.prepareStatement("INSERT INTO `subject` VALUES (?,?,?,?,?)");
-                int semNum = 0;
-                if ("odd".equals(sem)) {
-                    switch (grade) {
-                        case 1:
-                            System.out.println("hello");
-                            semNum = 1;
-                            break;
-                        case 2:
-                            semNum = 3;
-                            break;
-                        case 3:
-                            semNum = 5;
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-                if ("even".equals(sem)) {
-                    switch (grade) {
-                        case 1:
-                            semNum = 2;
-                            break;
-                        case 2:
-                            semNum = 4;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                ps.setString(1, sid);
+                int semNum = AttFunctions.getSem(oddeve,classID);
+                ps.setString(1, sid.toUpperCase());
                 ps.setInt(2, semNum);
                 ps.setString(3, name);
                 ps.setString(4, abbreviation);
-                ps.setInt(5, grade);
+                ps.setInt(5, classID);
                 ps.executeUpdate();
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");

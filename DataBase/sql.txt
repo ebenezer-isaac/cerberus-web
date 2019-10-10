@@ -11,14 +11,7 @@ ON timetable.slotID = slot.slotID
 where labID=1 and weekID=(select weekID from week where week = 40)
 GROUP BY slot.startTime, slot.endTime;
 
-SELECT student.PRN, student.name, student.email, 
-MAX(CASE WHEN studentsubject.subjectID = 'BCA1308' THEN concat(' 1 ',' ') END) as BCA1308 FROM student 
-INNER JOIN studentsubject 
-ON student.PRN = studentsubject.PRN 
-where student.PRN in (2017033800107501) 
-GROUP BY studentsubject.PRN
-
- SELECT student.PRN, student.name, student.email,
+SELECT rollcall.rollNo, student.PRN, student.name, student.email,
  MAX(CASE WHEN studentsubject.subjectID = 'BCA1501' THEN concat(' 1 ',' ') END) as XML, 
  MAX(CASE WHEN studentsubject.subjectID = 'BCA1530' THEN concat(' 1 ',' ') END) as WAD, 
  MAX(CASE WHEN studentsubject.subjectID = 'BCA1538' THEN concat(' 1 ',' ') END) as AI, 
@@ -26,9 +19,12 @@ GROUP BY studentsubject.PRN
  FROM student 
  INNER JOIN studentsubject 
  ON student.PRN = studentsubject.PRN 
+ INNER JOIN rollcall
+ on  rollcall.PRN = student.PRN
  where student.PRN 
- in (2017033800107501) 
+ in (select rollcall.PRN from rollcall where rollcall.classID = 3) 
  GROUP BY studentsubject.PRN
+ ORDER by rollcall.rollNo
 
 
 INSERT INTO `faculty` values (1,'Mr.Krishnanad','ebenezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');

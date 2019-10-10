@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,23 +23,24 @@ public class deltSubject extends HttpServlet {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                Statement stmt = con.createStatement();
-                stmt.executeUpdate("Delete from `subject` where `subjectID` = '" + sub + "';");
+                PreparedStatement stmt = con.prepareStatement("Delete from `subject` where `subjectID` = ?;");
+                stmt.setString(1, sub);
+                stmt.executeUpdate();
+                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                request.setAttribute("redirect", "false");
+                request.setAttribute("head", "Subject Deleted");
+                request.setAttribute("body", "The subject was deleted successfully<br>SubjectID : " + sub);
+                request.setAttribute("url", "dispSubject");
+                rd.forward(request, response);
             } catch (ClassNotFoundException | SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "false");
-                request.setAttribute("head", "Database Error");
-                request.setAttribute("body", e.getMessage());
+                request.setAttribute("head", "Request Failed");
+                request.setAttribute("body", "The subject cannot be deleted because timetable/teacher-log is dependent on it");
                 request.setAttribute("url", "dispSubject");
                 rd.forward(request, response);
             }
-            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-            request.setAttribute("redirect", "true");
-            request.setAttribute("head", "Subject Deleted");
-            request.setAttribute("body", "The subject was deleted successfully<br>SubjectID : " + sub);
-            request.setAttribute("url", "dispSubject");
-            request.setAttribute("sec", "2");
-            rd.forward(request, response);
+
         }
     }
 

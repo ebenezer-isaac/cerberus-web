@@ -1,10 +1,5 @@
-
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,26 +10,6 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
 public class login extends HttpServlet {
-
-    public static String hashIt(String raw) throws NoSuchAlgorithmException {
-        raw = raw + "msubca";
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        BigInteger number = new BigInteger(1, md.digest(raw.getBytes(StandardCharsets.UTF_8)));
-        StringBuilder hexString = new StringBuilder(number.toString(16));
-        while (hexString.length() < 32) {
-            hexString.insert(0, '0');
-        }
-        return hexString.toString();
-    }
-
-    public String trimSQLInjection(String str) {
-        String temp = str;
-        temp = temp.replaceAll("\\s+", "");
-        temp = temp.replaceAll("[A-Za-z0-9]+", "");
-        temp = temp.replaceAll("\"", "'");
-        return (temp);
-    }
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -42,7 +17,7 @@ public class login extends HttpServlet {
             String email = request.getParameter("email");
             String rawpass = request.getParameter("password");
             String id = "";
-            if (trimSQLInjection(rawpass).equals("'''='")) {
+            if (AttFunctions.trimSQLInjection(rawpass).equals("'''='")) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Nice Try!");
@@ -51,7 +26,7 @@ public class login extends HttpServlet {
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
-                String pass = hashIt(rawpass);
+                String pass = AttFunctions.hashIt(rawpass);
                 int access = 0;
                 String corrpass = "";
                 try {
@@ -102,6 +77,7 @@ public class login extends HttpServlet {
                     if (index != -1) {
                         userid = email.substring(0, index);
                     }
+                    userid = AttFunctions.hashIt(userid);
                     HttpSession session = request.getSession();
                     java.util.Date date = new java.util.Date();
                     SimpleDateFormat ft = new SimpleDateFormat("w");

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class editSubject extends HttpServlet {
+public class editFaculty extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -54,29 +54,16 @@ public class editSubject extends HttpServlet {
                                     + "function myFuntion()"
                                     + "{alert('hola');}"
                                     + "</script>");
-                            out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
-                                    + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input type='text' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' placeholder='BCAxxxx'/></td></tr>"
-                                    + "<tr><td class=\"editSubjectStyle\">Subject Name</td><td> : </td><td><input type='text' name='subject' class=\"editSubjectForm\" placeholder='Artificial Intelligence'/></td></tr></tr><td colspan=2></td><td align='center'><font style=\"font-size: 12.5px; color: red;\"> *Please do not use abbreviations in Subject Name </font> </td></tr> "
-                                    + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI'/> </td></tr>"
-                                    + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> Odd\n"
-                                    + "  <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"0\"> Even<br></td></tr>"
-                                    + "<tr><td class=\"editSubjectStyle\">Select Class</td><td> : </td><td><select name = 'class' id = 'class' class=\"editSelect\">");
-                            try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                Statement stmt = con.createStatement();
-                                ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                                int index = 0;
-                                while (rs.next()) {
-                                    index++;
-                                    out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>"); 
-                                }
-                                out.println("</select>");
-                            } catch (ClassNotFoundException | SQLException e) {
-                            }
-                            out.print("</td></tr>"
-                                    + "</table><br><button type='submit' class='btn btn-info'>Submit</button>"
-                                    + "</form>");
+                            out.print("<br><div align='center'><form action='addFaculty' method='post'><table cellspacing='10'>"
+                                    + "<tr><td class=\"editSubjectStyle\">Faculty Name</td><td> : </td><td>"
+                                    + "<select name='title' class=\"editSelect\" >"
+                                    + "<option value='Mr. '>Mr.</option>"
+                                    + "<option value='Ms. '>Ms.</option>"
+                                    + "<option value='Mrs. '>Mrs.</option>"
+                                    + "</select>"
+                                    + "<input type='text' name='name' class=\"editSubjectForm\" placeholder='Narendra Modi'/></td></tr>"
+                                    + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input type='email' name='email' class=\"editSubjectForm\" placeholder='narendramodi@gmail.com'/></td></tr> "
+                                    + "</table><br><button type='submit' class='btn btn-info'>Add Faculty</button></form>");
                         } else if (flow.equals("del")) {
                             try {
                                 out.print("<body onload='myFunction()'>");
@@ -87,16 +74,16 @@ public class editSubject extends HttpServlet {
                                         + "else"
                                         + "{document.getElementById('butt').style.display = 'none';}}"
                                         + "</script>");
-                                out.print("<form action='deltSubject' method='post'>");
+                                out.print("<form action='deltFaculty' method='post'>");
                                 out.print("<div align='center'><br>Select the subject you want to delete : <br><br>");
                                 Class.forName("com.mysql.cj.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                                 Statement stmt = con.createStatement();
-                                String sql = "SELECT `subjectID`,`subject` from `subject`;";
+                                String sql = "SELECT `facultyID`,`name` from `faculty`;";
                                 ResultSet rs = stmt.executeQuery(sql);
-                                String select = "<select name = 'subject'>";
+                                String select = "<select name = 'facultyID'>";
                                 while (rs.next()) {
-                                    select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(1) + " - " + rs.getString(2) + " </option>";
+                                    select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
                                 }
                                 select += "</select>";
                                 out.print(select);

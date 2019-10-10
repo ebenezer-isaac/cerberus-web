@@ -1,10 +1,6 @@
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import static java.lang.Thread.sleep;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +12,6 @@ import javax.mail.internet.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Random;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -28,28 +23,6 @@ public class otp extends HttpServlet implements Runnable {
     String hashotp = null;
     String userInfo = null;
 
-    public static String generateOTP() throws NoSuchAlgorithmException {
-        String otpchars = "1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 6) {
-            int index = (int) (rnd.nextFloat() * otpchars.length());
-            salt.append(otpchars.charAt(index));
-        }
-        return salt.toString();
-    }
-
-    public static String hashIt(String raw) throws NoSuchAlgorithmException {
-        raw = raw + "msubca";
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        BigInteger number = new BigInteger(1, md.digest(raw.getBytes(StandardCharsets.UTF_8)));
-        StringBuilder hexString = new StringBuilder(number.toString(16));
-        while (hexString.length() < 32) {
-            hexString.insert(0, '0');
-        }
-        return hexString.toString();
-    }
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -60,8 +33,8 @@ public class otp extends HttpServlet implements Runnable {
             this.email = (String) session.getAttribute("email");
         }
         try {
-            this.rawotp = generateOTP();
-            this.hashotp = hashIt(this.rawotp);
+            this.rawotp = AttFunctions.generateOTP();
+            this.hashotp = AttFunctions.hashIt(this.rawotp);
         } catch (NoSuchAlgorithmException e) {
         }
         int email_count = 0;
