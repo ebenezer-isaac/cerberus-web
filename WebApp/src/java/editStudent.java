@@ -104,7 +104,7 @@ public class editStudent extends HttpServlet {
                                 }
                                 out.println("</select>");
                                 out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
-                                        + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' style= 'width: 50px' onchange='this.value = zeroPad(this.value)' value = '01' placeholder='xx' min='1' max='150'/></td></tr> "
+                                        + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value)' value = '01' placeholder='xx' min='1' max='150'/></td></tr> "
                                         + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                         + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                         + "</table><br><button type='submit' class='btn btn-info'>Add Student</button></form>"

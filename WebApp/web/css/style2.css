@@ -198,12 +198,41 @@ a.article:hover {
 
 .editSelect
 {
-     padding: 4px 70px;
+     padding: 5px 70px;
      border-radius: 4px;
      border: none;
      background-color: #e6e6e6;
      outline: none;
      margin: 6px;
-     height: auto;
+     font-size: 14.5px;
+}
+
+.editSelectFaculty
+{
+     padding: 5px 12px;
+     border-radius: 4px;
+     border: none;
+     background-color: #e6e6e6;
+     outline: none;
+     margin: 6px;
+     font-size: 14.5px;
+}
+
+.editTimeTimeTable
+{
+    font-size: 14.5px;
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+
+.editSelectTimeTable
+{
+     padding: 5px 12px;
+     border-radius: 4px;
+     border: none;
+     background-color: #e6e6e6;
+     outline: none;
+     margin: 6px;
      font-size: 14.5px;
 }

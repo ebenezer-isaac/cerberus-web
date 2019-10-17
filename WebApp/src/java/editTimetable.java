@@ -240,13 +240,13 @@ public class editTimetable extends HttpServlet {
             while (line <= no_of_slots) {
                 if (rs.getInt(1) == line) {
                     table += ("<tr> ");
-                    table += ("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
-                    table += (" : <input type='number'  style='border:1px solid ;' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
-                    table += ("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
-                    table += (" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
+                    table += ("<th><input type='number' class=\"editTimeTimeTable\" name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
+                    table += (" : <input type='number'  class=\"editTimeTimeTable\" name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
+                    table += ("<th><input type='number'  class=\"editTimeTimeTable\" name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
+                    table += (" : <input type='number'  class=\"editTimeTimeTable\" name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
                     for (int j = 1; j <= 6; j++) {
                         table += ("<td align='center'>");
-                        table += ("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'  onchange = 'batchdisable(this.id)'>");
+                        table += ("<select class=\"editSelectTimeTable\" name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'  onchange = 'batchdisable(this.id)'>");
                         table += ("<option name='Sub' value='-'");
                         String[] arrOfsub = null;
                         int flag;
@@ -269,7 +269,7 @@ public class editTimetable extends HttpServlet {
                         }
                         String batch[] = {"Batch A", "Batch B", "Batch C"};
                         table += ("</select>");
-                        table += ("<select name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
+                        table += ("<select class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
                         if (flag == 0) {
                             table += ("disabled class='not-allowed';");
                         }
