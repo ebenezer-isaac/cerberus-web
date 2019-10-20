@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -74,7 +72,7 @@ public class dispSubject extends HttpServlet {
 
                         }
                         out.println(table);
-                        
+
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
                     default:
@@ -95,7 +93,6 @@ public class dispSubject extends HttpServlet {
                 request.setAttribute("url", "index.html");
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
-
             }
         }
     }

@@ -69,7 +69,7 @@ public class editSubject extends HttpServlet {
                                 int index = 0;
                                 while (rs.next()) {
                                     index++;
-                                    out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>"); 
+                                    out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>");
                                 }
                                 out.println("</select>");
                             } catch (ClassNotFoundException | SQLException e) {
@@ -105,12 +105,11 @@ public class editSubject extends HttpServlet {
                                         + "<p> <font style=\"font-size: 15.5px;\"> 1. All Attendance Records for the Subject will be deleted. </font> </p>"
                                         + "<p> <font style=\"font-size: 15.5px;\"> 2. Subject Selection of all Students will be erased for this subject. </font> </p>"
                                         + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
-                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>" 
+                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                         + "<br></fieldset>");
                                 out.print("<br><div id = 'butt' ><button type='submit' class='btn btn-info'>Submit</button></div>");
                                 out.print("</form></div>");
                                 con.close();
-
                             } catch (ClassNotFoundException | SQLException e) {
                                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                                 request.setAttribute("message", e.getMessage());
@@ -130,7 +129,7 @@ public class editSubject extends HttpServlet {
                         rd.forward(request, response);
                         break;
                 }
-            } catch (Exception e) {
+            } catch (IOException | ServletException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");
@@ -148,6 +147,7 @@ public class editSubject extends HttpServlet {
         processRequest(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);

@@ -1,3 +1,4 @@
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -60,7 +61,7 @@ public class AttFunctions {
         temp = temp.replaceAll("\"", "'");
         return (temp);
     }
-    
+
     public static String generateOTP() throws NoSuchAlgorithmException {
         String otpchars = "1234567890";
         StringBuilder salt = new StringBuilder();

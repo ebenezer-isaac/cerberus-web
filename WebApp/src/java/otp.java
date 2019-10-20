@@ -40,28 +40,27 @@ public class otp extends HttpServlet implements Runnable {
         int email_count = 0;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("SELECT email from `student` WHERE email=? union SELECT email from `faculty` WHERE email=?");
-            ps.setString(1, this.email);
-            ps.setString(2, this.email);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                this.email = rs.getString(1);
-                email_count++;
-            }
-            ps = con.prepareStatement("DELETE from `otp` where email=?;");
-            ps.setString(1, this.email);
-            try {
-                ps.executeUpdate();
-            } catch (SQLException e) {
-            }
-            if (email_count == 1) {
-                ps = con.prepareStatement("INSERT INTO `otp`(`email`, `OTP`) VALUES (?,?)");
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                PreparedStatement ps = con.prepareStatement("SELECT email from `student` WHERE email=? union SELECT email from `faculty` WHERE email=?");
                 ps.setString(1, this.email);
-                ps.setString(2, this.hashotp);
+                ps.setString(2, this.email);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    this.email = rs.getString(1);
+                    email_count++;
+                }
+                ps = con.prepareStatement("DELETE from `otp` where email=?;");
+                ps.setString(1, this.email);
                 ps.executeUpdate();
+
+                if (email_count == 1) {
+                    ps = con.prepareStatement("INSERT INTO `otp`(`email`, `OTP`) VALUES (?,?)");
+                    ps.setString(1, this.email);
+                    ps.setString(2, this.hashotp);
+                    ps.executeUpdate();
+                }
+                con.close();
             }
-            con.close();
         } catch (ClassNotFoundException | SQLException e) {
             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
             request.setAttribute("redirect", "false");
@@ -160,29 +159,26 @@ public class otp extends HttpServlet implements Runnable {
             msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com"));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.email));
             msg.setText(this.body);
-            Transport transport = session.getTransport("smtps");
-            transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
-            transport.sendMessage(msg, msg.getAllRecipients());
-            transport.close();
+            try (Transport transport = session.getTransport("smtps")) {
+                transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
+                transport.sendMessage(msg, msg.getAllRecipients());
+            }
         } catch (AddressException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
-            e.printStackTrace();
         }
         try {
             sleep(600000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
-            ps.setString(1, this.email);
-            ps.executeUpdate();
-            con.close();
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
+                ps.setString(1, this.email);
+                ps.executeUpdate();
+                con.close();
+            }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
     }
 }

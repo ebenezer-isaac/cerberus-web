@@ -22,18 +22,20 @@ public class ajaxCheckEmail extends HttpServlet {
             int flag = 0;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select email from student where email=?");
-                ps.setString(1, email);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    flag = 1;
-                }
-                ps = con.prepareStatement("select email from faculty where email=?");
-                ps.setString(1, email);
-                rs = ps.executeQuery();
-                while (rs.next()) {
-                    flag = 1;
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    PreparedStatement ps = con.prepareStatement("select email from student where email=?");
+                    ps.setString(1, email);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        flag = 1;
+                    }
+                    ps = con.prepareStatement("select email from faculty where email=?");
+                    ps.setString(1, email);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        flag = 1;
+                    }
+                    con.close();
                 }
             } catch (ClassNotFoundException | SQLException e) {
             }

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class deltFaculty extends HttpServlet implements Runnable{
+public class deltFaculty extends HttpServlet implements Runnable {
 
     String name = "";
     String email = "";
@@ -34,17 +34,19 @@ public class deltFaculty extends HttpServlet implements Runnable{
             String facultyID = request.getParameter("facultyID");
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("Select * from `faculty` where `facultyID` = ?;");
-                ps.setString(1, facultyID);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    this.name = rs.getString(2);
-                    this.email = rs.getString(3);
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    PreparedStatement ps = con.prepareStatement("Select * from `faculty` where `facultyID` = ?;");
+                    ps.setString(1, facultyID);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        this.name = rs.getString(2);
+                        this.email = rs.getString(3);
+                    }
+                    PreparedStatement stmt = con.prepareStatement("Delete from `faculty` where `facultyID` = ?;");
+                    stmt.setString(1, facultyID);
+                    stmt.executeUpdate();
+                    con.close();
                 }
-                PreparedStatement stmt = con.prepareStatement("Delete from `faculty` where `facultyID` = ?;");
-                stmt.setString(1, facultyID);
-                stmt.executeUpdate();
                 Thread thread = new Thread(this);
                 thread.start();
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -95,29 +97,25 @@ public class deltFaculty extends HttpServlet implements Runnable{
             msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com"));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.email));
             msg.setText(body);
-            Transport transport = session.getTransport("smtps");
-            transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
-            transport.sendMessage(msg, msg.getAllRecipients());
-            transport.close();
+            try (Transport transport = session.getTransport("smtps")) {
+                transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
+                transport.sendMessage(msg, msg.getAllRecipients());
+            }
         } catch (AddressException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
-            e.printStackTrace();
         }
         try {
             sleep(600000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
-            ps.setString(1, this.email);
-            ps.executeUpdate();
-            con.close();
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
+                ps.setString(1, this.email);
+                ps.executeUpdate();
+            }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
     }
 

@@ -103,7 +103,7 @@ public class editStudDetails extends HttpServlet {
                             PreparedStatement ps4 = con.prepareStatement(sql);
                             rs = ps4.executeQuery();
                             ResultSetMetaData rsm = rs.getMetaData();
-                            int cols = rsm.getColumnCount();    
+                            int cols = rsm.getColumnCount();
                             int line = 0;
                             if (rs.next()) {
                                 out.println("<table class=\"table table-striped table-bordered\"><thead>");
@@ -142,8 +142,8 @@ public class editStudDetails extends HttpServlet {
                                     + "<input type='text' name='cols' value='" + cols + "' hidden>"
                                     + "<input type='text' name='rows' value='" + line + "' hidden>");
                             out.println("</form><br>");
+                            con.close();
                         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                            e.printStackTrace();
                         }
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;

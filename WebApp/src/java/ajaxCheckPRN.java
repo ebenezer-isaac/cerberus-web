@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +22,14 @@ public class ajaxCheckPRN extends HttpServlet {
             int flag = 0;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
-                ps.setString(1, prn);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    flag = 1;
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
+                    ps.setString(1, prn);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        flag = 1;
+                    }
+                    con.close();
                 }
             } catch (ClassNotFoundException | SQLException e) {
             }

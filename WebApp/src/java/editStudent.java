@@ -98,24 +98,26 @@ public class editStudent extends HttpServlet {
 
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
-                                        + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
-                                Statement stmt = con.createStatement();
-                                out.print("<select name = 'clas' id = 'clas' class=\"editSelect\">");
-                                ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                                int index = 0;
-                                while (rs.next()) {
-                                    index++;
-                                    out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>");
+                                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                                    out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
+                                            + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
+                                    Statement stmt = con.createStatement();
+                                    out.print("<select name = 'clas' id = 'clas' class=\"editSelect\">");
+                                    ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                                    int index = 0;
+                                    while (rs.next()) {
+                                        index++;
+                                        out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>");
+                                    }
+                                    out.println("</select>");
+                                    out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
+                                            + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
+                                            + "</table><br><button type='submit' class='btn btn-info'>Add Student</button></form>"
+                                    );
+                                    con.close();
                                 }
-                                out.println("</select>");
-                                out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
-                                        + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
-                                        + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
-                                        + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                        + "</table><br><button type='submit' class='btn btn-info'>Add Student</button></form>"
-                                );
                             } catch (SQLException e) {
                                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                                 request.setAttribute("message", e.getMessage());
@@ -193,6 +195,7 @@ public class editStudent extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
