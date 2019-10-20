@@ -38,7 +38,6 @@ public class editTimetable extends HttpServlet {
                         if (labid >= 4 || labid <= 0) {
                             labid = 1;
                         }
-                        System.out.println("new " + labid);
                         new_week();
                         try {
                             int selesem = 1;
