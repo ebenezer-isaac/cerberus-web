@@ -20,7 +20,7 @@ public class ajaxCheckRoll extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             int roll = Integer.parseInt(request.getParameter("roll"));
             String clas = request.getParameter("clas");
-            System.out.println(clas);
+//            System.out.println("hello");
             int flag = 0;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -32,6 +32,7 @@ public class ajaxCheckRoll extends HttpServlet {
                 while (rs.next()) {
                     flag = 1;
                 }
+                con.close();
             } catch (ClassNotFoundException | SQLException e) {
             }
             System.out.println(roll);
