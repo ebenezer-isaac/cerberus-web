@@ -46,6 +46,7 @@ public class saveTimetable extends HttpServlet {
                                     no_of_subs++;
                                 }
                                 no_of_subs--;
+                                con.close();
                             } catch (SQLException e) {
                                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                                 request.setAttribute("redirect", "false");

@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,15 +23,16 @@ public class ajaxCheckRoll extends HttpServlet {
             int flag = 0;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where classID = ?");
-                ps.setInt(1, roll);
-                ps.setString(2, clas);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    flag = 1;
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where classID = ?");
+                    ps.setInt(1, roll);
+                    ps.setString(2, clas);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        flag = 1;
+                    }
+                    con.close();
                 }
-                con.close();
             } catch (ClassNotFoundException | SQLException e) {
             }
             System.out.println(roll);

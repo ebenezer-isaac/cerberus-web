@@ -19,18 +19,20 @@ public class addSubject extends HttpServlet {
             String abbreviation = request.getParameter("abbr");
 
             int oddeve = Integer.parseInt(request.getParameter("sem"));
-            int classID = Integer.parseInt(request.getParameter("class"));;
+            int classID = Integer.parseInt(request.getParameter("class"));
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("INSERT INTO `subject` VALUES (?,?,?,?,?)");
-                int semNum = AttFunctions.getSem(oddeve,classID);
-                ps.setString(1, sid.toUpperCase());
-                ps.setInt(2, semNum);
-                ps.setString(3, name);
-                ps.setString(4, abbreviation);
-                ps.setInt(5, classID);
-                ps.executeUpdate();
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO `subject` VALUES (?,?,?,?,?)");
+                    int semNum = AttFunctions.getSem(oddeve, classID);
+                    ps.setString(1, sid.toUpperCase());
+                    ps.setInt(2, semNum);
+                    ps.setString(3, name);
+                    ps.setString(4, abbreviation);
+                    ps.setInt(5, classID);
+                    ps.executeUpdate();
+                    con.close();
+                }
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Subject Added");
@@ -45,7 +47,6 @@ public class addSubject extends HttpServlet {
                 request.setAttribute("body", e.getMessage());
                 request.setAttribute("url", "dispSubject");
                 rd.forward(request, response);
-
             }
         } catch (ClassNotFoundException e) {
 

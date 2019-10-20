@@ -39,31 +39,33 @@ public class addFaculty extends HttpServlet implements Runnable {
             pass = AttFunctions.hashIt(pass);
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select name from faculty where email=?");
-                ps.setString(1, this.email);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "false");
-                    request.setAttribute("head", "Request Failed");
-                    request.setAttribute("body", "A faculty by name "+rs.getString(1)+" with email address as "+this.email+" already exits.");
-                    request.setAttribute("url", "homepage");
-                    rd.forward(request, response);
-                } else {
-                    ps = con.prepareStatement("INSERT INTO `faculty`(`name`, `email`, `password`) VALUES (?,?,?)");
-                    ps.setString(1, this.name);
-                    ps.setString(2, this.email);
-                    ps.setString(3, pass);
-                    ps.executeUpdate();
-                    Thread thread = new Thread(this);
-                    thread.start();
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "false");
-                    request.setAttribute("head", "Faculty Added");
-                    request.setAttribute("body", this.name + " was added to the list of faculties. A mail has been sent to their registered email address.");
-                    request.setAttribute("url", "homepage");
-                    rd.forward(request, response);
+                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    PreparedStatement ps = con.prepareStatement("select name from faculty where email=?");
+                    ps.setString(1, this.email);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        request.setAttribute("redirect", "false");
+                        request.setAttribute("head", "Request Failed");
+                        request.setAttribute("body", "A faculty by name "+rs.getString(1)+" with email address as "+this.email+" already exits.");
+                        request.setAttribute("url", "homepage");
+                        rd.forward(request, response);
+                    } else {
+                        ps = con.prepareStatement("INSERT INTO `faculty`(`name`, `email`, `password`) VALUES (?,?,?)");
+                        ps.setString(1, this.name);
+                        ps.setString(2, this.email);
+                        ps.setString(3, pass);
+                        ps.executeUpdate();
+                        Thread thread = new Thread(this);
+                        thread.start();
+                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                        request.setAttribute("redirect", "false");
+                        request.setAttribute("head", "Faculty Added");
+                        request.setAttribute("body", this.name + " was added to the list of faculties. A mail has been sent to their registered email address.");
+                        request.setAttribute("url", "homepage");
+                        rd.forward(request, response);
+                    }
+                    con.close();
                 }
             } catch (SQLException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -117,29 +119,25 @@ public class addFaculty extends HttpServlet implements Runnable {
             msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com"));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.email));
             msg.setText(body);
-            Transport transport = session.getTransport("smtps");
-            transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
-            transport.sendMessage(msg, msg.getAllRecipients());
-            transport.close();
+            try (Transport transport = session.getTransport("smtps")) {
+                transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
+                transport.sendMessage(msg, msg.getAllRecipients());
+            }
         } catch (AddressException e) {
-            e.printStackTrace();
         } catch (MessagingException e) {
-            e.printStackTrace();
         }
         try {
             sleep(600000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
-            ps.setString(1, this.email);
-            ps.executeUpdate();
-            con.close();
+            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
+                ps.setString(1, this.email);
+                ps.executeUpdate();
+            }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
     }
 

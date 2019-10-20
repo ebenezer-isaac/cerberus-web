@@ -77,27 +77,27 @@ public class editFaculty extends HttpServlet {
                                 out.print("<form action='deltFaculty' method='post'>");
                                 out.print("<div align='center'><br> <font style=\"font-size: 17px; color: red;\"> Select the subject you want to delete : </font> <br><br>");
                                 Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                Statement stmt = con.createStatement();
-                                String sql = "SELECT `facultyID`,`name` from `faculty`;";
-                                ResultSet rs = stmt.executeQuery(sql);
-                                String select = "<select name = 'facultyID' class=\"editSelect\">";
-                                while (rs.next()) {
-                                    select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
+                                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                                    Statement stmt = con.createStatement();
+                                    String sql = "SELECT `facultyID`,`name` from `faculty`;";
+                                    ResultSet rs = stmt.executeQuery(sql);
+                                    String select = "<select name = 'facultyID' class=\"editSelect\">";
+                                    while (rs.next()) {
+                                        select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
+                                    }
+                                    select += "</select>";
+                                    out.print(select);
+                                    out.print("<br><fieldset>"
+                                            + "<legend><br> <font style=\"font-size: 20px;\"> Warning - The following changes will be made: </font> <br></legend>"
+                                            + "<p> <font style=\"font-size: 15.5px;\"> 1. All Attendance Records for the Subject will be deleted. </font> </p>"
+                                            + "<p> <font style=\"font-size: 15.5px;\"> 2. Subject Selection of all Students will be erased for this subject. </font> </p>"
+                                            + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
+                                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
+                                            + "<br></fieldset>");
+                                    out.print("<br><div id = 'butt' ><button type='submit' class='btn btn-info'>Submit</button></div>");
+                                    out.print("</form></div>");
+                                    con.close();
                                 }
-                                select += "</select>";
-                                out.print(select);
-                                out.print("<br><fieldset>"
-                                        + "<legend><br> <font style=\"font-size: 20px;\"> Warning - The following changes will be made: </font> <br></legend>"
-                                        + "<p> <font style=\"font-size: 15.5px;\"> 1. All Attendance Records for the Subject will be deleted. </font> </p>"
-                                        + "<p> <font style=\"font-size: 15.5px;\"> 2. Subject Selection of all Students will be erased for this subject. </font> </p>"
-                                        + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
-                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
-                                        + "<br></fieldset>");
-                                out.print("<br><div id = 'butt' ><button type='submit' class='btn btn-info'>Submit</button></div>");
-                                out.print("</form></div>");
-                                con.close();
-
                             } catch (ClassNotFoundException | SQLException e) {
                                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                                 request.setAttribute("message", e.getMessage());
