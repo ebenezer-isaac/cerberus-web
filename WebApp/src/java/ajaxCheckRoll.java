@@ -19,15 +19,16 @@ public class ajaxCheckRoll extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int roll = Integer.parseInt(request.getParameter("roll"));
-            String clas = request.getParameter("clas");
-//            System.out.println("hello");
+            int clas = Integer.parseInt(request.getParameter("clas"))+1;
+            System.out.println(roll);
+            System.out.println(clas);
             int flag = 0;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where classID = ?");
+                PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where rollNo=? and classID = ?");
                 ps.setInt(1, roll);
-                ps.setString(2, clas);
+                ps.setInt(2, clas);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     flag = 1;
