@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -66,6 +68,18 @@ public class login extends HttpServlet {
                 if (corrpass.equals(pass)) {
                     RequestDispatcher rd = request.getRequestDispatcher("homepage");
                     HttpSession session = request.getSession();
+                    java.util.Date date = new java.util.Date();
+                    SimpleDateFormat ft = new SimpleDateFormat("w");
+                    int week = Integer.parseInt(ft.format(date));
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+                    if (calendar.get(Calendar.DAY_OF_WEEK) <= 2) {
+                        week--;
+                    }
+                    session.setAttribute("week", week);
+                    AttFunctions.new_week(week);
+                    AttFunctions.new_week(week + 1);
                     session.setAttribute("email", email);
                     session.setAttribute("access", access);
                     session.setAttribute("user", id);

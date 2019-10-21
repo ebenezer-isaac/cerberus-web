@@ -77,7 +77,7 @@ public class editFaculty extends HttpServlet {
                                         + "{document.getElementById('butt').style.display = 'none';}}"
                                         + "</script>");
                                 out.print("<form action='deltFaculty' method='post'>");
-                                out.print("<div align='center'><br> <font style=\"font-size: 17px; color: red;\"> Select the subject you want to delete : </font> <br><br>");
+                                out.print("<div align='center'><br> <font style=\"font-size: 17px; color: red;\"> Select the Faculty you want to delete : </font> <br><br>");
                                 Class.forName("com.mysql.cj.jdbc.Driver");
                                 try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
                                     Statement stmt = con.createStatement();
@@ -94,8 +94,8 @@ public class editFaculty extends HttpServlet {
                                     out.print(select);
                                     out.print("<br><fieldset>"
                                             + "<legend><br> <font style=\"font-size: 20px;\"> Warning - The following changes will be made: </font> <br></legend>"
-                                            + "<p> <font style=\"font-size: 15.5px;\"> 1. All Attendance Records for the Subject will be deleted. </font> </p>"
-                                            + "<p> <font style=\"font-size: 15.5px;\"> 2. Subject Selection of all Students will be erased for this subject. </font> </p>"
+                                            + "<p> <font style=\"font-size: 15.5px;\"> 1. A mail will be sent to the respective faculty </font> </p>"
+                                            + "<p> <font style=\"font-size: 15.5px;\"> 2. Fingerprint data will be deleted permanently </font> </p>"
                                             + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                             + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                             + "<br></fieldset>");
