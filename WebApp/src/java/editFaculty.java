@@ -60,6 +60,8 @@ public class editFaculty extends HttpServlet {
                                     + "<option value='Mr. '>Mr.</option>"
                                     + "<option value='Ms. '>Ms.</option>"
                                     + "<option value='Mrs. '>Mrs.</option>"
+                                    + "<option value='Dr. '>Mrs.</option>"
+                                    + "<option value='Prof. '>Mrs.</option>"
                                     + "</select>"
                                     + "<input type='text' name='name' class=\"editSubjectForm\" placeholder='Narendra Modi'/></td></tr>"
                                     + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input type='email' name='email' style='width: 303.3px' class=\"editSubjectForm\" placeholder='narendramodi@gmail.com'/></td></tr> "
@@ -83,7 +85,10 @@ public class editFaculty extends HttpServlet {
                                     ResultSet rs = stmt.executeQuery(sql);
                                     String select = "<select name = 'facultyID' class=\"editSelect\">";
                                     while (rs.next()) {
-                                        select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
+                                        if (session.getAttribute("user").equals(rs.getString(1))) {
+                                        } else {
+                                            select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
+                                        }
                                     }
                                     select += "</select>";
                                     out.print(select);

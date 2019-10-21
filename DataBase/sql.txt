@@ -11,6 +11,8 @@ ON timetable.slotID = slot.slotID
 where labID=1 and weekID=(select weekID from week where week = 40)
 GROUP BY slot.startTime, slot.endTime;
 
+
+
 SELECT rollcall.rollNo, student.PRN, student.name, student.email,
  MAX(CASE WHEN studentsubject.subjectID = 'BCA1501' THEN concat(' 1 ',' ') END) as XML, 
  MAX(CASE WHEN studentsubject.subjectID = 'BCA1530' THEN concat(' 1 ',' ') END) as WAD, 
@@ -26,11 +28,32 @@ SELECT rollcall.rollNo, student.PRN, student.name, student.email,
  GROUP BY studentsubject.PRN
  ORDER by rollcall.rollNo
  
- SELECT count(facultytimetable.scheduleID)
+ 
+ 
+SELECT count(facultytimetable.scheduleID)
 from facultytimetable 
 INNER JOIN timetable
 on timetable.scheduleID=facultytimetable.scheduleID
 where timetable.subjectID = 'BCA1538'
+
+
+
+SELECT facultytimetable.scheduleID, 
+(select datedata.date from datedata where attendance.dateID=datedata.dateID) as date, 
+slot.startTime, slot.endTime,
+(select lab.name from lab where lab.labID=timetable.labID) as lab,
+(select batch.name from batch where batch.batchID=timetable.batchID) as batch,
+(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher
+from facultytimetable
+INNER JOIN timetable
+on timetable.scheduleID=facultytimetable.scheduleID
+INNER JOIN slot
+on slot.slotID=timetable.slotID
+INNER JOIN attendance
+on attendance.scheduleID=facultytimetable.scheduleID
+where timetable.subjectID = 'BCA1538'
+
+
 
 INSERT INTO `faculty` values (1,'Mr.Krishnanad','ebenezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (2,'Mr.Ksitij','asdfasdfasdf@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
@@ -45,6 +68,8 @@ INSERT INTO `faculty` values (10,'Mrs.Hetal','ebenezxcfzerv99@gmail.com','de7866
 INSERT INTO `faculty` values (11,'Ms.Divya','ebendezdfcsdferv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (12,'Ms.Riya','ebenezsdrerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (13,'Ms.Ankita','ebeasdfnqwerdezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
+
+
 
 INSERT INTO `timetable` VALUES (1,1,1,"BCA1538",1,1,'mon');
 INSERT INTO `timetable` VALUES (2,2,1,"BCA1301",1,1,'mon');
