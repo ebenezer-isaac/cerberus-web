@@ -30,7 +30,7 @@ public class deltSubject extends HttpServlet {
                 request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Subject Deleted");
                 request.setAttribute("body", "The subject was deleted successfully<br>SubjectID : " + sub);
-                request.setAttribute("url", "dispSubject");
+                request.setAttribute("url", "viewSubject");
                 rd.forward(request, response);
 
             } catch (ClassNotFoundException | SQLException e) {
@@ -38,7 +38,7 @@ public class deltSubject extends HttpServlet {
                 request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Request Failed");
                 request.setAttribute("body", "The subject cannot be deleted because timetable/teacher-log is dependent on it");
-                request.setAttribute("url", "dispSubject");
+                request.setAttribute("url", "viewSubject");
                 rd.forward(request, response);
             }
         }
