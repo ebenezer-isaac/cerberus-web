@@ -1,36 +1,21 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-public class homepage extends HttpServlet {
-
-    int week;
+public class viewSubDetails extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            int access = (int) session.getAttribute("access");
-            switch (access) {
-                case 1:
-                    request.getRequestDispatcher("side-faculty.html").include(request, response);
-                    request.getRequestDispatcher("end.html").include(request, response);
-                    break;
-                case 0:
-                    request.getRequestDispatcher("side-student.html").include(request, response);
-                    request.getRequestDispatcher("end.html").include(request, response);
-                    break;
-                default:
-                    messages m = new messages();
-                    m.nouser(request, response);
-            }
+            String subcode = request.getParameter("subcode");
+            request.getRequestDispatcher("side-faculty.html").include(request, response);
+            out.println(subcode + " Details");
+            request.getRequestDispatcher("end.html").include(request, response);
         }
     }
 
@@ -45,4 +30,5 @@ public class homepage extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
 }

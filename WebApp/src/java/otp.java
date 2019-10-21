@@ -1,21 +1,17 @@
 
 import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Properties;
-import javax.mail.*;
-import javax.mail.internet.*;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
-public class otp extends HttpServlet implements Runnable {
+public class otp extends HttpServlet {
 
     String body = null;
     String email = null;
@@ -71,8 +67,20 @@ public class otp extends HttpServlet implements Runnable {
         }
         switch (email_count) {
             case 1: {
-                Thread thread = new Thread(this);
-                thread.start();
+                DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                java.util.Date dateobj = new java.util.Date();
+                String os = userInfo.substring(userInfo.indexOf("(") + 1, userInfo.indexOf(")"));
+                this.body = "Hello Subscriber,\n    This mail is in response to your request for password reset.\n"
+                        + "\n"
+                        + "Your OTP for Password Reset is\n" + this.rawotp + "\n"
+                        + "This password will become invalid after 10 minutes from the time of request.\n\n"
+                        + "Details of the Recieved Request are as follows :\n"
+                        + "Date and Time : " + (df.format(dateobj)).trim() + "\n";
+                this.body += "Operating System : " + os + "\n\n"
+                        + "This is an auto-generated e-mail, please do not reply.\n"
+                        + "Regards\nCerberus Support Team";
+                Mailer mail = new Mailer();
+                mail.send(this.email, "Password for Cerberus", this.body);
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "OTP Status");
@@ -122,63 +130,4 @@ public class otp extends HttpServlet implements Runnable {
         processRequest(request, response);
     }
 
-    @Override
-    public void run() {
-        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-        java.util.Date dateobj = new java.util.Date();
-        String os = userInfo.substring(userInfo.indexOf("(") + 1, userInfo.indexOf(")"));
-        this.body = "Hello Subscriber,\n    This mail is in response to your request for password reset.\n"
-                + "\n"
-                + "Your OTP for Password Reset is\n" + this.rawotp + "\n"
-                + "This password will become invalid after 10 minutes from the time of request.\n\n"
-                + "Details of the Recieved Request are as follows :\n"
-                + "Date and Time : " + (df.format(dateobj)).trim() + "\n";
-        this.body += "Operating System : " + os + "\n\n"
-                + "This is an auto-generated e-mail, please do not reply.\n"
-                + "Regards\nCerberus Support Team";
-        Properties props = new Properties();
-        props.put("mail.smtp.user", "cerberus.msubca@gmail.com");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "465");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.debug", "true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.socketFactory.fallback", "false");
-        Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("cerberus.msubca@gmail.com", "cerberu$@123");
-            }
-        });
-        MimeMessage msg = new MimeMessage(session);
-        try {
-            msg.setSubject("Password Reset for Cerberus");
-            msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com"));
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.email));
-            msg.setText(this.body);
-            try (Transport transport = session.getTransport("smtps")) {
-                transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
-                transport.sendMessage(msg, msg.getAllRecipients());
-            }
-        } catch (AddressException e) {
-        } catch (MessagingException e) {
-        }
-        try {
-            sleep(600000);
-        } catch (InterruptedException e) {
-        }
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
-                ps.setString(1, this.email);
-                ps.executeUpdate();
-                con.close();
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-        }
-    }
 }

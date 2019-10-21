@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class dispSubject extends HttpServlet {
+public class viewSubject extends HttpServlet {
 
     int week;
 
@@ -28,23 +29,28 @@ public class dispSubject extends HttpServlet {
                     case 1:
                         week = (int) session.getAttribute("week");
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        String table = "";
-                        table += ("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
-                        table += ("<tr>");
-                        table += ("<th>Subject Code</th>");
-                        table += ("<th>Semester</th>");
-                        table += ("<th>Subject Name</th>");
-                        table += ("<th>Abbreviation</th><th>Class</th></tr></thead><tbody>");
+                        out.println("<style>tr:hover {"
+                                + "background: #a8a3a3;"
+                                + "}</style>");
+                        out.println("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
+                        out.println("<tr>");
+                        out.println("<th>Subject Code</th>");
+                        out.println("<th>Semester</th>");
+                        out.println("<th>Subject Name</th>");
+                        out.println("<th>Abbreviation</th>");
+                        out.println("<th>Class</th>");
+                        out.println("<th>Labs Conducted</th>");
+                        out.println("</tr></thead><tbody>");
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery("Select * from `subject` ORDER BY `sem` ASC");
                             while (rs.next()) {
-                                table += ("</tr>");
+                                out.println("<tr onclick=\"window.location='viewSubDetails?subcode=" + rs.getString(1) + "';\">");
                                 for (int i = 1; i <= 5; i++) {
                                     if (i != 5) {
-                                        table += ("<td>" + rs.getString(i) + "</td>");
+                                        out.println("<td>" + rs.getString(i) + "</td>");
                                     } else {
                                         int sem = rs.getInt(i);
                                         String div = "";
@@ -59,22 +65,31 @@ public class dispSubject extends HttpServlet {
                                                 div = "TY";
                                                 break;
                                         }
-                                        table += ("<td>" + div + "</td>");
+                                        out.println("<td>" + div + "</td>");
                                     }
 
                                 }
-                                table += ("</tr>");
+                                PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID)\n"
+                                        + "from facultytimetable \n"
+                                        + "INNER JOIN timetable\n"
+                                        + "on timetable.scheduleID=facultytimetable.scheduleID\n"
+                                        + "where timetable.subjectID = ?");
+                                ps.setString(1, rs.getString(1));
+                                ResultSet rs1 = ps.executeQuery();
+                                while (rs1.next()) {
+                                    out.println("<td>" + rs1.getString(1) + "</td>");
+                                }
+                                out.println("</tr>");
                             }
-                            table += ("</tbody></table><br>");
+                            out.println("</tbody></table><br>");
                             con.close();
                         } catch (ClassNotFoundException | SQLException e) {
-                            table = e.getMessage();
+                            e.printStackTrace();
 
                         }
-                        out.println(table);
-
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
+
                     default:
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                         request.setAttribute("redirect", "true");

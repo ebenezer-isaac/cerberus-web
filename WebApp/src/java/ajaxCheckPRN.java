@@ -33,7 +33,6 @@ public class ajaxCheckPRN extends HttpServlet {
                 }
             } catch (ClassNotFoundException | SQLException e) {
             }
-            System.out.println(prn.length());
             if (Pattern.matches("^20\\d{14}$", prn)) {
                 if (flag == 0) {
                     out.println("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");

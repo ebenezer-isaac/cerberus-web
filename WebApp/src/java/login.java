@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -43,12 +42,8 @@ public class login extends HttpServlet {
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "false");
-                    request.setAttribute("head", "Database Error");
-                    request.setAttribute("body", e.getMessage());
-                    request.setAttribute("url", "dispSubject");
-                    rd.forward(request, response);
+                    messages m = new messages();
+                    m.dberror(request, response, e.getMessage(), "index.html");
                 }
                 if (corrpass.equals("")) {
                     try {
@@ -64,66 +59,34 @@ public class login extends HttpServlet {
                         access = 1;
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Database Error");
-                        request.setAttribute("body", e.getMessage());
-                        request.setAttribute("url", "dispSubject");
-                        rd.forward(request, response);
+                        messages m = new messages();
+                        m.dberror(request, response, e.getMessage(), "index.html");
                     }
                 }
                 if (corrpass.equals(pass)) {
-                    String userid = "";
-                    int index = email.indexOf("@");
-                    if (index != -1) {
-                        userid = email.substring(0, index);
-                    }
-                    userid = AttFunctions.hashIt(userid);
+                    RequestDispatcher rd = request.getRequestDispatcher("homepage");
                     HttpSession session = request.getSession();
-                    java.util.Date date = new java.util.Date();
-                    SimpleDateFormat ft = new SimpleDateFormat("w");
-                    int week = Integer.parseInt(ft.format(date));
-                    if (corrpass.equals(userid)) {
-                        RequestDispatcher rd = request.getRequestDispatcher("otp");
-                        session.setAttribute("email", email);
-                        rd.forward(request, response);
-                    } else {
-                        RequestDispatcher rd = request.getRequestDispatcher("homepage");
-                        session.setAttribute("email", email);
-                        session.setAttribute("access", access);
-                        session.setAttribute("id", id);
-                        session.setAttribute("week", week);
-                        rd.forward(request, response);
-                    }
-                } else {
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "false");
-                    request.setAttribute("head", "Security Firewall");
-                    request.setAttribute("body", "Invalid Username or Password. Please check your credentials and try again");
-                    request.setAttribute("url", "index.html");
+                    session.setAttribute("email", email);
+                    session.setAttribute("access", access);
+                    session.setAttribute("user", id);
                     rd.forward(request, response);
+
+                } else {
+                    messages m = new messages();
+                    m.wrongpass(request, response);
                 }
             }
         } catch (Exception e) {
-            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-            request.setAttribute("redirect", "false");
-            request.setAttribute("head", "Error");
-            request.setAttribute("body", e.getMessage());
-            request.setAttribute("url", "index.html");
-            rd.forward(request, response);
+            messages m = new messages();
+            m.error(request, response, e.getMessage(), "index.html");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-        request.setAttribute("redirect", "true");
-        request.setAttribute("head", "Security Firewall");
-        request.setAttribute("body", "Unauthorized access detected.");
-        request.setAttribute("url", "index.html");
-        request.setAttribute("sec", "2");
-        rd.forward(request, response);
+        messages m = new messages();
+        m.unauthaccess(request, response);
     }
 
     @Override

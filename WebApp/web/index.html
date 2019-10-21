@@ -13,8 +13,33 @@
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script>
+            function sessionstart() {
+                var request;
+                var url = "sessionStart";
+                if (window.XMLHttpRequest) {
+                    request = new XMLHttpRequest();
+                } else if (window.ActiveXObject) {
+                    request = new ActiveXObject('Microsoft.XMLHTTP');
+                }
+                try {
+                    request.onreadystatechange = getInfo;
+                    request.open('GET', url, true);
+                    request.send();
+                } catch (e) {
+                }
+            }
+            function getInfo() {
+                if (request.readyState == 4) {
+                    var val = request.responseText;
+                }
+            }
+        </script>
+
+
+
     </head>
-    <body>
+    <body onload="sessionstart()">
         <nav class="navbar navbar-expand" style="background-color: #24292E;">
             <div class="container">
                 <img class="custom_logo" src="images/logo-circle.png">
@@ -27,23 +52,23 @@
                 </div>
             </div>
         </nav>
-        
+
         <div class="main_body">
             <div class="container custom_container">
                 <div class="row custom_row">
                     <div class="col-lg-6 my-auto">
                         <div class="main_content mx-auto">
                             <h1 style="font-family: arno pro caption"> C E R B E R U S </h1>
-                          <!--  <h2 style="font-size: 14.3px;">
-                                C<small><font style="color: darkgray">OGNITIVE</font></small>
-                                E<small><font style="color: darkgray">FFICIENT</font></small>
-                                R<small><font style="color: darkgray">OBUST</font></small>
-                                B<small><font style="color: darkgray">IOMETRIC</font></small>
-                                E<small><font style="color: darkgray">VALUATION</font></small>
-                                R<small><font style="color: darkgray">EPORTING</font></small>
-                                U<small><font style="color: darkgray">TILITY</font></small>
-                                S<small><font style="color: darkgray">YSTEM</font></small> </h2>
-                          -->
+                            <!--  <h2 style="font-size: 14.3px;">
+                                  C<small><font style="color: darkgray">OGNITIVE</font></small>
+                                  E<small><font style="color: darkgray">FFICIENT</font></small>
+                                  R<small><font style="color: darkgray">OBUST</font></small>
+                                  B<small><font style="color: darkgray">IOMETRIC</font></small>
+                                  E<small><font style="color: darkgray">VALUATION</font></small>
+                                  R<small><font style="color: darkgray">EPORTING</font></small>
+                                  U<small><font style="color: darkgray">TILITY</font></small>
+                                  S<small><font style="color: darkgray">YSTEM</font></small> </h2>
+                            -->
                             <h3> The Attendance Initiative </h3>
                         </div>
                     </div>
@@ -87,7 +112,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="particles-js"></div>
         <div class="container">
             <div class="modal custom_modal_recaptcha" id="modalrecaptcha">

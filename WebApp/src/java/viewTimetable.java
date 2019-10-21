@@ -28,126 +28,53 @@ public class viewTimetable extends HttpServlet {
                 week = Integer.parseInt(request.getParameter("week"));
             } catch (NumberFormatException e) {
             }
-            try {
-                int access = (int) session.getAttribute("access");
-                if (week == 0) {
-                    week = (int) session.getAttribute("week");
-                }
-                switch (access) {
-                    case 1:
-                        new_week(week);
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                        LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                        out.print("<table width = 100%>"
-                                + "<tr><td width = 33% align='center'><form action='viewTimetable' method='post'>"
-                                + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
-                                + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
-                                + "<span>Previous</span>"
-                                + "</button>"
-                                + "</form></td>"
-                                + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
-                        out.print("<td width = 33% align='center'><form action='viewTimetable' method='post'>"
-                                + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
-                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
-                        if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                            out.println("disabled");
-                        }
-                        out.println("><span>Next</span>"
-                                + "</button>"
-                                + "</form></td>");
-                        out.print("</tr></table><br><br>");
-                        out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
-                        out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                        out.println(fac_printTimetable(1, week));
-                        out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                        out.println(fac_printTimetable(2, week));
-                        out.print("<p align='center'>LAB 3 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                        out.println(fac_printTimetable(3, week));
-                        request.getRequestDispatcher("end.html").include(request, response);
-                        break;
-
-                    default:
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
-                        request.setAttribute("head", "Hey 'Kid'!");
-                        request.setAttribute("body", "You are not authorized to view this page");
-                        request.setAttribute("url", "homepage");
-                        request.setAttribute("sec", "2");
-                        rd.forward(request, response);
-                        break;
-                }
-            } catch (IOException | NumberFormatException | ServletException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Security Firewall");
-                request.setAttribute("body", "Please login to continue");
-                request.setAttribute("url", "index.html");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
+            int access = (int) session.getAttribute("access");
+            if (week == 0) {
+                week = (int) session.getAttribute("week");
             }
-        }
-    }
-
-    public void new_week(int week) {
-        int weekid = 0;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps6 = con.prepareStatement("SELECT weekID FROM WEEK where week = ?");
-            ps6.setInt(1, week);
-            ResultSet rs = ps6.executeQuery();
-            while (rs.next()) {
-                weekid = rs.getInt(1);
-            }
-            if (weekid == 0) {
-                PreparedStatement ps2 = con.prepareStatement("insert into week(`week`) values(?)");
-                ps2.setInt(1, week);
-                ps2.executeUpdate();
-            }
-            rs = ps6.executeQuery();
-            while (rs.next()) {
-                weekid = rs.getInt(1);
-            }
-            int labcount = 0;
-            PreparedStatement ps8 = con.prepareStatement("SELECT count(labID) FROM lab");
-            ps6.setInt(1, week);
-            rs = ps8.executeQuery();
-            while (rs.next()) {
-                labcount = rs.getInt(1);
-            }
-            for (int i = 1; i <= labcount; i++) {
-                PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ? and labID=?");
-                ps5.setInt(1, weekid);
-                ps5.setInt(2, i);
-                rs = ps5.executeQuery();
-                int flag = 0;
-                while (rs.next()) {
-                    flag = 1;
-                    break;
-                }
-                if (flag == 0) {
-                    PreparedStatement ps10 = con.prepareStatement("SELECT weekID FROM `week` ORDER BY `week`.`weekID` DESC");
-                    rs = ps10.executeQuery();
-                    while (rs.next()) {
-                        PreparedStatement ps9 = con.prepareStatement("SELECT * FROM timetable where weekID = ? and labID=?");
-                        ps9.setInt(1, rs.getInt(1));
-                        ps9.setInt(2, i);
-                        ResultSet rs1 = ps9.executeQuery();
-                        flag = 0;
-                        while (rs1.next() && flag == 0) {
-                            flag = 1;
-                        }
-                        PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = ? and labID=?");
-                        ps3.setInt(1, weekid);
-                        ps3.setInt(2, rs.getInt(1));
-                        ps3.setInt(3, i);
-                        ps3.executeUpdate();
+            switch (access) {
+                case 1:
+                    request.getRequestDispatcher("side-faculty.html").include(request, response);
+                    LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+                    LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+                    out.print("<table width = 100%>"
+                            + "<tr><td width = 33% align='center'><form action='viewTimetable' method='post'>"
+                            + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
+                            + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
+                            + "<span>Previous</span>"
+                            + "</button>"
+                            + "</form></td>"
+                            + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
+                    out.print("<td width = 33% align='center'><form action='viewTimetable' method='post'>"
+                            + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
+                            + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
+                    if (week > Integer.parseInt(session.getAttribute("week").toString())) {
+                        out.println("disabled");
                     }
-                }
+                    out.println("><span>Next</span>"
+                            + "</button>"
+                            + "</form></td>");
+                    out.print("</tr></table><br><br>");
+                    out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
+                    out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                    out.println(fac_printTimetable(1, week));
+                    out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                    out.println(fac_printTimetable(2, week));
+                    out.print("<p align='center'>LAB 3 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                    out.println(fac_printTimetable(3, week));
+                    request.getRequestDispatcher("end.html").include(request, response);
+                    break;
+
+                default:
+                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                    request.setAttribute("redirect", "true");
+                    request.setAttribute("head", "Hey 'Kid'!");
+                    request.setAttribute("body", "You are not authorized to view this page");
+                    request.setAttribute("url", "homepage");
+                    request.setAttribute("sec", "2");
+                    rd.forward(request, response);
+                    break;
             }
-            con.close();
-        } catch (ClassNotFoundException | SQLException e) {
         }
     }
 

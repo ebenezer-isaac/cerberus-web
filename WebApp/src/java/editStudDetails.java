@@ -59,7 +59,6 @@ public class editStudDetails extends HttpServlet {
                             while (rs2.next()) {
                                 oddeve = (rs2.getInt(1) % 2);
                             }
-                            System.out.println(oddeve + " : " + classID);
                             int sem = AttFunctions.getSem(oddeve, classID);
                             PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
                             ps3.setInt(1, sem);
@@ -80,9 +79,8 @@ public class editStudDetails extends HttpServlet {
                             }
                             out.print("<form action='editStudDetail' method='post'>");
                             out.println("<h3 align='center'>" + cla.toUpperCase() + " Details </h3>");
-
                             index = 0;
-                            String sql = "SELECT rollcall.rollNo, student.PRN, student.name, student.email,";
+                            String sql = "SELECT student.PRN, rollcall.rollNo,student.name, student.email,";
                             while (index <= no_of_sub) {
                                 sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' 1 ',' ') END) as " + subs[index][1].replace('-', '_');
                                 if (index <= (no_of_sub - 1)) {
@@ -98,8 +96,6 @@ public class editStudDetails extends HttpServlet {
                                     + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                     + "GROUP BY studentsubject.PRN "
                                     + "ORDER by rollcall.rollNo";
-                            System.out.println(sem);
-                            System.out.println(sql);
                             PreparedStatement ps4 = con.prepareStatement(sql);
                             rs = ps4.executeQuery();
                             ResultSetMetaData rsm = rs.getMetaData();
@@ -108,8 +104,8 @@ public class editStudDetails extends HttpServlet {
                             if (rs.next()) {
                                 out.println("<table class=\"table table-striped table-bordered\"><thead>");
                                 out.println("<tr>");
-                                out.println("<th> Roll </th>");
                                 out.println("<th> PRN </th>");
+                                out.println("<th> Roll </th>");
                                 out.println("<th> Name </th>");
                                 out.println("<th> Email </th>");
                                 for (int i = 5; i <= cols; i++) {
@@ -120,8 +116,8 @@ public class editStudDetails extends HttpServlet {
                                 while (rs.next()) {
                                     line++;
                                     out.println("<tr>");
-                                    out.println("<td><input type='number' name='roll" + line + "' min='1' max='120' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
-                                    out.println("<td><input type='text' name='prn" + line + "' value='" + rs.getString(2) + "'></td>");
+                                    out.println("<td><div>" + rs.getString(1) + "</div><input type='text' name='prn" + line + "' value='" + rs.getString(1) + "' hidden></td>");
+                                    out.println("<td><input type='number' name='roll" + line + "' min='1' max='120' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2))) + "'></td>");
                                     out.println("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
                                     out.println("<td><input type='email' name='email" + line + "' value='" + rs.getString(4) + "'></td>");
                                     for (int i = 5; i <= cols; i++) {

@@ -37,7 +37,7 @@ public class addSubject extends HttpServlet {
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Subject Added");
                 request.setAttribute("body", "The subject was added successfully<br>SubjectID : " + sid);
-                request.setAttribute("url", "dispSubject");
+                request.setAttribute("url", "viewSubject");
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } catch (SQLException e) {
@@ -45,7 +45,7 @@ public class addSubject extends HttpServlet {
                 request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Database Error");
                 request.setAttribute("body", e.getMessage());
-                request.setAttribute("url", "dispSubject");
+                request.setAttribute("url", "viewSubject");
                 rd.forward(request, response);
             }
         } catch (ClassNotFoundException e) {

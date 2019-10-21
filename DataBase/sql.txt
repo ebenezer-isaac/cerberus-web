@@ -25,7 +25,12 @@ SELECT rollcall.rollNo, student.PRN, student.name, student.email,
  in (select rollcall.PRN from rollcall where rollcall.classID = 3) 
  GROUP BY studentsubject.PRN
  ORDER by rollcall.rollNo
-
+ 
+ SELECT count(facultytimetable.scheduleID)
+from facultytimetable 
+INNER JOIN timetable
+on timetable.scheduleID=facultytimetable.scheduleID
+where timetable.subjectID = 'BCA1538'
 
 INSERT INTO `faculty` values (1,'Mr.Krishnanad','ebenezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (2,'Mr.Ksitij','asdfasdfasdf@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
