@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -102,27 +103,59 @@ public class editStudent extends HttpServlet {
                                     out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
                                             + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
                                     Statement stmt = con.createStatement();
-                                    out.print("<select name = 'clas' id = 'clas' class=\"editSelect\">");
+                                    out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub()'>");
+                                    out.print("<option name='clas' value= '0'>Select Class</option>");
                                     ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                                    int index = 0;
+                                    int no_of_class = 0;
                                     while (rs.next()) {
-                                        index++;
-                                        out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>");
+                                        no_of_class++;
+                                        out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
                                     }
                                     out.println("</select>");
                                     out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
-                                            + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                            + "</table><br><button type='submit' class='btn btn-info'>Add Student</button></form>"
-                                    );
+                                            + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
+                                    out.println("<script>");
+                                    rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                                    PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
+                                    st.setInt(1, Integer.parseInt(session.getAttribute("week").toString()));
+                                    ResultSet rs2 = st.executeQuery();
+                                    int oddeve = 0;
+                                    while (rs2.next()) {
+                                        oddeve = (rs2.getInt(1) % 2);
+                                    }
+                                    int classcount = 1;
+                                    while (rs.next()) {
+                                        out.print("var class" + classcount + ";");
+                                        int sem = AttFunctions.getSem(oddeve, classcount);
+                                        PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
+                                        ps3.setInt(1, sem);
+                                        ResultSet rs3 = ps3.executeQuery();
+                                        out.print("class" + classcount + "=\"<table align='center'>");
+                                        while (rs3.next()) {
+                                            out.print("<tr><td><input type='checkbox' name='" + rs3.getString(1) + "'></option></td><td>" + rs3.getString(2) + "</td></tr>");
+
+                                        }
+                                        out.print("</table>\";");
+                                        classcount++;
+                                    }
+                                    classcount--;
+                                    out.println("function dissub()"
+                                            + "{"
+                                            + "var index = document.getElementById('clas').selectedIndex;"
+                                            + "if(index==0)"
+                                            + "{document.getElementById('subs').innerHTML = ' ';}");
+                                    for (int i = 1; i <= classcount; i++) {
+                                        out.println("else if (index=="+i+")"
+                                                + "{document.getElementById('subs').innerHTML = class"+i+"}");
+                                    };
+                                    out.println("}</script>");
                                     con.close();
                                 }
                             } catch (SQLException e) {
-                                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                                request.setAttribute("message", e.getMessage());
-                                request.setAttribute("redirect", "menu");
-                                rd.forward(request, response);
+                                e.printStackTrace();
                             }
                         } else if (flow.equals("del")) {
 //                            try {
