@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -86,13 +85,8 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-        request.setAttribute("redirect", "true");
-        request.setAttribute("head", "Security Firewall");
-        request.setAttribute("body", "Unauthorized access detected.");
-        request.setAttribute("url", "index.html");
-        request.setAttribute("sec", "2");
-        rd.forward(request, response);
+        messages m = new messages();
+        m.unauthaccess(request, response);
     }
 
     @Override

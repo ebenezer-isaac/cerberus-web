@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 public class editTimetable extends HttpServlet {
 
-    int week;
+    int week = 0;
     int no_of_subs = 0;
     String subs[];
 
@@ -28,125 +28,146 @@ public class editTimetable extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(true);
-            try {
-                int access = (int) session.getAttribute("access");
-                switch (access) {
-                    case 1:
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+            int access = (int) session.getAttribute("access");
+            switch (access) {
+                case 1:
+                    request.getRequestDispatcher("side-faculty.html").include(request, response);
+                    try {
+                        week = Integer.parseInt(request.getParameter("week"));
+                    } catch (NumberFormatException e) {
+                    }
+                    if (week == 0) {
                         week = (int) session.getAttribute("week");
-                        int labid = Integer.parseInt(request.getParameter("lab"));
-                        if (labid >= 4 || labid <= 0) {
-                            labid = 1;
-                        }
-                        try {
-                            int selesem = 1;
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                                PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
-                                st.setInt(1, week);
-                                ResultSet rs2 = st.executeQuery();
-                                while (rs2.next()) {
-                                    selesem = (rs2.getInt(1) % 2);
-                                    if (selesem == 0) {
-                                        selesem += 2;
-                                    }
+                    }
+                    int labid = Integer.parseInt(request.getParameter("lab"));
+                    if (labid >= 4 || labid <= 0) {
+                        labid = 1;
+                    }
+                    try {
+                        int selesem = 1;
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                            PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
+                            st.setInt(1, week);
+                            ResultSet rs2 = st.executeQuery();
+                            while (rs2.next()) {
+                                selesem = (rs2.getInt(1) % 2);
+                                if (selesem == 0) {
+                                    selesem += 2;
                                 }
-                                Statement stmt = con.createStatement();
-                                ResultSet rs = stmt.executeQuery("SELECT `Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
-                                while (rs.next()) {
-                                    no_of_subs++;
-                                }
-                                rs.first();
-                                rs.previous();
-                                no_of_subs++;
-                                subs = new String[no_of_subs];
-                                no_of_subs = 0;
-                                while (rs.next()) {
-                                    subs[no_of_subs] = rs.getString(1);
-                                    no_of_subs++;
-                                }
-                                no_of_subs--;
-                                out.println("<style>"
-                                        + "input[type=number]{"
-                                        + "width: 62px;"
-                                        + "height: 40px;"
-                                        + "} "
-                                        + ".not-allowed {cursor: not-allowed;}"
-                                        + "</style>");
-                                out.print("<script>"
-                                        + "function collp() {"
-                                        + "document.getElementById(\"sidebarCollapse\").click();}collp();"
-                                        + "function zeroPad(num) {"
-                                        + "var s = num+'';"
-                                        + "while (s.length < 2) s = '0' + s;"
-                                        + "return(s);}");
-                                out.println("function batchdisable(id) {"
-                                        + "var index = document.getElementById(id).selectedIndex;"
-                                        + "if(index == 0)"
-                                        + "{id = id.substr(1);"
-                                        + "document.getElementById('batch' + id).selectedIndex=0;"
-                                        + "document.getElementById('batch' + id).disabled=true;"
-                                        + "document.getElementById('batch' + id).classList.add('not-allowed');}"
-                                        + "else{id = id.substr(1);"
-                                        + "document.getElementById('batch' + id).selectedIndex=1;"
-                                        + "document.getElementById('batch' + id).disabled=false;"
-                                        + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
-                                        + "</script>");
-                                out.println("<style> th { white-space: nowrap; } </style>");
-                                LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                                LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                                out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                                out.print("<form action='saveTimetable' method='post' align='right'>");
-                                out.print(printTimetable(labid));
-                                out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
-                                out.print("<button type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
-                                        + "<span>Save</span>"
-                                        + "</button>");
-                                out.print("</form>");
-                                con.close();
                             }
-                        } catch (ClassNotFoundException | SQLException e) {
-                            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                            request.setAttribute("message", e.getMessage());
-                            request.setAttribute("redirect", "menu");
-                            rd.forward(request, response);
+                            Statement stmt = con.createStatement();
+                            ResultSet rs = stmt.executeQuery("SELECT `Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
+                            while (rs.next()) {
+                                no_of_subs++;
+                            }
+                            rs.first();
+                            rs.previous();
+                            no_of_subs++;
+                            subs = new String[no_of_subs];
+                            no_of_subs = 0;
+                            while (rs.next()) {
+                                subs[no_of_subs] = rs.getString(1);
+                                no_of_subs++;
+                            }
+                            no_of_subs--;
+                            out.println("<style>"
+                                    + "input[type=number]{"
+                                    + "width: 62px;"
+                                    + "height: 40px;"
+                                    + "} "
+                                    + ".not-allowed {cursor: not-allowed;}"
+                                    + "</style>");
+                            out.print("<script>"
+                                    + "function collp() {"
+                                    + "document.getElementById(\"sidebarCollapse\").click();}collp();"
+                                    + "function zeroPad(num) {"
+                                    + "var s = num+'';"
+                                    + "while (s.length < 2) s = '0' + s;"
+                                    + "return(s);}");
+                            out.println("function batchdisable(id) {"
+                                    + "var index = document.getElementById(id).selectedIndex;"
+                                    + "if(index == 0)"
+                                    + "{id = id.substr(1);"
+                                    + "document.getElementById('batch' + id).selectedIndex=0;"
+                                    + "document.getElementById('batch' + id).disabled=true;"
+                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}"
+                                    + "else{id = id.substr(1);"
+                                    + "document.getElementById('batch' + id).selectedIndex=1;"
+                                    + "document.getElementById('batch' + id).disabled=false;"
+                                    + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
+                                    + "</script>");
+                            out.println("<style> th { white-space: nowrap; } </style>");
+                            out.print("<table width = 100%>"
+                                    + "<tr><td width = 33% align='center'><form action='editTimetable' method='post'>"
+                                    + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
+                                    + "<input type='text' name='lab' value='" + labid + "' hidden>"
+                                    + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
+                                    + "<span>Previous</span>"
+                                    + "</button>"
+                                    + "</form></td>"
+                                    + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
+                            out.print("<td width = 33% align='center'><form action='editTimetable' method='post'>"
+                                    + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
+                                    + "<input type='text' name='lab' value='" + labid + "' hidden>"
+                                    + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
+                            if (week > Integer.parseInt(session.getAttribute("week").toString())) {
+                                out.println("disabled");
+                            }
+                            out.println("><span>Next</span>"
+                                    + "</button>"
+                                    + "</form></td>");
+                            out.print("</tr></table><br><br>");
+                            out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
+                            LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+                            LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+                            out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                            out.print("<form action='saveTimetable' method='post' align='right'>");
+                            out.print(printTimetable(labid));
+                            out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
+                            out.print("<button type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
+                                    + "<span>Save</span>"
+                                    + "</button>");
+                            out.print("</form>");
+                            con.close();
                         }
+                    } catch (ClassNotFoundException | SQLException e) {
+                        messages m = new messages();
+                        m.dberror(request, response, e.getMessage(), "homepage");
+                    }
 
-                        request.getRequestDispatcher("end.html").include(request, response);
-                        break;
-                    default:
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
-                        request.setAttribute("head", "Hey 'Kid'!");
-                        request.setAttribute("body", "You are not authorized to view this page");
-                        request.setAttribute("url", "homepage");
-                        request.setAttribute("sec", "2");
-                        rd.forward(request, response);
-                }
-            } catch (IOException | ServletException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Security Firewall");
-                request.setAttribute("body", "Please login to continue");
-                request.setAttribute("url", "index.html");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
+                    request.getRequestDispatcher("end.html").include(request, response);
+                    break;
+                case 0:
+                    messages m1 = new messages();
+                    m1.kids(request, response);
+                    break;
+                default:
+                    messages m2 = new messages();
+                    m2.nouser(request, response);
             }
         }
     }
+
     public String printTimetable(int labID) {
+        LocalDate mon = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+        LocalDate tue = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(2)));
+        LocalDate wed = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(3)));
+        LocalDate thu = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(4)));
+        LocalDate fri = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(5)));
+        LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
 
         String table = "";
         table += ("<table class=\"table table-striped table-bordered\"> <thead>");
         table += ("<tr align = center>");
         table += ("<th style=\"white-space:nowrap;\" >Start_Time</th>");
         table += ("<th>End_Time</th>");
-        table += ("<th>Monday</th>");
-        table += ("<th>Tuesday</th>");
-        table += ("<th>Wednesday</th>");
-        table += ("<th>Thursday</th>");
-        table += ("<th>Friday</th>");
-        table += ("<th>Saturday</th>");
+        table += ("<th>Monday<br>" + mon + "</th>");
+        table += ("<th>Tuesday<br>" + tue + "</th>");
+        table += ("<th>Wednesday<br>" + wed + "</th>");
+        table += ("<th>Thursday<br>" + thu + "</th>");
+        table += ("<th>Friday<br>" + fri + "</th>");
+        table += ("<th>Saturday<br>" + sat + "</th>");
         table += ("</tr></thead><tbody>");
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -238,14 +259,14 @@ public class editTimetable extends HttpServlet {
                     table += (" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
                     for (int j = 1; j <= 6; j++) {
                         table += ("<td align='center'>");
-                        table += ("<select name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "' onchange = 'batchdisable(this.id)'>");
+                        table += ("<select class=\"editSelectTimeTable\" name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "' onchange = 'batchdisable(this.id)'>");
                         table += ("<option name='Sub' value='-' selected>No Lab</option>");
                         for (int k = 0; k <= no_of_subs; k++) {
                             table += ("<option name='Sub' value='" + subs[k] + "'>" + subs[k] + "</option>");
                         }
                         String batch[] = {"Batch A", "Batch B", "Batch C"};
                         table += ("</select>");
-                        table += ("<select name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "' disabled class='not-allowed'>");
+                        table += ("<select class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "' disabled class='not-allowed'>");
                         table += ("<option name='-' value='-' selected>No Batch</option>");
                         for (int x = 0; x <= batch.length - 1; x++) {
                             table += ("<option name='A' value='" + batch[x] + "'>" + batch[x] + "</option>");
@@ -260,7 +281,7 @@ public class editTimetable extends HttpServlet {
             table += ("</tbody></table><br><br>");
             con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-            table = e.getMessage();
+            table = "No data available<br>";
         }
         return table;
     }

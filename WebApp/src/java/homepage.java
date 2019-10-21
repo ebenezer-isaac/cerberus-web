@@ -17,35 +17,19 @@ public class homepage extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            try {
-                int access = (int) session.getAttribute("access");
-                switch (access) {
-                    case 1:
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        request.getRequestDispatcher("end.html").include(request, response);
-                        break;
-                    case 0:
-                        request.getRequestDispatcher("side-student.html").include(request, response);
-                        request.getRequestDispatcher("end.html").include(request, response);
-                        break;
-                    default:
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
-                        request.setAttribute("head", "Security Firewall");
-                        request.setAttribute("body", "Please login to continue");
-                        request.setAttribute("url", "index.html");
-                        request.setAttribute("sec", "2");
-                        rd.forward(request, response);
-
-                }
-            } catch (IOException | ServletException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Security Firewall");
-                request.setAttribute("body", "Please login to continue");
-                request.setAttribute("url", "index.html");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
+            int access = (int) session.getAttribute("access");
+            switch (access) {
+                case 1:
+                    request.getRequestDispatcher("side-faculty.html").include(request, response);
+                    request.getRequestDispatcher("end.html").include(request, response);
+                    break;
+                case 0:
+                    request.getRequestDispatcher("side-student.html").include(request, response);
+                    request.getRequestDispatcher("end.html").include(request, response);
+                    break;
+                default:
+                    messages m = new messages();
+                    m.nouser(request, response);
             }
         }
     }
