@@ -32,6 +32,10 @@ public class addStudent extends HttpServlet implements Runnable {
             this.prn = request.getParameter("prn");
             this.name = request.getParameter("name");
             this.email = request.getParameter("email");
+
+            int seleclass = Integer.parseInt(request.getParameter("clas"));
+            int roll = Integer.parseInt(request.getParameter("roll"));
+
             String pass = "";
             int index = this.email.indexOf("@");
             if (index != -1) {
@@ -45,29 +49,43 @@ public class addStudent extends HttpServlet implements Runnable {
                     PreparedStatement ps = con.prepareStatement("select name, email from student where email=?");
                     ps.setString(1, this.email);
                     ResultSet rs = ps.executeQuery();
-                    if (rs.next()) {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Request Failed");
-                        request.setAttribute("body", "A Student by name " + rs.getString(1) + " and prn " + this.prn + " with email address as " + rs.getString(2) + " already exits.");
-                        request.setAttribute("url", "homepage");
-                        rd.forward(request, response);
-                    } else {
-                        ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`) VALUES (?,?,?,?)");
+
+                    ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`) VALUES (?,?,?,?)");
+                    ps.setString(1, this.prn);
+                    ps.setString(2, this.name);
+                    ps.setString(3, this.email);
+                    ps.setString(4, pass);
+                    ps.executeUpdate();
+
+                    ps = con.prepareStatement("INSERT INTO `rollcall`(`classID`, `rollNo`, `PRN`) VALUES (?,?,?)");
+                    ps.setInt(1, seleclass);
+                    ps.setInt(2, roll);
+                    ps.setString(3, this.prn);
+                    ps.executeUpdate();
+
+                    String subjects[] = request.getParameterValues("subjects");
+
+                    for (int i = 0; i < subjects.length; i++) {
+                        int batchid = Integer.parseInt(request.getParameter("b" + (i + 1)));
+                        System.out.println(batchid);
+                        System.out.println(subjects[i]);
+                        System.out.println(batchid);
+                        ps = con.prepareStatement("INSERT INTO `studentsubject`(`PRN`, `subjectID`, `batchID`) VALUES (?,?,?])");
                         ps.setString(1, this.prn);
-                        ps.setString(2, this.name);
-                        ps.setString(3, this.email);
-                        ps.setString(4, pass);
+                        ps.setString(2, subjects[i]);
+                        ps.setInt(3, batchid);
                         ps.executeUpdate();
-                        Thread thread = new Thread(this);
-                        thread.start();
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Student Added");
-                        request.setAttribute("body", this.name + " was added to the list of Students. A mail has been sent to respective student.");
-                        request.setAttribute("url", "homepage");
-                        rd.forward(request, response);
                     }
+
+                    Thread thread = new Thread(this);
+                    thread.start();
+                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                    request.setAttribute("redirect", "false");
+                    request.setAttribute("head", "Student Added");
+                    request.setAttribute("body", this.name + " was added to the list of Students. A mail has been sent to respective student.");
+                    request.setAttribute("url", "homepage");
+                    rd.forward(request, response);
+
                     con.close();
                 }
             } catch (SQLException e) {
