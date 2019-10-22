@@ -134,11 +134,13 @@ public class editStudent extends HttpServlet {
                                         ps3.setInt(1, sem);
                                         ResultSet rs3 = ps3.executeQuery();
                                         out.print("class" + classcount + "=\"<table align='center'>");
+                                        int batch=0;
                                         while (rs3.next()) {
-                                            out.print("<tr><td><input type='checkbox' name='" + rs3.getString(1) + "'></option></td><td>" + rs3.getString(2) + "</td>"
+                                            batch+=1;
+                                            out.print("<tr><td><input type='checkbox' name='subjects' value='"+ rs3.getString(1) +"'></option></td><td>" + rs3.getString(2) + "</td>"
                                                     + "<td>"
-                                                    + "  <input type='radio' name='batch' value='batchA' checked> Batch A"
-                                                    + "  <input type='radio' name='batch' value='batchB'> Batch B"
+                                                    + "  <input type='radio' name='b"+batch+"' value='1' checked> Batch A"
+                                                    + "  <input type='radio' name='b"+batch+"' value='2'> Batch B"
                                                     + "<td>"
                                                     + "</tr>");
                                         }

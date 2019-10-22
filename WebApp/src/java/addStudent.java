@@ -32,6 +32,10 @@ public class addStudent extends HttpServlet implements Runnable {
             this.prn = request.getParameter("prn");
             this.name = request.getParameter("name");
             this.email = request.getParameter("email");
+
+            int seleclass = Integer.parseInt(request.getParameter("clas"));
+            int roll = Integer.parseInt(request.getParameter("roll"));
+
             String pass = "";
             int index = this.email.indexOf("@");
             if (index != -1) {
@@ -52,6 +56,26 @@ public class addStudent extends HttpServlet implements Runnable {
                     ps.setString(3, this.email);
                     ps.setString(4, pass);
                     ps.executeUpdate();
+
+                    ps = con.prepareStatement("INSERT INTO `rollcall`(`classID`, `rollNo`, `PRN`) VALUES (?,?,?)");
+                    ps.setInt(1, seleclass);
+                    ps.setInt(2, roll);
+                    ps.setString(3, this.prn);
+                    ps.executeUpdate();
+
+                    String subjects[] = request.getParameterValues("subjects");
+
+                    for (int i = 0; i < subjects.length; i++) {
+                        int batchid = Integer.parseInt(request.getParameter("b" + (i + 1)));
+                        System.out.println(batchid);
+                        System.out.println(subjects[i]);
+                        System.out.println(batchid);
+                        ps = con.prepareStatement("INSERT INTO `studentsubject`(`PRN`, `subjectID`, `batchID`) VALUES (?,?,?])");
+                        ps.setString(1, this.prn);
+                        ps.setString(2, subjects[i]);
+                        ps.setInt(3, batchid);
+                        ps.executeUpdate();
+                    }
 
                     Thread thread = new Thread(this);
                     thread.start();
