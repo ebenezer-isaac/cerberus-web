@@ -37,41 +37,44 @@ public class viewSubDetails extends HttpServlet {
                         while (rs.next()) {
                             labcount = rs.getInt(1);
                         }
-                        out.println("<br>Total number of labs: " + labcount);
-
-                        PreparedStatement ps1 = con.prepareStatement("SELECT (select datedata.date from datedata where attendance.dateID=datedata.dateID) as date, \n"
-                                + "slot.startTime, slot.endTime,\n"
-                                + "(select lab.name from lab where lab.labID=timetable.labID) as lab,\n"
-                                + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,\n"
-                                + "(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher\n"
-                                + "from facultytimetable\n"
-                                + "INNER JOIN timetable\n"
-                                + "on timetable.scheduleID=facultytimetable.scheduleID\n"
-                                + "INNER JOIN slot\n"
-                                + "on slot.slotID=timetable.slotID\n"
-                                + "INNER JOIN attendance\n"
-                                + "on attendance.scheduleID=facultytimetable.scheduleID\n"
-                                + "where timetable.subjectID =? order by date");
-                        ps1.setString(1, subcode);
-                        ResultSet rs1 = ps1.executeQuery();
-                        out.println("<table class=\"table table-striped table-bordered\"><thead>");
-                        out.println("<tr align = center>");
-                        out.println("<th>Date</th>");
-                        out.println("<th>Start Time</th>");
-                        out.println("<th>End Time</th>");
-                        out.println("<th>Lab</th>");
-                        out.println("<th>Batch</th>");
-                        out.println("<th>Teacher Name</th>");
-                        out.println("</tr></thead><tbody>");
-                        while (rs1.next()) {
-                            out.println("<tr align='center'>");
-                            for (int i =1; i<=6;i++)
-                            {
-                             out.println("<td>"+rs1.getString(i)+"</td>");   
+                        out.print("<br>Total number of labs: " + labcount);
+                        if (labcount > 1) {
+                            PreparedStatement ps1 = con.prepareStatement("SELECT (select datedata.date from datedata where attendance.dateID=datedata.dateID) as date, \n"
+                                    + "slot.startTime, slot.endTime,\n"
+                                    + "(select lab.name from lab where lab.labID=timetable.labID) as lab,\n"
+                                    + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,\n"
+                                    + "(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher\n"
+                                    + "from facultytimetable\n"
+                                    + "INNER JOIN timetable\n"
+                                    + "on timetable.scheduleID=facultytimetable.scheduleID\n"
+                                    + "INNER JOIN slot\n"
+                                    + "on slot.slotID=timetable.slotID\n"
+                                    + "INNER JOIN attendance\n"
+                                    + "on attendance.scheduleID=facultytimetable.scheduleID\n"
+                                    + "where timetable.subjectID =? order by date");
+                            ps1.setString(1, subcode);
+                            ResultSet rs1 = ps1.executeQuery();
+                            out.print("<table class=\"table table-striped table-bordered\"><thead>");
+                            out.print("<tr align = center>");
+                            out.print("<th>Date</th>");
+                            out.print("<th>Start Time</th>");
+                            out.print("<th>End Time</th>");
+                            out.print("<th>Lab</th>");
+                            out.print("<th>Batch</th>");
+                            out.print("<th>Teacher Name</th>");
+                            out.print("</tr></thead><tbody>");
+                            while (rs1.next()) {
+                                out.print("<tr align='center'>");
+                                for (int i = 1; i <= 6; i++) {
+                                    out.print("<td>" + rs1.getString(i) + "</td>");
+                                }
+                                out.print("</tr>");
                             }
-                            out.println("</tr>");
+                            out.print("</tbody></table>");
+                        }else
+                        {
+                            out.print("No Data to show");
                         }
-                        out.println("</tbody></table>");
                         con.close();
                     } catch (SQLException e) {
                         e.printStackTrace();

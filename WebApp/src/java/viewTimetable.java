@@ -49,9 +49,9 @@ public class viewTimetable extends HttpServlet {
                             + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
                             + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
                     if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                        out.println("disabled");
+                        out.print("disabled");
                     }
-                    out.println("><span>Next</span>"
+                    out.print("><span>Next</span>"
                             + "</button>"
                             + "</form></td>");
                     out.print("</tr></table><br><br>");

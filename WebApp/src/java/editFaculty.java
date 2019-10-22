@@ -18,16 +18,14 @@ public class editFaculty extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-            HttpSession session = request.getSession(true);
+        try (PrintWriter out = response.getWriter()) { 
+           HttpSession session = request.getSession(true);
             try {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        out.println("<style>\n"
+                        out.print("<style>\n"
                                 + "input[type=number]{\n"
                                 + "    width: 15px;\n"
                                 + "} \n"
@@ -39,7 +37,7 @@ public class editFaculty extends HttpServlet {
                             flow = "add";
                         }
                         if (flow.equals("add")) {
-                            out.println("<style>"
+                            out.print("<style>"
                                     + "input[type=number]{"
                                     + "width: 40px;"
                                     + "} "

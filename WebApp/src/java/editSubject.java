@@ -27,7 +27,7 @@ public class editSubject extends HttpServlet {
                     case 1:
 
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        out.println("<style>\n"
+                        out.print("<style>\n"
                                 + "input[type=number]{\n"
                                 + "    width: 15px;\n"
                                 + "} \n"
@@ -39,7 +39,7 @@ public class editSubject extends HttpServlet {
                             flow = "add";
                         }
                         if (flow.equals("add")) {
-                            out.println("<style>"
+                            out.print("<style>"
                                     + "input[type=number]{"
                                     + "width: 40px;"
                                     + "} "
@@ -71,7 +71,7 @@ public class editSubject extends HttpServlet {
                                     index++;
                                     out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>");
                                 }
-                                out.println("</select>");
+                                out.print("</select>");
                             } catch (ClassNotFoundException | SQLException e) {
                             }
                             out.print("</td></tr>"

@@ -9,7 +9,16 @@ public class saveStudDetails extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+            int cols = Integer.parseInt(request.getParameter("cols"));
+            int rows = Integer.parseInt(request.getParameter("rows"));
+            int classID = Integer.parseInt(request.getParameter("division"));
+            for(int row = 1;row<=rows;row++)
+            {
+                for(int col = 1;col<=rows;col++)
+                {           
+                    
+                }
+            }
         }
     }
     @Override

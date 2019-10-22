@@ -40,7 +40,7 @@ public class editStudDetails extends HttpServlet {
                                 + "return(s);"
                                 + "}"
                                 + "</script>");
-                        out.println("<div>");
+                        out.print("<div>");
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -78,7 +78,7 @@ public class editStudDetails extends HttpServlet {
                                 index++;
                             }
                             out.print("<form action='editStudDetail' method='post'>");
-                            out.println("<h3 align='center'>" + cla.toUpperCase() + " Details </h3>");
+                            out.print("<h3 align='center'>" + cla.toUpperCase() + " Details </h3>");
                             index = 0;
                             String sql = "SELECT student.PRN, rollcall.rollNo,student.name, student.email,";
                             while (index <= no_of_sub) {
@@ -102,42 +102,42 @@ public class editStudDetails extends HttpServlet {
                             int cols = rsm.getColumnCount();
                             int line = 0;
                             if (rs.next()) {
-                                out.println("<table class=\"table table-striped table-bordered\"><thead>");
-                                out.println("<tr>");
-                                out.println("<th> PRN </th>");
-                                out.println("<th> Roll </th>");
-                                out.println("<th> Name </th>");
-                                out.println("<th> Email </th>");
+                                out.print("<table class=\"table table-striped table-bordered\"><thead>");
+                                out.print("<tr>");
+                                out.print("<th> PRN </th>");
+                                out.print("<th> Roll </th>");
+                                out.print("<th> Name </th>");
+                                out.print("<th> Email </th>");
                                 for (int i = 5; i <= cols; i++) {
-                                    out.println("<th> " + rsm.getColumnLabel(i) + " </th>");
+                                    out.print("<th> " + rsm.getColumnLabel(i) + " </th>");
                                 }
-                                out.println("</tr>");
+                                out.print("</tr>");
                                 rs.previous();
                                 while (rs.next()) {
                                     line++;
-                                    out.println("<tr>");
-                                    out.println("<td><div>" + rs.getString(1) + "</div><input type='text' name='prn" + line + "' value='" + rs.getString(1) + "' hidden></td>");
-                                    out.println("<td><input type='number' name='roll" + line + "' min='1' max='120' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2))) + "'></td>");
-                                    out.println("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
-                                    out.println("<td><input type='email' name='email" + line + "' value='" + rs.getString(4) + "'></td>");
+                                    out.print("<tr>");
+                                    out.print("<td><div>" + rs.getString(1) + "</div><input type='text' name='prn" + line + "' value='" + rs.getString(1) + "' hidden></td>");
+                                    out.print("<td><input type='number' name='roll" + line + "' min='1' max='120' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2))) + "'></td>");
+                                    out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
+                                    out.print("<td><input type='email' name='email" + line + "' value='" + rs.getString(4) + "'></td>");
                                     for (int i = 5; i <= cols; i++) {
-                                        out.println("<td><input type='checkbox' name='sub" + line + "" + i + "'");
+                                        out.print("<td><input type='checkbox' name='sub" + line + "" + rsm.getColumnLabel(i) + "'");
                                         if (rs.getString(i) != null) {
-                                            out.println(" checked ");
+                                            out.print(" checked ");
                                         }
-                                        out.println("></td>");
+                                        out.print("></td>");
                                     }
-                                    out.println("</tr>");
+                                    out.print("</tr>");
                                 }
-                                out.println("</table><br><br>");
+                                out.print("</table><br><br>");
                             } else {
-                                out.println("No Data to display");
+                                out.print("No Data to display");
                             }
-                            out.println("<input type='submit' value='Submit' align='center'>"
-                                    + "<input type='text' name='division' value='" + cla + "' hidden>"
+                            out.print("<input type='submit' value='Submit' align='center'>"
+                                    + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "<input type='text' name='cols' value='" + cols + "' hidden>"
                                     + "<input type='text' name='rows' value='" + line + "' hidden>");
-                            out.println("</form><br>");
+                            out.print("</form><br>");
                             con.close();
                         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         }

@@ -29,28 +29,28 @@ public class viewSubject extends HttpServlet {
                     case 1:
                         week = (int) session.getAttribute("week");
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        out.println("<style>tr:hover {"
+                        out.print("<style>tr:hover {"
                                 + "background: #a8a3a3;"
                                 + "}</style>");
-                        out.println("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
-                        out.println("<tr>");
-                        out.println("<th>Subject Code</th>");
-                        out.println("<th>Semester</th>");
-                        out.println("<th>Subject Name</th>");
-                        out.println("<th>Abbreviation</th>");
-                        out.println("<th>Class</th>");
-                        out.println("<th>Labs Conducted</th>");
-                        out.println("</tr></thead><tbody>");
+                        out.print("<table class=\"table table-striped table-bordered\" style='text-align:center'><thead>");
+                        out.print("<tr>");
+                        out.print("<th>Subject Code</th>");
+                        out.print("<th>Semester</th>");
+                        out.print("<th>Subject Name</th>");
+                        out.print("<th>Abbreviation</th>");
+                        out.print("<th>Class</th>");
+                        out.print("<th>Labs Conducted</th>");
+                        out.print("</tr></thead><tbody>");
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery("Select * from `subject` ORDER BY `sem` ASC");
                             while (rs.next()) {
-                                out.println("<tr onclick=\"window.location='viewSubDetails?subcode=" + rs.getString(1) + "';\">");
+                                out.print("<tr onclick=\"window.location='viewSubDetails?subcode=" + rs.getString(1) + "';\">");
                                 for (int i = 1; i <= 5; i++) {
                                     if (i != 5) {
-                                        out.println("<td>" + rs.getString(i) + "</td>");
+                                        out.print("<td>" + rs.getString(i) + "</td>");
                                     } else {
                                         int sem = rs.getInt(i);
                                         String div = "";
@@ -65,7 +65,7 @@ public class viewSubject extends HttpServlet {
                                                 div = "TY";
                                                 break;
                                         }
-                                        out.println("<td>" + div + "</td>");
+                                        out.print("<td>" + div + "</td>");
                                     }
 
                                 }
@@ -77,11 +77,11 @@ public class viewSubject extends HttpServlet {
                                 ps.setString(1, rs.getString(1));
                                 ResultSet rs1 = ps.executeQuery();
                                 while (rs1.next()) {
-                                    out.println("<td>" + rs1.getString(1) + "</td>");
+                                    out.print("<td>" + rs1.getString(1) + "</td>");
                                 }
-                                out.println("</tr>");
+                                out.print("</tr>");
                             }
-                            out.println("</tbody></table><br>");
+                            out.print("</tbody></table><br>");
                             con.close();
                         } catch (ClassNotFoundException | SQLException e) {
                             e.printStackTrace();

@@ -41,12 +41,12 @@ public class ajaxCheckEmail extends HttpServlet {
             }
             if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
                 if (flag == 0) {
-                    out.println("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
+                    out.print("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
                 } else {
-                    out.println("<i class=\"fa fa-user\" aria-hidden=\"true\"></i>Email Exists");
+                    out.print("<i class=\"fa fa-user\" aria-hidden=\"true\"></i>Email Exists");
                 }
             } else {
-                out.println("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>");
+                out.print("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>");
             }
         }
     }

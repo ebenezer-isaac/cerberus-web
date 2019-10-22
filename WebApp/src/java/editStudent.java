@@ -28,7 +28,7 @@ public class editStudent extends HttpServlet {
                     case 1:
 
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        out.println("<style>"
+                        out.print("<style>"
                                 + "input[type=number]{"
                                 + "width: 15px;"
                                 + "} "
@@ -40,7 +40,7 @@ public class editStudent extends HttpServlet {
                             flow = "add";
                         }
                         if (flow.equals("add")) {
-                            out.println("<style>"
+                            out.print("<style>"
                                     + "input[type=number]{"
                                     + "width: 40px;"
                                     + "} "
@@ -111,13 +111,13 @@ public class editStudent extends HttpServlet {
                                         no_of_class++;
                                         out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
                                     }
-                                    out.println("</select>");
+                                    out.print("</select>");
                                     out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
                                             + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                             + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
-                                    out.println("<script>");
+                                    out.print("<script>");
                                     rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                                     PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
                                     st.setInt(1, Integer.parseInt(session.getAttribute("week").toString()));
@@ -142,16 +142,16 @@ public class editStudent extends HttpServlet {
                                         classcount++;
                                     }
                                     classcount--;
-                                    out.println("function dissub()"
+                                    out.print("function dissub()"
                                             + "{"
                                             + "var index = document.getElementById('clas').selectedIndex;"
                                             + "if(index==0)"
                                             + "{document.getElementById('subs').innerHTML = ' ';}");
                                     for (int i = 1; i <= classcount; i++) {
-                                        out.println("else if (index=="+i+")"
+                                        out.print("else if (index=="+i+")"
                                                 + "{document.getElementById('subs').innerHTML = class"+i+"}");
                                     };
-                                    out.println("}</script>");
+                                    out.print("}</script>");
                                     con.close();
                                 }
                             } catch (SQLException e) {

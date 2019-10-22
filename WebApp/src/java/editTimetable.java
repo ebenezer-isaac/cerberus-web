@@ -71,7 +71,7 @@ public class editTimetable extends HttpServlet {
                                 no_of_subs++;
                             }
                             no_of_subs--;
-                            out.println("<style>"
+                            out.print("<style>"
                                     + "input[type=number]{"
                                     + "width: 62px;"
                                     + "height: 40px;"
@@ -85,7 +85,7 @@ public class editTimetable extends HttpServlet {
                                     + "var s = num+'';"
                                     + "while (s.length < 2) s = '0' + s;"
                                     + "return(s);}");
-                            out.println("function batchdisable(id) {"
+                            out.print("function batchdisable(id) {"
                                     + "var index = document.getElementById(id).selectedIndex;"
                                     + "if(index == 0)"
                                     + "{id = id.substr(1);"
@@ -97,7 +97,7 @@ public class editTimetable extends HttpServlet {
                                     + "document.getElementById('batch' + id).disabled=false;"
                                     + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
                                     + "</script>");
-                            out.println("<style> th { white-space: nowrap; } </style>");
+                            out.print("<style> th { white-space: nowrap; } </style>");
                             out.print("<table width = 100%>"
                                     + "<tr><td width = 33% align='center'><form action='editTimetable' method='post'>"
                                     + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
@@ -112,9 +112,9 @@ public class editTimetable extends HttpServlet {
                                     + "<input type='text' name='lab' value='" + labid + "' hidden>"
                                     + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
                             if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                                out.println("disabled");
+                                out.print("disabled");
                             }
-                            out.println("><span>Next</span>"
+                            out.print("><span>Next</span>"
                                     + "</button>"
                                     + "</form></td>");
                             out.print("</tr></table><br><br>");

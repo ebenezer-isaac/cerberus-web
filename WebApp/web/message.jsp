@@ -107,7 +107,7 @@
                             <p><%out.print((request.getAttribute("body")).toString());%></p>
                             
                                 <%if ((request.getAttribute("redirect")).equals("true")) {
-                                        out.println("<small><b>You will be redirected shortly</b></small>"
+                                        out.print("<small><b>You will be redirected shortly</b></small>"
                                                 + "<div class=\"loader\">"
                                                 + "<div class=\"duo duo1\">"
                                                 + "<div class=\"dot dot-a\">"
@@ -123,7 +123,7 @@
                                                 + "</div>"
                                                 + "</div>");
                                     } else {
-                                        out.println("<br><form action=\"" + request.getAttribute("url") + "\" method=\"post\">"
+                                        out.print("<br><form action=\"" + request.getAttribute("url") + "\" method=\"post\">"
                                                 + "<button type =\"submit\">Accept</button>"
                                                 + "</form>");
                                     }
