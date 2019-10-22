@@ -25,7 +25,7 @@ public class viewSubDetails extends HttpServlet {
                 case 1:
                     String subcode = request.getParameter("subcode");
                     request.getRequestDispatcher("side-faculty.html").include(request, response);
-                    out.println(subcode + " Details");
+                    out.print(subcode + " Details");
                     try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
                         PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID)\n"
                                 + "from facultytimetable \n"

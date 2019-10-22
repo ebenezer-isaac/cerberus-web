@@ -25,10 +25,10 @@ public class editFaculty extends HttpServlet {
                 switch (access) {
                     case 1:
                         request.getRequestDispatcher("side-faculty.html").include(request, response);
-                        out.print("<style>\n"
-                                + "input[type=number]{\n"
-                                + "    width: 15px;\n"
-                                + "} \n"
+                        out.print("<style>"
+                                + "input[type=number]{"
+                                + "width: 15px;"
+                                + "}"
                                 + "</style>");
                         String flow = "";
                         try {

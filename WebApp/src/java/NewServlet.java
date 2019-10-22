@@ -31,7 +31,7 @@ public class NewServlet extends HttpServlet {
                 }
                 int row = ps1.executeUpdate();
                 if (row > 0) {
-                    out.println("<h1> File Inserted into database </h1>");
+                    out.print("<h1> File Inserted into database </h1>");
                 }
                 String sql2 = "SELECT photo FROM profile_pic WHERE id = ?";
                 PreparedStatement ps2 = con.prepareStatement(sql2);
@@ -44,7 +44,7 @@ public class NewServlet extends HttpServlet {
                     con.close();
                     System.out.println("FILE SAVED");
                      String imgString = DatatypeConverter.printBase64Binary(blob);
-                     out.println("<img src=\"data:image/png;base64,"+imgString+"\"/>");
+                     out.print("<img src=\"data:image/png;base64,"+imgString+"\"/>");
             } catch (ClassNotFoundException | SQLException e) {
                 System.out.println(e);
             }

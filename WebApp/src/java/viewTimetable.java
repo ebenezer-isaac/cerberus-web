@@ -57,11 +57,11 @@ public class viewTimetable extends HttpServlet {
                     out.print("</tr></table><br><br>");
                     out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
                     out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                    out.println(fac_printTimetable(1, week));
+                    out.print(fac_printTimetable(1, week));
                     out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                    out.println(fac_printTimetable(2, week));
+                    out.print(fac_printTimetable(2, week));
                     out.print("<p align='center'>LAB 3 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                    out.println(fac_printTimetable(3, week));
+                    out.print(fac_printTimetable(3, week));
                     request.getRequestDispatcher("end.html").include(request, response);
                     break;
 

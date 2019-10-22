@@ -226,8 +226,8 @@ public class editTimetable extends HttpServlet {
                             }
                             table += (">" + subs[k] + "</option>");
                         }
-                        String batch[] = {"Batch A", "Batch B", "Batch C"};
-                        table += ("</select>");
+
+                        table += ("</select>");                        
                         table += ("<select class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
                         if (flag == 0) {
                             table += ("disabled class='not-allowed';");
@@ -237,14 +237,16 @@ public class editTimetable extends HttpServlet {
                             table += ("selected");
                         }
                         table += (">No Batch</option>");
-                        for (int x = 0; x <= batch.length - 1; x++) {
-                            table += ("<option name='A' value='" + batch[x] + "'");
+                        PreparedStatement ps11 = con.prepareStatement("Select name from batch order by aesc");
+                        ResultSet rs3 = ps11.executeQuery();
+                        while (rs3.next()) {
+                            table += ("<option name='" + rs.getString(1) + "' value='" + rs.getString(1) + "'");
                             if (flag == 1) {
-                                if (batch[x].equals(arrOfsub[1])) {
+                                if (rs.getString(1).equals(arrOfsub[1])) {
                                     table += ("selected ");
                                 }
                             }
-                            table += (">" + batch[x] + "</option>");
+                            table += (">" + rs.getString(1) + "</option>");
                         }
                         table += ("</select>");
                         table += ("</td>");

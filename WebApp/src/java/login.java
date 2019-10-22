@@ -73,7 +73,7 @@ public class login extends HttpServlet {
                     int week = Integer.parseInt(ft.format(date));
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date);
-                    System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+                    System.out.print(calendar.get(Calendar.DAY_OF_WEEK));
                     if (calendar.get(Calendar.DAY_OF_WEEK) <= 2) {
                         week--;
                     }

@@ -46,6 +46,14 @@ public class editStudent extends HttpServlet {
                                     + "} "
                                     + "</style>");
                             out.print("<script>"
+                                    + "function batchdisable(id) {"
+                                    + "if(document.getElementById('subject'+id).checked == true)"
+                                    + "{document.getElementById('batch' + id).selectedIndex=1;"
+                                    + "document.getElementById('batch' + id).disabled=false;"
+                                    + "document.getElementById('batch' + id).classList.remove('not-allowed');}"
+                                    + "else{document.getElementById('batch' + id).selectedIndex=0;"
+                                    + "document.getElementById('batch' + id).disabled=true;"
+                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}}"
                                     + "function zeroPad(num)"
                                     + "{"
                                     + "var s = num+'';"
@@ -95,7 +103,8 @@ public class editStudent extends HttpServlet {
                                     + "{document.getElementById('disp3').innerHTML = val;}"
                                     + "}"
                                     + "}"
-                                    + "</script>");
+                                    + "</script>"
+                            );
 
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
@@ -103,7 +112,7 @@ public class editStudent extends HttpServlet {
                                     out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
                                             + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
                                     Statement stmt = con.createStatement();
-                                    out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub()'>");
+                                    out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub();'>");
                                     out.print("<option name='clas' value= '0'>Select Class</option>");
                                     ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                                     int no_of_class = 0;
@@ -127,6 +136,16 @@ public class editStudent extends HttpServlet {
                                         oddeve = (rs2.getInt(1) % 2);
                                     }
                                     int classcount = 1;
+                                    out.print("function getbatch(name){batch=\"");
+                                    out.print("<select class='editSelectTimeTable not-allowed' name = 'batch\"+name+\"' id = 'batch\"+name+\"' disabled>"
+                                            + "<option name='-' value='-' selected >No Batch</option>");
+                                    PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                                    ResultSet rs4 = ps11.executeQuery();
+                                    while (rs4.next()) {
+                                        out.print("<option name='" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(1) + "</option>");
+                                    }
+
+                                    out.print("</select>\";return batch;}");
                                     while (rs.next()) {
                                         out.print("var class" + classcount + ";");
                                         int sem = AttFunctions.getSem(oddeve, classcount);
@@ -134,29 +153,26 @@ public class editStudent extends HttpServlet {
                                         ps3.setInt(1, sem);
                                         ResultSet rs3 = ps3.executeQuery();
                                         out.print("class" + classcount + "=\"<table align='center'>");
-                                        int batch=0;
+                                        int no_of_sub = 0;
                                         while (rs3.next()) {
-                                            batch+=1;
-                                            out.print("<tr><td><input type='checkbox' name='subjects' value='"+ rs3.getString(1) +"'></option></td><td>" + rs3.getString(2) + "</td>"
-                                                    + "<td>"
-                                                    + "  <input type='radio' name='b"+batch+"' value='1' checked> Batch A"
-                                                    + "  <input type='radio' name='b"+batch+"' value='2'> Batch B"
-                                                    + "<td>"
-                                                    + "</tr>");
+                                            no_of_sub += 1;
+                                            out.print("<tr><td><input type='checkbox' name='subject" + no_of_sub + "' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
+                                                    + "<td>");
+                                            out.print("\"+getbatch(" + no_of_sub + ")+\"");
+                                            out.print("<td></tr>");
                                         }
                                         out.print("</table>\";");
                                         classcount++;
                                     }
                                     classcount--;
-                                    out.print("function dissub()"
-                                            + "{"
-                                            + "var index = document.getElementById('clas').selectedIndex;"
+                                    out.print("</script><script>function dissub()"
+                                            + "{var index = document.getElementById('clas').selectedIndex;"
                                             + "if(index==0)"
                                             + "{document.getElementById('subs').innerHTML = ' ';}");
                                     for (int i = 1; i <= classcount; i++) {
-                                        out.print("else if (index=="+i+")"
-                                                + "{document.getElementById('subs').innerHTML = class"+i+"}");
-                                    };
+                                        out.print("else if (index==" + i + ")"
+                                                + "{document.getElementById('subs').innerHTML = class" + i + "}");
+                                    }
                                     out.print("}</script>");
                                     con.close();
                                 }
