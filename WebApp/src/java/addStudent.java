@@ -64,7 +64,7 @@ public class addStudent extends HttpServlet implements Runnable {
                     ps.executeUpdate();
 
                     String subjects[] = request.getParameterValues("subjects");
-
+                    System.out.println(subjects.length);
                     for (int i = 0; i < subjects.length; i++) {
                         int batchid = Integer.parseInt(request.getParameter("b" + (i + 1)));
                         System.out.println(batchid);
