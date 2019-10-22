@@ -45,29 +45,23 @@ public class addStudent extends HttpServlet implements Runnable {
                     PreparedStatement ps = con.prepareStatement("select name, email from student where email=?");
                     ps.setString(1, this.email);
                     ResultSet rs = ps.executeQuery();
-                    if (rs.next()) {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Request Failed");
-                        request.setAttribute("body", "A Student by name " + rs.getString(1) + " and prn " + this.prn + " with email address as " + rs.getString(2) + " already exits.");
-                        request.setAttribute("url", "homepage");
-                        rd.forward(request, response);
-                    } else {
-                        ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`) VALUES (?,?,?,?)");
-                        ps.setString(1, this.prn);
-                        ps.setString(2, this.name);
-                        ps.setString(3, this.email);
-                        ps.setString(4, pass);
-                        ps.executeUpdate();
-                        Thread thread = new Thread(this);
-                        thread.start();
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Student Added");
-                        request.setAttribute("body", this.name + " was added to the list of Students. A mail has been sent to respective student.");
-                        request.setAttribute("url", "homepage");
-                        rd.forward(request, response);
-                    }
+
+                    ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`) VALUES (?,?,?,?)");
+                    ps.setString(1, this.prn);
+                    ps.setString(2, this.name);
+                    ps.setString(3, this.email);
+                    ps.setString(4, pass);
+                    ps.executeUpdate();
+
+                    Thread thread = new Thread(this);
+                    thread.start();
+                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                    request.setAttribute("redirect", "false");
+                    request.setAttribute("head", "Student Added");
+                    request.setAttribute("body", this.name + " was added to the list of Students. A mail has been sent to respective student.");
+                    request.setAttribute("url", "homepage");
+                    rd.forward(request, response);
+
                     con.close();
                 }
             } catch (SQLException e) {
