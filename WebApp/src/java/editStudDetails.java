@@ -50,7 +50,7 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 cla = rs.getString(1);
                             }
-                            int index = 0;
+                            int index;
                             int oddeve = 1;
                             PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
                             st.setInt(1, week);
