@@ -109,10 +109,6 @@
         <servlet-class>editProfile</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>NewServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>delStudent</servlet-name>
         <servlet-class>delStudent</servlet-class>
     </servlet>
@@ -223,10 +219,6 @@
     <servlet-mapping>
         <servlet-name>editProfile</servlet-name>
         <url-pattern>/editProfile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>delStudent</servlet-name>
