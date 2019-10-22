@@ -215,7 +215,7 @@ public class editStudent extends HttpServlet {
                         rd.forward(request, response);
                         break;
                 }
-            } catch (IOException | ClassNotFoundException | ServletException e) {
+            } catch (ClassNotFoundException e) {
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");
