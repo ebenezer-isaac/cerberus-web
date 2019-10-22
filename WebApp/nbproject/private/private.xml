@@ -3,9 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editStudent.java</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editStudDetails.java</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/saveStudDetails.java</file>
+=======
+            <file>file:/C:/Users/Haji%20Huseinali/Desktop/cerberus-web/WebApp/web/editProfilePage.html</file>
+            <file>file:/C:/Users/Haji%20Huseinali/Desktop/cerberus-web/WebApp/src/java/editProfile.java</file>
+>>>>>>> f7f09b94e2f3392cf5817f2760abf149405cd92b
         </group>
     </open-files>
 </project-private>
