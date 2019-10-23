@@ -180,45 +180,45 @@ public class editStudent extends HttpServlet {
                             } catch (SQLException e) {
                             }
                         } else if (flow.equals("del")) {
-//                            try {
-//                                out.print("<body onload='myFunction()'>");
-//                                out.print("<script>"
-//                                        + "function myFunction()"
-//                                        + "{if (document.getElementById('warn').checked==true) "
-//                                        + "{document.getElementById('butt').style.display = 'block';}"
-//                                        + "else"
-//                                        + "{document.getElementById('butt').style.display = 'none';}}"
-//                                        + "</script>");
-//                                out.print("<form action='deltFaculty' method='post'>");
-//                                out.print("<div align='center'><br>Select the subject you want to delete : <br><br>");
-//                                Class.forName("com.mysql.cj.jdbc.Driver");
-//                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-//                                Statement stmt = con.createStatement();
-//                                String sql = "SELECT `facultyID`,`name` from `faculty`;";
-//                                ResultSet rs = stmt.executeQuery(sql);
-//                                String select = "<select name = 'facultyID'>";
-//                                while (rs.next()) {
-//                                    select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
-//                                }
-//                                select += "</select>";
-//                                out.print(select);
-//                                out.print("<br><br><fieldset>"
-//                                        + "<legend><br>Warning - The following changes will be made:<br></legend>"
-//                                        + "<p>1. All Attendance Records for the Subject will be deleted.</p>"
-//                                        + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
-//                                        + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
-//                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
-//                                        + "<br><br></fieldset>");
-//                                out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
-//                                out.print("</form></div>");
-//                                con.close();
-//
-//                            } catch (ClassNotFoundException | SQLException e) {
-//                                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-//                                request.setAttribute("message", e.getMessage());
-//                                request.setAttribute("redirect", "menu");
-//                                rd.forward(request, response);
-//                            }
+                            try {
+                                out.print("<body onload='myFunction()'>");
+                                out.print("<script>"
+                                        + "function myFunction()"
+                                        + "{if (document.getElementById('warn').checked==true) "
+                                        + "{document.getElementById('butt').style.display = 'block';}"
+                                        + "else"
+                                        + "{document.getElementById('butt').style.display = 'none';}}"
+                                        + "</script>");
+                                out.print("<form action='delStudent' method='post'>");
+                                out.print("<div align='center'><br>Select the Student you want to delete : <br><br>");
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                                    Statement stmt = con.createStatement();
+                                    String sql = "SELECT `studentID`,`name` from `student`;";
+                                    ResultSet rs = stmt.executeQuery(sql);
+                                    String select = "<select name = 'StuentID'>";
+                                    while (rs.next()) {
+                                        select += "<option name='Stu' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
+                                    }
+                                    select += "</select>";
+                                    out.print(select);
+                                    out.print("<br><br><fieldset>"
+                                            + "<legend><br>Warning - The following changes will be made:<br></legend>"
+                                            + "<p>1. All Attendance Records for the Student will be deleted.</p>"
+                                            + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
+                                            + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
+                                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
+                                            + "<br><br></fieldset>");
+                                    out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
+                                    out.print("</form></div>");
+                                }
+
+                            } catch (ClassNotFoundException | SQLException e) {
+                                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                                request.setAttribute("message", e.getMessage());
+                                request.setAttribute("redirect", "menu");
+                                rd.forward(request, response);
+                            }
                         }
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
