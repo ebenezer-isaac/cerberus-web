@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -82,7 +80,6 @@ public class login extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             /*messages m = new messages();
             m.error(request, response, e.getMessage(), "index.jsp");*/
         }

@@ -124,6 +124,7 @@ public class editStudent extends HttpServlet {
                                     out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
                                             + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">MSU Username</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' onkeyup='sendInfo(2)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                             + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
                                     out.print("<script>");
@@ -139,10 +140,10 @@ public class editStudent extends HttpServlet {
                                     out.print("function getbatch(name){batch=\"");
                                     out.print("<select class='editSelectTimeTable not-allowed' name = 'batch\"+name+\"' id = 'batch\"+name+\"' disabled>"
                                             + "<option name='-' value='-' selected >No Batch</option>");
-                                    PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                                    PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
                                     ResultSet rs4 = ps11.executeQuery();
                                     while (rs4.next()) {
-                                        out.print("<option name='" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(1) + "</option>");
+                                        out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(2) + "</option>");
                                     }
 
                                     out.print("</select>\";return batch;}");
@@ -156,7 +157,7 @@ public class editStudent extends HttpServlet {
                                         int no_of_sub = 0;
                                         while (rs3.next()) {
                                             no_of_sub += 1;
-                                            out.print("<tr><td><input type='checkbox' name='subject" + no_of_sub + "' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
+                                            out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
                                                     + "<td>");
                                             out.print("\"+getbatch(" + no_of_sub + ")+\"");
                                             out.print("<td></tr>");
@@ -177,7 +178,6 @@ public class editStudent extends HttpServlet {
                                     con.close();
                                 }
                             } catch (SQLException e) {
-                                e.printStackTrace();
                             }
                         } else if (flow.equals("del")) {
 //                            try {
