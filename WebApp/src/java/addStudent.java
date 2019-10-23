@@ -32,17 +32,11 @@ public class addStudent extends HttpServlet implements Runnable {
             this.prn = request.getParameter("prn");
             this.name = request.getParameter("name");
             this.email = request.getParameter("email");
-
             int seleclass = Integer.parseInt(request.getParameter("clas"));
             int roll = Integer.parseInt(request.getParameter("roll"));
-
-            String pass = "";
-            int index = this.email.indexOf("@");
-            if (index != -1) {
-                pass = this.email.substring(0, index);
-            }
+            String photoID = request.getParameter("photo_id").toString();
             this.rawpass = this.prn;
-            pass = AttFunctions.hashIt(this.prn);
+            String pass = AttFunctions.hashIt(this.prn);
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
@@ -50,7 +44,7 @@ public class addStudent extends HttpServlet implements Runnable {
                     ps.setString(1, this.email);
                     ResultSet rs = ps.executeQuery();
 
-                    ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`) VALUES (?,?,?,?)");
+                    ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`, `photo_id`) VALUES (?,?,?,?)");
                     ps.setString(1, this.prn);
                     ps.setString(2, this.name);
                     ps.setString(3, this.email);
