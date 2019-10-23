@@ -24,7 +24,7 @@ public class editStudDetails extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                         int classID;
                         try {
                             classID = Integer.parseInt(request.getParameter("class"));

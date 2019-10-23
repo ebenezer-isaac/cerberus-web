@@ -26,7 +26,7 @@ public class editSubject extends HttpServlet {
                 switch (access) {
                     case 1:
 
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                         out.print("<style>\n"
                                 + "input[type=number]{\n"
                                 + "    width: 15px;\n"

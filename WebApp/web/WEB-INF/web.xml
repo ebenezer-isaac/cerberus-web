@@ -93,10 +93,6 @@
         <servlet-class>saveStudDetails</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>sessionStart</servlet-name>
-        <servlet-class>sessionStart</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>messages</servlet-name>
         <servlet-class>messages</servlet-class>
     </servlet>
@@ -111,6 +107,10 @@
     <servlet>
         <servlet-name>delStudent</servlet-name>
         <servlet-class>delStudent</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewServlet</servlet-name>
+        <servlet-class>NewServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -205,10 +205,6 @@
         <url-pattern>/saveStudDetails</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>sessionStart</servlet-name>
-        <url-pattern>/sessionStart</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>messages</servlet-name>
         <url-pattern>/messages</url-pattern>
     </servlet-mapping>
@@ -223,6 +219,10 @@
     <servlet-mapping>
         <servlet-name>delStudent</servlet-name>
         <url-pattern>/delStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewServlet</servlet-name>
+        <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

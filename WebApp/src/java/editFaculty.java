@@ -24,7 +24,7 @@ public class editFaculty extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                         out.print("<style>"
                                 + "input[type=number]{"
                                 + "width: 15px;"

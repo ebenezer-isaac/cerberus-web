@@ -28,7 +28,7 @@ public class viewSubject extends HttpServlet {
                 switch (access) {
                     case 1:
                         week = (int) session.getAttribute("week");
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                         out.print("<style>tr:hover {"
                                 + "background: #a8a3a3;"
                                 + "}</style>");

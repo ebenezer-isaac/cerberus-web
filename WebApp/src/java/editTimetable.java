@@ -31,7 +31,7 @@ public class editTimetable extends HttpServlet {
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.html").include(request, response);
+                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     try {
                         week = Integer.parseInt(request.getParameter("week"));
                     } catch (NumberFormatException e) {
@@ -39,6 +39,7 @@ public class editTimetable extends HttpServlet {
                     if (week == 0) {
                         week = (int) session.getAttribute("week");
                     }
+                    System.out.println(week);
                     int labid = Integer.parseInt(request.getParameter("lab"));
                     if (labid >= 4 || labid <= 0) {
                         labid = 1;
@@ -237,16 +238,16 @@ public class editTimetable extends HttpServlet {
                             table += ("selected");
                         }
                         table += (">No Batch</option>");
-                        PreparedStatement ps11 = con.prepareStatement("Select name from batch order by aesc");
+                        PreparedStatement ps11 = con.prepareStatement("Select name from batch");
                         ResultSet rs3 = ps11.executeQuery();
                         while (rs3.next()) {
-                            table += ("<option name='" + rs.getString(1) + "' value='" + rs.getString(1) + "'");
+                            table += ("<option name='" + rs3.getString(1) + "' value='" + rs3.getString(1) + "'");
                             if (flag == 1) {
-                                if (rs.getString(1).equals(arrOfsub[1])) {
+                                if (rs3.getString(1).equals(arrOfsub[1])) {
                                     table += ("selected ");
                                 }
                             }
-                            table += (">" + rs.getString(1) + "</option>");
+                            table += (">" + rs3.getString(1) + "</option>");
                         }
                         table += ("</select>");
                         table += ("</td>");
@@ -283,7 +284,7 @@ public class editTimetable extends HttpServlet {
             table += ("</tbody></table><br><br>");
             con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-            table = "No data available<br>";
+            e.printStackTrace();
         }
         return table;
     }

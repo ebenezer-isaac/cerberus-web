@@ -25,32 +25,11 @@ public class homepage extends HttpServlet {
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.html").include(request, response);
-                    try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        String sql2 = "SELECT name, photo FROM faculty WHERE facultyID = 1";
-                        PreparedStatement ps2 = con.prepareStatement(sql2);
-                        byte[] blob = null;
-                        String name = "";
-                        ResultSet rs = ps2.executeQuery();
-                        while (rs.next()) {
-                            blob = rs.getBytes("photo");
-                            name = rs.getString("name");
-                        }
-                        con.close();
-                        System.out.println("FILE SAVED");
-                        String imgString = DatatypeConverter.printBase64Binary(blob);
-                        out.print("<script>document.getElementById('pic').innerHTML=\"<a href='editProfilePage.html'><img src='data:image/png;base64," + imgString + "'/><br>"+name+"<br><br></a>\";</script>");
-                    } catch (ClassNotFoundException | SQLException e) {
-                        System.out.println(e);
-                    }
-                    //
-                    //
+                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     request.getRequestDispatcher("end.html").include(request, response);
                     break;
                 case 0:
-                    request.getRequestDispatcher("side-student.html").include(request, response);
+                    request.getRequestDispatcher("side-student.jsp").include(request, response);
                     request.getRequestDispatcher("end.html").include(request, response);
                     break;
                 default:

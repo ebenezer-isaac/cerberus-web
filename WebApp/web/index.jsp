@@ -1,3 +1,8 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="javax.xml.bind.DatatypeConverter"%>
+<%@page import="java.sql.*"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -130,4 +135,25 @@
         <script src="js/particles.js"></script>
         <script src="js/app.js"></script>
     </body>
-</html>
+</html>                
+<%
+    java.util.Date date = new java.util.Date();
+    SimpleDateFormat ft = new SimpleDateFormat("w");
+    int week = Integer.parseInt(ft.format(date));
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+    if (calendar.get(Calendar.DAY_OF_WEEK) <= 2) {
+        week--;
+    }
+    session.setAttribute("week", week);
+    session.setAttribute("access", 2);
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+        PreparedStatement ps = con.prepareStatement("select class from class");
+        ps.executeQuery();
+        con.close();
+    } catch (SQLException e) {
+    }
+%>

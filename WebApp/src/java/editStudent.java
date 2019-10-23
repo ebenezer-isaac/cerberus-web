@@ -27,7 +27,7 @@ public class editStudent extends HttpServlet {
                 switch (access) {
                     case 1:
 
-                        request.getRequestDispatcher("side-faculty.html").include(request, response);
+                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                         out.print("<style>"
                                 + "input[type=number]{"
                                 + "width: 15px;"

@@ -34,7 +34,7 @@ public class viewTimetable extends HttpServlet {
             }
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.html").include(request, response);
+                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                     LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                     out.print("<table width = 100%>"
