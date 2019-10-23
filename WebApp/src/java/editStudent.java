@@ -40,6 +40,47 @@ public class editStudent extends HttpServlet {
                         } catch (Exception e) {
                             flow = "add";
                         }
+                        out.print("<script>"
+                                + "function sendInfo(x)"
+                                + "{ "
+                                + "id=x;"
+                                + "if(x==0){"
+                                + "v = document.getElementById('email').value;"
+                                + "var url = \"ajaxCheckEmail?email=\" + v;}"
+                                + "else if (x==1){"
+                                + "v = document.getElementById('prn').value;"
+                                + "var url = \"ajaxCheckPRN?prn=\" + v;}"
+                                + "else if (x==2){"
+                                + "v = document.getElementById('roll').value;"
+                                + "cl = document.getElementById('clas').selectedIndex;"
+                                + "var url = \"ajaxCheckRoll?roll=\" + v+\"&clas=\"+cl;}"
+                                + "if (window.XMLHttpRequest) {"
+                                + "request = new XMLHttpRequest();"
+                                + "} else if (window.ActiveXObject) {"
+                                + "request = new ActiveXObject(\"Microsoft.XMLHTTP\");"
+                                + "}"
+                                + "try"
+                                + "{"
+                                + "request.onreadystatechange = getInfo;"
+                                + "request.open(\"GET\", url, true);"
+                                + "request.send();"
+                                + "} catch (e)"
+                                + "{"
+                                + "alert(\"Unable to connect to server\");"
+                                + "}"
+                                + "}"
+                                + "function getInfo() {"
+                                + "if (request.readyState == 4) {"
+                                + "var val = request.responseText;"
+                                + "if(id==0)"
+                                + "{document.getElementById('disp1').innerHTML = val;}"
+                                + "else if (id==1)"
+                                + "{document.getElementById('disp2').innerHTML = val;}"
+                                + "else if (id==2)"
+                                + "{document.getElementById('disp3').innerHTML = val;}"
+                                + "}"
+                                + "}"
+                                + "</script>");
                         if (flow.equals("add")) {
                             out.print("<style>"
                                     + "input[type=number]{"
@@ -64,47 +105,7 @@ public class editStudent extends HttpServlet {
                                     + "function myFuntion()"
                                     + "{alert('hola');}"
                                     + "var request;"
-                                    + "var id;"
-                                    + "function sendInfo(x)"
-                                    + "{ "
-                                    + "id=x;"
-                                    + "if(x==0){"
-                                    + "v = document.getElementById('email').value;"
-                                    + "var url = \"ajaxCheckEmail?email=\" + v;}"
-                                    + "else if (x==1){"
-                                    + "v = document.getElementById('prn').value;"
-                                    + "var url = \"ajaxCheckPRN?prn=\" + v;}"
-                                    + "else if (x==2){"
-                                    + "v = document.getElementById('roll').value;"
-                                    + "cl = document.getElementById('clas').selectedIndex;"
-                                    + "var url = \"ajaxCheckRoll?roll=\" + v+\"&clas=\"+cl;}"
-                                    + "if (window.XMLHttpRequest) {"
-                                    + "request = new XMLHttpRequest();"
-                                    + "} else if (window.ActiveXObject) {"
-                                    + "request = new ActiveXObject(\"Microsoft.XMLHTTP\");"
-                                    + "}"
-                                    + "try"
-                                    + "{"
-                                    + "request.onreadystatechange = getInfo;"
-                                    + "request.open(\"GET\", url, true);"
-                                    + "request.send();"
-                                    + "} catch (e)"
-                                    + "{"
-                                    + "alert(\"Unable to connect to server\");"
-                                    + "}"
-                                    + "}"
-                                    + "function getInfo() {"
-                                    + "if (request.readyState == 4) {"
-                                    + "var val = request.responseText;"
-                                    + "if(id==0)"
-                                    + "{document.getElementById('disp1').innerHTML = val;}"
-                                    + "else if (id==1)"
-                                    + "{document.getElementById('disp2').innerHTML = val;}"
-                                    + "else if (id==2)"
-                                    + "{document.getElementById('disp3').innerHTML = val;}"
-                                    + "}"
-                                    + "}"
-                                    + "</script>"
+                                    + "var id;</script>"
                             );
 
                             try {
@@ -183,42 +184,26 @@ public class editStudent extends HttpServlet {
                             } catch (SQLException e) {
                             }
                         } else if (flow.equals("del")) {
-                            try {
-                                out.print("<body onload='myFunction()'>");
-                                out.print("<script>"
-                                        + "function myFunction()"
-                                        + "{if (document.getElementById('warn').checked==true) "
-                                        + "{document.getElementById('butt').style.display = 'block';}"
-                                        + "else"
-                                        + "{document.getElementById('butt').style.display = 'none';}}"
-                                        + "</script>");
-                                out.print("<form action='delStudent' method='post'>");
-                                out.print("<div align='center'><br>Select the Student you want to delete : <br><br>");
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                                    Statement stmt = con.createStatement();
-                                    String sql = "SELECT `name` from `student`;";
-                                    ResultSet rs = stmt.executeQuery(sql);
-                                    String select = "<select name = 'StuentID'>";
-                                    while (rs.next()) {
-                                        select += "<option name='Stu' value='" + rs.getString(1) + "'> " + rs.getString(1) + "</option>";
-                                    }
-                                    select += "</select>";
-                                    out.print(select);
-                                    out.print("<br><br><fieldset>"
-                                            + "<legend><br>Warning - The following changes will be made:<br></legend>"
-                                            + "<p>1. All Attendance Records for the Student will be deleted.</p>"
-                                            + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
-                                            + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
-                                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
-                                            + "<br><br></fieldset>");
-                                    out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
-                                    out.print("</form></div>");
-                                }
-
-                            } catch (ClassNotFoundException | SQLException e) {
-                                e.printStackTrace();
-                            }
+                            out.print("<body onload='myFunction()'>");
+                            out.print("<script>"
+                                    + "function myFunction()"
+                                    + "{if (document.getElementById('warn').checked==true) "
+                                    + "{document.getElementById('butt').style.display = 'block';}"
+                                    + "else"
+                                    + "{document.getElementById('butt').style.display = 'none';}}"
+                                    + "</script>");
+                            out.print("<form action='delStudent' method='post'>");
+                            out.print("<div align='center'><br>Enter the PRN of the student: <br><br>");
+                            out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
+                            out.print("<br><br><fieldset>"
+                                    + "<legend><br>Warning - The following changes will be made:<br></legend>"
+                                    + "<p>1. All Attendance Records for the Student will be deleted.</p>"
+                                    + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
+                                    + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
+                                    + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
+                                    + "<br><br></fieldset>");
+                            out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
+                            out.print("</form></div>");
                         }
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;

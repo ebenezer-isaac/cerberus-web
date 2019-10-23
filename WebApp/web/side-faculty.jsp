@@ -98,7 +98,7 @@
                                     <a href="/Cerberus/editStudent?flow=add"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
+                                    <a href="/Cerberus/editStudent?flow=del"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
                                 </li>
                                 <li>
                                     <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Student Data</a>

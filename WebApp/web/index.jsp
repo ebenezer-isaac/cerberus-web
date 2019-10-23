@@ -69,7 +69,7 @@
                 <div class="row custom_row">
                     <div class="col-lg-6 my-auto">
                         <div class="main_content mx-auto">
-                            <img src="images/logo-circle.png" style="width: 70px; height: 70px;">
+                            <img src="images/logo-main.png" style="width: 101px; height: 101px;">
                             <h1 style="font-family: DPSDbeyond;"> C E R B E R U S </h1>
                             <h3> The Attendance Initiative </h3>
                         </div>
