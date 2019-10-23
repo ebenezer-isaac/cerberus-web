@@ -82,8 +82,9 @@ public class login extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            messages m = new messages();
-            m.error(request, response, e.getMessage(), "index.jsp");
+            e.printStackTrace();
+            /*messages m = new messages();
+            m.error(request, response, e.getMessage(), "index.jsp");*/
         }
     }
 
