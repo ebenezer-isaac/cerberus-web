@@ -220,8 +220,8 @@ public class homepage extends HttpServlet {
                 int slot = 0;
                 while (slot <= no_of_slots) {
                     out.print("<tr align='center'>");
-                    out.print("<td rowspan='4'>" + slots[slot][0] + "</td>");
-                    out.print("<td rowspan='4'>" + slots[slot][1] + "</td></tr>");
+                    out.print("<td valign='middle' rowspan='4'>" + slots[slot][0] + "</td>");
+                    out.print("<td valign='middle' rowspan='4'>" + slots[slot][1] + "</td></tr>");
                     for (int lab = 0; lab <= no_of_labs - 1; lab++) {
                         out.print("<td  align='center'>Lab " + (lab + 1) + "</td>");
                         out.print(labs[lab][slot]);

@@ -1,6 +1,8 @@
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.sql.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,18 +27,24 @@ public class addStudent extends HttpServlet {
             this.email = request.getParameter("email");
             int seleclass = Integer.parseInt(request.getParameter("clas"));
             int roll = Integer.parseInt(request.getParameter("roll"));
-            String photoID = request.getParameter("photo_id").toString();
+            String photoID = request.getParameter("photo_id");
             this.rawpass = this.prn;
             String pass = AttFunctions.hashIt(this.prn);
+            String hello = "http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + this.prn.substring(0, 4) + "/" + photoID + "_P.JPG";
+            System.out.println(hello);
+            URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + this.prn.substring(0, 4) + "/" + photoID + "_P.JPG");
+            InputStream inputStream = url.openStream();
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
 
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `name`, `email`, `password`) VALUES (?,?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `photo_id` ,`name`, `email`, `password`,`photo`) VALUES (?,?,?,?,?,?)");
                     ps.setString(1, this.prn);
-                    ps.setString(2, this.name);
-                    ps.setString(3, this.email);
-                    ps.setString(4, pass);
+                    ps.setString(2, photoID);
+                    ps.setString(3, this.name);
+                    ps.setString(4, this.email);
+                    ps.setString(5, pass);
+                    ps.setBlob(6, inputStream);
                     ps.executeUpdate();
                     ps = con.prepareStatement("INSERT INTO `rollcall`(`classID`, `rollNo`, `PRN`) VALUES (?,?,?)");
                     ps.setInt(1, seleclass);
@@ -45,18 +53,20 @@ public class addStudent extends HttpServlet {
                     ps.executeUpdate();
 
                     String subjects[] = request.getParameterValues("subjects");
-                    System.out.println("hwkki world "+subjects.length);
+                    System.out.println("hwkki world " + subjects.length);
                     for (int i = 0; i < subjects.length; i++) {
-                        int batchid = Integer.parseInt(request.getParameter("batch" + (i + 1)));
-                        System.out.println(batchid);
-                        System.out.println(subjects[i]);
-                        System.out.println(batchid);
-                        ps = con.prepareStatement("INSERT INTO `studentsubject`(`PRN`, `subjectID`, `batchID`) VALUES (?,?,?)");
-                        ps.setString(1, this.prn);
-                        ps.setString(2, subjects[i]);
-                        ps.setInt(3, batchid);
-                        ps.executeUpdate();
-
+                        try {
+                            int batchid = Integer.parseInt(request.getParameter("batch" + (i + 1)));
+                            System.out.println(batchid);
+                            System.out.println(subjects[i]);
+                            System.out.println(batchid);
+                            ps = con.prepareStatement("INSERT INTO `studentsubject`(`PRN`, `subjectID`, `batchID`) VALUES (?,?,?)");
+                            ps.setString(1, this.prn);
+                            ps.setString(2, subjects[i]);
+                            ps.setInt(3, batchid);
+                            ps.executeUpdate();
+                        } catch (NumberFormatException | SQLException e) {
+                        }
                     }
                     this.body = "Hello " + this.name + ",\n    This mail is in response to a request to add you as a student at MSU-CA Department.\n\n"
                             + "Email/Username : " + this.email + "\n"
@@ -85,6 +95,7 @@ public class addStudent extends HttpServlet {
                 request.setAttribute("body", "Student alredy exists with given PRN");
                 request.setAttribute("url", "editStudent?flow=add");
                 rd.forward(request, response);
+                e.printStackTrace();
 
             }
         } catch (Exception e) {
