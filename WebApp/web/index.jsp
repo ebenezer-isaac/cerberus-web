@@ -63,34 +63,14 @@
         </script>
     </head>
     <body onload="sessionstart()">
-        <nav class="navbar navbar-expand" style="background-color: #24292E;">
-            <div class="container">
-                <img class="custom_logo" src="images/logo-circle.png">
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="aboutus.html"> <button class="aboutus-button"> About us </button> </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        
         <div class="main_body">
             <div class="container custom_container">
                 <div class="row custom_row">
                     <div class="col-lg-6 my-auto">
                         <div class="main_content mx-auto">
-                            <h1 style="font-family: arno pro caption"> C E R B E R U S </h1>
-                            <!--  <h2 style="font-size: 14.3px;">
-                                  C<small><font style="color: darkgray">OGNITIVE</font></small>
-                                  E<small><font style="color: darkgray">FFICIENT</font></small>
-                                  R<small><font style="color: darkgray">OBUST</font></small>
-                                  B<small><font style="color: darkgray">IOMETRIC</font></small>
-                                  E<small><font style="color: darkgray">VALUATION</font></small>
-                                  R<small><font style="color: darkgray">EPORTING</font></small>
-                                  U<small><font style="color: darkgray">TILITY</font></small>
-                                  S<small><font style="color: darkgray">YSTEM</font></small> </h2>
-                            -->
+                            <img src="images/logo-circle.png" style="width: 70px; height: 70px;">
+                            <h1 style="font-family: DPSDbeyond;"> C E R B E R U S </h1>
                             <h3> The Attendance Initiative </h3>
                         </div>
                     </div>
