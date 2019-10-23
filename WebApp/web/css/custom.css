@@ -38,7 +38,7 @@
 
 .form_container
 {
-    background: #FFFFFF;
+    background: #EEEEEE;
     max-width: 360px;
     padding: 37px;
     margin: auto;
@@ -52,7 +52,7 @@ input[type=text], input[type=password], input[type=email], input[type=number]
 {
     font-family: "Roboto", sans-serif;
     outline: 0;
-    background: #f2f2f2;
+    background: #FFF;
     width: 100%;
     border: none;
     margin: 10px 0 0;
