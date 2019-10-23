@@ -65,7 +65,6 @@ input[type=text], input[type=password], input[type=email], input[type=number]
     box-sizing: border-box;
     font-size: 14px;
 }
-
 .form_container button
 {
     border-radius: 4px;
