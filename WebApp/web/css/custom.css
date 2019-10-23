@@ -51,6 +51,7 @@
 
 input[type=text], input[type=password], input[type=email], input[type=number]
 {
+    border-radius: 8px;
     font-family: "Roboto", sans-serif;
     outline: 0;
     background: #FFF;
@@ -64,6 +65,7 @@ input[type=text], input[type=password], input[type=email], input[type=number]
 
 .form_container button
 {
+    border-radius: 4px;
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
