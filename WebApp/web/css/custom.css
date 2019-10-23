@@ -38,6 +38,7 @@
 
 .form_container
 {
+    border-radius: 8px;
     background: #EEEEEE;
     max-width: 360px;
     padding: 37px;
