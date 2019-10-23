@@ -134,7 +134,7 @@ public class editSubject extends HttpServlet {
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");
                 request.setAttribute("body", "Please login to continue");
-                request.setAttribute("url", "index.html");
+                request.setAttribute("url", "index.jsp");
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             }

@@ -44,7 +44,7 @@ public class resetpass extends HttpServlet {
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Nice Try!");
                 request.setAttribute("body", "You're smart.<br>But not half as smart enough.<br><br>" + new String(Character.toChars(0x1F60F)));
-                request.setAttribute("url", "index.html");
+                request.setAttribute("url", "index.jsp");
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
@@ -91,7 +91,7 @@ public class resetpass extends HttpServlet {
                             request.setAttribute("redirect", "true");
                             request.setAttribute("head", "Security Message");
                             request.setAttribute("body", "Your password has been updated.<br> Please login with your new credentials");
-                            request.setAttribute("url", "index.html");
+                            request.setAttribute("url", "index.jsp");
                             request.setAttribute("sec", "2");
                             rd.forward(request, response);
                         } catch (ClassNotFoundException | SQLException e) {
@@ -116,7 +116,7 @@ public class resetpass extends HttpServlet {
                     request.setAttribute("redirect", "false");
                     request.setAttribute("head", "Security Firewall");
                     request.setAttribute("body", "An OTP was not found for the provided Email address.");
-                    request.setAttribute("url", "index.html");
+                    request.setAttribute("url", "index.jsp");
                     request.setAttribute("button", "Redirect");
                     rd.forward(request, response);
                 }
@@ -132,7 +132,7 @@ public class resetpass extends HttpServlet {
         request.setAttribute("redirect", "true");
         request.setAttribute("head", "Security Firewall");
         request.setAttribute("body", "Unauthorized access to this page has been detected.");
-        request.setAttribute("url", "index.html");
+        request.setAttribute("url", "index.jsp");
         request.setAttribute("sec", "2");
         rd.forward(request, response);
     }

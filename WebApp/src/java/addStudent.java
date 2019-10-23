@@ -102,7 +102,7 @@ public class addStudent extends HttpServlet implements Runnable {
             request.setAttribute("redirect", "false");
             request.setAttribute("head", "Error");
             request.setAttribute("body", e.getMessage());
-            request.setAttribute("url", "index.html");
+            request.setAttribute("url", "index.jsp");
             rd.forward(request, response);
         }
     }
