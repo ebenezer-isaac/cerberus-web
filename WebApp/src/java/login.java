@@ -80,7 +80,6 @@ public class login extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             /*messages m = new messages();
             m.error(request, response, e.getMessage(), "index.jsp");*/
         }

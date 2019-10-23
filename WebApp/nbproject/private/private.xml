@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/AttFunctions.java</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/end.html</file>
@@ -14,5 +15,8 @@
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editProfile.java</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/viewTimetable.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> 5f53d68d6be1cb5b8c9e97f5ed5d29bca67da35b
     </open-files>
 </project-private>

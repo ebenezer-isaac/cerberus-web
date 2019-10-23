@@ -125,9 +125,10 @@ public class editStudent extends HttpServlet {
                                     int year = d.getYear() + 1900;
                                     out.print("</select>");
                                     out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
-                                            + "<tr><td class=\"editSubjectStyle\">MSU ID</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' class=\"editSubjectForm\" placeholder='D" +String.valueOf(year).substring(2)+ "CJxxxxxxx'/></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">MSU ID</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' class=\"editSubjectForm\" placeholder='D" + String.valueOf(year).substring(2) + "CJxxxxxxx'/></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
-                                            + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='" + year + "03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                            + "<tr><td class=\"editSubjectStyle\">MSU Username</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' onkeyup='sendInfo(2)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                             + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                             + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
                                     out.print("<script>");
@@ -143,10 +144,10 @@ public class editStudent extends HttpServlet {
                                     out.print("function getbatch(name){batch=\"");
                                     out.print("<select class='editSelectTimeTable not-allowed' name = 'batch\"+name+\"' id = 'batch\"+name+\"' disabled>"
                                             + "<option name='-' value='-' selected >No Batch</option>");
-                                    PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                                    PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
                                     ResultSet rs4 = ps11.executeQuery();
                                     while (rs4.next()) {
-                                        out.print("<option name='" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(1) + "</option>");
+                                        out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(2) + "</option>");
                                     }
 
                                     out.print("</select>\";return batch;}");
@@ -160,7 +161,7 @@ public class editStudent extends HttpServlet {
                                         int no_of_sub = 0;
                                         while (rs3.next()) {
                                             no_of_sub += 1;
-                                            out.print("<tr><td><input type='checkbox' name='subject" + no_of_sub + "' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
+                                            out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
                                                     + "<td>");
                                             out.print("\"+getbatch(" + no_of_sub + ")+\"");
                                             out.print("<td></tr>");
@@ -181,48 +182,44 @@ public class editStudent extends HttpServlet {
                                     con.close();
                                 }
                             } catch (SQLException e) {
-                                e.printStackTrace();
                             }
                         } else if (flow.equals("del")) {
-//                            try {
-//                                out.print("<body onload='myFunction()'>");
-//                                out.print("<script>"
-//                                        + "function myFunction()"
-//                                        + "{if (document.getElementById('warn').checked==true) "
-//                                        + "{document.getElementById('butt').style.display = 'block';}"
-//                                        + "else"
-//                                        + "{document.getElementById('butt').style.display = 'none';}}"
-//                                        + "</script>");
-//                                out.print("<form action='deltFaculty' method='post'>");
-//                                out.print("<div align='center'><br>Select the subject you want to delete : <br><br>");
-//                                Class.forName("com.mysql.cj.jdbc.Driver");
-//                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-//                                Statement stmt = con.createStatement();
-//                                String sql = "SELECT `facultyID`,`name` from `faculty`;";
-//                                ResultSet rs = stmt.executeQuery(sql);
-//                                String select = "<select name = 'facultyID'>";
-//                                while (rs.next()) {
-//                                    select += "<option name='Sub' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
-//                                }
-//                                select += "</select>";
-//                                out.print(select);
-//                                out.print("<br><br><fieldset>"
-//                                        + "<legend><br>Warning - The following changes will be made:<br></legend>"
-//                                        + "<p>1. All Attendance Records for the Subject will be deleted.</p>"
-//                                        + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
-//                                        + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
-//                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
-//                                        + "<br><br></fieldset>");
-//                                out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
-//                                out.print("</form></div>");
-//                                con.close();
-//
-//                            } catch (ClassNotFoundException | SQLException e) {
-//                                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-//                                request.setAttribute("message", e.getMessage());
-//                                request.setAttribute("redirect", "menu");
-//                                rd.forward(request, response);
-//                            }
+                            try {
+                                out.print("<body onload='myFunction()'>");
+                                out.print("<script>"
+                                        + "function myFunction()"
+                                        + "{if (document.getElementById('warn').checked==true) "
+                                        + "{document.getElementById('butt').style.display = 'block';}"
+                                        + "else"
+                                        + "{document.getElementById('butt').style.display = 'none';}}"
+                                        + "</script>");
+                                out.print("<form action='delStudent' method='post'>");
+                                out.print("<div align='center'><br>Select the Student you want to delete : <br><br>");
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                                    Statement stmt = con.createStatement();
+                                    String sql = "SELECT `name` from `student`;";
+                                    ResultSet rs = stmt.executeQuery(sql);
+                                    String select = "<select name = 'StuentID'>";
+                                    while (rs.next()) {
+                                        select += "<option name='Stu' value='" + rs.getString(1) + "'> " + rs.getString(1) + "</option>";
+                                    }
+                                    select += "</select>";
+                                    out.print(select);
+                                    out.print("<br><br><fieldset>"
+                                            + "<legend><br>Warning - The following changes will be made:<br></legend>"
+                                            + "<p>1. All Attendance Records for the Student will be deleted.</p>"
+                                            + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
+                                            + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
+                                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
+                                            + "<br><br></fieldset>");
+                                    out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
+                                    out.print("</form></div>");
+                                }
+
+                            } catch (ClassNotFoundException | SQLException e) {
+                                e.printStackTrace();
+                            }
                         }
                         request.getRequestDispatcher("end.html").include(request, response);
                         break;
