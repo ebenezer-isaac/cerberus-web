@@ -124,7 +124,7 @@
                                                 + "</div>");
                                     } else {
                                         out.print("<br><form action=\"" + request.getAttribute("url") + "\" method=\"post\">"
-                                                + "<button type =\"submit\">Accept</button>"
+                                                + "<button type =\"submit\" autofocus>Accept</button>"
                                                 + "</form>");
                                     }
                                 %>

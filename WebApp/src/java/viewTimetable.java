@@ -57,11 +57,11 @@ public class viewTimetable extends HttpServlet {
                     out.print("</tr></table><br><br>");
                     out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
                     out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                    out.print(fac_printTimetable(1, week));
+                    out.print(printTimetable(1, week));
                     out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                    out.print(fac_printTimetable(2, week));
+                    out.print(printTimetable(2, week));
                     out.print("<p align='center'>LAB 3 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                    out.print(fac_printTimetable(3, week));
+                    out.print(printTimetable(3, week));
                     request.getRequestDispatcher("end.html").include(request, response);
                     break;
 
@@ -78,7 +78,7 @@ public class viewTimetable extends HttpServlet {
         }
     }
 
-    public String fac_printTimetable(int labid, int week) {
+    public String printTimetable(int labid, int week) {
         String timetable = "";
         LocalDate mon = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
         LocalDate tue = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(2)));
