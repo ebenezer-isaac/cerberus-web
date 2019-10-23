@@ -96,7 +96,7 @@ public class otp extends HttpServlet {
                 request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Security Firewall");
                 request.setAttribute("body", "An e-mail was not found for the provided username. Please check your username and try again");
-                request.setAttribute("url", "index.html");
+                request.setAttribute("url", "index.jsp");
                 rd.forward(request, response);
                 break;
             }
@@ -105,7 +105,7 @@ public class otp extends HttpServlet {
                 request.setAttribute("redirect", "false");
                 request.setAttribute("head", "Security Firewall");
                 request.setAttribute("body", "Multiple accounts have been registered with the same email. Please contact Administrator");
-                request.setAttribute("url", "index.html");
+                request.setAttribute("url", "index.jsp");
                 rd.forward(request, response);
                 break;
             }
@@ -119,7 +119,7 @@ public class otp extends HttpServlet {
         request.setAttribute("redirect", "true");
         request.setAttribute("head", "Security Firewall");
         request.setAttribute("body", "Unauthorized access to this page has been detected.");
-        request.setAttribute("url", "index.html");
+        request.setAttribute("url", "index.jsp");
         request.setAttribute("sec", "2");
         rd.forward(request, response);
     }

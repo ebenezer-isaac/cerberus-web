@@ -59,7 +59,7 @@ public class messages extends HttpServlet {
         this.redirect = "false";
         this.head = "Security Firewall";
         this.body = "Invalid Username or Password. Please check your credentials and try again";
-        this.url = "index.html";
+        this.url = "index.jsp";
         processRequest(request, response);
     }
 
@@ -68,7 +68,7 @@ public class messages extends HttpServlet {
         this.redirect = "true";
         this.head = "Security Firewall";
         this.body = "Please login to continue";
-        this.url = "index.html";
+        this.url = "index.jsp";
         this.sec = 2;
         processRequest(request, response);
     }
@@ -81,7 +81,7 @@ public class messages extends HttpServlet {
         HttpSession session = request.getSession();
         int access = Integer.parseInt(session.getAttribute("access").toString());
         if (access == 2) {
-            this.url = "index.html";
+            this.url = "index.jsp";
         } else {
             this.url = "homepage";
         }

@@ -25,7 +25,7 @@ public class login extends HttpServlet {
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Nice Try!");
                 request.setAttribute("body", "You're smart.<br>But not half as smart enough.<br><br>" + new String(Character.toChars(0x1F60F)));
-                request.setAttribute("url", "index.html");
+                request.setAttribute("url", "index.jsp");
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
@@ -45,7 +45,7 @@ public class login extends HttpServlet {
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
                     messages m = new messages();
-                    m.dberror(request, response, e.getMessage(), "index.html");
+                    m.dberror(request, response, e.getMessage(), "index.jsp");
                 }
                 if (corrpass.equals("")) {
                     try {
@@ -62,7 +62,7 @@ public class login extends HttpServlet {
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         messages m = new messages();
-                        m.dberror(request, response, e.getMessage(), "index.html");
+                        m.dberror(request, response, e.getMessage(), "index.jsp");
                     }
                 }
                 if (corrpass.equals(pass)) {
@@ -83,7 +83,7 @@ public class login extends HttpServlet {
             }
         } catch (Exception e) {
             messages m = new messages();
-            m.error(request, response, e.getMessage(), "index.html");
+            m.error(request, response, e.getMessage(), "index.jsp");
         }
     }
 

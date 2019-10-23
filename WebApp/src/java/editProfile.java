@@ -54,13 +54,8 @@ public class editProfile extends HttpServlet {
                 request.setAttribute("sec", "2");
                 rd.forward(request, response);
             } else {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Request Unsuccessfull");
-                request.setAttribute("body", "New Profile Picture is not supported");
-                request.setAttribute("url", "homepage");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
+                messages m = new messages();
+                m.dberror(request, response, "New Profile Picture is not supported", "homepage");
             }
         }
     }
