@@ -194,11 +194,11 @@ public class editStudent extends HttpServlet {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
                                 try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
                                     Statement stmt = con.createStatement();
-                                    String sql = "SELECT `studentID`,`name` from `student`;";
+                                    String sql = "SELECT `name` from `student`;";
                                     ResultSet rs = stmt.executeQuery(sql);
                                     String select = "<select name = 'StuentID'>";
                                     while (rs.next()) {
-                                        select += "<option name='Stu' value='" + rs.getString(1) + "'> " + rs.getString(2) + "</option>";
+                                        select += "<option name='Stu' value='" + rs.getString(1) + "'> " + rs.getString(1) + "</option>";
                                     }
                                     select += "</select>";
                                     out.print(select);
@@ -214,10 +214,7 @@ public class editStudent extends HttpServlet {
                                 }
 
                             } catch (ClassNotFoundException | SQLException e) {
-                                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                                request.setAttribute("message", e.getMessage());
-                                request.setAttribute("redirect", "menu");
-                                rd.forward(request, response);
+                                e.printStackTrace();
                             }
                         }
                         request.getRequestDispatcher("end.html").include(request, response);
