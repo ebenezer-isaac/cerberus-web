@@ -38,6 +38,7 @@
         <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             function sessionstart() {
@@ -61,9 +62,40 @@
                 }
             }
         </script>
+        <script>
+            var request;
+            function sendInfo()
+            {
+                var v = document.vinform.t1.value;
+                var url = "ajaxCheckEmailIndex?email=" + v;
+
+                if (window.XMLHttpRequest) {
+                    request = new XMLHttpRequest();
+                } else if (window.ActiveXObject) {
+                    request = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+
+                try
+                {
+                    request.onreadystatechange = getInf;
+                    request.open("GET", url, true);
+                    request.send();
+                } catch (e)
+                {
+                    alert("Unable to connect to server");
+                }
+            }
+
+            function getInf() {
+                if (request.readyState == 4) {
+                    var val = request.responseText;
+                    document.getElementById('borderchange').style.border = '"'+val'"';
+                }
+            }
+        </script> 
     </head>
     <body onload="sessionstart()">
-        
+
         <div class="main_body">
             <div class="container custom_container">
                 <div class="row custom_row">
@@ -78,7 +110,7 @@
                         <div class="form_container">
                             <form method="post" action="login">
                                 <div class="form-group">
-                                    <input type="email" placeholder="Email" name="email" id="email" required>
+                                    <input id="borderchange" type="email" placeholder="Email" name="email" onkeyup="sendInfo()" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="password" placeholder="Password" name="password" title="Minimum 8 characters and maximum 12 characters" required>

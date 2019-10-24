@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 23, 2019 at 11:46 AM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Generation Time: Oct 23, 2019 at 05:30 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -193,8 +193,9 @@ DROP TABLE IF EXISTS `facultysubject`;
 CREATE TABLE IF NOT EXISTS `facultysubject` (
   `facultyID` int(3) NOT NULL,
   `subjectID` varchar(7) NOT NULL,
-  PRIMARY KEY (`facultyID`,`subjectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`facultyID`,`subjectID`),
+  KEY `subjectID` (`subjectID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `facultysubject`
@@ -18762,6 +18763,13 @@ ALTER TABLE `attendance`
 --
 ALTER TABLE `facultyfingerprint`
   ADD CONSTRAINT `facultyfingerprint_ibfk_1` FOREIGN KEY (`facultyID`) REFERENCES `faculty` (`facultyID`);
+
+--
+-- Constraints for table `facultysubject`
+--
+ALTER TABLE `facultysubject`
+  ADD CONSTRAINT `facultysubject_ibfk_1` FOREIGN KEY (`facultyID`) REFERENCES `faculty` (`facultyID`),
+  ADD CONSTRAINT `facultysubject_ibfk_2` FOREIGN KEY (`subjectID`) REFERENCES `subject` (`subjectID`);
 
 --
 -- Constraints for table `facultytimetable`
