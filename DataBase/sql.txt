@@ -11,7 +11,18 @@ ON timetable.slotID = slot.slotID
 where labID=1 and weekID=(select weekID from week where week = 40)
 GROUP BY slot.startTime, slot.endTime;
 
-
+SELECT slot.slotID,slot.startTime, slot.endTime,
+MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday,
+MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday,
+MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday,
+MAX(CASE WHEN dayID = 'thu' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday,
+MAX(CASE WHEN dayID = 'fri' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday,
+MAX(CASE WHEN dayID = 'sat' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday
+FROM timetable
+INNER JOIN slot
+ON timetable.slotID = slot.slotID
+where labID=1 and weekID=(select weekID from week where week = 43)
+GROUP BY slot.startTime, slot.endTime;
 
 SELECT rollcall.rollNo, student.PRN, student.name, student.email,
  MAX(CASE WHEN studentsubject.subjectID = 'BCA1501' THEN concat(' 1 ',' ') END) as XML, 

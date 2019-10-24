@@ -79,8 +79,6 @@ public class editTimetable extends HttpServlet {
                                     + ".not-allowed {cursor: not-allowed;}"
                                     + "</style>");
                             out.print("<script>"
-                                    + "function collp() {"
-                                    + "document.getElementById(\"sidebarCollapse\").click();}collp();"
                                     + "function zeroPad(num) {"
                                     + "var s = num+'';"
                                     + "while (s.length < 2) s = '0' + s;"
@@ -95,7 +93,14 @@ public class editTimetable extends HttpServlet {
                                     + "else{id = id.substr(1);"
                                     + "document.getElementById('batch' + id).selectedIndex=1;"
                                     + "document.getElementById('batch' + id).disabled=false;"
-                                    + "document.getElementById('batch' + id).classList.remove('not-allowed');}}"
+                                    + "document.getElementById('batch' + id).classList.remove('not-allowed');}}");
+                            out.print("function subsdisable(id) {"
+                                    + "var index = document.getElementById(id).selectedIndex;"
+                                    + "if(index == 0)"
+                                    + "{id = id.substr(5);"
+                                    + "document.getElementById('c' + id).selectedIndex=0;}"
+                                    + "document.getElementById('batch' + id).disabled=true;"
+                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                     + "</script>");
                             out.print("<style> th { white-space: nowrap; } </style>");
                             out.print("<table width = 100%>"
@@ -227,8 +232,8 @@ public class editTimetable extends HttpServlet {
                             table += (">" + subs[k] + "</option>");
                         }
 
-                        table += ("</select>");                        
-                        table += ("<select class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
+                        table += ("</select>");
+                        table += ("<select onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
                         if (flag == 0) {
                             table += ("disabled class='not-allowed';");
                         }

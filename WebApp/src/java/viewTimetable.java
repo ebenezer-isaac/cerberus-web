@@ -21,29 +21,6 @@ import javax.servlet.http.HttpSession;
 public class viewTimetable extends HttpServlet {
 
     int no_of_class;
-    String classsubs[][];
-
-    public static boolean isNullOrEmpty(String str) {
-        if (str != null && !str.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
-    public int findclass(String subject) {
-        subject = subject.substring(0, subject.indexOf(" "));
-        for (int i = 0; i < no_of_class; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (isNullOrEmpty(classsubs[i][j])) {
-                       break;
-                }
-                else if(subject.equals(classsubs[i][j])) {
-                    return i;
-                }
-            }
-        }
-        return 0;
-    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -64,12 +41,11 @@ public class viewTimetable extends HttpServlet {
                     request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                     LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                    out.print("<script>"
-                            + "function highlight(classid)"
-                            + "{"
-                            + "alert(classid);"
+                    out.print("<style>"
+                            + ".bold {"
+                            + " font-weight: bold;"
                             + "}"
-                            + "</script>"
+                            + "</style>"
                             + "<table width = 100%>"
                             + "<tr><td width = 33% align='center'><form action='viewTimetable' method='post'>"
                             + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
@@ -104,8 +80,21 @@ public class viewTimetable extends HttpServlet {
                         }
                         out.print("</select>");
                     } catch (ClassNotFoundException | SQLException e) {
-
                     }
+                    out.print("<script>"
+                            + "function highlight(classid)"
+                            + "{"
+                            + "if(classid==0)"
+                            + "{"
+                            + "$(\"div[id^='nolab']\").addClass('bold');"
+                            + "$(\"div[id^='subclass']\").removeClass('bold');"
+                            + "}"
+                            + "else{"
+                            + "$(\"div[id^='nolab']\").removeClass('bold');"
+                            + "$(\"div[id^='subclass']\").removeClass('bold');"
+                            + "$(\"div[id^='subclass\" + classid + \"']\").addClass('bold');"
+                            + "}}"
+                            + "</script>");
                     out.print("<br>");
                     out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
                     out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
@@ -154,12 +143,12 @@ public class viewTimetable extends HttpServlet {
                 timetable += ("<th>Saturday<br>" + sat + "</th>");
                 timetable += ("</tr></thead><tbody>");
                 PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
-                        + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
-                        + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
-                        + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
-                        + "MAX(CASE WHEN dayID = 'thu' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday, "
-                        + "MAX(CASE WHEN dayID = 'fri' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday, "
-                        + "MAX(CASE WHEN dayID = 'sat' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday "
+                        + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Monday, "
+                        + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Tuesday, "
+                        + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Wednesday, "
+                        + "MAX(CASE WHEN dayID = 'thu' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Thursday, "
+                        + "MAX(CASE WHEN dayID = 'fri' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Friday, "
+                        + "MAX(CASE WHEN dayID = 'sat' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Saturday "
                         + "FROM timetable "
                         + "INNER JOIN slot "
                         + "ON timetable.slotID = slot.slotID "
@@ -184,21 +173,6 @@ public class viewTimetable extends HttpServlet {
                     slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
                     no_of_slots++;
                 }
-                PreparedStatement ps8 = con.prepareStatement("SELECT * from slot");
-                ResultSet rs3 = ps8.executeQuery();
-                classsubs = new String[no_of_class][15];
-                while (rs1.next()) {
-                    no_of_slots++;
-                }
-                rs1.first();
-                rs1.previous();
-                slots = new String[no_of_slots][2];
-                no_of_slots = 0;
-                while (rs1.next()) {
-                    slots[no_of_slots][0] = rs1.getString(2).substring(0, 5);
-                    slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
-                    no_of_slots++;
-                }
                 no_of_slots--;
                 int line = 0;
                 lab1.next();
@@ -209,13 +183,17 @@ public class viewTimetable extends HttpServlet {
                         timetable += ("<th>" + slots[line][1] + "</th>");
                         for (int j = 1; j <= 6; j++) {
                             if (lab1.getString(j + 3) != null) {
-                                int cla = findclass(lab1.getString(j + 3));
-                                timetable += ("<td><p id = 'subclass" + cla + "" + temp + "'>" + lab1.getString(j + 3) + " </p></td>");
+                                System.out.println(lab1.getString(j + 3));
+                                String[] arrOfStr = lab1.getString(j + 3).split(",");
+                                System.out.println(arrOfStr[0]);
+                                System.out.println(arrOfStr[1]);
+
+                                timetable += ("<td><div id = 'subclass" + arrOfStr[1] + "" + temp + "'>" + arrOfStr[0] + " </div></td>");
                                 temp++;
                             } else {
-                                timetable += ("<td><p id = 'nolab'>No Lab </p></td>");
+                                timetable += ("<td><div id = 'nolab" + temp + "'>No Lab </div></td>");
                             }
-
+                            temp++;
                         }
                         timetable += ("</tr>");
                         lab1.next();
@@ -224,7 +202,8 @@ public class viewTimetable extends HttpServlet {
                         timetable += ("<th>" + slots[line][0] + "</th>");
                         timetable += ("<th>" + slots[line][1] + "</th>");
                         for (int j = 1; j <= 6; j++) {
-                            timetable += ("<td><p id = 'nolab'>No Lab</p></td>");
+                            timetable += ("<td><div id = 'nolab" + temp + "'>No Lab</div></td>");
+                            temp++;
                         }
                         timetable += ("</tr>");
                     }

@@ -77,6 +77,7 @@ public class AttFunctions {
         }
         return salt.toString();
     }
+
     public static void new_week(int week) {
         int weekid = 0;
         try {
@@ -138,4 +139,39 @@ public class AttFunctions {
         } catch (ClassNotFoundException | SQLException e) {
         }
     }
+
+    public float calpercentage(String prn, String subid, int batchid) {
+        float perc = 0;
+        int labs_conducted = 0;
+        int attendance = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps = con.prepareStatement("select timetable.scheduleID "
+                    + "from timetable"
+                    + "inner join facultytimetable"
+                    + "on timetable.scheduleID = facultytimetable.scheduleID"
+                    + "where timetable.subjectID = ? and timetable.batchID= ?");
+            ps.setString(1, subid);
+            ps.setInt(2, batchid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                labs_conducted++;
+                PreparedStatement ps1 = con.prepareStatement("select PRN "
+                        + "from attendance"
+                        + "where timetable.scheduleID= ?");
+                ps.setString(1, rs.getString(1));
+                ResultSet rs1 = ps1.executeQuery();
+                while (rs1.next()) {
+                    attendance++;
+                }
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        perc = attendance*100/labs_conducted;
+        return perc;
+    }
+
 }
