@@ -30,8 +30,6 @@ public class addStudent extends HttpServlet {
             String photoID = request.getParameter("photo_id");
             this.rawpass = this.prn;
             String pass = AttFunctions.hashIt(this.prn);
-            String hello = "http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + this.prn.substring(0, 4) + "/" + photoID + "_P.JPG";
-            System.out.println(hello);
             URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + this.prn.substring(0, 4) + "/" + photoID + "_P.JPG");
             InputStream inputStream = url.openStream();
             try {
