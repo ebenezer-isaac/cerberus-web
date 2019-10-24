@@ -30,20 +30,27 @@ public class addStudent extends HttpServlet {
             String photoID = request.getParameter("photo_id");
             this.rawpass = this.prn;
             String pass = AttFunctions.hashIt(this.prn);
-            URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + this.prn.substring(0, 4) + "/" + photoID + "_P.JPG");
-            InputStream inputStream = url.openStream();
+            InputStream inputStream = null;
+            try{
+                URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + this.prn.substring(0, 4) + "/" + photoID + "_P.JPG");
+                inputStream = url.openStream();
+            }
+            catch(IOException e){
+                
+            }
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
 
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO `student`(`PRN`, `photo_id` ,`name`, `email`, `password`,`photo`) VALUES (?,?,?,?,?,?)");
+                    PreparedStatement ps = con.prepareStatement("INSERT INTO `student`(`PRN` ,`name`, `email`, `password`,`photo_id`, `photo`) VALUES (?,?,?,?,?,?)");
                     ps.setString(1, this.prn);
-                    ps.setString(2, photoID);
-                    ps.setString(3, this.name);
-                    ps.setString(4, this.email);
-                    ps.setString(5, pass);
+                    ps.setString(2, this.name);
+                    ps.setString(3, this.email);
+                    ps.setString(4, pass);
+                    ps.setString(5, photoID);
                     ps.setBlob(6, inputStream);
                     ps.executeUpdate();
+                    
                     ps = con.prepareStatement("INSERT INTO `rollcall`(`classID`, `rollNo`, `PRN`) VALUES (?,?,?)");
                     ps.setInt(1, seleclass);
                     ps.setInt(2, roll);
