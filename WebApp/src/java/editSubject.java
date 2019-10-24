@@ -51,8 +51,6 @@ public class editSubject extends HttpServlet {
                                     + "while (s.length < 2) s = '0' + s;"
                                     + "return(s);"
                                     + "}"
-                                    + "function myFuntion()"
-                                    + "{alert('hola');}"
                                     + "</script>");
                             out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
                                     + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input type='text' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' placeholder='BCAxxxx'/></td></tr>"

@@ -102,8 +102,6 @@ public class editStudent extends HttpServlet {
                                     + "while (s.length < 2) s = '0' + s;"
                                     + "return(s);"
                                     + "}"
-                                    + "function myFuntion()"
-                                    + "{alert('hola');}"
                                     + "var request;"
                                     + "var id;</script>"
                             );

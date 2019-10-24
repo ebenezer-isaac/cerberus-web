@@ -49,8 +49,6 @@ public class editFaculty extends HttpServlet {
                                     + "while (s.length < 2) s = '0' + s;"
                                     + "return(s);"
                                     + "}"
-                                    + "function myFuntion()"
-                                    + "{alert('hola');}"
                                     + "</script>");
                             out.print("<br><div align='center'><form action='addFaculty' method='post'><table cellspacing='10'>"
                                     + "<tr><td class=\"editSubjectStyle\">Faculty Name</td><td> : </td><td>"

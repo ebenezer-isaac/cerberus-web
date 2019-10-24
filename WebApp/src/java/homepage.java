@@ -207,11 +207,11 @@ public class homepage extends HttpServlet {
                                 }
 
                             }
-                            lab1.next();
+                            lab1.next();/*
                         } else {
                             for (int j = 1; j <= 6; j++) {
                                 labs[l][line] += ("<td align='center'> No Lab <br>&nbsp</td>");
-                            }
+                            }*/
                         }
                         line++;
                     }

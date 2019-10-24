@@ -6,9 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.*;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class viewTimetable extends HttpServlet {
+
+    String[] subs;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,7 +41,12 @@ public class viewTimetable extends HttpServlet {
                     request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                     LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                    out.print("<table width = 100%>"
+                    out.print("<script>"
+                            + "function highlight(classid)"
+                            + "{"
+                            + ""
+                            + "}"
+                            + "<table width = 100%>"
                             + "<tr><td width = 33% align='center'><form action='viewTimetable' method='post'>"
                             + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
                             + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
@@ -54,7 +63,43 @@ public class viewTimetable extends HttpServlet {
                     out.print("><span>Next</span>"
                             + "</button>"
                             + "</form></td>");
-                    out.print("</tr></table><br><br>");
+                    out.print("</tr></table><br>");
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        out.print("<br><div align='center'>"
+                                + "Student Class : ");
+                        out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='highlight(this.selectedIndex)'>");
+                        out.print("<option name='clas' value= '0'>Select Class</option>");
+                        Statement stmt = con.createStatement();
+                        ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                        int no_of_class = 0;
+                        while (rs.next()) {
+                            no_of_class++;
+                            out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
+                        }
+                        out.print("</select>");
+                        PreparedStatement ps1 = con.prepareStatement("select subject.Abbreviation from facultysubject "
+                                + "inner join subject "
+                                + "on subject.subjectID=facultysubject.subjectID "
+                                + "where facultyID = ?");
+                        ps1.setString(1, session.getAttribute("user").toString());
+                        rs = ps1.executeQuery();
+                        int no_of_subs = 0;
+                        while (rs.next()) {
+                            no_of_subs++;
+                        }
+                        subs = new String[no_of_subs];
+                        rs = ps1.executeQuery();
+                        no_of_subs = 0;
+                        while (rs.next()) {
+                            subs[no_of_subs] = rs.getString(1);
+                            no_of_subs++;
+                        }
+                    } catch (ClassNotFoundException | SQLException e) {
+
+                    }
+                    out.print("<br>");
                     out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
                     out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                     out.print(printTimetable(1, week));
