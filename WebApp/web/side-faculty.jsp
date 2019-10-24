@@ -119,7 +119,20 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fas fa-check"></i>&nbsp;&nbsp;Attendance Management</a>
+                            <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-check"></i>&nbsp;&nbsp;Attendance Management</a>
+                            <ul>
+                                <ul class="collapse list-unstyled" id="attSubmenu1">
+                                    <li>
+                                        <a href="/Cerberus/attendance?class=1"><i class="fas fa-dice-one"></i>&nbsp;&nbsp;BCA FY</a>
+                                    </li>
+                                    <li>
+                                        <a href="/Cerberus/attendance?class=2"><i class="fas fa-dice-two"></i>&nbsp;&nbsp;BCA SY</a>
+                                    </li>
+                                    <li>
+                                        <a href="/Cerberus/attendance?class=3"><i class="fas fa-dice-three"></i>&nbsp;&nbsp;BCA TY</a>
+                                    </li>
+                                </ul>
+                            </ul>
                         </li>
                         <li>
                             <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-chalkboard-teacher"></i>&nbsp;&nbsp;Faculty Management</a>
