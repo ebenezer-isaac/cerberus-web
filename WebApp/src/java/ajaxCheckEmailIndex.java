@@ -28,6 +28,7 @@ public class ajaxCheckEmailIndex extends HttpServlet {
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
                         flag = 1;
+                        System.out.println("found");
                     }
                     con.close();
                 }
@@ -38,7 +39,7 @@ public class ajaxCheckEmailIndex extends HttpServlet {
                 if (flag == 0) {
                     out.print("1px solid red");
                 } else {
-                    out.print("1px solid green");
+                    out.print("1px solid #8cc45a");
                 }
             } else {
                 out.print("1px solid red");

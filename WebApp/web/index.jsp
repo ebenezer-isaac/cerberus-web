@@ -66,9 +66,8 @@
             var request;
             function sendInfo()
             {
-                var v = document.vinform.t1.value;
+                var v = document.getElementById('borderchange').value;
                 var url = "ajaxCheckEmailIndex?email=" + v;
-
                 if (window.XMLHttpRequest) {
                     request = new XMLHttpRequest();
                 } else if (window.ActiveXObject) {
@@ -89,7 +88,7 @@
             function getInf() {
                 if (request.readyState == 4) {
                     var val = request.responseText;
-                    document.getElementById('borderchange').style.border = '"'+val'"';
+                    document.getElementById('borderchange').style.border = val;
                 }
             }
         </script> 
