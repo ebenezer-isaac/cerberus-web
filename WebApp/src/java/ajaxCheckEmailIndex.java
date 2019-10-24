@@ -18,29 +18,9 @@ public class ajaxCheckEmailIndex extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String email = request.getParameter("email");
-            int flag = 0;
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                    PreparedStatement ps = con.prepareStatement("select email from student where email=?");
-                    ps.setString(1, email);
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        flag = 1;
-                        System.out.println("found");
-                    }
-                    con.close();
-                }
-            } catch (ClassNotFoundException | SQLException e) {
-            }
-            System.out.println(email);
+String email = request.getParameter("email");
             if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
-                if (flag == 0) {
-                    out.print("1px solid red");
-                } else {
-                    out.print("1px solid #8cc45a");
-                }
+                out.print("1px solid #8cc45a");
             } else {
                 out.print("1px solid red");
             }
