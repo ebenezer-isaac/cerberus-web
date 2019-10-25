@@ -101,21 +101,21 @@
                         <div id='pic' align='center'></div>
                         <li>
                             <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-check"></i>&nbsp;&nbsp;Attendance Management</a>
-                            <ul>
-                                <ul class="collapse list-unstyled" id="attSubmenu1">
-                                    <%
-                                        try {
-                                            Class.forName("com.mysql.cj.jdbc.Driver");
-                                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                            Statement stmt = con.createStatement();
-                                            ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
-                                            while (rs.next()) {
-                                                out.print("<li><a href='/Cerberus/attendance?class=" + rs.getInt(1) + "'><i class='fas fa-dice-one'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
-                                            }
-                                        } catch (Exception e) {
+                            <ul class="collapse list-unstyled" id="attSubmenu1">
+                                <%
+                                    try {
+                                        Class.forName("com.mysql.cj.jdbc.Driver");
+                                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                        Statement stmt = con.createStatement();
+                                        ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                        while (rs.next()) {
+                                            EnglishNumberToWords a = new EnglishNumberToWords();
+                                            String number = a.convert(rs.getInt(1));
+                                            out.print("<li><a href='/Cerberus/attendance?class=" + rs.getInt(1) + "'><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
                                         }
-                                    %>
-                                </ul>
+                                    } catch (Exception e) {
+                                    }
+                                %>
                             </ul>
                         </li>
                         <li>

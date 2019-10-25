@@ -142,8 +142,8 @@ public class editStudent extends HttpServlet {
                                 }
                                 System.out.println(oddeve);
                                 int classcount = 1;
-                                out.print("function getbatch(name){batch=\"");
-                                out.print("<select class='editSelectTimeTable not-allowed' onchange = 'subsdisable(this.id)' name = 'batch\"+name+\"' id = 'batch\"+name+\"' disabled>"
+                                out.print("function getbatch(name,sub){batch=\"");
+                                out.print("<select class='editSelectTimeTable not-allowed' onchange = 'subsdisable(this.id)' name = 'batch\"+sub+\"' id = 'batch\"+name+\"' disabled>"
                                         + "<option name='-' value='-' selected >No Batch</option>");
                                 PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
                                 ResultSet rs4 = ps11.executeQuery();
@@ -162,9 +162,9 @@ public class editStudent extends HttpServlet {
                                     int no_of_sub = 0;
                                     while (rs3.next()) {
                                         no_of_sub += 1;
-                                        out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
+                                        out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub+ ")'></option></td><td>" + rs3.getString(2) + "</td>"
                                                 + "<td>");
-                                        out.print("\"+getbatch(" + no_of_sub + ")+\"");
+                                        out.print("\"+getbatch(" + no_of_sub + ",'" + rs3.getString(1) + "')+\"");
                                         out.print("<td></tr>");
                                     }
                                     out.print("</table>\";");
