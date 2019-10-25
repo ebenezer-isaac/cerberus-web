@@ -96,90 +96,94 @@ public class editStudent extends HttpServlet {
                                     + "else{document.getElementById('batch' + id).selectedIndex=0;"
                                     + "document.getElementById('batch' + id).disabled=true;"
                                     + "document.getElementById('batch' + id).classList.add('not-allowed');}}"
-                                    + "function zeroPad(num)"
-                                    + "{"
-                                    + "var s = num+'';"
-                                    + "while (s.length < 2) s = '0' + s;"
-                                    + "return(s);"
-                                    + "}"
                                     + "var request;"
-                                    + "var id;</script>"
-                            );
-
+                                    + "var id;"
+                                    + "function subsdisable(id) {"
+                                    + "var index = document.getElementById(id).selectedIndex;"
+                                    + "if(index == 0)"
+                                    + "{id = id.substr(5);"
+                                    + "document.getElementById('subject' + id).checked = false;}"
+                                    + "document.getElementById('batch' + id).disabled=true;"
+                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}</script>");
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
-                                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                                    out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
-                                            + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
-                                    Statement stmt = con.createStatement();
-                                    out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub();'>");
-                                    out.print("<option name='clas' value= '0'>Select Class</option>");
-                                    ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                                    int no_of_class = 0;
-                                    while (rs.next()) {
-                                        no_of_class++;
-                                        out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
-                                    }
-                                    Date d = new Date();
-                                    int year = d.getYear() + 1900;
-                                    out.print("</select>");
-                                    out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
-                                            + "<tr><td class=\"editSubjectStyle\">MSU ID</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' class=\"editSubjectForm\" placeholder='D" + String.valueOf(year).substring(2) + "CJxxxxxxx'/></td></tr> "
-                                            + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
-                                            + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
-                                            + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                            + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
-                                    out.print("<script>");
-                                    rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                                    PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
-                                    st.setInt(1, Integer.parseInt(session.getAttribute("week").toString()));
-                                    ResultSet rs2 = st.executeQuery();
-                                    int oddeve = 0;
-                                    while (rs2.next()) {
-                                        oddeve = (rs2.getInt(1) % 2);
-                                    }
-                                    int classcount = 1;
-                                    out.print("function getbatch(name){batch=\"");
-                                    out.print("<select class='editSelectTimeTable not-allowed' name = 'batch\"+name+\"' id = 'batch\"+name+\"' disabled>"
-                                            + "<option name='-' value='-' selected >No Batch</option>");
-                                    PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
-                                    ResultSet rs4 = ps11.executeQuery();
-                                    while (rs4.next()) {
-                                        out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(2) + "</option>");
-                                    }
-
-                                    out.print("</select>\";return batch;}");
-                                    while (rs.next()) {
-                                        out.print("var class" + classcount + ";");
-                                        int sem = AttFunctions.getSem(oddeve, classcount);
-                                        PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
-                                        ps3.setInt(1, sem);
-                                        ResultSet rs3 = ps3.executeQuery();
-                                        out.print("class" + classcount + "=\"<table align='center'>");
-                                        int no_of_sub = 0;
-                                        while (rs3.next()) {
-                                            no_of_sub += 1;
-                                            out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
-                                                    + "<td>");
-                                            out.print("\"+getbatch(" + no_of_sub + ")+\"");
-                                            out.print("<td></tr>");
-                                        }
-                                        out.print("</table>\";");
-                                        classcount++;
-                                    }
-                                    classcount--;
-                                    out.print("</script><script>function dissub()"
-                                            + "{var index = document.getElementById('clas').selectedIndex;"
-                                            + "if(index==0)"
-                                            + "{document.getElementById('subs').innerHTML = ' ';}");
-                                    for (int i = 1; i <= classcount; i++) {
-                                        out.print("else if (index==" + i + ")"
-                                                + "{document.getElementById('subs').innerHTML = class" + i + "}");
-                                    }
-                                    out.print("}</script>");
-                                    con.close();
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
+                                        + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
+                                Statement stmt = con.createStatement();
+                                out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub();'>");
+                                out.print("<option name='clas' value= '0'>Select Class</option>");
+                                ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                                int no_of_class = 0;
+                                while (rs.next()) {
+                                    no_of_class++;
+                                    out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
                                 }
+                                Date d = new Date();
+                                int year = d.getYear() + 1900;
+                                out.print("</select>");
+                                System.out.println("hello");
+                                out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
+                                        + "<tr><td class=\"editSubjectStyle\">MSU ID</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' class=\"editSubjectForm\" placeholder='D" + String.valueOf(year).substring(2) + "CJxxxxxxx'/></td></tr> "
+                                        + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
+                                        + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                        + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
+                                        + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
+                                out.print("<script>");
+                                System.out.println("hello");
+                                rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                                PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
+                                st.setInt(1, Integer.parseInt(session.getAttribute("week").toString()));
+                                ResultSet rs2 = st.executeQuery();
+                                int oddeve = 0;
+                                System.out.println(oddeve);
+                                while (rs2.next()) {
+                                    oddeve = (rs2.getInt(1) % 2);
+                                }
+                                System.out.println(oddeve);
+                                int classcount = 1;
+                                out.print("function getbatch(name){batch=\"");
+                                out.print("<select class='editSelectTimeTable not-allowed' onchange = 'subsdisable(this.id)' name = 'batch\"+name+\"' id = 'batch\"+name+\"' disabled>"
+                                        + "<option name='-' value='-' selected >No Batch</option>");
+                                PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
+                                ResultSet rs4 = ps11.executeQuery();
+                                while (rs4.next()) {
+                                    out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(2) + "</option>");
+                                }
+                                System.out.println("batch functions");
+                                out.print("</select>\";return batch;}");
+                                while (rs.next()) {
+                                    out.print("var class" + classcount + ";");
+                                    int sem = AttFunctions.getSem(oddeve, classcount);
+                                    PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
+                                    ps3.setInt(1, sem);
+                                    ResultSet rs3 = ps3.executeQuery();
+                                    out.print("class" + classcount + "=\"<table align='center'>");
+                                    int no_of_sub = 0;
+                                    while (rs3.next()) {
+                                        no_of_sub += 1;
+                                        out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
+                                                + "<td>");
+                                        out.print("\"+getbatch(" + no_of_sub + ")+\"");
+                                        out.print("<td></tr>");
+                                    }
+                                    out.print("</table>\";");
+                                    classcount++;
+                                }
+                                classcount--;
+                                out.print("</script><script>function dissub()"
+                                        + "{var index = document.getElementById('clas').selectedIndex;"
+                                        + "if(index==0)"
+                                        + "{document.getElementById('subs').innerHTML = ' ';}");
+                                for (int i = 1; i <= classcount; i++) {
+                                    out.print("else if (index==" + i + ")"
+                                            + "{document.getElementById('subs').innerHTML = class" + i + "}");
+                                }
+                                out.print("}</script>");
+                                con.close();
+
                             } catch (SQLException e) {
+                                e.printStackTrace();
                             }
                         } else if (flow.equals("del")) {
                             out.print("<body onload='myFunction()'>");

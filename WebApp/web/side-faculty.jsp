@@ -1,5 +1,6 @@
 <%@page import="javax.xml.bind.DatatypeConverter"%>
 <%@page import="java.sql.*"%>
+<%@page import="numbertowords.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
     <head>
@@ -18,7 +19,52 @@
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-
+        <script>
+            window.onload = function () {
+                var labels = document.getElementsByTagName('li');
+                for (var i = 0; i < labels.length; i++) {
+                    disableSelection(labels[i]);
+                }
+            };
+            function disableSelection(element) {
+                if (typeof element.onselectstart != 'undefined') {
+                    element.onselectstart = function () {
+                        return false;
+                    };
+                } else if (typeof element.style.MozUserSelect != 'undefined') {
+                    element.style.MozUserSelect = 'none';
+                } else {
+                    element.onmousedown = function () {
+                        return false;
+                    };
+                }
+            }
+        </script>
+        <script>
+            window.onload = function () {
+                var labels = document.getElementsByTagName('ul');
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.add("unselectable");
+                }
+                var labels = document.getElementsByTagName('body');
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.add("unselectable");
+                }
+            };
+        </script>
+        <style>
+            img {
+                pointer-events: none;
+            }
+            .unselectable {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
         <style>
             @media screen and (max-width: 1000px) {
                 div.example {
@@ -51,8 +97,27 @@
                 <!-- Sidebar --> 
                 <nav id="sidebar" >
                     <ul class="list-unstyled components">
-                        <p align="center"><br><a href="/Cerberus/homepage">FACULTY PANEL</a></p>
+                        <p align="center"><br><a href="/Cerberus/homepage"><i class="fas fa-home"></i>&nbsp;&nbsp;FACULTY PANEL</a></p>
                         <div id='pic' align='center'></div>
+                        <li>
+                            <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-check"></i>&nbsp;&nbsp;Attendance Management</a>
+                            <ul>
+                                <ul class="collapse list-unstyled" id="attSubmenu1">
+                                    <%
+                                        try {
+                                            Class.forName("com.mysql.cj.jdbc.Driver");
+                                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                            Statement stmt = con.createStatement();
+                                            ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                            while (rs.next()) {
+                                                out.print("<li><a href='/Cerberus/attendance?class=" + rs.getInt(1) + "'><i class='fas fa-dice-one'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                    %>
+                                </ul>
+                            </ul>
+                        </li>
                         <li>
                             <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;Timetable Management</a>
                             <ul class="collapse list-unstyled" id="homeSubmenu">
@@ -63,31 +128,22 @@
                                     <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
                                     <ul>
                                         <ul class="collapse list-unstyled" id="homeSubmenu1">
-                                            <li>
-                                                <a href="/Cerberus/editTimetable?lab=1"><i class="fas fa-dice-one"></i>&nbsp;&nbsp;Lab 1</a>
-                                            </li>
-                                            <li>
-                                                <a href="/Cerberus/editTimetable?lab=2"><i class="fas fa-dice-two"></i>&nbsp;&nbsp;Lab 2</a>
-                                            </li>
-                                            <li>
-                                                <a href="/Cerberus/editTimetable?lab=3"><i class="fas fa-dice-three"></i>&nbsp;&nbsp;Lab 3</a>
-                                            </li>
+                                            <%
+                                                try {
+                                                    Class.forName("com.mysql.cj.jdbc.Driver");
+                                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                                    Statement stmt = con.createStatement();
+                                                    ResultSet rs = stmt.executeQuery("SELECT labID, name FROM `lab` ORDER BY `labID` ASC");
+                                                    while (rs.next()) {
+                                                        EnglishNumberToWords a = new EnglishNumberToWords();
+                                                        String number = a.convert(rs.getInt(1));
+                                                        out.print("<li><a href='/Cerberus/editTimetable?lab=" + rs.getInt(1) + "'><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                                    }
+                                                } catch (Exception e) {
+                                                }
+                                            %>
                                         </ul>
                                     </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#subSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Subject Management</a>
-                            <ul class="collapse list-unstyled" id="subSubmenu">
-                                <li>
-                                    <a href="/Cerberus/viewSubject"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a>
-                                </li>
-                                <li>
-                                    <a href="/Cerberus/editSubject?flow=add"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a>
-                                </li>
-                                <li>
-                                    <a href="/Cerberus/editSubject?flow=del"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a>
                                 </li>
                             </ul>
                         </li>
@@ -104,34 +160,23 @@
                                     <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Student Data</a>
                                     <ul>
                                         <ul class="collapse list-unstyled" id="stuSubmenu1">
-                                            <li>
-                                                <a href="/Cerberus/editStudDetails?class=1"><i class="fas fa-dice-one"></i>&nbsp;&nbsp;BCA FY</a>
-                                            </li>
-                                            <li>
-                                                <a href="/Cerberus/editStudDetails?class=2"><i class="fas fa-dice-two"></i>&nbsp;&nbsp;BCA SY</a>
-                                            </li>
-                                            <li>
-                                                <a href="/Cerberus/editStudDetails?class=3"><i class="fas fa-dice-three"></i>&nbsp;&nbsp;BCA TY</a>
-                                            </li>
+                                            <%
+                                                try {
+                                                    Class.forName("com.mysql.cj.jdbc.Driver");
+                                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                                    Statement stmt = con.createStatement();
+                                                    ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                                    while (rs.next()) {
+                                                        EnglishNumberToWords a = new EnglishNumberToWords();
+                                                        String number = a.convert(rs.getInt(1));
+                                                        out.print("<li><a href='/Cerberus/editStudDetails?class=" + rs.getInt(1) + "'><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                                    }
+                                                } catch (Exception e) {
+                                                }
+                                            %>
                                         </ul>
                                     </ul>
                                 </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-check"></i>&nbsp;&nbsp;Attendance Management</a>
-                            <ul>
-                                <ul class="collapse list-unstyled" id="attSubmenu1">
-                                    <li>
-                                        <a href="/Cerberus/attendance?class=1"><i class="fas fa-dice-one"></i>&nbsp;&nbsp;BCA FY</a>
-                                    </li>
-                                    <li>
-                                        <a href="/Cerberus/attendance?class=2"><i class="fas fa-dice-two"></i>&nbsp;&nbsp;BCA SY</a>
-                                    </li>
-                                    <li>
-                                        <a href="/Cerberus/attendance?class=3"><i class="fas fa-dice-three"></i>&nbsp;&nbsp;BCA TY</a>
-                                    </li>
-                                </ul>
                             </ul>
                         </li>
                         <li>
@@ -146,10 +191,22 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fas fa-address-card"></i>&nbsp;&nbsp;Student Progression</a>
+                            <a href="#subSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Subject Management</a>
+                            <ul class="collapse list-unstyled" id="subSubmenu">
+
+                                <li>
+                                    <a href="/Cerberus/viewSubject"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a>
+                                </li>
+                                <li>
+                                    <a href="/Cerberus/editSubject?flow=add"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a>
+                                </li>
+                                <li>
+                                    <a href="/Cerberus/editSubject?flow=del"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <a href="editProfilePage.html"><i class="fas fa-address-card"></i>&nbsp;&nbsp;Profile</a>
+                            <a href="#"><i class="fas fa-address-card"></i>&nbsp;&nbsp;Student Progression</a>
                         </li>
                     </ul>
                 </nav>

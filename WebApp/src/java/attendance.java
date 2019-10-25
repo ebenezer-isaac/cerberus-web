@@ -56,7 +56,7 @@ public class attendance extends HttpServlet {
                         index = 0;
                         String sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as " + subs[index][0];
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as " + subs[index][1];
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -95,7 +95,7 @@ public class attendance extends HttpServlet {
                                 for (int i = 4; i <= cols; i++) {
                                     out.print("<td>");
                                     if (rs.getString(i) != null) {
-                                        out.print(AttFunctions.calpercentage(prn, rs.getString(i)));
+                                        out.print(String.format("%.02f", AttFunctions.calpercentage(prn, rs.getString(i)))+"%");
                                     } else {
                                         out.print("NA");
                                     }

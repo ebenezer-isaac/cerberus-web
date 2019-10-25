@@ -141,41 +141,20 @@ public class AttFunctions {
     }
 
     public static float calpercentage(String prn, String subid) {
-        String perc = "";
-        System.out.println(prn);
-        System.out.println(subid);
+        prn = prn.trim();
+        subid = subid.trim();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("select ((count(attendance.scheduleID)*100)/count(facultytimetable.scheduleID)) "
-                    + "from student "
-                    + "inner join rollcall "
-                    + "on student.PRN = rollcall.PRN "
-                    + "inner join attendance "
-                    + "on attendance.PRN = student.PRN "
-                    + "inner join studentsubject "
-                    + "on studentsubject.PRN = student.PRN "
-                    + "inner join timetable "
-                    + "on timetable.scheduleID = attendance.scheduleID "
-                    + "inner join facultytimetable "
-                    + "on timetable.scheduleID = facultytimetable.scheduleID "
-                    + "inner join subject "
-                    + "on studentsubject.subjectID = subject.subjectID "
-                    + "where timetable.subjectID=studentsubject.subjectID "
-                    + "and facultytimetable.scheduleID = timetable.scheduleID "
-                    + "and timetable.subjectID=? "
-                    + " and student.PRN = ?");
+            PreparedStatement ps = con.prepareStatement("select ((count(attendance.scheduleID)*100)/count(facultytimetable.scheduleID)) from timetable inner join attendance on attendance.scheduleID = timetable.scheduleID inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and attendance.PRN = ?");
             ps.setString(1, subid);
             ps.setString(2, prn);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                System.out.println("hello");
-                perc = rs.getString(1);
+                return rs.getFloat(1);
             }
-            System.out.println(perc);
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
         }
         return 0;
     }

@@ -62,6 +62,19 @@
                 }
             }
         </script>
+        <style>
+            img {
+                pointer-events: none;
+            }
+            .unselectable {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
         <script>
             var request;
             function sendInfo()
@@ -93,7 +106,7 @@
             }
         </script> 
     </head>
-    <body onload="sessionstart()">
+    <body onload="sessionstart()" class="unselectable">
 
         <div class="main_body">
             <div class="container custom_container">
