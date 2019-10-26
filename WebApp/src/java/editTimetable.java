@@ -193,97 +193,110 @@ public class editTimetable extends HttpServlet {
             ps.setInt(1, labID);
             ps.setInt(2, week);
             ResultSet rs = ps.executeQuery();
-            PreparedStatement ps1 = con.prepareStatement("SELECT count(slotID) from slot");
-            ResultSet rs1 = ps1.executeQuery();
+            PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
+            ResultSet rs1 = ps7.executeQuery();
+            String slots[][];
             int no_of_slots = 0;
             while (rs1.next()) {
-                no_of_slots = rs1.getInt(1);
+                no_of_slots++;
             }
-            int line = 1;
-            rs.next();
-            while (line <= no_of_slots) {
-                if (rs.getInt(1) == line) {
-                    table += ("<tr> ");
-                    table += ("<th><input type='number' class=\"editTimeTimeTable\" name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
-                    table += (" : <input type='number'  class=\"editTimeTimeTable\" name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
-                    table += ("<th><input type='number'  class=\"editTimeTimeTable\" name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
-                    table += (" : <input type='number'  class=\"editTimeTimeTable\" name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
-                    for (int j = 1; j <= 6; j++) {
-                        table += ("<td align='center'>");
-                        table += ("<select class=\"editSelectTimeTable\" name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "'  onchange = 'batchdisable(this.id)'>");
-                        table += ("<option name='Sub' value='-'");
-                        String[] arrOfsub = null;
-                        int flag;
-                        if (rs.getString(j + 3) == null) {
-                            table += ("selected ");
-                            flag = 0;
-                        } else {
-                            arrOfsub = rs.getString(j + 3).split(" - ");
-                            flag = 1;
-                        }
-                        table += (">No Lab</option>");
-                        for (int k = 0; k <= no_of_subs; k++) {
-                            table += ("<option name='Sub' value='" + subs[k] + "' ");
-                            if (flag == 1) {
-                                if (subs[k].equals(arrOfsub[0])) {
-                                    table += ("selected ");
-                                }
-                            }
-                            table += (">" + subs[k] + "</option>");
-                        }
-
-                        table += ("</select>");
-                        table += ("<select onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "'");
-                        if (flag == 0) {
-                            table += ("disabled class='not-allowed';");
-                        }
-                        table += ("><option name='-' value='-'");
-                        if (flag == 0) {
-                            table += ("selected");
-                        }
-                        table += (">No Batch</option>");
-                        PreparedStatement ps11 = con.prepareStatement("Select name from batch");
-                        ResultSet rs3 = ps11.executeQuery();
-                        while (rs3.next()) {
-                            table += ("<option name='" + rs3.getString(1) + "' value='" + rs3.getString(1) + "'");
-                            if (flag == 1) {
-                                if (rs3.getString(1).equals(arrOfsub[1])) {
-                                    table += ("selected ");
-                                }
-                            }
-                            table += (">" + rs3.getString(1) + "</option>");
-                        }
-                        table += ("</select>");
-                        table += ("</td>");
+            rs1.first();
+            rs1.previous();
+            slots = new String[no_of_slots][2];
+            no_of_slots = 0;
+            while (rs1.next()) {
+                slots[no_of_slots][0] = rs1.getString(2).substring(0, 5);
+                slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
+                no_of_slots++;
+            }
+            no_of_slots--;
+            String lines[] = new String[(no_of_slots + 2)];
+            for (int y = 0; y <= no_of_slots; y++) {
+                lines[y] = "";
+            }
+            while (rs.next()) {
+                lines[rs.getInt(1) - 1] = ("<tr> ");
+                lines[rs.getInt(1) - 1] += ("<th><input type='number' class=\"editTimeTimeTable\" name='ts" + (rs.getInt(1) - 1) + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
+                lines[rs.getInt(1) - 1] += (" : <input type='number'  class=\"editTimeTimeTable\" name='ts" + (rs.getInt(1) - 1) + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
+                lines[rs.getInt(1) - 1] += ("<th><input type='number'  class=\"editTimeTimeTable\" name='te" + (rs.getInt(1) - 1) + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
+                lines[rs.getInt(1) - 1] += (" : <input type='number'  class=\"editTimeTimeTable\" name='te" + (rs.getInt(1) - 1) + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
+                for (int j = 1; j <= 6; j++) {
+                    lines[rs.getInt(1) - 1] += ("<td align='center'>");
+                    lines[rs.getInt(1) - 1] += ("<select class=\"editSelectTimeTable\" name = 'c" + (rs.getInt(1) - 1) + "" + j + "' id = 'c" + (rs.getInt(1) - 1)+ "" + j + "'  onchange = 'batchdisable(this.id)'>");
+                    lines[rs.getInt(1) - 1] += ("<option name='Sub' value='-'");
+                    String[] arrOfsub = null;
+                    int flag;
+                    if (rs.getString(j + 3) == null) {
+                        lines[rs.getInt(1) - 1] += ("selected ");
+                        flag = 0;
+                    } else {
+                        arrOfsub = rs.getString(j + 3).split(" - ");
+                        flag = 1;
                     }
-                    table += ("</tr>");
-                    rs.next();
-                } else {
-                    table += ("<tr> ");
-                    table += ("<th><input type='number' style='border:1px solid ;' name='ts" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
-                    table += (" : <input type='number'  style='border:1px solid ;' name='ts" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
-                    table += ("<th><input type='number'  style='border:1px solid ;' name='te" + line + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
-                    table += (" : <input type='number'  style='border:1px solid ;' name='te" + line + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
+                    lines[rs.getInt(1) - 1] += (">No Lab</option>");
+                    for (int k = 0; k <= no_of_subs; k++) {
+                        lines[rs.getInt(1) - 1] += ("<option name='Sub' value='" + subs[k] + "' ");
+                        if (flag == 1) {
+                            if (subs[k].equals(arrOfsub[0])) {
+                                lines[rs.getInt(1) - 1] += ("selected ");
+                            }
+                        }
+                        lines[rs.getInt(1) - 1] += (">" + subs[k] + "</option>");
+                    }
+
+                    lines[rs.getInt(1) - 1] += ("</select>");
+                    lines[rs.getInt(1) - 1] += ("<select onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + (rs.getInt(1) - 1) + "" + j + "' id = 'batch" + (rs.getInt(1) - 1) + "" + j + "'");
+                    if (flag == 0) {
+                        lines[rs.getInt(1) - 1] += ("disabled class='not-allowed';");
+                    }
+                    lines[rs.getInt(1) - 1] += ("><option name='-' value='-'");
+                    if (flag == 0) {
+                        lines[rs.getInt(1) - 1] += ("selected");
+                    }
+                    lines[rs.getInt(1) - 1] += (">No Batch</option>");
+                    PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                    ResultSet rs3 = ps11.executeQuery();
+                    while (rs3.next()) {
+                        lines[rs.getInt(1) - 1] += ("<option name='" + rs3.getString(1) + "' value='" + rs3.getString(1) + "'");
+                        if (flag == 1) {
+                            if (rs3.getString(1).equals(arrOfsub[1])) {
+                                lines[rs.getInt(1) - 1] += ("selected ");
+                            }
+                        }
+                        lines[rs.getInt(1) - 1] += (">" + rs3.getString(1) + "</option>");
+                    }
+                    lines[rs.getInt(1) - 1] += ("</select>");
+                    lines[rs.getInt(1) - 1] += ("</td>");
+                }
+                lines[rs.getInt(1) - 1] += ("</tr>");
+            }
+            for (int y = 0; y <= no_of_slots; y++) {
+                if (lines[y].equals("")) {
+                    lines[y] = ("<tr> ");
+                    lines[y] += ("<th><input type='number' style='border:1px solid ;' name='ts" + y + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][0].substring(0, 2))) + "'>");
+                    lines[y] += (" : <input type='number'  style='border:1px solid ;' name='ts" + y + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][0].substring(3, 5))) + "'></th>");
+                    lines[y] += ("<th><input type='number'  style='border:1px solid ;' name='te" + y + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][1].substring(0, 2))) + "'>");
+                    lines[y] += (" : <input type='number'  style='border:1px solid ;' name='te" + y + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][1].substring(3, 5))) + "'></th>");
                     for (int j = 1; j <= 6; j++) {
-                        table += ("<td align='center'>");
-                        table += ("<select class=\"editSelectTimeTable\" name = 'c" + line + "" + j + "' id = 'c" + line + "" + j + "' onchange = 'batchdisable(this.id)'>");
-                        table += ("<option name='Sub' value='-' selected>No Lab</option>");
+                        lines[y] += ("<td align='center'>");
+                        lines[y] += ("<select class=\"editSelectTimeTable\" name = 'c" + y + "" + j + "' id = 'c" + y + "" + j + "' onchange = 'batchdisable(this.id)'>");
+                        lines[y] += ("<option name='Sub' value='-' selected>No Lab</option>");
                         for (int k = 0; k <= no_of_subs; k++) {
-                            table += ("<option name='Sub' value='" + subs[k] + "'>" + subs[k] + "</option>");
+                            lines[y] += ("<option name='Sub' value='" + subs[k] + "'>" + subs[k] + "</option>");
                         }
                         String batch[] = {"Batch A", "Batch B", "Batch C"};
-                        table += ("</select>");
-                        table += ("<select class=\"editSelectTimeTable\" name = 'batch" + line + "" + j + "' id = 'batch" + line + "" + j + "' disabled class='not-allowed'>");
-                        table += ("<option name='-' value='-' selected>No Batch</option>");
+                        lines[y] += ("</select>");
+                        lines[y] += ("<select class=\"editSelectTimeTable\" name = 'batch" + y+ "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
+                        lines[y] += ("<option name='-' value='-' selected>No Batch</option>");
                         for (int x = 0; x <= batch.length - 1; x++) {
-                            table += ("<option name='A' value='" + batch[x] + "'>" + batch[x] + "</option>");
+                            lines[y] += ("<option name='A' value='" + batch[x] + "'>" + batch[x] + "</option>");
                         }
-                        table += ("</select>");
-                        table += ("</td>");
+                        lines[y] += ("</select>");
+                        lines[y] += ("</td>");
                     }
-                    table += ("</tr>");
+                    lines[y] += ("</tr>");
                 }
-                line++;
+                table += lines[y];
             }
             table += ("</tbody></table><br><br>");
             con.close();
