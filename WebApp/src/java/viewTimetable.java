@@ -182,7 +182,7 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            timetable += ("<table class=\"table table-striped table-bordered\"><thead>");
+            timetable += ("<table class=\"table table-hover table-bordered\"><thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
             timetable += ("<tr align = center>");
             timetable += ("<th>Start Time</th>");
             timetable += ("<th>End Time</th>");

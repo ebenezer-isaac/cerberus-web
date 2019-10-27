@@ -10,6 +10,7 @@
         <title>Cerberus</title>
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
         <link rel="icon" href="images/logo-circle.png" type="image/gif">
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <!-- Our Custom CSS -->
         <link rel="stylesheet" href="css/style2.css">
@@ -89,7 +90,28 @@
                     top: 50%;
                     left: 50%;
                     transform: translate(-50%, -50%);
-                } 
+                }
+            </style>
+            <style>
+                /* width */
+                ::-webkit-scrollbar {
+                    width: 7.5px;
+                }
+
+                /* Track */
+                ::-webkit-scrollbar-track {
+                    background: #f1f1f1; 
+                }
+
+                /* Handle */
+                ::-webkit-scrollbar-thumb {
+                    background: #888; 
+                }
+
+                /* Handle on hover */
+                ::-webkit-scrollbar-thumb:hover {
+                    background: #555; 
+                }
             </style>
         </head>
         <body>
@@ -211,20 +233,22 @@
                     </ul>
                 </nav>
                 <div id="content">
-                    <nav class="navbar navbar-expand bg-light">
-                        <div class="container example">
-                            <button type="button" id="sidebarCollapse" style="background-color:#000000;" class="btn">
-                                <font style="color: #ffffff"><i class="fas fa-bars"></i></font>
-                                <img src="images/logo-circle.png"  height="42" width="42">
-                            </button>
+                    <div class="container-fluid">
+                        <nav class="navbar navbar-expand bg-light">
+                            <div class="container example">
+                                <button type="button" id="sidebarCollapse" style="background-color:#000000; width: 110px;" class="btn">
+                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font>&nbsp;&nbsp;&nbsp;
+                                    <img src="images/logo-circle.png"  height="26px" width="26px">
+                                </button>
 
-                            <font class="toBeReplaced" style="font-size: 17px; color: #000000; font-family: DPSDbeyond;"> Cerberus Attendance Management System </font>
+                                <font class="toBeReplaced" style="font-size: 17px; color: #000000; font-family: DPSDbeyond;"> Cerberus Attendance Management System </font>
 
-                            <a class="nav-link" href="/Cerberus/signout"><button type="button" style="background-color:#000000;" class="btn"><span><font style="color: #ffffff">Sign out</font></span>
-                                    <font style="color: #ffffff"><i class="fas fa-door-open"></i></font>
-                                </button></a>
+                                <a href="/Cerberus/signout"><button type="button" style="background-color:#000000;" class="btn"><span><font style="color: #ffffff">Sign out</font></span>
+                                        <font style="color: #ffffff"><i class="fas fa-door-open"></i></font>
+                                    </button></a>
 
-                        </div>
+                            </div>
+                    </div>
                     </nav>
 
                     <%

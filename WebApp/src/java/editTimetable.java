@@ -127,6 +127,7 @@ public class editTimetable extends HttpServlet {
                             LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                             LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                             out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                            out.print("<div class=\"table-responsive\">");
                             out.print("<form action='saveTimetable' method='post' align='right'>");
                             out.print(printTimetable(labid));
                             out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
@@ -134,6 +135,7 @@ public class editTimetable extends HttpServlet {
                                     + "<span>Save</span>"
                                     + "</button>");
                             out.print("</form>");
+                            out.print("</div>");
                             con.close();
                         }
                     } catch (ClassNotFoundException | SQLException e) {
@@ -163,7 +165,7 @@ public class editTimetable extends HttpServlet {
         LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
 
         String table = "";
-        table += ("<table class=\"table table-striped table-bordered\"> <thead>");
+        table += ("<table class=\"table table-hover table-bordered\"> <thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
         table += ("<tr align = center>");
         table += ("<th style=\"white-space:nowrap;\" >Start_Time</th>");
         table += ("<th>End_Time</th>");
