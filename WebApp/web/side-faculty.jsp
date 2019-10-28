@@ -234,16 +234,16 @@
                 </nav>
                 <div id="content">
                     <div class="container-fluid">
-                        <nav class="navbar navbar-expand bg-light">
+                        <nav class="navbar navbar-expand bg-light custom-navbar">
                             <div class="container example">
-                                <button type="button" id="sidebarCollapse" style="background-color:#000000; width: 110px;" class="btn">
-                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font>&nbsp;&nbsp;&nbsp;
+                                <button type="button" id="sidebarCollapse" style="background-color:#000000; width: 93px; font-size: 12px; height: 34px; padding: 1px;" class="btn">
+                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <img src="images/logo-circle.png"  height="26px" width="26px">
                                 </button>
 
                                 <font class="toBeReplaced" style="font-size: 17px; color: #000000; font-family: DPSDbeyond;"> Cerberus Attendance Management System </font>
 
-                                <a href="/Cerberus/signout"><button type="button" style="background-color:#000000;" class="btn"><span><font style="color: #ffffff">Sign out</font></span>
+                                <a href="/Cerberus/signout"><button type="button" style="background-color:#000000; font-size: 12px;" class="btn"><span><font style="color: #ffffff">Sign out</font></span>
                                         <font style="color: #ffffff"><i class="fas fa-door-open"></i></font>
                                     </button></a>
 

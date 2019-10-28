@@ -182,6 +182,7 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            timetable += ("<div class=\"table-responsive\">");
             timetable += ("<table class=\"table table-hover table-bordered\"><thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
             timetable += ("<tr align = center>");
             timetable += ("<th>Start Time</th>");
@@ -264,7 +265,7 @@ public class viewTimetable extends HttpServlet {
                 }
                 timetable += lines[y];
             }
-            timetable += ("</tbody></table><br><br>");
+            timetable += ("</tbody></table></div><br><br>");
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
