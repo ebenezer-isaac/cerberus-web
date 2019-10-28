@@ -25,7 +25,7 @@ a:focus {
 }
 
 .navbar {
-    padding: 5.5px 20px;
+    padding: 7px 20px;
     border: none;
     margin-bottom: 40px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
@@ -128,7 +128,7 @@ a.article:hover {
 ----------------------------------------------------- */
 
 #content {
-    width: 80.7%;
+    width: 100%;
     padding: 20px 20px;
     min-height: 100vh;
     transition: all 0.3s;
