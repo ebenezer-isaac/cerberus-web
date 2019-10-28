@@ -109,10 +109,6 @@
         <servlet-class>delStudent</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewServlet</servlet-name>
-        <servlet-class>NewServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ajaxCheckEmailIndex</servlet-name>
         <servlet-class>ajaxCheckEmailIndex</servlet-class>
     </servlet>
@@ -235,10 +231,6 @@
     <servlet-mapping>
         <servlet-name>delStudent</servlet-name>
         <url-pattern>/delStudent</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>NewServlet</servlet-name>
-        <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ajaxCheckEmailIndex</servlet-name>

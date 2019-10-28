@@ -38,16 +38,15 @@ SELECT rollcall.rollNo, student.PRN, student.name, student.email,
  in (select rollcall.PRN from rollcall where rollcall.classID = 3) 
  GROUP BY studentsubject.PRN
  ORDER by rollcall.rollNo
- 
- 
- 
-SELECT count(facultytimetable.scheduleID)
-from facultytimetable 
-INNER JOIN timetable
-on timetable.scheduleID=facultytimetable.scheduleID
-where timetable.subjectID = 'BCA1538'
 
-
+select subject.subjectID, subject.Abbreviation , 
+count(CASE WHEN timetable.batchID = '1' THEN '' END) as 'Batch 1', 
+count(CASE WHEN timetable.batchID = '2' THEN '' END) as 'Batch 2', 
+count(CASE WHEN timetable.batchID = '3' THEN '' END) as 'Batch 3' 
+from timetable 
+inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID 
+inner join subject on timetable.subjectID = subject.subjectID 
+where subject.subjectID = 'BCA1501'
 
 SELECT facultytimetable.scheduleID, 
 (select datedata.date from datedata where attendance.dateID=datedata.dateID) as date, 
@@ -64,8 +63,6 @@ INNER JOIN attendance
 on attendance.scheduleID=facultytimetable.scheduleID
 where timetable.subjectID = 'BCA1538'
 
-
-
 INSERT INTO `faculty` values (1,'Mr.Krishnanad','ebenezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (2,'Mr.Ksitij','asdfasdfasdf@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (3,'Mrs.Pooja','esdfgdgff@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
@@ -79,8 +76,6 @@ INSERT INTO `faculty` values (10,'Mrs.Hetal','ebenezxcfzerv99@gmail.com','de7866
 INSERT INTO `faculty` values (11,'Ms.Divya','ebendezdfcsdferv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (12,'Ms.Riya','ebenezsdrerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
 INSERT INTO `faculty` values (13,'Ms.Ankita','ebeasdfnqwerdezerv99@gmail.com','de786632264b9f3a79a7ec15c2460dd079554f0b0ad377cb8408edeb26947eec');
-
-
 
 INSERT INTO `timetable` VALUES (1,1,1,"BCA1538",1,1,'mon');
 INSERT INTO `timetable` VALUES (2,2,1,"BCA1301",1,1,'mon');

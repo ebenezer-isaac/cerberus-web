@@ -56,8 +56,9 @@ public class saveTimetable extends HttpServlet {
                                 rd.forward(request, response);
 
                             }
-                            for (int i = 1; i <= 5; i++) {
+                            for (int i = 0; i <= 4; i++) {
                                 for (int j = 1; j <= 6; j++) {
+                                    System.out.println("c" + i + j);
                                     if (request.getParameter("c" + i + j).equals("-")) {
                                     } else {
                                         PreparedStatement ps1 = con.prepareStatement("Insert into timetable(`slotID`, `labID`, `subjectID`, `batchID`, `weekID`, `dayID`) values(?,?,?,?,?,?)");
@@ -101,7 +102,7 @@ public class saveTimetable extends HttpServlet {
                                                 dayOfWeek = "sat";
                                                 break;
                                         }
-                                        ps1.setInt(1, i);
+                                        ps1.setInt(1, i+1);
                                         ps1.setInt(2, labid);
                                         ps1.setString(3, subjectID);
                                         ps1.setInt(4, batchID);

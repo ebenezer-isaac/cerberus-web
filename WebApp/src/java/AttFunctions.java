@@ -121,6 +121,7 @@ public class AttFunctions {
                         flag = 1;
                         break;
                     }
+                    break;
                 }
             }
             con.close();

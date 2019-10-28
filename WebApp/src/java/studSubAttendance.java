@@ -21,6 +21,7 @@ public class studSubAttendance extends HttpServlet {
                 case 1:
                     request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     out.println(request.getParameter("sub"));
+                    out.println(request.getParameter("prn"));
                     request.getRequestDispatcher("end.html").include(request, response);
                     break;
                 case 0:

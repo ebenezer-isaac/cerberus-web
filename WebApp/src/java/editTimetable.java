@@ -7,10 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -137,6 +142,8 @@ public class editTimetable extends HttpServlet {
                             out.print("</form>");
                             out.print("</div>");
                             con.close();
+                        } catch (ParseException ex) {
+                            Logger.getLogger(editTimetable.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     } catch (ClassNotFoundException | SQLException e) {
                         messages m = new messages();
@@ -156,14 +163,20 @@ public class editTimetable extends HttpServlet {
         }
     }
 
-    public String printTimetable(int labID) {
+    public String printTimetable(int labID) throws ParseException {
+        String date[] = new String[6];
         LocalDate mon = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+        date[0] = mon.toString();
         LocalDate tue = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(2)));
+        date[1] = tue.toString();
         LocalDate wed = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(3)));
-        LocalDate thu = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(4)));
-        LocalDate fri = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(5)));
-        LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-
+        date[2] = wed.toString();
+        LocalDate thu = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(4)));
+        date[3] = thu.toString();
+        LocalDate fri = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(5)));
+        date[4] = fri.toString();
+        LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+        date[5] = sat.toString();
         String table = "";
         table += ("<table class=\"table table-hover table-bordered\"> <thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
         table += ("<tr align = center>");
@@ -181,12 +194,12 @@ public class editTimetable extends HttpServlet {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
 
             PreparedStatement ps = con.prepareStatement("SELECT slot.slotID, slot.startTime, slot.endTime, "
-                    + "MAX(CASE WHEN dayID = 'mon' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
-                    + "MAX(CASE WHEN dayID = 'tue' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
-                    + "MAX(CASE WHEN dayID = 'wed' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
-                    + "MAX(CASE WHEN dayID = 'thu' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday, "
-                    + "MAX(CASE WHEN dayID = 'fri' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday, "
-                    + "MAX(CASE WHEN dayID = 'sat' THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday "
+                    + "MAX(CASE WHEN dayID = 1 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
+                    + "MAX(CASE WHEN dayID = 2 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
+                    + "MAX(CASE WHEN dayID = 3 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
+                    + "MAX(CASE WHEN dayID = 4 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday, "
+                    + "MAX(CASE WHEN dayID = 5 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday, "
+                    + "MAX(CASE WHEN dayID = 6 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday "
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
@@ -218,13 +231,22 @@ public class editTimetable extends HttpServlet {
             }
             while (rs.next()) {
                 lines[rs.getInt(1) - 1] = ("<tr> ");
-                lines[rs.getInt(1) - 1] += ("<th><input type='number' class=\"editTimeTimeTable\" name='ts" + (rs.getInt(1) - 1) + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + "'>");
-                lines[rs.getInt(1) - 1] += (" : <input type='number'  class=\"editTimeTimeTable\" name='ts" + (rs.getInt(1) - 1) + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "'></th>");
-                lines[rs.getInt(1) - 1] += ("<th><input type='number'  class=\"editTimeTimeTable\" name='te" + (rs.getInt(1) - 1) + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + "'>");
-                lines[rs.getInt(1) - 1] += (" : <input type='number'  class=\"editTimeTimeTable\" name='te" + (rs.getInt(1) - 1) + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "'></th>");
+                String time = rs.getString(2);
+                lines[rs.getInt(1) - 1] += ("<th>" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "</th>");
+                lines[rs.getInt(1) - 1] += ("<th>" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "</th>");
                 for (int j = 1; j <= 6; j++) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+                    String dateInString = date[j - 1] + " " + time;
+                    Date datetime = sdf.parse(dateInString);
+                    Date now = new Date();
+                    long nowmill = now.getTime();
+                    long datetimemill = datetime.getTime();
+                    String disabled = "";
+                    if (nowmill > datetimemill) {
+                        disabled = " disabled ";
+                    }
                     lines[rs.getInt(1) - 1] += ("<td align='center'>");
-                    lines[rs.getInt(1) - 1] += ("<select class=\"editSelectTimeTable\" name = 'c" + (rs.getInt(1) - 1) + "" + j + "' id = 'c" + (rs.getInt(1) - 1)+ "" + j + "'  onchange = 'batchdisable(this.id)'>");
+                    lines[rs.getInt(1) - 1] += ("<select class=\"editSelectTimeTable\" name = 'c" + (rs.getInt(1) - 1) + "" + j + "' id = 'c" + (rs.getInt(1) - 1) + "" + j + "'  onchange = 'batchdisable(this.id)' " + disabled + ">");
                     lines[rs.getInt(1) - 1] += ("<option name='Sub' value='-'");
                     String[] arrOfsub = null;
                     int flag;
@@ -247,7 +269,7 @@ public class editTimetable extends HttpServlet {
                     }
 
                     lines[rs.getInt(1) - 1] += ("</select>");
-                    lines[rs.getInt(1) - 1] += ("<select onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + (rs.getInt(1) - 1) + "" + j + "' id = 'batch" + (rs.getInt(1) - 1) + "" + j + "'");
+                    lines[rs.getInt(1) - 1] += ("<select " + disabled + " onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + (rs.getInt(1) - 1) + "" + j + "' id = 'batch" + (rs.getInt(1) - 1) + "" + j + "'");
                     if (flag == 0) {
                         lines[rs.getInt(1) - 1] += ("disabled class='not-allowed';");
                     }
@@ -275,20 +297,28 @@ public class editTimetable extends HttpServlet {
             for (int y = 0; y <= no_of_slots; y++) {
                 if (lines[y].equals("")) {
                     lines[y] = ("<tr> ");
-                    lines[y] += ("<th><input type='number' style='border:1px solid ;' name='ts" + y + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][0].substring(0, 2))) + "'>");
-                    lines[y] += (" : <input type='number'  style='border:1px solid ;' name='ts" + y + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][0].substring(3, 5))) + "'></th>");
-                    lines[y] += ("<th><input type='number'  style='border:1px solid ;' name='te" + y + "1' min='1' max='24' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][1].substring(0, 2))) + "'>");
-                    lines[y] += (" : <input type='number'  style='border:1px solid ;' name='te" + y + "2' min='0' max='59' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(slots[y][1].substring(3, 5))) + "'></th>");
+                    lines[y] += ("<th>" + String.format("%02d", Integer.parseInt(slots[y][0].substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(slots[y][0].substring(3, 5))) + "</th>");
+                    lines[y] += ("<th>" + String.format("%02d", Integer.parseInt(slots[y][1].substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(slots[y][1].substring(3, 5))) + "</th>");
                     for (int j = 1; j <= 6; j++) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+                        String dateInString = date[j - 1] + " " + slots[y][0] + ":00";
+                        Date datetime = sdf.parse(dateInString);
+                        Date now = new Date();
+                        long nowmill = now.getTime();
+                        long datetimemill = datetime.getTime();
+                        String disabled = "";
+                        if (nowmill > datetimemill) {
+                            disabled = " disabled ";
+                        }
                         lines[y] += ("<td align='center'>");
-                        lines[y] += ("<select class=\"editSelectTimeTable\" name = 'c" + y + "" + j + "' id = 'c" + y + "" + j + "' onchange = 'batchdisable(this.id)'>");
+                        lines[y] += ("<select " + disabled + " class=\"editSelectTimeTable\" name = 'c" + y + "" + j + "' id = 'c" + y + "" + j + "' onchange = 'batchdisable(this.id)'>");
                         lines[y] += ("<option name='Sub' value='-' selected>No Lab</option>");
                         for (int k = 0; k <= no_of_subs; k++) {
                             lines[y] += ("<option name='Sub' value='" + subs[k] + "'>" + subs[k] + "</option>");
                         }
                         String batch[] = {"Batch A", "Batch B", "Batch C"};
                         lines[y] += ("</select>");
-                        lines[y] += ("<select class=\"editSelectTimeTable\" name = 'batch" + y+ "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
+                        lines[y] += ("<select " + disabled + " class=\"editSelectTimeTable\" name = 'batch" + y + "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
                         lines[y] += ("<option name='-' value='-' selected>No Batch</option>");
                         for (int x = 0; x <= batch.length - 1; x++) {
                             lines[y] += ("<option name='A' value='" + batch[x] + "'>" + batch[x] + "</option>");

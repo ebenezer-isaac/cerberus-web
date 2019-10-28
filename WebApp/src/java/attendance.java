@@ -48,15 +48,51 @@ public class attendance extends HttpServlet {
                         String[][] subs = new String[no_of_sub][2];
                         no_of_sub--;
                         int index = 0;
+                        out.println("No of labs conducted :");
                         while (rs3.next()) {
+
                             subs[index][0] = rs3.getString(1);
                             subs[index][1] = rs3.getString(2);
                             index++;
                         }
+                        int no_of_batch = 0;
+                        PreparedStatement ps4 = con.prepareStatement("select count(batch.batchID) from batch");
+                        ResultSet rs4 = ps4.executeQuery();
+                        while (rs4.next()) {
+                            no_of_batch = rs4.getInt(1);
+                        }
+                        out.println("<table class=\"table table-striped table-bordered\"><thead><th>Subject Code</th><th>Subject Abbr</th>");
+                        String sql = "select ";
+                        for (int x = 1; x <= no_of_batch; x++) {
+                            sql += "count(CASE WHEN timetable.batchID = '" + x + "' THEN '' END) ";
+                            out.println("<th>Batch " + x + " </th>");
+                            if (x != no_of_batch) {
+                                sql += ", ";
+                            }
+                        }
+                        sql += "from timetable \n"
+                                + "inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID \n"
+                                + "inner join subject on timetable.subjectID = subject.subjectID \n"
+                                + "where subject.subjectID = ?";
+                        out.println("</thead><tbody>");
+                        for (int x = 0; x <= no_of_sub; x++) {
+                            ps4 = con.prepareStatement(sql);
+                            ps4.setString(1, subs[x][0]);
+                            rs4 = ps4.executeQuery();
+                            out.println("<tr><td>" + subs[x][0] + "</td><td>" + subs[x][1] + "</td>");
+                            while (rs4.next()) {
+                                for (int y = 1; y <= no_of_batch; y++) {
+                                    out.print("<td>" + rs4.getInt(y) + "</td>");
+                                }
+                            }
+                            out.print("</tr>");
+                        }
+                        out.print("</tbody>");
+
                         index = 0;
-                        String sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
+                        sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as " + subs[index][1];
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as " + subs[index][1].replace("-", "_");
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -70,13 +106,13 @@ public class attendance extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by rollcall.rollNo";
-                        PreparedStatement ps4 = con.prepareStatement(sql);
+                        ps4 = con.prepareStatement(sql);
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         int line = 0;
                         if (rs.next()) {
-                            String prn = rs.getString(1);
+                            
                             out.print("<table class=\"table table-striped table-bordered\"><thead>");
                             out.print("<tr>");
                             out.print("<th> Roll </th>");
@@ -88,18 +124,19 @@ public class attendance extends HttpServlet {
                             rs.previous();
 
                             while (rs.next()) {
+                                String prn = rs.getString(1);
                                 line++;
                                 out.print("<tr>");
                                 out.print("<td>" + rs.getString(2) + "</td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
-                                    out.print("<td>");
+                                    out.print("<td><a href = '/Cerberus/studSubAttendance?prn="+prn+"&sub="+rs.getString(i)+"' style='display:block;text-decoration:none;'>");
                                     if (rs.getString(i) != null) {
-                                        out.print(String.format("%.02f", AttFunctions.calpercentage(prn, rs.getString(i)))+"%");
+                                        out.print(String.format("%.02f", AttFunctions.calpercentage(prn, rs.getString(i))) + "%");
                                     } else {
                                         out.print("NA");
                                     }
-                                    out.print("</td>");
+                                    out.print("</a></td>");
                                 }
                                 out.print("</tr>");
                             }
