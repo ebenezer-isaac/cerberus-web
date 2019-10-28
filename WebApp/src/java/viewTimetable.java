@@ -7,9 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,11 +29,32 @@ public class viewTimetable extends HttpServlet {
     HttpServletResponse response;
     HttpServletRequest request;
     int no_of_class;
+    String mon, tue, wed, thu, fri, sat;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            Calendar cal = Calendar.getInstance();
+            Date d = new Date();
+            int year = d.getYear();
+            cal.set(Calendar.WEEK_OF_YEAR, week - 1);
+            cal.set(Calendar.YEAR, year);
+            cal.setFirstDayOfWeek(Calendar.SATURDAY);
+            cal.set(Calendar.DAY_OF_WEEK, 6);
+            mon = sdf.format(cal.getTime());
+            cal.set(Calendar.WEEK_OF_YEAR, week);
+            cal.set(Calendar.DAY_OF_WEEK, 0);
+            tue = sdf.format(cal.getTime());
+            cal.set(Calendar.DAY_OF_WEEK, 1);
+            wed = sdf.format(cal.getTime());
+            cal.set(Calendar.DAY_OF_WEEK, 2);
+            thu = sdf.format(cal.getTime());
+            cal.set(Calendar.DAY_OF_WEEK, 3);
+            fri = sdf.format(cal.getTime());
+            cal.set(Calendar.DAY_OF_WEEK, 4);
+            sat = sdf.format(cal.getTime());
             HttpSession session = request.getSession();
             try {
                 week = Integer.parseInt(request.getParameter("week"));
@@ -173,12 +197,6 @@ public class viewTimetable extends HttpServlet {
 
     public String lab_printTimetable(int labid) {
         String timetable = "";
-        LocalDate mon = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-        LocalDate tue = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(2)));
-        LocalDate wed = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(3)));
-        LocalDate thu = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(4)));
-        LocalDate fri = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(5)));
-        LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -230,7 +248,6 @@ public class viewTimetable extends HttpServlet {
                 lines[y] = "";
             }
             while (lab1.next()) {
-                System.out.println(lab1.getInt(1) - 1);
                 lines[lab1.getInt(1) - 1] = ("<tr align='center'>");
                 lines[lab1.getInt(1) - 1] += ("<th>" + slots[lab1.getInt(1) - 1][0] + "</th>");
                 lines[lab1.getInt(1) - 1] += ("<th>" + slots[lab1.getInt(1) - 1][1] + "</th>");
@@ -252,7 +269,6 @@ public class viewTimetable extends HttpServlet {
             }
             for (int y = 0; y <= no_of_slots; y++) {
                 if (lines[y].equals("")) {
-                    System.out.println(y + " empty");
                     lines[y] = ("<tr align='center'>");
                     lines[y] += ("<th>" + slots[y][0] + "</th>");
                     lines[y] += ("<th>" + slots[y][1] + "</th>");
@@ -275,12 +291,6 @@ public class viewTimetable extends HttpServlet {
 
     public String printTimetable() {
         String timetable = "";
-        LocalDate mon = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-        LocalDate tue = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(2)));
-        LocalDate wed = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(3)));
-        LocalDate thu = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(4)));
-        LocalDate fri = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(5)));
-        LocalDate sat = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");

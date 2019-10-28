@@ -9,13 +9,15 @@
     SimpleDateFormat ft = new SimpleDateFormat("w");
     int week = Integer.parseInt(ft.format(date));
     Calendar calendar = Calendar.getInstance();
+    calendar.setFirstDayOfWeek(Calendar.MONDAY);
     calendar.setTime(date);
-    if (calendar.get(Calendar.DAY_OF_WEEK) <= 2) {
-        week--;
-    }
+//    if (calendar.get(Calendar.DAY_OF_WEEK) <= 2) {
+//        week--;
+//    }
+    int day = calendar.get(Calendar.DAY_OF_WEEK);
     session.setAttribute("week", week);
     session.setAttribute("access", 2);
-    System.out.println("Week has been set");
+    System.out.println("Week " + week);
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
