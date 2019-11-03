@@ -1,4 +1,5 @@
 
+import cerberus.AttFunctions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -27,8 +28,6 @@ public class editStudent extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-
-                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                         out.print("<style>"
                                 + "input[type=number]{"
                                 + "width: 15px;"
@@ -122,7 +121,6 @@ public class editStudent extends HttpServlet {
                                 Date d = new Date();
                                 int year = d.getYear() + 1900;
                                 out.print("</select>");
-                                System.out.println("hello");
                                 out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
                                         + "<tr><td class=\"editSubjectStyle\">MSU ID</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' class=\"editSubjectForm\" placeholder='D" + String.valueOf(year).substring(2) + "CJxxxxxxx'/></td></tr> "
                                         + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
@@ -130,17 +128,14 @@ public class editStudent extends HttpServlet {
                                         + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                         + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
                                 out.print("<script>");
-                                System.out.println("hello");
                                 rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                                 PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
                                 st.setInt(1, Integer.parseInt(session.getAttribute("week").toString()));
                                 ResultSet rs2 = st.executeQuery();
                                 int oddeve = 0;
-                                System.out.println(oddeve);
                                 while (rs2.next()) {
                                     oddeve = (rs2.getInt(1) % 2);
                                 }
-                                System.out.println(oddeve);
                                 int classcount = 1;
                                 out.print("function getbatch(name,sub){batch=\"");
                                 out.print("<select class='editSelectTimeTable not-allowed' onchange = 'subsdisable(this.id)' name = 'batch\"+sub+\"' id = 'batch\"+name+\"' disabled>"
@@ -150,7 +145,6 @@ public class editStudent extends HttpServlet {
                                 while (rs4.next()) {
                                     out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(2) + "</option>");
                                 }
-                                System.out.println("batch functions");
                                 out.print("</select>\";return batch;}");
                                 while (rs.next()) {
                                     out.print("var class" + classcount + ";");
@@ -162,7 +156,7 @@ public class editStudent extends HttpServlet {
                                     int no_of_sub = 0;
                                     while (rs3.next()) {
                                         no_of_sub += 1;
-                                        out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub+ ")'></option></td><td>" + rs3.getString(2) + "</td>"
+                                        out.print("<tr><td><input type='checkbox' name='subjects' id='subject" + no_of_sub + "' value='" + rs3.getString(1) + "' onchange='batchdisable(" + no_of_sub + ")'></option></td><td>" + rs3.getString(2) + "</td>"
                                                 + "<td>");
                                         out.print("\"+getbatch(" + no_of_sub + ",'" + rs3.getString(1) + "')+\"");
                                         out.print("<td></tr>");
@@ -207,9 +201,7 @@ public class editStudent extends HttpServlet {
                             out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
                             out.print("</form></div>");
                         }
-                        request.getRequestDispatcher("end.html").include(request, response);
                         break;
-
                     default:
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                         request.setAttribute("redirect", "true");
@@ -221,6 +213,7 @@ public class editStudent extends HttpServlet {
                         break;
                 }
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
                 RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                 request.setAttribute("redirect", "true");
                 request.setAttribute("head", "Security Firewall");

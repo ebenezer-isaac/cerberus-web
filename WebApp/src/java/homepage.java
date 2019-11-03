@@ -1,4 +1,4 @@
-
+import cerberus.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import numbertowords.EnglishNumberToWords;
+import cerberus.EnglishNumberToWords;
 
 public class homepage extends HttpServlet {
 
@@ -27,12 +27,9 @@ public class homepage extends HttpServlet {
             access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     out.println("hello");
-                    request.getRequestDispatcher("end.html").include(request, response);
                     break;
                 case 0:
-                    request.getRequestDispatcher("side-student.jsp").include(request, response);
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -44,13 +41,14 @@ public class homepage extends HttpServlet {
                         ResultSet rs = ps1.executeQuery();
                         int index = 1;
                         while (rs.next()) {
+                            out.print(rs.getString(1)+" "+rs.getString(2));
+                            index++;
                         }
                         if (index == 1) {
-                            out.print("No Subjects Available");
+                            out.print("No Subjects Selected");
                         }
                     } catch (Exception e) {
                     }
-                    request.getRequestDispatcher("end.html").include(request, response);
                     break;
                 default:
                     messages m = new messages();

@@ -26,7 +26,7 @@ public class editSubject extends HttpServlet {
                 switch (access) {
                     case 1:
 
-                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
+                        
                         out.print("<style>\n"
                                 + "input[type=number]{\n"
                                 + "    width: 15px;\n"
@@ -115,7 +115,7 @@ public class editSubject extends HttpServlet {
                                 rd.forward(request, response);
                             }
                         }
-                        request.getRequestDispatcher("end.html").include(request, response);
+                        
                         break;
                     default:
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");

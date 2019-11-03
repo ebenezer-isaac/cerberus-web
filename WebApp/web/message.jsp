@@ -1,7 +1,88 @@
 <%@ page import = "java.io.*,java.util.*" %>
-<%if ((request.getAttribute("redirect")).equals("true")) {
-        response.setHeader("Refresh", request.getAttribute("sec")+";url=" + request.getAttribute("url"));
-    } %>
+<%
+    int access = 2;
+    try {
+        access = Integer.parseInt(session.getAttribute("access").toString());
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println(access);
+    }
+    String redirect = "", head = "", body = "", fullpage = "", sec = "", type = "", url = "";
+    try {
+        type = request.getAttribute("type").toString();
+    } catch (Exception e) {
+        try {
+            type = request.getParameter("type").toString();
+        } catch (Exception d) {
+            type = "";
+            d.printStackTrace();
+        }
+        e.printStackTrace();
+    }
+    System.out.println(type);
+    if (type.equals("login0")) {
+        System.out.println(0);
+        redirect = "false";
+        head = "Security Firewall";
+        body = "Invalid Username or Password. Please check your credentials and try again";
+        url = "index.jsp";
+        fullpage = "false";
+    } else if (type.equals("login1")) {
+        System.out.println(1);
+        if (access == 1 || access == 0) {
+            redirect = "true";
+            head = "Login Successfull";
+            body = "Populating your profile";
+            url = "ajaxContent?url=homepage";
+            sec = "2";
+            fullpage = "true";
+        } else {
+            redirect = "true";
+            head = "Security Firewall";
+            body = "Please login to continue";
+            url = "index.jsp";
+            fullpage = "false";
+            sec = "2";
+        }
+    } else if (type.equals("login2")) {
+        System.out.println(2);
+        redirect = "true";
+        fullpage = "false";
+        head = "Nice Try!";
+        body = "You're smart.<br>But not half as smart enough.<br><br>" + new String(Character.toChars(0x1F60F));
+        url = "index.jsp";
+        sec = "2";
+    } else if (type.equals("login3")) {
+        System.out.println(2);
+        redirect = "true";
+        fullpage = "false";
+        head = "Security Firewall";
+        body = "You have exceeded allowed number of login attempts";
+        url = "index.jsp";
+        sec = "2";
+    } else {
+        redirect = request.getAttribute("redirect").toString();
+        head = request.getAttribute("head").toString();
+        body = request.getAttribute("body").toString();
+        fullpage = request.getAttribute("fullpage").toString();
+        url = request.getAttribute("url").toString();
+        sec = request.getAttribute("sec").toString();
+    }
+    System.out.println("redirect:" + redirect);
+    System.out.println("head:" + head);
+    System.out.println("body:" + body);
+    System.out.println("fullpage:" + fullpage);
+    System.out.println("url:" + url);
+    System.out.println("sec:" + sec);
+    int ajax = 0;
+    if (fullpage.equals("false") && redirect.equals("true")) {
+        response.setHeader("Refresh", sec + ";url=" + url + "");
+    } else if (fullpage.equals("true") && redirect.equals("true")) {
+        response.setHeader("Refresh", sec + ";url=ajaxContent?url=" + url + "");
+    } else if (fullpage.equals("true") && redirect.equals("false")) {
+        ajax = 1;
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,72 +97,11 @@
         <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css">
         <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
         <link rel="stylesheet" href="css/custom.css" type="text/css">
+        <link rel="stylesheet" href="css/loader.css" type="text/css">
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.10.1-web/css/all.css">
         <link rel="icon" href="images/logo-circle.png" type="image/gif">
         <style>
-            .loader {
-                position: relative;
-                width: 80px;
-                margin: 100px auto;
-            }
-            .duo {
-                height: 20px;
-                width: 50px;
-                background: hsla(0, 0%, 0%, 0.0);
-                position: absolute;
 
-            }
-            .duo, .dot {
-                animation-duration: 0.8s;
-                animation-timing-function: ease-in-out;
-                animation-iteration-count: infinite;
-            }
-            .duo1 {
-                left: 0;
-            }
-            .duo2 {
-                left: 30px
-            }
-            .dot {
-                width: 20px;
-                height: 20px;
-                border-radius: 10px;
-                border-color: #24af29;
-                background: #24af29;
-                position: absolute;
-            }
-            .dot-a {
-                left: 0px;  
-            }
-            .dot-b {
-                right: 0px;
-            }
-            @keyframes spin {
-                0% { transform: rotate(0deg) }
-                50% { transform: rotate(180deg) }
-                100% { transform: rotate(180deg) }
-            }
-            @keyframes onOff {
-                0% { opacity: 0; }
-                49% { opacity: 0; }
-                50% { opacity: 1; }
-                100% { opacity: 1; }
-            }
-            .duo1 {
-                animation-name: spin;
-            }
-            .duo2 {
-                animation-name: spin;
-                animation-direction: reverse;
-            }
-            .duo2 .dot-b {
-                animation-name: onOff;
-            }
-            .duo1 .dot-a {
-                opacity: 0;
-                animation-name: onOff;
-                animation-direction: reverse;
-            }    
         </style>
     </head>
     <body style="background-color: #black;">
@@ -100,35 +120,42 @@
         <div class="container" >
             <div class="reset_page" >
                 <div class="form_reset">
-                            
-                            <div align="center">
-                            <h2 style="font-family: arno pro caption"> <%out.print((request.getAttribute("head")).toString());%> </h2>
-                            <br>
-                            <p><%out.print((request.getAttribute("body")).toString());%></p>
-                            
-                                <%if ((request.getAttribute("redirect")).equals("true")) {
-                                        out.print("<small><b>You will be redirected shortly</b></small>"
-                                                + "<div class=\"loader\">"
-                                                + "<div class=\"duo duo1\">"
-                                                + "<div class=\"dot dot-a\">"
-                                                + "</div>"
-                                                + "<div class=\"dot dot-b\">"
-                                                + "</div>"
-                                                + "</div>"
-                                                + "<div class=\"duo duo2\">"
-                                                + "<div class=\"dot dot-a\">"
-                                                + "</div>"
-                                                + "<div class=\"dot dot-b\">"
-                                                + "</div>"
-                                                + "</div>"
-                                                + "</div>");
-                                    } else {
-                                        out.print("<br><form action=\"" + request.getAttribute("url") + "\" method=\"post\">"
-                                                + "<button type =\"submit\" autofocus>Accept</button>"
-                                                + "</form>");
-                                    }
-                                %>
-                            </div>
+
+                    <div align="center">
+                        <h2 style="font-family: arno pro caption"> <%out.print(head);%> </h2>
+                        <br>
+                        <p><%out.print(body);%></p>
+
+                        <%if (redirect.equals("true")) {
+                                out.print("<small><b>You will be redirected shortly</b></small>"
+                                        + "<div class='loader'>"
+                                        + "<div class='duo duo1'>"
+                                        + "<div class='dot dot-a'>"
+                                        + "</div>"
+                                        + "<div class='dot dot-b'>"
+                                        + "</div>"
+                                        + "</div>"
+                                        + "<div class='duo duo2'>"
+                                        + "<div class='dot dot-a'>"
+                                        + "</div>"
+                                        + "<div class='dot dot-b'>"
+                                        + "</div>"
+                                        + "</div>"
+                                        + "</div>");
+                            } else {
+                                out.print("<br><form action='");
+                                if (ajax == 1) {
+                                    out.print("ajaxContent' method='post'>"
+                                            + "<input name='url' type='text' value='" + url + "' hidden>");
+                                } else {
+                                    out.print(url + "' method='post'>");
+                                }
+                                out.print(""
+                                        + "<button type ='submit' autofocus>Accept</button>"
+                                        + "</form>");
+                            }
+                        %>
+                    </div>
                 </div>
             </div>
         </div>

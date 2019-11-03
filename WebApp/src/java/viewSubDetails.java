@@ -1,4 +1,4 @@
-
+import cerberus.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -24,7 +24,7 @@ public class viewSubDetails extends HttpServlet {
             switch (access) {
                 case 1:
                     String subcode = request.getParameter("subcode");
-                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
+                    
                     out.print(subcode + " Details");
                     try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
                         PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID)\n"
@@ -79,7 +79,7 @@ public class viewSubDetails extends HttpServlet {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    request.getRequestDispatcher("end.html").include(request, response);
+                    
                     break;
                 case 0:
                     messages m1 = new messages();

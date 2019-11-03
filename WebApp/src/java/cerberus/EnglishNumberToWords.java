@@ -1,4 +1,4 @@
-package numbertowords;
+package cerberus;
 import java.text.DecimalFormat;
 
 public class EnglishNumberToWords {

@@ -1,30 +1,38 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-public class ajaxCheckEmailIndex extends HttpServlet {
+public class ajaxContent extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-String email = request.getParameter("email");
-            if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
-                out.print("1px solid #8cc45a");
-            } else {
-                out.print("1px solid red");
+            String url;
+            try {
+                url = request.getAttribute("url").toString();
+            } catch (Exception e) {
+                try {
+                    url = request.getParameter("url");
+                } catch (Exception x) {
+                    url = "homepage";
+                }
             }
-        }
+            request.setAttribute("url", url);
+            HttpSession session = request.getSession();
+            int access = (int) session.getAttribute("access");
+            if (access == 1) {
+                request.getRequestDispatcher("side-faculty.jsp").include(request, response);
+            } else {
+                request.getRequestDispatcher("side-student.jsp").include(request, response);
+            }
+            request.getRequestDispatcher("end.jsp").include(request, response);
+        }catch(Exception w){w.printStackTrace();}
     }
 
     @Override

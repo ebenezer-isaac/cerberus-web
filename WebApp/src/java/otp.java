@@ -1,4 +1,6 @@
 
+import cerberus.Mailer;
+import cerberus.AttFunctions;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import javax.servlet.ServletException;

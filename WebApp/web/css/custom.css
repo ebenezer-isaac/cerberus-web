@@ -52,18 +52,34 @@
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
+.form-group{
+    position: relative;
+}
+
 input[type=text], input[type=password], input[type=email], input[type=number]
 {
     border-radius: 8px;
     font-family: "Roboto", sans-serif;
-    outline: 0;
     background: #FFF;
+    color: #666;
     width: 100%;
     border: none;
     margin: 10px 0 0;
     padding: 15px;
     box-sizing: border-box;
     font-size: 14px;
+    &:focus, &:focus + .fa{
+        border-color:#10CE88;
+        color:#10CE88;
+    }
+}
+
+.form-group .fa
+{
+    position: absolute;
+    right: 15px;
+    top: 28px;
+    color: #737373;
 }
 
 .form_container button
@@ -136,23 +152,26 @@ a:hover
 
 .reset_page {
     width: 400px;
-    padding: 4.4% 0 0;
     margin: auto;
+    margin-top: 100px;
 }
 
 .form_reset
 {
-    position: absolute;
-    background: #FFFFFF;
-    width: 360px;
-    margin: 20px;
-    padding: 45px;
+    border-radius: 8px;
+    background: #EEEEEE;
+    max-width: 360px;
+    padding: 37px;
+    margin: auto;
+    font-size: 14px;
     text-align: center;
+    color: black;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
 .form_reset button
 {
+    border-radius: 4px;
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
@@ -170,8 +189,6 @@ a:hover
 .form_reset button:hover,.form button:active,.form button:focus {
     background: #000000;
 }
-
-
 
 .form_message button
 {

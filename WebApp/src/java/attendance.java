@@ -1,4 +1,5 @@
 
+import cerberus.AttFunctions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -23,9 +24,7 @@ public class attendance extends HttpServlet {
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    int classID = Integer.parseInt(request.getParameter("class"));
-                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
-                    out.print("attendance class" + classID + "<br>");
+                    int classID = Integer.parseInt(request.getParameter("class"));                 
                     try {
                         int oddeve = 0;
                         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -36,7 +35,16 @@ public class attendance extends HttpServlet {
                         while (rs2.next()) {
                             oddeve = (rs2.getInt(1) % 2);
                         }
+                        String cla = "";
+                        PreparedStatement ps1 = con.prepareStatement("Select class from class where classID=?");
+                        ps1.setInt(1, classID);
+                        ResultSet rs5 = ps1.executeQuery();
+                        while (rs5.next()) {
+                            cla = rs5.getString(1);
+                        }
+                        out.print("<div align='center'>" + cla + "</div><br>");
                         int sem = AttFunctions.getSem(oddeve, classID);
+                        System.out.println("sem:"+sem);
                         PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
                         ps3.setInt(1, sem);
                         ResultSet rs3 = ps3.executeQuery();
@@ -48,7 +56,6 @@ public class attendance extends HttpServlet {
                         String[][] subs = new String[no_of_sub][2];
                         no_of_sub--;
                         int index = 0;
-                        out.println("No of labs conducted :");
                         while (rs3.next()) {
 
                             subs[index][0] = rs3.getString(1);
@@ -61,7 +68,7 @@ public class attendance extends HttpServlet {
                         while (rs4.next()) {
                             no_of_batch = rs4.getInt(1);
                         }
-                        out.println("<table class=\"table table-striped table-bordered\"><thead><th>Subject Code</th><th>Subject Abbr</th>");
+                        out.println("<table class='table table-striped table-bordered'><thead><th>Subject Code</th><th>Subject Abbr</th>");
                         String sql = "select ";
                         for (int x = 1; x <= no_of_batch; x++) {
                             sql += "count(CASE WHEN timetable.batchID = '" + x + "' THEN '' END) ";
@@ -87,12 +94,12 @@ public class attendance extends HttpServlet {
                             }
                             out.print("</tr>");
                         }
-                        out.print("</tbody>");
+                        out.print("</tbody></table>");
 
                         index = 0;
                         sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as " + subs[index][1].replace("-", "_");
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as '" + subs[index][1].replace("-", "_")+"'";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -106,14 +113,14 @@ public class attendance extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by rollcall.rollNo";
+                        System.out.println(sql);
                         ps4 = con.prepareStatement(sql);
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         int line = 0;
                         if (rs.next()) {
-                            
-                            out.print("<table class=\"table table-striped table-bordered\"><thead>");
+                            out.print("<table class='table table-striped table-bordered'><thead>");
                             out.print("<tr>");
                             out.print("<th> Roll </th>");
                             out.print("<th> Name </th>");
@@ -130,13 +137,13 @@ public class attendance extends HttpServlet {
                                 out.print("<td>" + rs.getString(2) + "</td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
-                                    out.print("<td><a href = '/Cerberus/studSubAttendance?prn="+prn+"&sub="+rs.getString(i)+"' style='display:block;text-decoration:none;'>");
                                     if (rs.getString(i) != null) {
+                                        out.print("<td><a href = '/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + rs.getString(i) + "' style='display:block;text-decoration:none;'>");
                                         out.print(String.format("%.02f", AttFunctions.calpercentage(prn, rs.getString(i))) + "%");
+                                        out.print("</a></td>");
                                     } else {
-                                        out.print("NA");
+                                        out.print("<td>NA</td>");
                                     }
-                                    out.print("</a></td>");
                                 }
                                 out.print("</tr>");
                             }
@@ -144,13 +151,11 @@ public class attendance extends HttpServlet {
                             rs = ps4.executeQuery();
 
                         } else {
-                            out.print("No Data to display");
+                            out.print("<div align='center'>Student Data Unavailable</div>");
                         }
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         e.printStackTrace();
                     }
-
-                    request.getRequestDispatcher("end.html").include(request, response);
                     break;
             }
 

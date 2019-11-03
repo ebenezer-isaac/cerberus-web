@@ -1,3 +1,4 @@
+import cerberus.AttFunctions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -24,7 +25,7 @@ public class editStudDetails extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-                        request.getRequestDispatcher("side-faculty.jsp").include(request, response);
+                        
                         int classID;
                         try {
                             classID = Integer.parseInt(request.getParameter("class"));
@@ -140,7 +141,7 @@ public class editStudDetails extends HttpServlet {
                             con.close();
                         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         }
-                        request.getRequestDispatcher("end.html").include(request, response);
+                        
                         break;
                     case 0:
                         request.getRequestDispatcher("side-student.html").include(request, response);

@@ -1,4 +1,4 @@
-
+import cerberus.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,15 +19,15 @@ public class studSubAttendance extends HttpServlet {
             access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
+                    
                     out.println(request.getParameter("sub"));
                     out.println(request.getParameter("prn"));
-                    request.getRequestDispatcher("end.html").include(request, response);
+                    
                     break;
                 case 0:
                     request.getRequestDispatcher("side-student.jsp").include(request, response);
                     out.println(request.getParameter("sub"));
-                    request.getRequestDispatcher("end.html").include(request, response);
+                    
                     break;
                 default:
                     messages m = new messages();

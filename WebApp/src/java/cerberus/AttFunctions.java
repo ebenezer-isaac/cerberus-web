@@ -1,3 +1,5 @@
+package cerberus;
+
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -76,57 +78,6 @@ public class AttFunctions {
             salt.append(otpchars.charAt(index));
         }
         return salt.toString();
-    }
-
-    public static void new_week(int week) {
-        int weekid = 0;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps6 = con.prepareStatement("SELECT weekID FROM WEEK where week = ?");
-            ps6.setInt(1, week);
-            ResultSet rs = ps6.executeQuery();
-            while (rs.next()) {
-                weekid = rs.getInt(1);
-            }
-            if (weekid == 0) {
-                PreparedStatement ps2 = con.prepareStatement("insert into week(`week`) values(?)");
-                ps2.setInt(1, week);
-                ps2.executeUpdate();
-                rs = ps6.executeQuery();
-                while (rs.next()) {
-                    weekid = rs.getInt(1);
-                }
-            }
-            PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
-            ps5.setInt(1, weekid);
-            rs = ps5.executeQuery();
-            int flag = 0;
-            while (rs.next()) {
-                flag = 1;
-                break;
-            }
-            if (flag == 0) {
-                PreparedStatement ps10 = con.prepareStatement("SELECT weekID FROM `week` ORDER BY `week`.`weekID` DESC");
-                rs = ps10.executeQuery();
-                while (rs.next() && flag == 0) {
-                    PreparedStatement ps9 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
-                    ps9.setInt(1, rs.getInt(1));
-                    ResultSet rs1 = ps9.executeQuery();
-                    while (rs1.next()) {
-                        PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = ?");
-                        ps3.setInt(1, weekid);
-                        ps3.setInt(2, rs.getInt(1));
-                        ps3.executeUpdate();
-                        flag = 1;
-                        break;
-                    }
-                    break;
-                }
-            }
-            con.close();
-        } catch (ClassNotFoundException | SQLException e) {
-        }
     }
 
     public static float calpercentage(String prn, String subid) {

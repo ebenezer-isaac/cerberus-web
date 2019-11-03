@@ -109,10 +109,6 @@
         <servlet-class>delStudent</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ajaxCheckEmailIndex</servlet-name>
-        <servlet-class>ajaxCheckEmailIndex</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>studentProgression</servlet-name>
         <servlet-class>studentProgression</servlet-class>
     </servlet>
@@ -123,6 +119,14 @@
     <servlet>
         <servlet-name>studSubAttendance</servlet-name>
         <servlet-class>studSubAttendance</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ajaxContent</servlet-name>
+        <servlet-class>ajaxContent</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>newTimetable</servlet-name>
+        <servlet-class>newTimetable</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -233,10 +237,6 @@
         <url-pattern>/delStudent</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ajaxCheckEmailIndex</servlet-name>
-        <url-pattern>/ajaxCheckEmailIndex</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>studentProgression</servlet-name>
         <url-pattern>/studentProgression</url-pattern>
     </servlet-mapping>
@@ -247,6 +247,14 @@
     <servlet-mapping>
         <servlet-name>studSubAttendance</servlet-name>
         <url-pattern>/studSubAttendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ajaxContent</servlet-name>
+        <url-pattern>/ajaxContent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>newTimetable</servlet-name>
+        <url-pattern>/newTimetable</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

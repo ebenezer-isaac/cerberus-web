@@ -1,4 +1,6 @@
 
+import cerberus.Mailer;
+import cerberus.AttFunctions;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;

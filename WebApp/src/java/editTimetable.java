@@ -1,4 +1,4 @@
-
+import cerberus.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -27,7 +27,7 @@ public class editTimetable extends HttpServlet {
 
     int week = 0;
     int no_of_subs = 0;
-    String subs[];
+    String subs[][];
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -36,7 +36,6 @@ public class editTimetable extends HttpServlet {
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     try {
                         week = Integer.parseInt(request.getParameter("week"));
                     } catch (NumberFormatException e) {
@@ -44,7 +43,6 @@ public class editTimetable extends HttpServlet {
                     if (week == 0) {
                         week = (int) session.getAttribute("week");
                     }
-                    System.out.println(week);
                     int labid = Integer.parseInt(request.getParameter("lab"));
                     if (labid >= 4 || labid <= 0) {
                         labid = 1;
@@ -63,23 +61,24 @@ public class editTimetable extends HttpServlet {
                                 }
                             }
                             Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("SELECT `Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
+                            ResultSet rs = stmt.executeQuery("SELECT subjectID,`Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
                             while (rs.next()) {
                                 no_of_subs++;
                             }
                             rs.first();
                             rs.previous();
                             no_of_subs++;
-                            subs = new String[no_of_subs];
+                            subs = new String[no_of_subs][2];
                             no_of_subs = 0;
                             while (rs.next()) {
-                                subs[no_of_subs] = rs.getString(1);
+                                subs[no_of_subs][0] = rs.getString(1);
+                                subs[no_of_subs][1] = rs.getString(2);
                                 no_of_subs++;
                             }
                             no_of_subs--;
                             out.print("<style>"
                                     + "input[type=number]{"
-                                    + "width: 62px;"
+                                    + "width: 61px;"
                                     + "height: 40px;"
                                     + "} "
                                     + ".not-allowed {cursor: not-allowed;}"
@@ -108,19 +107,19 @@ public class editTimetable extends HttpServlet {
                                     + "document.getElementById('batch' + id).disabled=true;"
                                     + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                     + "</script>");
+
                             out.print("<style> th { white-space: nowrap; } </style>");
                             out.print("<table width = 100%>"
-                                    + "<tr><td width = 33% align='center'><form action='editTimetable' method='post'>"
-                                    + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
-                                    + "<input type='text' name='lab' value='" + labid + "' hidden>"
-                                    + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
-                                    + "<span>Previous</span>"
+                                    + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
+                                    + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\"");
+                            if (week <= Integer.parseInt(session.getAttribute("week").toString())) {
+                                out.print("disabled");
+                            }
+                            out.print("><span>Previous</span>"
                                     + "</button>"
                                     + "</form></td>"
                                     + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
-                            out.print("<td width = 33% align='center'><form action='editTimetable' method='post'>"
-                                    + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
-                                    + "<input type='text' name='lab' value='" + labid + "' hidden>"
+                            out.print("<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
                                     + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
                             if (week > Integer.parseInt(session.getAttribute("week").toString())) {
                                 out.print("disabled");
@@ -134,9 +133,10 @@ public class editTimetable extends HttpServlet {
                             LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                             out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                             out.print("<div class=\"table-responsive\">");
-                            out.print("<form action='saveTimetable' method='post' align='right'>");
+                            out.print("<form id='ajaxform' action='saveTimetable' method='post'    2 align='right'>");
                             out.print(printTimetable(labid));
                             out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
+                            out.print("<input type='text' name='week' value='" + week + "' hidden>");
                             out.print("<button type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
                                     + "<span>Save</span>"
                                     + "</button>");
@@ -150,9 +150,8 @@ public class editTimetable extends HttpServlet {
                         messages m = new messages();
                         m.dberror(request, response, e.getMessage(), "homepage");
                     }
-
-                    request.getRequestDispatcher("end.html").include(request, response);
                     break;
+
                 case 0:
                     messages m1 = new messages();
                     m1.kids(request, response);
@@ -189,8 +188,8 @@ public class editTimetable extends HttpServlet {
         String table = "";
         table += ("<table class=\"table table-hover table-bordered\"> <thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
         table += ("<tr align = center>");
-        table += ("<th style=\"white-space:nowrap;\" >Start_Time</th>");
-        table += ("<th>End_Time</th>");
+        table += ("<th style=\"white-space:nowrap;\" >Start Time</th>");
+        table += ("<th>End Time</th>");
         table += ("<th>Monday<br>" + date[0] + "</th>");
         table += ("<th>Tuesday<br>" + date[1] + "</th>");
         table += ("<th>Wednesday<br>" + date[2] + "</th>");
@@ -203,12 +202,12 @@ public class editTimetable extends HttpServlet {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
 
             PreparedStatement ps = con.prepareStatement("SELECT slot.slotID, slot.startTime, slot.endTime, "
-                    + "MAX(CASE WHEN dayID = 1 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
-                    + "MAX(CASE WHEN dayID = 2 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
-                    + "MAX(CASE WHEN dayID = 3 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
-                    + "MAX(CASE WHEN dayID = 4 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday, "
-                    + "MAX(CASE WHEN dayID = 5 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday, "
-                    + "MAX(CASE WHEN dayID = 6 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday "
+                    + "MAX(CASE WHEN dayID = 1 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
+                    + "MAX(CASE WHEN dayID = 2 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
+                    + "MAX(CASE WHEN dayID = 3 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Wednesday, "
+                    + "MAX(CASE WHEN dayID = 4 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Thursday, "
+                    + "MAX(CASE WHEN dayID = 5 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Friday, "
+                    + "MAX(CASE WHEN dayID = 6 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Saturday "
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
@@ -248,15 +247,17 @@ public class editTimetable extends HttpServlet {
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
                     Date now = new Date();
-                    System.out.println("now = " + now.getDate() + " " + now.getTime() + ", table = " + datetime.getDate() + " " + datetime.getTime());
+
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();
                     String disabled = "";
+                    String disabledstyl = "style='border:solid 1px green'";
                     if (nowmill > datetimemill) {
                         disabled = " disabled ";
+                        disabledstyl = "style='border:solid 1px red'";
                     }
                     lines[rs.getInt(1) - 1] += ("<td align='center'>");
-                    lines[rs.getInt(1) - 1] += ("<select class=\"editSelectTimeTable\" name = 'c" + (rs.getInt(1) - 1) + "" + j + "' id = 'c" + (rs.getInt(1) - 1) + "" + j + "'  onchange = 'batchdisable(this.id)' " + disabled + ">");
+                    lines[rs.getInt(1) - 1] += ("<select class=\"editSelectTimeTable\" name = 'c" + (rs.getInt(1) - 1) + "" + j + "' id = 'c" + (rs.getInt(1) - 1) + "" + j + "'  onchange = 'batchdisable(this.id)' " + disabledstyl + ">");
                     lines[rs.getInt(1) - 1] += ("<option name='Sub' value='-'");
                     String[] arrOfsub = null;
                     int flag;
@@ -264,40 +265,55 @@ public class editTimetable extends HttpServlet {
                         lines[rs.getInt(1) - 1] += ("selected ");
                         flag = 0;
                     } else {
+                        lines[rs.getInt(1) - 1] += (disabled);
                         arrOfsub = rs.getString(j + 3).split(" - ");
                         flag = 1;
                     }
                     lines[rs.getInt(1) - 1] += (">No Lab</option>");
                     for (int k = 0; k <= no_of_subs; k++) {
-                        lines[rs.getInt(1) - 1] += ("<option name='Sub' value='" + subs[k] + "' ");
+                        lines[rs.getInt(1) - 1] += ("<option name='Sub' value='" + subs[k][0] + "' ");
                         if (flag == 1) {
-                            if (subs[k].equals(arrOfsub[0])) {
+                            if (subs[k][0].equals(arrOfsub[0])) {
                                 lines[rs.getInt(1) - 1] += ("selected ");
+                            } else {
+                                lines[rs.getInt(1) - 1] += (disabled);
                             }
                         }
-                        lines[rs.getInt(1) - 1] += (">" + subs[k] + "</option>");
+                        if (flag == 0) {
+                            lines[rs.getInt(1) - 1] += (disabled);
+                        }
+                        lines[rs.getInt(1) - 1] += (">" + subs[k][1] + "</option>");
                     }
 
                     lines[rs.getInt(1) - 1] += ("</select>");
-                    lines[rs.getInt(1) - 1] += ("<select " + disabled + " onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + (rs.getInt(1) - 1) + "" + j + "' id = 'batch" + (rs.getInt(1) - 1) + "" + j + "'");
+                    lines[rs.getInt(1) - 1] += ("<select onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + (rs.getInt(1) - 1) + "" + j + "' id = 'batch" + (rs.getInt(1) - 1) + "" + j + "'");
                     if (flag == 0) {
-                        lines[rs.getInt(1) - 1] += ("disabled class='not-allowed';");
+                        lines[rs.getInt(1) - 1] += ("disabled  class='not-allowed';");
                     }
                     lines[rs.getInt(1) - 1] += ("><option name='-' value='-'");
                     if (flag == 0) {
                         lines[rs.getInt(1) - 1] += ("selected");
+                    } else {
+                        lines[rs.getInt(1) - 1] += (disabled);
                     }
                     lines[rs.getInt(1) - 1] += (">No Batch</option>");
                     PreparedStatement ps11 = con.prepareStatement("Select name from batch");
                     ResultSet rs3 = ps11.executeQuery();
+                    int index = 1;
                     while (rs3.next()) {
-                        lines[rs.getInt(1) - 1] += ("<option name='" + rs3.getString(1) + "' value='" + rs3.getString(1) + "'");
+                        lines[rs.getInt(1) - 1] += ("<option name='" + rs3.getString(1) + "' value='" + index + "'");
                         if (flag == 1) {
                             if (rs3.getString(1).equals(arrOfsub[1])) {
                                 lines[rs.getInt(1) - 1] += ("selected ");
+                            } else {
+                                lines[rs.getInt(1) - 1] += (disabled);
                             }
                         }
+                        if (flag == 0) {
+                            lines[rs.getInt(1) - 1] += (disabled);
+                        }
                         lines[rs.getInt(1) - 1] += (">" + rs3.getString(1) + "</option>");
+                        index++;
                     }
                     lines[rs.getInt(1) - 1] += ("</select>");
                     lines[rs.getInt(1) - 1] += ("</td>");
@@ -314,25 +330,29 @@ public class editTimetable extends HttpServlet {
                         String dateInString = date[j - 1] + " " + slots[y][0] + ":00";
                         Date datetime = sdf.parse(dateInString);
                         Date now = new Date();
-                        System.out.println("now = " + now.getDate() + " " + now.getTime() + ", table = " + datetime.getDate() + " " + datetime.getTime());
                         long nowmill = now.getTime();
                         long datetimemill = datetime.getTime();
                         String disabled = "";
+                        String disabledstyl = "style='border:solid 1px green'";
                         if (nowmill > datetimemill) {
                             disabled = " disabled ";
+                            disabledstyl = "style='border:solid 1px red'";
                         }
                         lines[y] += ("<td align='center'>");
-                        lines[y] += ("<select " + disabled + " class=\"editSelectTimeTable\" name = 'c" + y + "" + j + "' id = 'c" + y + "" + j + "' onchange = 'batchdisable(this.id)'>");
-                        lines[y] += ("<option name='Sub' value='-' selected>No Lab</option>");
+                        lines[y] += ("<select class=\"editSelectTimeTable\" name = 'c" + y + "" + j + "' id = 'c" + y + "" + j + "' onchange = 'batchdisable(this.id)' " + disabledstyl + ">");
+                        lines[y] += ("<option " + disabled + " name='Sub' value='-' selected>No Lab</option>");
                         for (int k = 0; k <= no_of_subs; k++) {
-                            lines[y] += ("<option name='Sub' value='" + subs[k] + "'>" + subs[k] + "</option>");
+                            lines[y] += ("<option " + disabled + " name='Sub' value='" + subs[k][0] + "'>" + subs[k][1] + "</option>");
                         }
-                        String batch[] = {"Batch A", "Batch B", "Batch C"};
                         lines[y] += ("</select>");
-                        lines[y] += ("<select " + disabled + " class=\"editSelectTimeTable\" name = 'batch" + y + "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
-                        lines[y] += ("<option name='-' value='-' selected>No Batch</option>");
-                        for (int x = 0; x <= batch.length - 1; x++) {
-                            lines[y] += ("<option name='A' value='" + batch[x] + "'>" + batch[x] + "</option>");
+                        lines[y] += ("<select class=\"editSelectTimeTable\" name = 'batch" + y + "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
+                        lines[y] += ("<option " + disabled + " name='-' value='-' selected>No Batch</option>");
+                        PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                        ResultSet rs3 = ps11.executeQuery();
+                        int index = 1;
+                        while (rs3.next()) {
+                            lines[y] += ("<option " + disabled + " name='A' value='" + index + "'>" + rs3.getString(1) + "</option>");
+                            index++;
                         }
                         lines[y] += ("</select>");
                         lines[y] += ("</td>");

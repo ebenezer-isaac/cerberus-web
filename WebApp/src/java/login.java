@@ -1,4 +1,6 @@
 
+import cerberus.*;
+import cerberus.AttFunctions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,16 +18,10 @@ public class login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String email = request.getParameter("email");
-            String rawpass = request.getParameter("password");
+            String rawpass = request.getParameter("pwd");
             String id = "";
-            if (AttFunctions.trimSQLInjection(rawpass).equals("'''='")) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Nice Try!");
-                request.setAttribute("body", "You're smart.<br>But not half as smart enough.<br><br>" + new String(Character.toChars(0x1F60F)));
-                request.setAttribute("url", "index.jsp");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
+            if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || email.equals("admin") || rawpass.equals("admin")) {
+                out.print("2");
             } else {
                 String pass = AttFunctions.hashIt(rawpass);
                 int access = 0;
@@ -42,8 +38,7 @@ public class login extends HttpServlet {
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
-                    messages m = new messages();
-                    m.dberror(request, response, e.getMessage(), "index.jsp");
+                    e.printStackTrace();
                 }
                 if (corrpass.equals("")) {
                     try {
@@ -59,27 +54,35 @@ public class login extends HttpServlet {
                         access = 1;
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        messages m = new messages();
-                        m.dberror(request, response, e.getMessage(), "index.jsp");
+                        e.printStackTrace();
                     }
                 }
                 if (corrpass.equals(pass)) {
-                    RequestDispatcher rd = request.getRequestDispatcher("homepage");
                     HttpSession session = request.getSession();
-                    int week = Integer.parseInt(session.getAttribute("week").toString());
-                    AttFunctions.new_week(week);
-                    AttFunctions.new_week(week + 1);
                     session.setAttribute("email", email);
                     session.setAttribute("access", access);
                     session.setAttribute("user", id);
-                    rd.forward(request, response);
-
+                    session.setAttribute("pop", 0);
+                    out.print("1");
                 } else {
-                    messages m = new messages();
-                    m.wrongpass(request, response);
+                    HttpSession session = request.getSession();
+                    int trial = 0;
+                    try {
+                        trial = Integer.parseInt(session.getAttribute("trial").toString());
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                        trial++;
+                        session.setAttribute("trial", trial);
+                    }
+                    if (trial > 4) {
+                        out.print("3");
+                    } else {
+                        out.print("0");
+                    }
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             /*messages m = new messages();
             m.error(request, response, e.getMessage(), "index.jsp");*/
         }

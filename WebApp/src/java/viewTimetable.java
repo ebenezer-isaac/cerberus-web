@@ -66,7 +66,6 @@ public class viewTimetable extends HttpServlet {
             }
             switch (access) {
                 case 1:
-                    request.getRequestDispatcher("side-faculty.jsp").include(request, response);
                     LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                     LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                     out.print("<style>"
@@ -109,15 +108,13 @@ public class viewTimetable extends HttpServlet {
                             + "}}"
                             + "</script>"
                             + "<table width = 100%>"
-                            + "<tr><td width = 33% align='center'><form action='viewTimetable' method='post'>"
-                            + "<input type='text' name='week' value='" + (week - 1) + "' hidden>"
+                            + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "')\" >"
                             + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
                             + "<span>Previous</span>"
                             + "</button>"
                             + "</form></td>"
                             + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
-                    out.print("<td width = 33% align='center'><form action='viewTimetable' method='post'>"
-                            + "<input type='text' name='week' value='" + (week + 1) + "' hidden>"
+                    out.print("<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
                             + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
                     if (week > Integer.parseInt(session.getAttribute("week").toString())) {
                         out.print("disabled");
@@ -164,6 +161,7 @@ public class viewTimetable extends HttpServlet {
                         }
                         out.print("</select>");
                     } catch (ClassNotFoundException | SQLException e) {
+                        e.printStackTrace();
                     }
 
                     out.print("<br>");
@@ -179,7 +177,6 @@ public class viewTimetable extends HttpServlet {
                     out.print("<div id='timetable' style='display: none;'>");
                     out.print(printTimetable());
                     out.print("</div>");
-                    request.getRequestDispatcher("end.html").include(request, response);
                     break;
 
                 default:
@@ -285,6 +282,7 @@ public class viewTimetable extends HttpServlet {
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             timetable = e.getMessage();
         }
         return timetable;
