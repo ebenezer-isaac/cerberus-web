@@ -66,15 +66,14 @@ public class login extends HttpServlet {
                     out.print("1");
                 } else {
                     HttpSession session = request.getSession();
-                    int trial = 0;
+                    int trial = 1;
                     try {
-                        trial = Integer.parseInt(session.getAttribute("trial").toString());
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+                        trial = Integer.parseInt(session.getAttribute("count").toString());
                         trial++;
-                        session.setAttribute("trial", trial);
+                    } catch (Exception e) {
                     }
-                    if (trial > 4) {
+                    session.setAttribute("count", ""+trial);
+                    if (trial > 5) {
                         out.print("3");
                     } else {
                         out.print("0");

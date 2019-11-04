@@ -1,3 +1,4 @@
+
 import cerberus.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -133,14 +134,22 @@ public class editTimetable extends HttpServlet {
                             LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                             out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                             out.print("<div class=\"table-responsive\">");
-                            out.print("<form id='ajaxform' action='saveTimetable' method='post'    2 align='right'>");
+                            out.print("<form id='ajaxform' action='saveTimetable' method='post' align='center'>");
                             out.print(printTimetable(labid));
                             out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
                             out.print("<input type='text' name='week' value='" + week + "' hidden>");
-                            out.print("<button type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
+
+                            out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
                                     + "<span>Save</span>"
                                     + "</button>");
                             out.print("</form>");
+                            if (week == ((int) session.getAttribute("week")) + 1) {
+                                out.print("<form action='copyTimetable' method='post' align='center'>");
+                                out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
+                                        + "<span>Copy From Previous Week</span>"
+                                        + "</button>");
+                                out.print("</form>");
+                            }
                             out.print("</div>");
                             con.close();
                         } catch (ParseException ex) {

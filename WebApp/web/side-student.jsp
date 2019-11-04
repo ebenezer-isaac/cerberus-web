@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Cerberus</title>
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
-        <link rel="icon" href="images/logo-circle.png" type="image/gif">
+        <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <link rel="stylesheet" href="css/loader.css" type="text/css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <!-- Our Custom CSS -->

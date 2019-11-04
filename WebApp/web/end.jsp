@@ -27,7 +27,6 @@
         }
     }
     $(document).ready(function () {
-
     <%try {
             String url = request.getAttribute("url").toString();
             out.print("setContent('/Cerberus/" + url + "');");

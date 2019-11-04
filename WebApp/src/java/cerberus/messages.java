@@ -81,6 +81,18 @@ public class messages extends HttpServlet {
         }
     }
 
+    public void failed(HttpServletRequest request, HttpServletResponse response, String body, String url)
+            throws ServletException, IOException {
+        try (PrintWriter out = response.getWriter()) {
+            this.redirect = "true";
+            this.head = "Request Unsuccessfull";
+            this.body = body;
+            this.url = url;
+            this.sec = 2;
+            processRequest(request, response);
+        }
+    }
+
     public void unauthaccess(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         this.redirect = "true";

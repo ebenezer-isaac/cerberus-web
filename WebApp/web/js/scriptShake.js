@@ -19,11 +19,10 @@ $(document).ready(function () {
             document.getElementById("loginbtn").click();
         }
     });
-    $('.log-btn').click(function () {
-
+    $('#loginbtn').click(function () {
+        document.getElementById("mess").innerHTML = "<div style='height: 100vh;vertical-align: middle;'><div class='loader'><div class='duo duo1'><div class='dot dot-a'></div><div class='dot dot-b'></div></div><div class='duo duo2'><div class='dot dot-a'></div><div class='dot dot-b'></div></div></div></div>";
         var mail = document.getElementById('email').value;
         var pwd = document.getElementById('pass').value;
-
         if (!ValidateEmail(mail))
         {
             document.getElementById("mess").innerHTML = "Invalid Email Address";
@@ -46,12 +45,16 @@ $(document).ready(function () {
                             window.location.replace("message.jsp?type=login" + data);
                         } else
                         {
-                            document.getElementById("mess").innerHTML = "Incorrect Password";
+                            document.getElementById("mess").innerHTML = "Incorrect Username or Password";
                             $('.pass-tf').addClass('wrong-entry');
+                            $('.mail-tf').addClass('wrong-entry');
                             $('.alert').fadeIn(500);
                             setTimeout("$('.alert').fadeOut(1500);", 3000);
                             $('.pass-tf').keypress(function () {
                                 $('.pass-tf').removeClass('wrong-entry');
+                            });
+                            $('.mail-tf').keypress(function () {
+                                $('.mail-tf').removeClass('wrong-entry');
                             });
                         }
 

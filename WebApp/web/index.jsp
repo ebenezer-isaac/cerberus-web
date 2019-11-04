@@ -30,10 +30,23 @@
 %>
 <html lang="en" >
     <head>
+        <style>
+            .main_content {
+                pointer-events: none;
+            }
+            .unselectable {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> Login Shake Effect </title>
+        <title> Login </title>
         <style> html {overflow: hidden;} </style>
         <title>Login form shake effect</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
@@ -43,6 +56,7 @@
         <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css">
         <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
+        <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
     <body>
@@ -144,7 +158,28 @@
                     x.type = "password";
                     y.innerHTML = "<i class='fa fa-eye-slash'></i>";
                 }
-            }</script>
+            }
+            window.onload = function () {
+                var labels = document.getElementsByTagName('body');
+                for (var i = 0; i < labels.length; i++) {
+                    labels[i].classList.add("unselectable");
+                }
+            };
+            function disableSelection(element) {
+
+                if (typeof element.onselectstart != 'undefined') {
+                    element.onselectstart = function () {
+                        return false;
+                    };
+                } else if (typeof element.style.MozUserSelect != 'undefined') {
+                    element.style.MozUserSelect = 'none';
+                } else {
+                    element.onmousedown = function () {
+                        return false;
+                    };
+                }
+            }
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="js/scriptShake.js"></script>
         <script src="js/main.js"></script>

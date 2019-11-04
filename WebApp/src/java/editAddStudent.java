@@ -23,7 +23,7 @@ public class editAddStudent extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            HttpSession session = request.getSession(true);
+            HttpSession session = request.getSession();
             try {
                 int access = (int) session.getAttribute("access");
                 switch (access) {

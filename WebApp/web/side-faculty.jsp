@@ -9,7 +9,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Cerberus</title>
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
-        <link rel="icon" href="images/logo-circle.png" type="image/gif">
+        <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <!-- Our Custom CSS -->
         <link rel="stylesheet" href="css/style2.css">
@@ -21,14 +21,6 @@
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
         <script>
             window.onload = function () {
-                var labels = document.getElementsByTagName('li');
-                for (var i = 0; i < labels.length; i++) {
-                    disableSelection(labels[i]);
-                }
-                var labels = document.getElementsByTagName('ul');
-                for (var i = 0; i < labels.length; i++) {
-                    labels[i].classList.add("unselectable");
-                }
                 var labels = document.getElementsByTagName('body');
                 for (var i = 0; i < labels.length; i++) {
                     labels[i].classList.add("unselectable");
@@ -168,6 +160,23 @@
                                                     } catch (Exception e) {
                                                     }
                                                 %>
+                                            </ul>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#slotSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Manage Timings</a>
+                                        <ul>
+                                            <ul class="collapse list-unstyled" id="slotSubmenu">
+
+                                                <li>
+                                                    <a href="javascript:setContent('/Cerberus/editSlot?flow=edit');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timings</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:setContent('/Cerberus/editSlot?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Slot</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:setContent('/Cerberus/editSlot?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove Slot</a>
+                                                </li>
                                             </ul>
                                         </ul>
                                     </li>

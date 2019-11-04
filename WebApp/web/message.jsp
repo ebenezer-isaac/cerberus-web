@@ -5,7 +5,6 @@
         access = Integer.parseInt(session.getAttribute("access").toString());
     } catch (Exception e) {
         e.printStackTrace();
-        System.out.println(access);
     }
     String redirect = "", head = "", body = "", fullpage = "", sec = "", type = "", url = "";
     try {
@@ -15,20 +14,16 @@
             type = request.getParameter("type").toString();
         } catch (Exception d) {
             type = "";
-            d.printStackTrace();
         }
-        e.printStackTrace();
     }
     System.out.println(type);
     if (type.equals("login0")) {
-        System.out.println(0);
         redirect = "false";
         head = "Security Firewall";
         body = "Invalid Username or Password. Please check your credentials and try again";
         url = "index.jsp";
         fullpage = "false";
     } else if (type.equals("login1")) {
-        System.out.println(1);
         if (access == 1 || access == 0) {
             redirect = "true";
             head = "Login Successfull";
@@ -45,7 +40,6 @@
             sec = "2";
         }
     } else if (type.equals("login2")) {
-        System.out.println(2);
         redirect = "true";
         fullpage = "false";
         head = "Nice Try!";
@@ -53,7 +47,6 @@
         url = "index.jsp";
         sec = "2";
     } else if (type.equals("login3")) {
-        System.out.println(2);
         redirect = "true";
         fullpage = "false";
         head = "Security Firewall";
@@ -68,12 +61,6 @@
         url = request.getAttribute("url").toString();
         sec = request.getAttribute("sec").toString();
     }
-    System.out.println("redirect:" + redirect);
-    System.out.println("head:" + head);
-    System.out.println("body:" + body);
-    System.out.println("fullpage:" + fullpage);
-    System.out.println("url:" + url);
-    System.out.println("sec:" + sec);
     int ajax = 0;
     if (fullpage.equals("false") && redirect.equals("true")) {
         response.setHeader("Refresh", sec + ";url=" + url + "");
@@ -99,7 +86,7 @@
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="stylesheet" href="css/loader.css" type="text/css">
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.10.1-web/css/all.css">
-        <link rel="icon" href="images/logo-circle.png" type="image/gif">
+        <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <style>
         </style>
     </head>
