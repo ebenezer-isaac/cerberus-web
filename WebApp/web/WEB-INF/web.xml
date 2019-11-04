@@ -129,17 +129,16 @@
         <servlet-class>newTimetable</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
         <servlet-name>deltSlot</servlet-name>
         <servlet-class>deltSlot</servlet-class>
-=======
+    </servlet>
+    <servlet>
         <servlet-name>editAddStudent</servlet-name>
         <servlet-class>editAddStudent</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>editDelStudent</servlet-name>
         <servlet-class>editDelStudent</servlet-class>
->>>>>>> ce9d98241429b9b997bac90a02acc9ff4aeaf886
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -270,17 +269,16 @@
         <url-pattern>/newTimetable</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>deltSlot</servlet-name>
         <url-pattern>/deltSlot</url-pattern>
-=======
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>editAddStudent</servlet-name>
         <url-pattern>/editAddStudent</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>editDelStudent</servlet-name>
         <url-pattern>/editDelStudent</url-pattern>
->>>>>>> ce9d98241429b9b997bac90a02acc9ff4aeaf886
     </servlet-mapping>
     <session-config>
         <session-timeout>
