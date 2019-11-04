@@ -61,12 +61,12 @@
 
                             <form>
                                 <div class="form-group mail-tf">
-                                    <input type="email" id='email' class="form-control" name="email" placeholder="Email" required>
+                                    <input type="email" id='email' class="form-control" name="email" placeholder="Email" title='Enter a valid e-mail address' required>
                                     <i class="fa fa-user"></i>
                                 </div>
                                 <div class="form-group pass-tf">
-                                    <input type="password" class="form-control active" id="pass" placeholder="Password" title="Minimum 8 characters and maximum 12 characters" required>
-                                    <i id="icon" class="fa fa-eye-slash"></i>
+                                    <input type="password" class="form-control active" id="pass" placeholder="Password" title='Enter the password associated with your e-mail address' required>
+                                    <div id='eye' class='pass-tf' onclick="showPass()"><i class="fa fa-eye-slash" ></i></div>
                                 </div>
                                 <span id = 'mess' class="alert">Invalid Password</span><br>
                                 <button type="button" class="log-btn" id='loginbtn'>Login</button>
@@ -118,6 +118,18 @@
                 </div>
             </div>
         </div>
+        <script>    
+            function showPass() {
+                var x = document.getElementById("pass");
+                var y = document.getElementById("eye");
+                if (x.type === "password") {
+                    x.type = "text";
+                    y.innerHTML="<i class='fa fa-eye'></i>";
+                } else {
+                    x.type = "password";
+                    y.innerHTML="<i class='fa fa-eye-slash'></i>";
+                }
+            }</script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="js/scriptShake.js"></script>
         <script src="js/main.js"></script>

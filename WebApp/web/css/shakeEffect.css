@@ -114,11 +114,14 @@ input[type=text], input[type=password], input[type=email], input[type=number]
     animation: wrong-log 0.4s;
 }
 
-.mail-tf.wrong-entry .form-control, .wrong-entry .form-control + .fa {
+.pass-tf.wrong-entry .form-control, .wrong-entry .form-control + .fa {
     border-color: #ed1c24;
     color: #ed1c24;
 }
-
+.wrong{
+    border-color: #ed1c24;
+    color: #ed1c24;
+}
 .log-btn {
     background: #0AC986;
     dispaly: inline-block;

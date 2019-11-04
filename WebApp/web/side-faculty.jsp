@@ -277,4 +277,4 @@
                                 } catch (Exception e) {
                                 }
                             %>
-                            <div id='main' style='display: none;'> 
+                            <div id='main' style='display: none;' align='center'> 

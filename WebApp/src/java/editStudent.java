@@ -28,25 +28,24 @@ public class editStudent extends HttpServlet {
                 int access = (int) session.getAttribute("access");
                 switch (access) {
                     case 1:
-                        out.print("<style>"
-                                + "input[type=number]{"
-                                + "width: 15px;"
-                                + "} "
-                                + "</style>");
-                        String flow = "";
+                        String flow;
                         try {
                             flow = request.getParameter("flow");
                         } catch (Exception e) {
                             flow = "add";
                         }
                         out.print("<script>"
+                                + "var btnstatus1=1;"
+                                + "var btnstatus2=1;"
+                                + "var btnstatus3=1;"
+                                + "var btnstatus4=0;"
                                 + "function sendInfo(x)"
-                                + "{ "
+                                + "{alert(x); "
                                 + "id=x;"
                                 + "if(x==0){"
                                 + "v = document.getElementById('email').value;"
                                 + "var url = \"ajaxCheckEmail?email=\" + v;}"
-                                + "else if (x==1){"
+                                + "else if (x==1||x==3){"
                                 + "v = document.getElementById('prn').value;"
                                 + "var url = \"ajaxCheckPRN?prn=\" + v;}"
                                 + "else if (x==2){"
@@ -72,11 +71,35 @@ public class editStudent extends HttpServlet {
                                 + "if (request.readyState == 4) {"
                                 + "var val = request.responseText;"
                                 + "if(id==0)"
-                                + "{document.getElementById('disp1').innerHTML = val;}"
+                                + "{if (val==0)"
+                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus1=1;}"
+                                + "else if(val==1)"
+                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-check' aria-hidden='true'></i>\";btnstatus1=0;}"
+                                + "else if(val==2)"
+                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus1=1;}}"
                                 + "else if (id==1)"
-                                + "{document.getElementById('disp2').innerHTML = val;}"
+                                + "{if (val==0)"
+                                + "{document.getElementById('disp2').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus2=1;}"
+                                + "else if(val==1)"
+                                + "{document.getElementById('disp2').innerHTML = \"<i class='fa fa-check' aria-hidden='true'></i>\";btnstatus2=0;}"
+                                + "else if(val==2)"
+                                + "{document.getElementById('disp2').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus2=1;}}"
                                 + "else if (id==2)"
-                                + "{document.getElementById('disp3').innerHTML = val;}"
+                                + "{if (val==0)"
+                                + "{document.getElementById('disp3').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus3=1;}"
+                                + "else if(val==1)"
+                                + "{document.getElementById('disp3').innerHTML = \"<i class='fa fa-check' aria-hidden='true'></i>\";btnstatus3=0;}"
+                                + "else if(val==2)"
+                                + "{document.getElementById('disp3').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus3=1;}}"
+                                + "else if (id==3)"
+                                + "{if (val==0||val==1)"
+                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus4=0;}"
+                                + "else if(val==2)"
+                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus4=1;}}"
+                                + "if(id==3){alert(btnstatus4);if(btnstatus4==1){document.getElementById('studbtn2').disabled = false;}"
+                                + "else{document.getElementById('studbtn2').disabled = true;}}"
+                                + "else{if(btnstatus1==0&&btnstatus2==0&&btnstatus3==0){document.getElementById('studbtn1').disabled = false;}"
+                                + "else{document.getElementById('studbtn1').disabled = true;}}"
                                 + "}"
                                 + "}"
                                 + "</script>");
@@ -107,7 +130,7 @@ public class editStudent extends HttpServlet {
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                out.print("<br><div align='center'><form action='addStudent' method='post'><table cellspacing='10'>"
+                                out.print("<br><form action='addStudent' method='post'><table cellspacing='10'>"
                                         + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
                                 Statement stmt = con.createStatement();
                                 out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub();'>");
@@ -126,7 +149,7 @@ public class editStudent extends HttpServlet {
                                         + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
                                         + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                         + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                        + "</table><div id='subs'></div><button type='submit' class='btn btn-info'>Add Student</button></form></div>");
+                                        + "</table><div id='subs'></div><button disabled type='submit' id='studbtn1' class='btn btn-info'>Add Student</button></form>");
                                 out.print("<script>");
                                 rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                                 PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
@@ -165,7 +188,7 @@ public class editStudent extends HttpServlet {
                                     classcount++;
                                 }
                                 classcount--;
-                                out.print("</script><script>function dissub()"
+                                out.print("function dissub()"
                                         + "{var index = document.getElementById('clas').selectedIndex;"
                                         + "if(index==0)"
                                         + "{document.getElementById('subs').innerHTML = ' ';}");
@@ -190,7 +213,7 @@ public class editStudent extends HttpServlet {
                                     + "</script>");
                             out.print("<form action='delStudent' method='post'>");
                             out.print("<div align='center'><br>Enter the PRN of the student: <br><br>");
-                            out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
+                            out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(3);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
                             out.print("<br><br><fieldset>"
                                     + "<legend><br>Warning - The following changes will be made:<br></legend>"
                                     + "<p>1. All Attendance Records for the Student will be deleted.</p>"
@@ -198,7 +221,7 @@ public class editStudent extends HttpServlet {
                                     + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
                                     + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
                                     + "<br><br></fieldset>");
-                            out.print("<br><div id = 'butt' ><button type='submit'>Submit</button></div>");
+                            out.print("<br><div id = 'butt' ><button id='studbtn2' disabled type='submit'>Submit</button></div>");
                             out.print("</form></div>");
                         }
                         break;

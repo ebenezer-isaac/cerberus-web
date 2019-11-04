@@ -35,12 +35,12 @@ public class ajaxCheckPRN extends HttpServlet {
             }
             if (Pattern.matches("^20\\d{14}$", prn)) {
                 if (flag == 0) {
-                    out.print("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
+                    out.print("1");
                 } else {
-                    out.print("<i class=\"fa fa-user\" aria-hidden=\"true\"></i>Student Exists");
+                    out.print("2");
                 }
             } else {
-                out.print("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>");
+                out.print("0");
             }
         }
     }
