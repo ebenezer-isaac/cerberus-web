@@ -40,7 +40,7 @@ public class editStudent extends HttpServlet {
                                 + "var btnstatus3=1;"
                                 + "var btnstatus4=0;"
                                 + "function sendInfo(x)"
-                                + "{alert(x); "
+                                + "{"
                                 + "id=x;"
                                 + "if(x==0){"
                                 + "v = document.getElementById('email').value;"
@@ -69,7 +69,7 @@ public class editStudent extends HttpServlet {
                                 + "}"
                                 + "function getInfo() {"
                                 + "if (request.readyState == 4) {"
-                                + "var val = request.responseText;alert(val);"
+                                + "var val = request.responseText;"
                                 + "if(id==0)"
                                 + "{if (val==0)"
                                 + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus1=1;}"
@@ -92,12 +92,12 @@ public class editStudent extends HttpServlet {
                                 + "else if(val==2)"
                                 + "{document.getElementById('disp3').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus3=1;}}"
                                 + "else if (id==3)"
-                                + "{alert('insideif');"
+                                + "{"
                                 + "if (val==0||val==1)"
-                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus4=0;}"
+                                + "{document.getElementById('disp4').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus4=0;}"
                                 + "else if(val==2)"
-                                + "{document.getElementById('disp1').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus4=1;}}"
-                                + "if(id==3){alert(btnstatus4);if(btnstatus4==1){document.getElementById('studbtn2').disabled = false;}"
+                                + "{document.getElementById('disp4').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus4=1;}}"
+                                + "if(id==3){if(btnstatus4==1){document.getElementById('studbtn2').disabled = false;}"
                                 + "else{document.getElementById('studbtn2').disabled = true;}}"
                                 + "else{if(btnstatus1==0&&btnstatus2==0&&btnstatus3==0){document.getElementById('studbtn1').disabled = false;}"
                                 + "else{document.getElementById('studbtn1').disabled = true;}}"
@@ -214,7 +214,7 @@ public class editStudent extends HttpServlet {
                                     + "</script>");
                             out.print("<form action='delStudent' method='post'>");
                             out.print("<div align='center'><br>Enter the PRN of the student: <br><br>");
-                            out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(3);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
+                            out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(3);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
                             out.print("<br><br><fieldset>"
                                     + "<legend><br>Warning - The following changes will be made:<br></legend>"
                                     + "<p>1. All Attendance Records for the Student will be deleted.</p>"

@@ -41,7 +41,7 @@ $(document).ready(function () {
                         pwd: pwd
                     },
                     function (data, status) {
-                        if (data == 1 || data == 2)
+                        if (data == 1 || data == 2 || data == 3)
                         {
                             window.location.replace("message.jsp?type=login" + data);
                         } else
