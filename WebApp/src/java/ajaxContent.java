@@ -21,8 +21,10 @@ public class ajaxContent extends HttpServlet {
                     url = request.getParameter("url");
                 } catch (Exception x) {
                     url = "homepage";
+                    System.out.println("exception");
                 }
             }
+            System.out.println("inside ajaxcontent"+url);
             request.setAttribute("url", url);
             HttpSession session = request.getSession();
             int access = (int) session.getAttribute("access");

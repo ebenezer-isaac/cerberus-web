@@ -101,7 +101,6 @@
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.10.1-web/css/all.css">
         <link rel="icon" href="images/logo-circle.png" type="image/gif">
         <style>
-
         </style>
     </head>
     <body style="background-color: #black;">
