@@ -33,7 +33,7 @@
             redirect = "true";
             head = "Login Successfull";
             body = "Populating your profile";
-            url = "ajaxContent?url=homepage";
+            url = "homepage";
             sec = "2";
             fullpage = "true";
         } else {

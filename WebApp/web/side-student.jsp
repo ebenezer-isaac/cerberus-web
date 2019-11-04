@@ -25,7 +25,7 @@
         <div class = "wrapper" > 
             <nav id="sidebar" ><ul class="list-unstyled components"><p align="center"><br><a href="/Cerberus/homepage">STUDENT PANEL</a></p><div id='pic' align='center'></div>
                     <li>
-                        <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-check"></i>&nbsp;&nbsp;View Attendance</a>
+                        <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-calendar-alt"></i>&nbsp;&nbsp;View Attendance</a>
                         <ul class="collapse list-unstyled" id="attSubmenu1">
                             <%
                                 try {
@@ -39,10 +39,7 @@
                                     ResultSet rs = ps1.executeQuery();
                                     int index = 1;
                                     while (rs.next()) {
-                                        EnglishNumberToWords a = new EnglishNumberToWords();
-                                        String number = a.convert(index);
-                                        System.out.print("<li><a href='/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "'><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
-                                        out.print("<li><a href='/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "'><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                        out.print("<li><a href='/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "'><i class='fas fa-chevron-right'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
                                         index++;
                                     }
                                     if (index == 1) {

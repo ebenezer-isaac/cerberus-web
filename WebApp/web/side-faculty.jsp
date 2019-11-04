@@ -177,10 +177,10 @@
                                 <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
                                 <ul class="collapse list-unstyled" id="stuSubmenu">
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editStudent?flow=add');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
+                                        <a href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editStudent?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
+                                        <a href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
                                     </li>
                                     <li>
                                         <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Student Data</a>
@@ -195,7 +195,7 @@
                                                         while (rs.next()) {
                                                             EnglishNumberToWords a = new EnglishNumberToWords();
                                                             String number = a.convert(rs.getInt(1));
-                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
                                                         }
                                                     } catch (Exception e) {
                                                     }
