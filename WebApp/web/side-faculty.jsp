@@ -177,10 +177,10 @@
                                 <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
                                 <ul class="collapse list-unstyled" id="stuSubmenu">
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editStudent?flow=add');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
+                                        <a href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editStudent?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
+                                        <a href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
                                     </li>
                                     <li>
                                         <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Student Data</a>
@@ -195,7 +195,7 @@
                                                         while (rs.next()) {
                                                             EnglishNumberToWords a = new EnglishNumberToWords();
                                                             String number = a.convert(rs.getInt(1));
-                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
                                                         }
                                                     } catch (Exception e) {
                                                     }
@@ -239,9 +239,9 @@
                     <div id="content">
                         <nav class="navbar navbar-expand bg-light">
                             <div class="container example">
-                                <button type="button" id="sidebarCollapse" style="background-color:#000000;" class="btn">
-                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font>
-                                        <img src="images/logo-circle.png"  height="42" width="42">
+                                <button type="button" id="sidebarCollapse" style="background-color:#000000; padding: 6px 20px;" class="btn">
+                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font> &nbsp; &nbsp;
+                                        <img src="images/logo-circle.png"  height="27" width="27">
                                     </button>
 
                                     <font class="toBeReplaced" style="font-size: 17px; color: #000000; font-family: DPSDbeyond;"> Cerberus Attendance Management System </font>

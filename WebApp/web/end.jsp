@@ -15,6 +15,7 @@
         } catch (e) {
             alert("Unable to connect to server");
         }
+
     }
 
     function getInfo() {

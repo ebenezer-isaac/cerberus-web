@@ -42,14 +42,6 @@ public class editFaculty extends HttpServlet {
                                     + "width: 40px;"
                                     + "} "
                                     + "</style>");
-                            out.print("<script>"
-                                    + "function zeroPad(num)"
-                                    + "{"
-                                    + "var s = num+'';"
-                                    + "while (s.length < 2) s = '0' + s;"
-                                    + "return(s);"
-                                    + "}"
-                                    + "</script>");
                             out.print("<br><div align='center'><form action='addFaculty' method='post'><table cellspacing='10'>"
                                     + "<tr><td class=\"editSubjectStyle\">Faculty Name</td><td> : </td><td>"
                                     + "<select name='title' class=\"editSelectFaculty\">"
@@ -95,7 +87,7 @@ public class editFaculty extends HttpServlet {
                                             + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                             + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                             + "<br></fieldset>");
-                                    out.print("<br><div id = 'butt' ><button type='submit' class='btn btn-info'>Submit</button></div>");
+                                    out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-info'>Submit</button></div>");
                                     out.print("</form></div>");
                                     con.close();
                                 }

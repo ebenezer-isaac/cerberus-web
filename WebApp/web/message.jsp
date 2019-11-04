@@ -33,7 +33,7 @@
             redirect = "true";
             head = "Login Successfull";
             body = "Populating your profile";
-            url = "ajaxContent?url=homepage";
+            url = "homepage";
             sec = "2";
             fullpage = "true";
         } else {
@@ -101,22 +101,10 @@
         <link rel="stylesheet" href="fontawesome/fontawesome-free-5.10.1-web/css/all.css">
         <link rel="icon" href="images/logo-circle.png" type="image/gif">
         <style>
-
         </style>
     </head>
     <body style="background-color: #black;">
-        <nav class="navbar navbar-expand navbar-light" style="background-color: black;">
-            <div class="container">
-                <img class="custom_logo" src="images/logo-circle.png"></a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="aboutus.html"> <button class="aboutus-button"> About us </button> </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        
         <div class="container" >
             <div class="reset_page" >
                 <div class="form_reset">
