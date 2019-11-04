@@ -239,9 +239,9 @@
                     <div id="content">
                         <nav class="navbar navbar-expand bg-light">
                             <div class="container example">
-                                <button type="button" id="sidebarCollapse" style="background-color:#000000;" class="btn">
-                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font>
-                                        <img src="images/logo-circle.png"  height="42" width="42">
+                                <button type="button" id="sidebarCollapse" style="background-color:#000000; padding: 6px 20px;" class="btn">
+                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font> &nbsp; &nbsp;
+                                        <img src="images/logo-circle.png"  height="27" width="27">
                                     </button>
 
                                     <font class="toBeReplaced" style="font-size: 17px; color: #000000; font-family: DPSDbeyond;"> Cerberus Attendance Management System </font>

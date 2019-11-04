@@ -105,18 +105,7 @@
         </style>
     </head>
     <body style="background-color: #black;">
-        <nav class="navbar navbar-expand navbar-light" style="background-color: black;">
-            <div class="container">
-                <img class="custom_logo" src="images/logo-circle.png"></a>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a href="aboutus.html"> <button class="aboutus-button"> About us </button> </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        
         <div class="container" >
             <div class="reset_page" >
                 <div class="form_reset">
