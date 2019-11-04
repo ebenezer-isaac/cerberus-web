@@ -27,47 +27,7 @@ public class editDelStudent extends HttpServlet {
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    out.print("<script>"
-                            + "var btnstatus4=0;"
-                            + "function sendInfo(x)"
-                            + "{"
-                            + "v = document.getElementById('prn').value;"
-                            + "var url = \"ajaxCheckPRN?prn=\" + v;"
-                            + "if (window.XMLHttpRequest) {"
-                            + "request = new XMLHttpRequest();"
-                            + "} else if (window.ActiveXObject) {"
-                            + "request = new ActiveXObject(\"Microsoft.XMLHTTP\");"
-                            + "}"
-                            + "try"
-                            + "{"
-                            + "request.onreadystatechange = getInfo;"
-                            + "request.open(\"GET\", url, true);"
-                            + "request.send();"
-                            + "} catch (e)"
-                            + "{"
-                            + "alert(\"Unable to connect to server\");"
-                            + "}"
-                            + "}"
-                            + "function getInfo() {"
-                            + "if (request.readyState == 4) {"
-                            + "var val = request.responseText;"
-                            + "if (val==0||val==1)"
-                            + "{document.getElementById('disp4').innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";btnstatus4=0;}"
-                            + "else if(val==2)"
-                            + "{document.getElementById('disp4').innerHTML = \"<i class='fa fa-user' aria-hidden='true'></i>\";btnstatus4=1;}"
-                            + "if(btnstatus4==1){document.getElementById('studbtn2').disabled = false;}"
-                            + "else{document.getElementById('studbtn2').disabled = true;}"
-                            + "}"
-                            + "}"
-                            + "</script>");
                     out.print("<body onload='myFunction()'>");
-                    out.print("<script>"
-                            + "function myFunction()"
-                            + "{if (document.getElementById('warn').checked==true) "
-                            + "{document.getElementById('butt').style.display = 'block';}"
-                            + "else"
-                            + "{document.getElementById('butt').style.display = 'none';}}"
-                            + "</script>");
                     out.print("<form action='delStudent' method='post'>");
                     out.print("<br>Enter the PRN of the student: <br><br>");
                     out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(3);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
@@ -80,7 +40,7 @@ public class editDelStudent extends HttpServlet {
                             + "<br><br></fieldset>");
                     out.print("<br><div id = 'butt' style='display:none;' ><button id='studbtn2' disabled type='submit'>Submit</button></div>");
                     out.print("</form>");
-                    
+                    out.print("<script src=\"js/studdelvalidations.js\">");
                     break;
                 default:
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
