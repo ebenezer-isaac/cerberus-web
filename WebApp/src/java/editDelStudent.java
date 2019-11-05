@@ -27,10 +27,9 @@ public class editDelStudent extends HttpServlet {
             int access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    out.print("<body onload='myFunction()'>");
                     out.print("<form action='delStudent' method='post'>");
                     out.print("<br>Enter the PRN of the student: <br><br>");
-                    out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='sendInfo(3);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
+                    out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='checkPRN();' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
                     out.print("<br><br><fieldset>"
                             + "<legend><br>Warning - The following changes will be made:<br></legend>"
                             + "<p>1. All Attendance Records for the Student will be deleted.</p>"
@@ -40,7 +39,7 @@ public class editDelStudent extends HttpServlet {
                             + "<br><br></fieldset>");
                     out.print("<br><div id = 'butt' style='display:none;' ><button id='studbtn2' disabled type='submit'>Submit</button></div>");
                     out.print("</form>");
-                    out.print("<script src=\"js/studdelvalidations.js\">");
+                    
                     break;
                 default:
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");

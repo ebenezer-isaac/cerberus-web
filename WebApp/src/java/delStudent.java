@@ -1,5 +1,6 @@
 
 import cerberus.Mailer;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -36,18 +37,22 @@ public class delStudent extends HttpServlet {
                     break;
                 }
                 if (flag == 0) {
-                    ps = con.prepareStatement("Delete from `studentfingerprint` where `prn` = ?;");
-                    ps.setString(1, prn);
-                    ps.executeUpdate();
-                    ps = con.prepareStatement("Delete from `rollcall` where `prn` = ?;");
-                    ps.setString(1, prn);
-                    ps.executeUpdate();
-                    ps = con.prepareStatement("Delete from `studentsubject` where `prn` = ?;");
-                    ps.setString(1, prn);
-                    ps.executeUpdate();
-                    ps = con.prepareStatement("Delete from `student` where `prn` = ?;");
-                    ps.setString(1, prn);
-                    ps.executeUpdate();
+                    try {
+                        ps = con.prepareStatement("Delete from `studentfingerprint` where `prn` = ?;");
+                        ps.setString(1, prn);
+                        ps.executeUpdate();
+                        ps = con.prepareStatement("Delete from `rollcall` where `prn` = ?;");
+                        ps.setString(1, prn);
+                        ps.executeUpdate();
+                        ps = con.prepareStatement("Delete from `studentsubject` where `prn` = ?;");
+                        ps.setString(1, prn);
+                        ps.executeUpdate();
+                        ps = con.prepareStatement("Delete from `student` where `prn` = ?;");
+                        ps.setString(1, prn);
+                        ps.executeUpdate();
+                    } catch (SQLException e) {
+                        con.rollback();
+                    }
                     con.close();
                     this.body = "Hey kiddo,\n    This mail is in response to a request to remove you as a Student at MSU-CA Department.\n\n"
                             + "Email/Username : " + this.email + "\n\n"
@@ -56,20 +61,12 @@ public class delStudent extends HttpServlet {
                             + "Regards\nCerberus Support Team";
                     Mailer mail = new Mailer();
                     mail.send(this.email, "Student Deletion", this.body);
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "false");
-                    request.setAttribute("head", "Student Deleted");
-                    request.setAttribute("body", "The student was deleted successfully");
-                    request.setAttribute("url", "homepage");
-                    rd.forward(request, response);
+                    messages a = new messages();
+                    a.success(request, response, "The student was deleted successfully", "homepage");
                 }
             } catch (ClassNotFoundException | SQLException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "false");
-                request.setAttribute("head", "Request Failed");
-                request.setAttribute("body", "The Student cannot be deleted because student-log/student-fingerprint is dependent on it");
-                request.setAttribute("url", "homepage");
-                rd.forward(request, response);
+                messages a = new messages();
+                a.failed(request, response, "The Student cannot be deleted because student-log/student-fingerprint is dependent on it", "homepage");
             }
 
         }

@@ -21,8 +21,31 @@ public class editSlot extends HttpServlet {
                 flow = "edit";
             }
             if (flow.equals("edit")) {
+                out.print("<form action ='saveSlot' method='post'>");
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    Statement stmt = con.createStatement();
+                    String sql = "SELECT `slotID`,`startTime`,`endTime` from `slot` order by startTime,endTime ASC;";
+                    ResultSet rs = stmt.executeQuery(sql);
+                    out.print("<table><th>Start Time</th><th>End Time</th></tr>");
+                    while (rs.next()) {
+                        out.print("<tr><td><input type = 'time' name = 'stime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(2).substring(0, 5) + "' step='60'></td> ");
+                        out.print("<td><input type = 'time' name = 'etime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(3).substring(0, 5) + "' step='60'></td></tr>");
+                    }
+                    out.print("</table><br><button type='submit' class='btn btn-info'>Submit</button>");
+                    out.print("</form>");
+                } catch (SQLException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+
+                }
 
             } else if (flow.equals("add")) {
+                out.print("<form action = 'addSlot' method='post'>"
+                        + "Start Time : <input type = 'time' name = 'stime' id = 'stime'  value='08:00' step='60'><br>"
+                        + "End Time : <input type = 'time' name = 'etime' id = 'etime'  value='13:00' step='60'><br>"
+                        + "<button type = 'submit'>Add</button>"
+                        + "</form");
             } else if (flow.equals("del")) {
                 out.print("<script>"
                         + "function myFunction()"
@@ -32,12 +55,12 @@ public class editSlot extends HttpServlet {
                         + "{document.getElementById('butt').style.display = 'none';}}"
                         + "</script>");
                 out.print("<form action='delSlot' method='post'>");
-                out.print("<div align='center'><br> <font style=\"font-size: 17px; color: red;\"> Select the Slot you want to delete : </font> <br><br>");
+                out.print("<br> <font style=\"font-size: 17px; color: red;\"> Select the Slot you want to delete : </font> <br><br>");
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     Statement stmt = con.createStatement();
-                    String sql = "SELECT `slotID`,`startTime`,`endTime` from `slot`;";
+                    String sql = "SELECT `slotID`,`startTime`,`endTime` from `slot` order by startTime,endTime ASC;";
                     ResultSet rs = stmt.executeQuery(sql);
                     String select = "<select name = 'slotID' class=\"editSelect\">";
                     while (rs.next()) {
@@ -53,7 +76,7 @@ public class editSlot extends HttpServlet {
                             + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                             + "<br></fieldset>");
                     out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-info'>Submit</button></div>");
-                    out.print("</form></div>");
+                    out.print("</form>");
                 } catch (SQLException | ClassNotFoundException ex) {
                     ex.printStackTrace();
 

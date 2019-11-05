@@ -186,13 +186,7 @@
                                 <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
                                 <ul class="collapse list-unstyled" id="stuSubmenu">
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
-                                    </li>
-                                    <li>
-                                        <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Student Data</a>
+                                        <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Student Details</a>
                                         <ul>
                                             <ul class="collapse list-unstyled" id="stuSubmenu1">
                                                 <%
@@ -212,16 +206,32 @@
                                             </ul>
                                         </ul>
                                     </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-chalkboard-teacher"></i>&nbsp;&nbsp;Faculty Management</a>
-                                <ul class="collapse list-unstyled" id="admSubmenu">
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a>
+                                        <a href="#stusubSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Subject Selection</a>
+                                        <ul>
+                                            <ul class="collapse list-unstyled" id="stusubSubmenu1">
+                                                <%
+                                                    try {
+                                                        Class.forName("com.mysql.cj.jdbc.Driver");
+                                                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                                        Statement stmt = con.createStatement();
+                                                        ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                                        while (rs.next()) {
+                                                            EnglishNumberToWords a = new EnglishNumberToWords();
+                                                            String number = a.convert(rs.getInt(1));
+                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
+                                                        }
+                                                    } catch (Exception e) {
+                                                    }
+                                                %>
+                                            </ul>
+                                        </ul>
                                     </li>
                                     <li>
-                                        <a href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a>
+                                        <a href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
                                     </li>
                                 </ul>
                             </li>
@@ -237,6 +247,17 @@
                                     </li>
                                     <li>
                                         <a href="javascript:setContent('/Cerberus/editSubject?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-chalkboard-teacher"></i>&nbsp;&nbsp;Faculty Management</a>
+                                <ul class="collapse list-unstyled" id="admSubmenu">
+                                    <li>
+                                        <a href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a>
                                     </li>
                                 </ul>
                             </li>

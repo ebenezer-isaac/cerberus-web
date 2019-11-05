@@ -220,7 +220,8 @@ public class viewTimetable extends HttpServlet {
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
                     + "where labID=? and weekID=(select weekID from week where week = ?) "
-                    + "GROUP BY slot.startTime, slot.endTime;");
+                    + "GROUP BY slot.startTime, slot.endTime ASC "
+                    + "ORDER BY slot.startTime, slot.endTime ASC;");
             ps4.setInt(1, labid);
             ps4.setInt(2, week);
             ResultSet lab1 = ps4.executeQuery();

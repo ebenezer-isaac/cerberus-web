@@ -28,7 +28,7 @@ public class viewSubject extends HttpServlet {
                 switch (access) {
                     case 1:
                         week = (int) session.getAttribute("week");
-                        
+
                         out.print("<style>tr:hover {"
                                 + "background: #a8a3a3;"
                                 + "}</style>");
@@ -39,45 +39,16 @@ public class viewSubject extends HttpServlet {
                         out.print("<th>Subject Name</th>");
                         out.print("<th>Abbreviation</th>");
                         out.print("<th>Class</th>");
-                        out.print("<th>Labs Conducted</th>");
                         out.print("</tr></thead><tbody>");
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                             Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("Select * from `subject` ORDER BY `sem` ASC");
+                            ResultSet rs = stmt.executeQuery("Select subject.subjectID, subject.sem, subject.subject, subject.Abbreviation, (select class.class from class where subject.classID = class.classID) from `subject` ORDER BY `sem` ASC");
                             while (rs.next()) {
                                 out.print("<tr onclick=\"window.location='viewSubDetails?subcode=" + rs.getString(1) + "';\">");
                                 for (int i = 1; i <= 5; i++) {
-                                    if (i != 5) {
-                                        out.print("<td>" + rs.getString(i) + "</td>");
-                                    } else {
-                                        int sem = rs.getInt(i);
-                                        String div = "";
-                                        switch (sem) {
-                                            case 1:
-                                                div = "FY";
-                                                break;
-                                            case 2:
-                                                div = "SY";
-                                                break;
-                                            case 3:
-                                                div = "TY";
-                                                break;
-                                        }
-                                        out.print("<td>" + div + "</td>");
-                                    }
-
-                                }
-                                PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID)\n"
-                                        + "from facultytimetable \n"
-                                        + "INNER JOIN timetable\n"
-                                        + "on timetable.scheduleID=facultytimetable.scheduleID\n"
-                                        + "where timetable.subjectID = ?");
-                                ps.setString(1, rs.getString(1));
-                                ResultSet rs1 = ps.executeQuery();
-                                while (rs1.next()) {
-                                    out.print("<td>" + rs1.getString(1) + "</td>");
+                                    out.print("<td>" + rs.getString(i) + "</td>");
                                 }
                                 out.print("</tr>");
                             }
@@ -87,7 +58,7 @@ public class viewSubject extends HttpServlet {
                             e.printStackTrace();
 
                         }
-                        
+
                         break;
 
                     default:

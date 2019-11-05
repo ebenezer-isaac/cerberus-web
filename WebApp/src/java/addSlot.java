@@ -1,4 +1,5 @@
 
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -15,7 +16,6 @@ public class addSlot extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String stime = request.getParameter("stime");
             String etime = request.getParameter("etime");
-            System.out.println(stime);
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -24,7 +24,6 @@ public class addSlot extends HttpServlet {
                 int max = 0;
                 while (rs1.next()) {
                     max = rs1.getInt(1);
-                    System.out.println(max);
                 }
                 PreparedStatement pp = con.prepareStatement("INSERT INTO `slot`(`slotID`, `startTime`, `endTime`) VALUES (?,?,?)");
                 pp.setInt(1, max + 1);
@@ -34,6 +33,8 @@ public class addSlot extends HttpServlet {
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
             }
+            messages a = new messages();
+            a.success(request, response, "New Slot has been added", "viewTimetable");
         }
     }
 

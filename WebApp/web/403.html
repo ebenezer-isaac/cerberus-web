@@ -170,7 +170,25 @@
                     text-indent: -373px;
                 }
             }
-            p{ color: white; font-size: 20px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
+            .p{ 
+                color: white; 
+                font-size: 20px; 
+                font-family: 'Signika', sans-serif; 
+                padding-bottom: 10px; 
+            }
+            .log-btn {
+                background: #0AC986;
+                dispaly: inline-block;
+                width: 100%;
+                font-size: 16px;
+                height: 50px;
+                color: #fff;
+                text-decoration: none;
+                border: none;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+                border-radius: 4px;
+            }
         </style>
         <script>
             window.console = window.console || function (t) {};
@@ -188,5 +206,6 @@
         <br>
         And there is someone, right behind you.
     </p>
+    <button type="button" onclick="window.location.replace('/Cerberus/index.jsp')" class="log-btn" style='max-width: 150px'>Redirect Me</button>
 
 </body></html>

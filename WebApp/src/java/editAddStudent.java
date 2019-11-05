@@ -40,7 +40,7 @@ public class editAddStudent extends HttpServlet {
                             out.print("<br><form action='addStudent' method='post'><table cellspacing='10'>"
                                     + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
                             Statement stmt = con.createStatement();
-                            out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='sendInfo(2);dissub();'>");
+                            out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='checkValidations(2);dissub();'>");
                             out.print("<option name='clas' value= '0'>Select Class</option>");
                             ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                             int no_of_class = 0;
@@ -53,9 +53,9 @@ public class editAddStudent extends HttpServlet {
                             out.print("</select>");
                             out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
                                     + "<tr><td class=\"editSubjectStyle\">MSU ID</td><td> : </td><td><input type='TEXT' name='photo_id' id='photo_id' class=\"editSubjectForm\" placeholder='D" + String.valueOf(year).substring(2) + "CJxxxxxxx'/></td></tr> "
-                                    + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);sendInfo(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='sendInfo(2);'></i></div></td></td></tr> "
-                                    + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='sendInfo(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
-                                    + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='sendInfo(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
+                                    + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);checkValidations(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='checkValidations(2);'></i></div></td></td></tr> "
+                                    + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='checkValidations(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                    + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='checkValidations(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                     + "</table><div id='subs'></div><button disabled type='submit' id='studbtn1' class='btn btn-info'>Add Student</button></form>");
                             out.print("<script>");
                             rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
@@ -103,7 +103,7 @@ public class editAddStudent extends HttpServlet {
                                 out.print("else if (index==" + i + ")"
                                         + "{document.getElementById('subs').innerHTML = class" + i + "}");
                             }
-                            out.print("}</script><script src=\"js/studaddvalidations.js\">");
+                            out.print("}</script>");
                             con.close();
 
                         } catch (SQLException e) {

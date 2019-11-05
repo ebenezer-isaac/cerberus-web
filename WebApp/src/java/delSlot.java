@@ -28,8 +28,9 @@ public class delSlot extends HttpServlet {
                 e.printStackTrace();
                 messages a = new messages();
                 a.dberror(request, response, e.getMessage(), "homepage");
-
             }
+            messages a = new messages();
+            a.success(request, response, "Slot has been deleted", "viewTimetable");
         }
     }
 
