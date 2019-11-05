@@ -65,7 +65,7 @@
                 <div class="row custom_row">
                     <div class="col-lg-6 my-auto">
                         <div class="main_content mx-auto">
-                            <img src="images/logo-main.png" style="width: 101px; height: 101px; margin-bottom: 70px;">
+                            <img src="images/logomain.png" style="width: 101px; height: 101px; margin-bottom: 70px;">
 
                             <svg width="331" height="34" viewBox="0 0 331 34" fill="none" xmlns="http://www.w3.org/2000/svg" id="logo">
 
