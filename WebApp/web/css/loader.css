@@ -25,8 +25,8 @@
     width: 20px;
     height: 20px;
     border-radius: 10px;
-    border-color: #24af29;
-    background: #24af29;
+    border-color: #007BFF;
+    background: #007BFF;
     position: absolute;
 }
 .dot-a {
@@ -57,6 +57,59 @@
     animation-name: onOff;
 }
 .duo1 .dot-a {
+    opacity: 0;
+    animation-name: onOff;
+    animation-direction: reverse;
+}    
+
+
+.loader-s {
+    position: relative;
+    width: 20px;
+    margin: 0px auto;
+}
+.duo-s {
+    height: 10px;
+    width: 25px;
+    background: hsla(0, 0%, 0%, 0.0);
+    position: absolute;
+}
+.duo-s, .dot-s {
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+.duo1-s {
+    left: 0;
+}
+.duo2-s {
+    left: 15px
+}
+.dot-s {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    border-color: #007BFF;
+    background: #007BFF;
+    position: absolute;
+}
+.dot-a-s {
+    left: 0px;  
+}
+.dot-b-s {
+    right: 0px;
+}
+.duo1-s {
+    animation-name: spin;
+}
+.duo2-s {
+    animation-name: spin;
+    animation-direction: reverse;
+}
+.duo2-s .dot-b-s {
+    animation-name: onOff;
+}
+.duo1-s .dot-a-s {
     opacity: 0;
     animation-name: onOff;
     animation-direction: reverse;

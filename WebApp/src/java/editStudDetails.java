@@ -82,24 +82,27 @@ public class editStudDetails extends HttpServlet {
                                 out.print("<th align='center'> Fingerprint <br>1 </th>");
                                 out.print("<th align='center'> Fingerprint <br>2 </th>");
                                 out.print("</tr></thead><tbody>");
+                                out.print("<style>"
+                                        + ".noborder{border:none;}"
+                                        + "</style>");
                                 rs.previous();
                                 while (rs.next()) {
                                     line++;
                                     out.print("<tr>");
-                                    out.print("<td><input type='number' name='roll" + line + "' min='1' max='120' onchange='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
-                                    out.print("<td><div>" + rs.getString(2) + "</div><input type='text' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
+                                    out.print("<td><table><tr><td><input type='number' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td><td><div id='disproll" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td></tr></table></td>");
+                                    out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                     out.print("<td>" + rs.getString(3) + "</td>");
                                     out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(4) + "'></td>");
-                                    out.print("<td><input type='email' name='email" + line + "' value='" + rs.getString(5) + "'></td><td>");
+                                    out.print("<td><table><tr><td><input type='email' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(5) + "'></td><td><div id='dispemail" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td></tr></table></td><td>");
                                     if (rs.getString(6) != null) {
-                                        out.print("<input type='checkbox' name='sub" + line + "" + rs.getString(6) + "' checked >");
+                                        out.print("<input type='checkbox' name='t1" + line + "' checked >");
                                     } else {
                                         out.print("N/A");
                                     }
                                     out.print("</td>");
                                     out.print("<td>");
                                     if (rs.getString(7) != null) {
-                                        out.print("<input type='checkbox' name='sub" + line + "" + rs.getString(7) + "' checked >");
+                                        out.print("<input type='checkbox' name='t2" + line + "' checked >");
                                     } else {
                                         out.print("N/A");
                                     }
@@ -108,11 +111,49 @@ public class editStudDetails extends HttpServlet {
                                     out.print("</tr>");
                                 }
                                 out.print("</tbody></table><br><br>");
-                                out.print("<input type='submit' value='Submit' align='center'>"
+                                out.print("<input type='submit' id='studdbtn' value='Submit' align='center'>"
                                         + "<input type='text' name='division' value='" + classID + "' hidden>"
                                         + "<input type='text' name='cols' value='" + cols + "' hidden>"
                                         + "<input type='text' name='rows' value='" + line + "' hidden>");
                                 out.print("</form><br>");
+                                out.print("<script>"
+                                        + "var btnstatus5 = 0;var line=0;"
+                                        + "function checkdupEmail(id) {line=id;"
+                                        + "prn = document.getElementById('prn'+id).value;"
+                                        + "email = document.getElementById('email'+id).value;"
+                                        + "var url = \"ajaxDupEmail?prn=\" + prn+\"&email=\"+email;"
+                                        + "if (window.XMLHttpRequest) {"
+                                        + "request = new XMLHttpRequest()"
+                                        + "} else if (window.ActiveXObject) {"
+                                        + "request = new ActiveXObject(\"Microsoft.XMLHTTP\");"
+                                        + "}"
+                                        + "try {"
+                                        + "request.onreadystatechange = setInf;"
+                                        + "request.open(\"GET\", url, true);"
+                                        + "request.send();"
+                                        + "} catch (e) {"
+                                        + "alert(\"Unable to connect to server\");"
+                                        + "}"
+                                        + "}"
+                                        + ""
+                                        + "function setInf() {"
+                                        + "if (request.readyState == 4) {"
+                                        + "var val = request.responseText;"
+                                        + "if (val == 1) {"
+                                        + "    document.getElementById('dispemail'+line).innerHTML = \"<i class='fa fa-check' aria-hidden='true'></i>\";"
+                                        + "    btnstatus5 = 1;"
+                                        + "} else {"
+                                        + "    document.getElementById('dispemail'+line).innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";"
+                                        + "    btnstatus5 = 0;"
+                                        + "}"
+                                        + "if (btnstatus5 == 1) {"
+                                        + "    document.getElementById('studdbtn').disabled = false;"
+                                        + "} else {"
+                                        + "    document.getElementById('studdbtn').disabled = true;"
+                                        + "}"
+                                        + "}"
+                                        + "}"
+                                        + "</script>");
                             } else {
                                 out.print("No Data to display");
                             }

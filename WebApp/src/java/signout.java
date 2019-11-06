@@ -12,7 +12,6 @@ public class signout extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.getSession().invalidate();
         response.sendRedirect(request.getContextPath() + "/index.jsp");
-
     }
 
     @Override

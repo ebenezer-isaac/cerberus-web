@@ -5,8 +5,8 @@
  */
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,28 +30,14 @@ public class newTimetable extends HttpServlet {
         } catch (NoSuchAlgorithmException e) {
         }
         if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
-            int weekid = 0;
+            int weekid = getWeekID(week);
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps6 = con.prepareStatement("SELECT weekID FROM WEEK where week = ?");
-                ps6.setInt(1, week);
-                ResultSet rs = ps6.executeQuery();
-                while (rs.next()) {
-                    weekid = rs.getInt(1);
-                }
-                if (weekid == 0) {
-                    PreparedStatement ps2 = con.prepareStatement("insert into week(`week`) values(?)");
-                    ps2.setInt(1, week);
-                    ps2.executeUpdate();
-                    rs = ps6.executeQuery();
-                    while (rs.next()) {
-                        weekid = rs.getInt(1);
-                    }
-                }
+                
                 PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
                 ps5.setInt(1, weekid);
-                rs = ps5.executeQuery();
+                ResultSet rs = ps5.executeQuery();
                 int flag = 0;
                 while (rs.next()) {
                     flag = 1;

@@ -138,8 +138,8 @@ public class attendance extends HttpServlet {
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
                                     if (rs.getString(i) != null) {
-                                        out.print("<td><a href = '/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + rs.getString(i) + "' style='display:block;text-decoration:none;'>");
-                                        out.print(String.format("%.02f", AttFunctions.calpercentage(prn, rs.getString(i))) + "%");
+                                        out.print("<td><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + rs.getString(i) + "');\" style='display:block;text-decoration:none;'>");
+                                        out.print(String.format("%.02f", AttFunctions.calPercentage(prn, rs.getString(i))) + "%");
                                         out.print("</a></td>");
                                     } else {
                                         out.print("<td>NA</td>");

@@ -2,59 +2,31 @@
 <%@page import="java.sql.*"%>
 <%@page import="cerberus.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Cerberus</title>
-        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-        <!-- Our Custom CSS -->
-        <link rel="stylesheet" href="css/style2.css">
-        <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-
-        <!-- Font Awesome JS -->
-        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-        <script>
-            window.onload = function () {
-                var labels = document.getElementsByTagName('body');
-                for (var i = 0; i < labels.length; i++) {
-                    labels[i].classList.add("unselectable");
-                }
-            };
-            function disableSelection(element) {
-
-                if (typeof element.onselectstart != 'undefined') {
-                    element.onselectstart = function () {
-                        return false;
-                    };
-                } else if (typeof element.style.MozUserSelect != 'undefined') {
-                    element.style.MozUserSelect = 'none';
-                } else {
-                    element.onmousedown = function () {
-                        return false;
-                    };
-                }
-            }
-            function unfade(element) {
-                var op = 0.1; // initial opacity
-
-                var timer = setInterval(function () {
-                    if (op >= 1) {
-                        clearInterval(timer);
-                    }
-                    element.style.opacity = op;
-                    element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-                    element.style.display = 'block';
-                    op += op * 0.08;
-                }, 10);
-            }
-        </script>
+        <title>Cerberus</title>
+        <!-- Custom fonts for this template-->
+        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <!-- Page level plugin CSS-->
+        <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+        <!-- Custom styles for this template-->
+        <link href="css/sb-admin.css" rel="stylesheet">
         <style>
+            .warning{
+                background-color:red;
+                color:white;
+            }
+            .success{
+                background-color:green;
+                color:white;
+            }
             img {
                 pointer-events: none;
             }
@@ -66,245 +38,201 @@
                 -ms-user-select: none;
                 user-select: none;
             }
-            @media screen and (max-width: 1000px) {
-                div.example {
-                    font-size: 17px;
-                    content: "hi";
-                }
-
-                .toBeReplaced
-                { 
-                    visibility: hidden; 
-                    position: relative; 
-                }
-
-                .toBeReplaced:after
-                { 
-                    visibility: visible; 
-                    position: absolute;
-                    left: 0;
-                    content: "Cerberus";
-                    font-family: DPSDbeyond;
-                    float: none;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                } 
-                /* width */
-                ::-webkit-scrollbar {
-                    width: 7.5px;
-                }
-
-                /* Track */
-                ::-webkit-scrollbar-track {
-                    background: #f1f1f1; 
-                }
-
-                /* Handle */
-                ::-webkit-scrollbar-thumb {
-                    background: #888; 
-                }
-
-                /* Handle on hover */
-                ::-webkit-scrollbar-thumb:hover {
-
-                </style>
-            </head>
-            <body>
-                <div class="wrapper">
-                    <!-- Sidebar --> 
-                    <nav id="sidebar" >
-                        <ul class="list-unstyled components">
-                            <div align="center"><br><a href="javascript:setContent('/Cerberus/homepage');"><i class="fas fa-home"></i>&nbsp;&nbsp;FACULTY PANEL</a></div>
-                            <br><div id='pic' align='center'></div>
-                            <li>
-                                <a href="#attSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-check"></i>&nbsp;&nbsp;Attendance Management</a>
-                                <ul class="collapse list-unstyled" id="attSubmenu1">
-                                    <%
-                                        try {
-                                            Class.forName("com.mysql.cj.jdbc.Driver");
-                                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                            Statement stmt = con.createStatement();
-                                            ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
-                                            while (rs.next()) {
-                                                EnglishNumberToWords a = new EnglishNumberToWords();
-                                                String number = a.convert(rs.getInt(1));
-                                                out.print("<li><a href=\"javascript:setContent('/Cerberus/attendance?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
-                                            }
-                                        } catch (Exception e) {
-                                        }
-                                    %>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-calendar-alt"></i>&nbsp;&nbsp;Timetable Management</a>
-                                <ul class="collapse list-unstyled" id="homeSubmenu">
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/viewTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
-                                    </li>
-                                    <li>
-                                        <a href="#homeSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
-                                        <ul>
-                                            <ul class="collapse list-unstyled" id="homeSubmenu1">
-                                                <%
-                                                    try {
-                                                        Class.forName("com.mysql.cj.jdbc.Driver");
-                                                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                                        Statement stmt = con.createStatement();
-                                                        ResultSet rs = stmt.executeQuery("SELECT labID, name FROM `lab` ORDER BY `labID` ASC");
-                                                        while (rs.next()) {
-                                                            EnglishNumberToWords a = new EnglishNumberToWords();
-                                                            String number = a.convert(rs.getInt(1));
-                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
-                                                        }
-                                                    } catch (Exception e) {
-                                                    }
-                                                %>
-                                            </ul>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#slotSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Manage Timings</a>
-                                        <ul>
-                                            <ul class="collapse list-unstyled" id="slotSubmenu">
-
-                                                <li>
-                                                    <a href="javascript:setContent('/Cerberus/editSlot?flow=edit');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timings</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:setContent('/Cerberus/editSlot?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Slot</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:setContent('/Cerberus/editSlot?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove Slot</a>
-                                                </li>
-                                            </ul>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#stuSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-users"></i>&nbsp;&nbsp;Student Management</a>
-                                <ul class="collapse list-unstyled" id="stuSubmenu">
-                                    <li>
-                                        <a href="#stuSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Student Details</a>
-                                        <ul>
-                                            <ul class="collapse list-unstyled" id="stuSubmenu1">
-                                                <%
-                                                    try {
-                                                        Class.forName("com.mysql.cj.jdbc.Driver");
-                                                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                                        Statement stmt = con.createStatement();
-                                                        ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
-                                                        while (rs.next()) {
-                                                            EnglishNumberToWords a = new EnglishNumberToWords();
-                                                            String number = a.convert(rs.getInt(1));
-                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
-                                                        }
-                                                    } catch (Exception e) {
-                                                    }
-                                                %>
-                                            </ul>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#stusubSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-edit"></i>&nbsp;&nbsp;Subject Selection</a>
-                                        <ul>
-                                            <ul class="collapse list-unstyled" id="stusubSubmenu1">
-                                                <%
-                                                    try {
-                                                        Class.forName("com.mysql.cj.jdbc.Driver");
-                                                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                                        Statement stmt = con.createStatement();
-                                                        ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
-                                                        while (rs.next()) {
-                                                            EnglishNumberToWords a = new EnglishNumberToWords();
-                                                            String number = a.convert(rs.getInt(1));
-                                                            out.print("<li><a href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a></li>");
-                                                        }
-                                                    } catch (Exception e) {
-                                                    }
-                                                %>
-                                            </ul>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#subSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;Subject Management</a>
-                                <ul class="collapse list-unstyled" id="subSubmenu">
-
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/viewSubject');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editSubject?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editSubject?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#admSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-chalkboard-teacher"></i>&nbsp;&nbsp;Faculty Management</a>
-                                <ul class="collapse list-unstyled" id="admSubmenu">
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fas fa-address-card"></i>&nbsp;&nbsp;Student Progression</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div id="content">
-                        <nav class="navbar navbar-expand bg-light">
-                            <div class="container example">
-                                <button type="button" id="sidebarCollapse" style="background-color:#000000; padding: 6px 20px;" class="btn">
-                                    <font style="color: #ffffff"><i class="fas fa-bars"></i></font> &nbsp; &nbsp;
-                                        <img src="images/logo-circle.png"  height="27" width="27">
-                                    </button>
-
-                                    <font class="toBeReplaced" style="font-size: 17px; color: #000000; font-family: DPSDbeyond;"> Cerberus Attendance Management System </font>
-
-                                <a class="nav-link" href="/Cerberus/signout"><button type="button" style="background-color:#000000;" class="btn"><span><font style="color: #ffffff">Sign out</font></span>
-                                            <font style="color: #ffffff"><i class="fas fa-door-open"></i></font>
-                                        </button></a>
-
-                                </div>
-                            </nav>
-
-                            <%
+        </style>
+    </head>
+    <body id="page-top">
+        <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+            <img src="images/logomain.png"  height="27" align='center' width="27">
+            <a class="navbar-brand mr-1" href="index.html">Cerberus</a>
+            <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+                <i class="fas fa-bars"></i>
+            </button>
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                
+            </form>
+            <!-- Navbar -->
+            <ul class="navbar-nav ml-auto ml-md-0">
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div id='pic'></div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/profile');">Settings</a>
+                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <ul class="sidebar navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-check"></i>
+                        <span>Attendance</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <h6 class="dropdown-header" align='center'>View : </h6>
+                        <%
+                            try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");
-                                try {
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                                    PreparedStatement ps2 = con.prepareStatement("SELECT name, photo FROM faculty WHERE facultyID = ?");
-                                    ps2.setString(1, session.getAttribute("user").toString());
-                                    byte[] blob = null;
-                                    String name = "";
-                                    ResultSet rs = ps2.executeQuery();
-                                    while (rs.next()) {
-                                        blob = rs.getBytes("photo");
-                                        name = rs.getString("name");
-                                    }
-                                    con.close();
-                                    if (blob != null) {
-                                        String imgString = DatatypeConverter.printBase64Binary(blob);
-                                        out.print("<script>document.getElementById('pic').innerHTML=\""
-                                                + "<a href='editProfilePage.html'>"
-                                                + "<img style='border-radius: 10%;' src='data:image/png;base64," + imgString + "'/>"
-                                                + "<br><br>" + name + "<br><br></a>\";</script>");
-                                    }
-                                } catch (Exception e) {
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Statement stmt = con.createStatement();
+                                ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                while (rs.next()) {
+                                    EnglishNumberToWords a = new EnglishNumberToWords();
+                                    String number = a.convert(rs.getInt(1));
+                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/attendance?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
                                 }
-                            %>
-                            <div id='main' style='display: none;' align='center'> 
+                            } catch (Exception e) {
+                            }
+                        %>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Management : </h6>
+                        <a class="dropdown-item" href="#">404 Page</a>
+                        <a class="dropdown-item" href="#">Blank Page</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-calendar-alt"></i>
+                        <span>TimeTable</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Edit :</h6>
+                        <%
+                            try {
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Statement stmt = con.createStatement();
+                                ResultSet rs = stmt.executeQuery("SELECT labID, name FROM `lab` ORDER BY `labID` ASC");
+                                while (rs.next()) {
+                                    EnglishNumberToWords a = new EnglishNumberToWords();
+                                    String number = a.convert(rs.getInt(1));
+                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                }
+                            } catch (Exception e) {
+                            }
+                        %>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Timings :</h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=edit');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timings</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Slot</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove Slot</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-users"></i>
+                        <span>Student</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <h6 class="dropdown-header" align='center'>Details : </h6>
+                        <%
+                            try {
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Statement stmt = con.createStatement();
+                                ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                while (rs.next()) {
+                                    EnglishNumberToWords a = new EnglishNumberToWords();
+                                    String number = a.convert(rs.getInt(1));
+                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                }
+                            } catch (Exception e) {
+                            }
+                        %>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Subject Selection : </h6>
+                        <%
+                            try {
+                                Class.forName("com.mysql.cj.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Statement stmt = con.createStatement();
+                                ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                while (rs.next()) {
+                                    EnglishNumberToWords a = new EnglishNumberToWords();
+                                    String number = a.convert(rs.getInt(1));
+                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                }
+                            } catch (Exception e) {
+                            }
+                        %>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-list-alt"></i>
+                        <span>Subject</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewSubject');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Management : </h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-chalkboard-teacher"></i>
+                        <span>Faculty</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <h6 class="dropdown-header" align='center'>Management : </h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:setContent('/Cerberus/studentProgression');">
+                        <i class="fas fa-address-card"></i>
+                        <span>Student Progression</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="tables.html">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Timetable</span></a>
+                </li>
+            </ul>
+
+            <%
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                try {
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    PreparedStatement ps2 = con.prepareStatement("SELECT name, photo FROM faculty WHERE facultyID = ?");
+                    ps2.setString(1, session.getAttribute("user").toString());
+                    byte[] blob = null;
+                    String name = "";
+                    ResultSet rs = ps2.executeQuery();
+                    while (rs.next()) {
+                        blob = rs.getBytes("photo");
+                        name = rs.getString("name");
+                    }
+                    con.close();
+                    if (blob != null) {
+                        String imgString = DatatypeConverter.printBase64Binary(blob);
+                        out.print("<script>document.getElementById('pic').innerHTML=\"" + name
+                                + "&nbsp&nbsp<img style='border-radius:50%;' height='30px'src='data:image/png;base64," + imgString + "'/>\";"
+                                + "var name='';</script>");
+                    }
+                } catch (Exception e) {
+                }
+            %>
+            <div id="content-wrapper">
+                <div class="container-fluid">
+                    <!-- Breadcrumbs-->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">Overview</li>
+                    </ol>
+                    <div id='main' style='display: none;' align='center'> 

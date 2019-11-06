@@ -85,7 +85,7 @@
         <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="stylesheet" href="css/loader.css" type="text/css">
-        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.10.1-web/css/all.css">
+        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <style>
         </style>
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div id="particles-js"></div>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="js/jquery.min.js"></script>
         <script src="js/main.js"></script>
         <script src="js/particles.js"></script>
         <script src="js/app.js"></script>

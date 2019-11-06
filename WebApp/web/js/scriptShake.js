@@ -20,11 +20,13 @@ $(document).ready(function () {
         }
     });
     $('#loginbtn').click(function () {
-        document.getElementById("mess").innerHTML = "<div style='height: 100vh;vertical-align: middle;'><div class='loader'><div class='duo duo1'><div class='dot dot-a'></div><div class='dot dot-b'></div></div><div class='duo duo2'><div class='dot dot-a'></div><div class='dot dot-b'></div></div></div></div>";
+        $('.alert').fadeIn(500);
+        document.getElementById("mess").innerHTML = "<div class='loader-s'><div class='duo-s duo1-s'><div class='dot-s dot-a-s'></div><div class='dot-s dot-b-s'></div></div><div class='duo-s duo2-s'><div class='dot-s dot-a-s'></div><div class='dot-s dot-b-s'></div></div></div>";
         var mail = document.getElementById('email').value;
         var pwd = document.getElementById('pass').value;
         if (!ValidateEmail(mail))
         {
+            $('.alert').fadeOut(500);
             document.getElementById("mess").innerHTML = "Invalid Email Address";
             $('.mail-tf').addClass('wrong-entry');
             $('.alert').fadeIn(500);
@@ -45,6 +47,7 @@ $(document).ready(function () {
                             window.location.replace("message.jsp?type=login" + data);
                         } else
                         {
+                            $('.alert').fadeOut(500);
                             document.getElementById("mess").innerHTML = "Incorrect Username or Password";
                             $('.pass-tf').addClass('wrong-entry');
                             $('.mail-tf').addClass('wrong-entry');

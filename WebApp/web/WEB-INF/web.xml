@@ -129,10 +129,6 @@
         <servlet-class>newTimetable</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>deltSlot</servlet-name>
-        <servlet-class>deltSlot</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>editAddStudent</servlet-name>
         <servlet-class>editAddStudent</servlet-class>
     </servlet>
@@ -163,6 +159,14 @@
     <servlet>
         <servlet-name>editSubSelection</servlet-name>
         <servlet-class>editSubSelection</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ajaxDupEmail</servlet-name>
+        <servlet-class>ajaxDupEmail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>profile</servlet-name>
+        <servlet-class>profile</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -293,10 +297,6 @@
         <url-pattern>/newTimetable</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>deltSlot</servlet-name>
-        <url-pattern>/deltSlot</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>editAddStudent</servlet-name>
         <url-pattern>/editAddStudent</url-pattern>
     </servlet-mapping>
@@ -327,6 +327,14 @@
     <servlet-mapping>
         <servlet-name>editSubSelection</servlet-name>
         <url-pattern>/editSubSelection</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ajaxDupEmail</servlet-name>
+        <url-pattern>/ajaxDupEmail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>profile</servlet-name>
+        <url-pattern>/profile</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

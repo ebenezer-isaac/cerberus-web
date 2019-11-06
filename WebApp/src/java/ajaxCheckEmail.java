@@ -29,11 +29,13 @@ public class ajaxCheckEmail extends HttpServlet {
                     while (rs.next()) {
                         flag = 1;
                     }
-                    ps = con.prepareStatement("select email from faculty where email=?");
-                    ps.setString(1, email);
-                    rs = ps.executeQuery();
-                    while (rs.next()) {
-                        flag = 1;
+                    if (flag == 0) {
+                        ps = con.prepareStatement("select email from faculty where email=?");
+                        ps.setString(1, email);
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            flag = 1;
+                        }
                     }
                     con.close();
                 }

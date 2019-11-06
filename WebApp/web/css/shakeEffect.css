@@ -123,7 +123,7 @@ input[type=text], input[type=password], input[type=email], input[type=number]
     color: #ed1c24;
 }
 .log-btn {
-    background: #0AC986;
+    background: #007BFF;
     dispaly: inline-block;
     width: 100%;
     font-size: 16px;
@@ -247,7 +247,7 @@ input[type=text], input[type=password], input[type=email], input[type=number]
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
-    background: #4CAF50;
+    background: #007BFF;
     width: 100%;
     border: 0;
     margin-top: 12px;

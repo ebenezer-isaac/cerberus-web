@@ -117,10 +117,6 @@ public class editSubSelection extends HttpServlet {
                                 rs.previous();
                                 PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
                                 ResultSet rs4 = ps11.executeQuery();
-                                int no_of_batch = 0;
-                                while (rs4.next()) {
-                                    no_of_batch++;
-                                }
                                 while (rs.next()) {
                                     line++;
                                     out.print("<tr>");
