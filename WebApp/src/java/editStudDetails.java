@@ -5,6 +5,9 @@ import static cerberus.AttFunctions.getWeek;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
+import static cerberus.printer.tableend;
+import static cerberus.printer.tablehead;
+import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -64,25 +67,26 @@ public class editStudDetails extends HttpServlet {
                         int line = 0;
                         if (rs.next()) {
                             out.print("<form action='editStudDetail' method='post'>");
-                            out.print("<table class='table table-hover table-bordered' align='center'><thead>");
-                            out.print("<tr>");
-                            out.print("<th> Roll No </th>");
-                            out.print("<th> PRN </th>");
-                            out.print("<th> MSU ID </th>");
-                            out.print("<th> Name </th>");
-                            out.print("<th> Email </th>");
-                            out.print("<th align='center'> Fingerprint <br>1 </th>");
-                            out.print("<th align='center'> Fingerprint <br>2 </th>");
-                            out.print("</tr></thead><tbody>");
+                            out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 1) + "");
+                            String header = "<tr>";
+                            header += "<th> Roll No </th>";
+                            header += "<th> PRN </th>";
+                            header += "<th> MSU ID </th>";
+                            header += "<th> Name </th>";
+                            header += "<th> Email </th>";
+                            header += "<th align='center'> Fingerprint <br>1 </th>";
+                            header += "<th align='center'> Fingerprint <br>2 </th>";
+                            header += "</tr>";
+                            out.print(tablehead(header));
                             rs.previous();
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr>");
-                                out.print("<td><table><tr><td><input type='number' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td><td><div id='disproll" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td></tr></table></td>");
+                                out.print("<td><input type='number' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'><div id='disproll" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(4) + "'></td>");
-                                out.print("<td><table><tr><td><input type='email' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(5) + "'></td><td><div id='dispemail" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td></tr></table></td><td>");
+                                out.print("<td><input type='email' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(5) + "'><div id='dispemail" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td><td>");
                                 if (rs.getString(6) != null) {
                                     out.print("<input type='checkbox' name='t1" + line + "' checked >");
                                 } else {
@@ -99,12 +103,12 @@ public class editStudDetails extends HttpServlet {
 
                                 out.print("</tr>");
                             }
-                            out.print("</tbody></table><br><br>");
-                            out.print("<input type='submit' id='studdbtn' value='Submit' align='center'>"
-                                    + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                    + "<input type='text' name='cols' value='" + cols + "' hidden>"
-                                    + "<input type='text' name='rows' value='" + line + "' hidden>");
-                            out.print("</form><br>");
+                            out.print(tableend("No of students : " + line + "<br>"
+                                        + "<input type='submit' value='Submit' align='center'>"
+                                        + "<input type='text' name='division' value='" + classID + "' hidden>"
+                                        + "<input type='text' name='cols' value='" + cols + "' hidden>"
+                                        + "<input type='text' name='rows' value='" + line + "' hidden>"
+                                        + "</form>"));
                             out.print("<script>"
                                     + "var btnstatus5 = 0;var line=0;"
                                     + "function checkdupEmail(id) {line=id;"

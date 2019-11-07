@@ -215,6 +215,7 @@ svg {
 
 table {
   border-collapse: collapse;
+  white-space: nowrap;
 }
 
 caption {

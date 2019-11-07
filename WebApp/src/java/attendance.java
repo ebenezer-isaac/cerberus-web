@@ -120,6 +120,7 @@ public class attendance extends HttpServlet {
                         } else {
                             out.print("<div align='center'>Student Data Unavailable</div>");
                         }
+                        con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         e.printStackTrace();
                     }

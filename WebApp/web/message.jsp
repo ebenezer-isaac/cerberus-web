@@ -85,7 +85,7 @@
         <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
         <link rel="stylesheet" href="css/custom.css" type="text/css">
         <link rel="stylesheet" href="css/loader.css" type="text/css">
-        <link rel="stylesheet" href="fontawesome/fontawesome-free-5.11.2-web/css/all.css">
+        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <style>
         </style>

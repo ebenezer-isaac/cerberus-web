@@ -1,5 +1,9 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.getClassName;
+import static cerberus.AttFunctions.getWeek;
+import static cerberus.AttFunctions.oddEve;
+import static cerberus.AttFunctions.semSubs;
 import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
 import static cerberus.printer.tablestart;
@@ -36,7 +40,7 @@ public class editSubSelection extends HttpServlet {
                         } catch (NumberFormatException e) {
                             classID = 3;
                         }
-                        int week = (int) session.getAttribute("week");
+                        int week = getWeek(request);
                         out.print("<script>"
                                 + "function zeroPad(num) {"
                                 + "var s = num+'';"
@@ -52,40 +56,12 @@ public class editSubSelection extends HttpServlet {
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                            String cla = "";
-                            PreparedStatement ps1 = con.prepareStatement("Select class from class where classID=?");
-                            ps1.setInt(1, classID);
-                            ResultSet rs = ps1.executeQuery();
-                            while (rs.next()) {
-                                cla = rs.getString(1);
-                            }
-                            int index;
-                            int oddeve = 1;
-                            PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
-                            st.setInt(1, week);
-                            ResultSet rs2 = st.executeQuery();
-                            while (rs2.next()) {
-                                oddeve = (rs2.getInt(1) % 2);
-                            }
+                            String cla = getClassName(classID);
+                            int index = 0;
+                            int oddeve = oddEve(request);
                             int sem = AttFunctions.getSem(oddeve, classID);
-                            PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
-                            ps3.setInt(1, sem);
-                            rs = ps3.executeQuery();
-                            int no_of_sub = 0;
-                            while (rs.next()) {
-                                no_of_sub++;
-                            }
-                            rs = ps3.executeQuery();
-                            String[][] subs = new String[no_of_sub][2];
-                            no_of_sub--;
-                            index = 0;
-                            while (rs.next()) {
-                                subs[index][0] = rs.getString(1);
-
-                                subs[index][1] = rs.getString(2);
-                                index++;
-                            }
-                            index = 0;
+                            String[][] subs = semSubs(sem, classID);
+                            int no_of_sub = subs.length - 1;
                             String sql = "SELECT rollcall.rollNo,student.PRN,student.name,";
                             while (index <= no_of_sub) {
                                 sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat('1',',',(select name from batch where batch.batchID = studentsubject.batchID )) END) as " + subs[index][1].replace('-', '_');
@@ -104,7 +80,7 @@ public class editSubSelection extends HttpServlet {
                                     + "ORDER by rollcall.rollNo";
                             System.out.println(sql);
                             PreparedStatement ps4 = con.prepareStatement(sql);
-                            rs = ps4.executeQuery();
+                            ResultSet rs = ps4.executeQuery();
                             ResultSetMetaData rsm = rs.getMetaData();
                             int cols = rsm.getColumnCount();
                             int line = 0;
@@ -146,8 +122,7 @@ public class editSubSelection extends HttpServlet {
                                         out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + rsm.getColumnLabel(i) + "" + line + "' id = 'batch" + rsm.getColumnLabel(i) + "" + line + "' class='editSelectTimeTable");
                                         if (flag == 0) {
                                             out.print(" not-allowed' disabled");
-                                        }
-                                        else{
+                                        } else {
                                             out.print("'");
                                         }
                                         out.print("><option name='-' value='-'");

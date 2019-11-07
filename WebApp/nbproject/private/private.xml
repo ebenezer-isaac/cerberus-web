@@ -3,23 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editDelStudent.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/index.jsp</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editSlot.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/sb-admin.min.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editAddStudent.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/sb-admin.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editFaculty.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/editProfilePage.html</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editTimetable.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/end.jsp</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editStudDetails.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/jquery.min.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/cerberus/printer.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/bootstrap.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/api.js</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/attendance.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/message.jsp</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editSubject.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/index.jsp</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editSubSelection.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/demo/datatables-demo.js</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/side-faculty.jsp</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/resetpassword.html</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/cerberus/AttFunctions.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editProfile.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/css/sb-admin.css</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/side-student.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -166,10 +166,14 @@ public class AttFunctions {
         return no_of_batch;
     }
 
-    public static String[] prefSubs(HttpServletRequest request) {
+    public static String[] prefSubs(HttpServletRequest request, String user) {
         String prefsubs[] = null;
-        HttpSession session = request.getSession();
-        int access = (int) session.getAttribute("access");
+        int access = 0;
+        if (user == null) {
+            HttpSession session = request.getSession(false);
+            access = (int) session.getAttribute("access");
+            user = session.getAttribute("user").toString();
+        }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -185,7 +189,7 @@ public class AttFunctions {
                         + "on subject.subjectID=facultysubject.subjectID "
                         + "where facultyID = ?");
             }
-            ps.setString(1, session.getAttribute("user").toString());
+            ps.setString(1, user);
             ResultSet rs = ps.executeQuery();
             int no_of_pref = 0;
             while (rs.next()) {

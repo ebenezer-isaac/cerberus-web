@@ -1,5 +1,14 @@
 
-import cerberus.*;
+import cerberus.AttFunctions;
+import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getWeek;
+import static cerberus.AttFunctions.oddEve;
+import static cerberus.AttFunctions.oddEveSubs;
+import static cerberus.AttFunctions.semSubs;
+import cerberus.messages;
+import static cerberus.printer.error;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -22,9 +31,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class editTimetable extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
 
     int week = 0;
     int no_of_subs = 0;
@@ -33,141 +43,108 @@ public class editTimetable extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession(true);
-            int access = (int) session.getAttribute("access");
+            int access = getAccess(request);
             switch (access) {
                 case 1:
+                    int currweek = getWeek(request);
                     try {
                         week = Integer.parseInt(request.getParameter("week"));
                     } catch (NumberFormatException e) {
                     }
                     if (week == 0) {
-                        week = (int) session.getAttribute("week");
+                        week = currweek;
                     }
                     int labid = Integer.parseInt(request.getParameter("lab"));
                     if (labid >= 4 || labid <= 0) {
                         labid = 1;
                     }
                     try {
-                        int selesem = 1;
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                            PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
-                            st.setInt(1, week);
-                            ResultSet rs2 = st.executeQuery();
-                            while (rs2.next()) {
-                                selesem = (rs2.getInt(1) % 2);
-                                if (selesem == 0) {
-                                    selesem += 2;
-                                }
-                            }
-                            Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("SELECT subjectID,`Abbreviation` FROM `subject` where `sem` in(" + selesem + "," + (selesem + 2) + "," + (selesem + 4) + ") ORDER BY `subject`.`Abbreviation` ASC;");
-                            while (rs.next()) {
-                                no_of_subs++;
-                            }
-                            rs.first();
-                            rs.previous();
-                            no_of_subs++;
-                            subs = new String[no_of_subs][2];
-                            no_of_subs = 0;
-                            while (rs.next()) {
-                                subs[no_of_subs][0] = rs.getString(1);
-                                subs[no_of_subs][1] = rs.getString(2);
-                                no_of_subs++;
-                            }
-                            no_of_subs--;
-                            out.print("<style>"
-                                    + "input[type=number]{"
-                                    + "width: 61px;"
-                                    + "height: 40px;"
-                                    + "} "
-                                    + ".not-allowed {cursor: not-allowed;}"
-                                    + "</style>");
-                            out.print("<script>"
-                                    + "function zeroPad(num) {"
-                                    + "var s = num+'';"
-                                    + "while (s.length < 2) s = '0' + s;"
-                                    + "return(s);}");
-                            out.print("function batchdisable(id) {"
-                                    + "var index = document.getElementById(id).selectedIndex;"
-                                    + "if(index == 0)"
-                                    + "{id = id.substr(1);"
-                                    + "document.getElementById('batch' + id).selectedIndex=0;"
-                                    + "document.getElementById('batch' + id).disabled=true;"
-                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}"
-                                    + "else{id = id.substr(1);"
-                                    + "document.getElementById('batch' + id).selectedIndex=1;"
-                                    + "document.getElementById('batch' + id).disabled=false;"
-                                    + "document.getElementById('batch' + id).classList.remove('not-allowed');}}");
-                            out.print("function subsdisable(id) {"
-                                    + "var index = document.getElementById(id).selectedIndex;"
-                                    + "if(index == 0)"
-                                    + "{id = id.substr(5);"
-                                    + "document.getElementById('c' + id).selectedIndex=0;}"
-                                    + "document.getElementById('batch' + id).disabled=true;"
-                                    + "document.getElementById('batch' + id).classList.add('not-allowed');}"
-                                    + "</script>");
-
-                            out.print("<style> th { white-space: nowrap; } </style>");
-                            out.print("<table width = 100%>"
-                                    + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
-                                    + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\"");
-                            if (week <= Integer.parseInt(session.getAttribute("week").toString())) {
-                                out.print("disabled");
-                            }
-                            out.print("><span>Previous</span>"
-                                    + "</button>"
-                                    + "</form></td>"
-                                    + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
-                            out.print("<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
-                                    + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
-                            if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                                out.print("disabled");
-                            }
-                            out.print("><span>Next</span>"
-                                    + "</button>"
-                                    + "</form></td>");
-                            out.print("</tr></table><br><br>");
-                            out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
-                            LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                            LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                            out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                            out.print("<div class=\"table-responsive\">");
-                            out.print("<form id='ajaxform' action='saveTimetable' method='post' align='center'>");
-                            out.print(printTimetable(labid));
-                            out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
-                            out.print("<input type='text' name='week' value='" + week + "' hidden>");
-
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        int oddeve = oddEve(request);
+                        subs = oddEveSubs(oddeve);
+                        out.print("<style>"
+                                + "input[type=number]{"
+                                + "width: 61px;"
+                                + "height: 40px;"
+                                + "} "
+                                + ".not-allowed {cursor: not-allowed;}"
+                                + "</style>");
+                        out.print("<script>"
+                                + "function zeroPad(num) {"
+                                + "var s = num+'';"
+                                + "while (s.length < 2) s = '0' + s;"
+                                + "return(s);}");
+                        out.print("function batchdisable(id) {"
+                                + "var index = document.getElementById(id).selectedIndex;"
+                                + "if(index == 0)"
+                                + "{id = id.substr(1);"
+                                + "document.getElementById('batch' + id).selectedIndex=0;"
+                                + "document.getElementById('batch' + id).disabled=true;"
+                                + "document.getElementById('batch' + id).classList.add('not-allowed');}"
+                                + "else{id = id.substr(1);"
+                                + "document.getElementById('batch' + id).selectedIndex=1;"
+                                + "document.getElementById('batch' + id).disabled=false;"
+                                + "document.getElementById('batch' + id).classList.remove('not-allowed');}}");
+                        out.print("function subsdisable(id) {"
+                                + "var index = document.getElementById(id).selectedIndex;"
+                                + "if(index == 0)"
+                                + "{id = id.substr(5);"
+                                + "document.getElementById('c' + id).selectedIndex=0;}"
+                                + "document.getElementById('batch' + id).disabled=true;"
+                                + "document.getElementById('batch' + id).classList.add('not-allowed');}"
+                                + "</script>");
+                        out.print("<style> th { white-space: nowrap; } </style>");
+                        out.print("<table width = 100%>"
+                                + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
+                                + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\"");
+                        if (week <= currweek) {
+                            out.print("disabled");
+                        }
+                        out.print("><span>Previous</span>"
+                                + "</button>"
+                                + "</form></td>"
+                                + "<td width = 33% align='center'>Current Week : " + currweek + "</td>");
+                        out.print("<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
+                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
+                        if (week > currweek) {
+                            out.print("disabled");
+                        }
+                        out.print("><span>Next</span>"
+                                + "</button>"
+                                + "</form></td>");
+                        out.print("</tr></table><br><br>");
+                        out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
+                        LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
+                        LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+                        out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
+                        out.print("<div class=\"table-responsive\">");
+                        out.print("<form id='ajaxform' action='saveTimetable' method='post' align='center'>");
+                        out.print(printTimetable(labid));
+                        out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
+                        out.print("<input type='text' name='week' value='" + week + "' hidden>");
+                        out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
+                                + "<span>Save</span>"
+                                + "</button>");
+                        out.print("</form>");
+                        if (week == currweek + 1) {
+                            out.print("<form action='copyTimetable' method='post' align='center'>");
                             out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
-                                    + "<span>Save</span>"
+                                    + "<span>Copy From Previous Week</span>"
                                     + "</button>");
                             out.print("</form>");
-                            if (week == ((int) session.getAttribute("week")) + 1) {
-                                out.print("<form action='copyTimetable' method='post' align='center'>");
-                                out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
-                                        + "<span>Copy From Previous Week</span>"
-                                        + "</button>");
-                                out.print("</form>");
-                            }
-                            out.print("</div>");
-                            con.close();
-                        } catch (ParseException ex) {
-                            Logger.getLogger(editTimetable.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch (ClassNotFoundException | SQLException e) {
-                        messages m = new messages();
-                        m.dberror(request, response, e.getMessage(), "homepage");
+                        out.print("</div>");
+                        con.close();
+                    } catch (ParseException | ClassNotFoundException | SQLException e) {
+                        error(e.getMessage());
                     }
                     break;
-
                 case 0:
-                    messages m1 = new messages();
-                    m1.kids(request, response);
+                    out.print(kids());
                     break;
                 default:
-                    messages m2 = new messages();
-                    m2.nouser(request, response);
+                    out.print(nouser());
             }
         }
     }
