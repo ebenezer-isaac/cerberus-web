@@ -1,5 +1,6 @@
 
 import cerberus.AttFunctions;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -14,16 +15,19 @@ public class addSubject extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            String sid = request.getParameter("subjectID").toUpperCase();
-            String name = request.getParameter("subject");
-            String abbreviation = request.getParameter("abbr");
+        int access = getAccess(request);
+        switch (access) {
+            case 1:
 
-            int oddeve = Integer.parseInt(request.getParameter("sem"));
-            int classID = Integer.parseInt(request.getParameter("class"));
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                String sid = request.getParameter("subjectID").toUpperCase();
+                String name = request.getParameter("subject");
+                String abbreviation = request.getParameter("abbr");
+
+                int oddeve = Integer.parseInt(request.getParameter("sem"));
+                int classID = Integer.parseInt(request.getParameter("class"));
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                     PreparedStatement ps = con.prepareStatement("INSERT INTO `subject` VALUES (?,?,?,?,?)");
                     int semNum = AttFunctions.getSem(oddeve, classID);
                     ps.setString(1, sid.toUpperCase());
@@ -33,24 +37,21 @@ public class addSubject extends HttpServlet {
                     ps.setInt(5, classID);
                     ps.executeUpdate();
                     con.close();
+                    messages a = new messages();
+                    a.success(request, response, "The subject was added successfully<br>SubjectID : " + sid, "homepage");
+                } catch (ClassNotFoundException | SQLException e) {
+                    messages a = new messages();
+                    a.dberror(request, response, e.getMessage(), "homepage");
                 }
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Subject Added");
-                request.setAttribute("body", "The subject was added successfully<br>SubjectID : " + sid);
-                request.setAttribute("url", "viewSubject");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
-            } catch (SQLException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "false");
-                request.setAttribute("head", "Database Error");
-                request.setAttribute("body", e.getMessage());
-                request.setAttribute("url", "viewSubject");
-                rd.forward(request, response);
-            }
-        } catch (ClassNotFoundException e) {
+                break;
 
+            case 0:
+                messages a = new messages();
+                a.kids(request, response);
+                break;
+            default:
+                messages b = new messages();
+                b.nouser(request, response);
         }
     }
 
@@ -64,5 +65,9 @@ public class addSubject extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+    }
+
+    private int getAccess(HttpServletRequest request) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

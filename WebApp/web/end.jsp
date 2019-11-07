@@ -87,20 +87,17 @@
         }
     }
     $(document).ready(function () {
-        document.getElementById('studbtn2').onclick = function () {
-            alert('asdf');
-        };
-
-        window.onbeforeunload = function () {
-            return "Your work will be lost.";
-        };
-
     <%try {
             String url = request.getAttribute("url").toString();
             out.print("setContent('/Cerberus/" + url + "');");
         } catch (Exception e) {
         }
     %>
+        window.onbeforeunload = function () {
+            return "Your work will be lost.";
+        };
+
+
     });
     var btnstatus1 = 1;
     var btnstatus2 = 1;

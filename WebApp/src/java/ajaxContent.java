@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.getAccess;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,7 +14,8 @@ public class ajaxContent extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        int access = getAccess(request);
+        if (access == 1 || access == 0) {
             String url;
             try {
                 url = request.getAttribute("url").toString();
@@ -21,20 +24,20 @@ public class ajaxContent extends HttpServlet {
                     url = request.getParameter("url");
                 } catch (Exception x) {
                     url = "homepage";
-                    System.out.println("exception");
                 }
             }
-            System.out.println("inside ajaxcontent"+url);
-            request.setAttribute("url", url);
-            HttpSession session = request.getSession();
-            int access = (int) session.getAttribute("access");
+            System.out.println(url);
             if (access == 1) {
                 request.getRequestDispatcher("side-faculty.jsp").include(request, response);
-            } else {
+            } else if (access == 0) {
                 request.getRequestDispatcher("side-student.jsp").include(request, response);
             }
+            request.setAttribute("url", url);
             request.getRequestDispatcher("end.jsp").include(request, response);
-        }catch(Exception w){w.printStackTrace();}
+        } else {
+            messages b = new messages();
+            b.unauthaccess(request, response);
+        }
     }
 
     @Override

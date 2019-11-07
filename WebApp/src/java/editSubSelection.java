@@ -1,5 +1,8 @@
 
 import cerberus.AttFunctions;
+import static cerberus.printer.tableend;
+import static cerberus.printer.tablehead;
+import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -41,6 +44,10 @@ public class editSubSelection extends HttpServlet {
                                 + "return(s);"
                                 + "}"
                                 + "</script>");
+                        out.print("<style>td{"
+                                + "align: center;"
+                                + "vertical-align: middle;"
+                                + "}</style>");
                         out.print("<div>");
                         try {
                             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -78,8 +85,6 @@ public class editSubSelection extends HttpServlet {
                                 subs[index][1] = rs.getString(2);
                                 index++;
                             }
-
-                            out.print("<h3 align='center'>" + cla.toUpperCase() + " Subject Selection </h3>");
                             index = 0;
                             String sql = "SELECT rollcall.rollNo,student.PRN,student.name,";
                             while (index <= no_of_sub) {
@@ -106,14 +111,15 @@ public class editSubSelection extends HttpServlet {
                             if (rs.next()) {
                                 out.print("<style>.not-allowed {cursor: not-allowed;}</style>"
                                         + "<form action='editStudDetail' method='post'>");
-                                out.print("<table class=\"table table-striped table-bordered\"><thead>");
-                                out.print("<tr>");
-                                out.print("<th> Roll </th>");
-                                out.print("<th> Name </th>");
+                                out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 1) + "");
+                                String header = "<tr>";
+                                header += "<th> Roll </th>";
+                                header += "<th> Name </th>";
                                 for (int i = 4; i <= cols; i++) {
-                                    out.print("<th> " + rsm.getColumnLabel(i) + " </th>");
+                                    header += "<th> " + rsm.getColumnLabel(i) + " </th>";
                                 }
-                                out.print("</tr>");
+                                header += "</tr>";
+                                out.print(tablehead(header));
                                 rs.previous();
                                 PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
                                 ResultSet rs4 = ps11.executeQuery();
@@ -137,12 +143,14 @@ public class editSubSelection extends HttpServlet {
                                         if (flag == 1) {
                                             out.print(" checked");
                                         }
-                                        out.print("><select class='editSelectTimeTable not-allowed' onchange = 'subsdisable(this.id)' name = 'batch" + rsm.getColumnLabel(i) + "" + line + "' id = 'batch" + rsm.getColumnLabel(i) + "" + line + "'");
+                                        out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + rsm.getColumnLabel(i) + "" + line + "' id = 'batch" + rsm.getColumnLabel(i) + "" + line + "' class='editSelectTimeTable");
                                         if (flag == 0) {
-                                            out.print("disabled");
+                                            out.print(" not-allowed' disabled");
                                         }
-                                        out.print(">"
-                                                + "<option name='-' value='-'");
+                                        else{
+                                            out.print("'");
+                                        }
+                                        out.print("><option name='-' value='-'");
                                         if (flag == 0) {
                                             out.print("selected");
                                         }
@@ -161,12 +169,12 @@ public class editSubSelection extends HttpServlet {
                                     }
                                     out.print("</tr>");
                                 }
-                                out.print("</table><br><br>");
-                                out.print("<input type='submit' value='Submit' align='center'>"
+                                out.print(tableend("No of students : " + line + "<br>"
+                                        + "<input type='submit' value='Submit' align='center'>"
                                         + "<input type='text' name='division' value='" + classID + "' hidden>"
                                         + "<input type='text' name='cols' value='" + cols + "' hidden>"
-                                        + "<input type='text' name='rows' value='" + line + "' hidden>");
-                                out.print("</form><br>");
+                                        + "<input type='text' name='rows' value='" + line + "' hidden>"
+                                        + "</form>"));
                                 out.print("<script>function batchdisable(id) {"
                                         + "if(document.getElementById(id).checked)"
                                         + "{id = id.substr(3);"

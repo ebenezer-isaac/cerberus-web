@@ -1,20 +1,13 @@
 
-import cerberus.AttFunctions;
+import static cerberus.AttFunctions.getAccess;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class editDelStudent extends HttpServlet {
 
@@ -22,9 +15,7 @@ public class editDelStudent extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
-            HttpSession session = request.getSession(true);
-            int access = (int) session.getAttribute("access");
+            int access = getAccess(request);
             switch (access) {
                 case 1:
                     out.print("<form action='delStudent' method='post'>");
@@ -39,17 +30,12 @@ public class editDelStudent extends HttpServlet {
                             + "<br><br></fieldset>");
                     out.print("<br><div id = 'butt' style='display:none;' ><button id='studbtn2' disabled type='submit'>Submit</button></div>");
                     out.print("</form>");
-                    
+                    break;
+                case 0:
+                    out.print(kids());
                     break;
                 default:
-                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                    request.setAttribute("redirect", "true");
-                    request.setAttribute("head", "Hey 'Kid'!");
-                    request.setAttribute("body", "You are not authorized to view this page");
-                    request.setAttribute("url", "homepage");
-                    request.setAttribute("sec", "2");
-                    rd.forward(request, response);
-                    break;
+                    out.print(nouser());
             }
         }
     }

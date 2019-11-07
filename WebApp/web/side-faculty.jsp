@@ -70,7 +70,7 @@
             <ul class="sidebar navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-fingerprint"></i>
                         <span>Attendance</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="pagesDropdown">
@@ -157,7 +157,7 @@
                                 while (rs.next()) {
                                     EnglishNumberToWords a = new EnglishNumberToWords();
                                     String number = a.convert(rs.getInt(1));
-                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
                                 }
                             } catch (Exception e) {
                             }

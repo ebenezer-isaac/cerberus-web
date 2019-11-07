@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.getAccess;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -18,29 +20,35 @@ public class ajaxCheckPRN extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String prn = request.getParameter("prn");
-            int flag = 0;
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                    PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
-                    ps.setString(1, prn);
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        flag = 1;
+            int access = getAccess(request);
+            if (access == 1 || access == 0) {
+                int flag = 0;
+                String prn = request.getParameter("prn");
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                        PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
+                        ps.setString(1, prn);
+                        ResultSet rs = ps.executeQuery();
+                        while (rs.next()) {
+                            flag = 1;
+                        }
+                        con.close();
                     }
-                    con.close();
+                } catch (ClassNotFoundException | SQLException e) {
                 }
-            } catch (ClassNotFoundException | SQLException e) {
-            }
-            if (Pattern.matches("^20\\d{14}$", prn)) {
-                if (flag == 0) {
-                    out.print("1");
+                if (Pattern.matches("^20\\d{14}$", prn)) {
+                    if (flag == 0) {
+                        out.print("1");
+                    } else {
+                        out.print("2");
+                    }
                 } else {
-                    out.print("2");
+                    out.print("0");
                 }
             } else {
-                out.print("0");
+                messages b = new messages();
+                b.unauthaccess(request, response);
             }
         }
     }

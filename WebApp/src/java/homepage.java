@@ -41,7 +41,7 @@ public class homepage extends HttpServlet {
                         ResultSet rs = ps1.executeQuery();
                         int index = 1;
                         while (rs.next()) {
-                            out.print(rs.getString(1)+" "+rs.getString(2));
+                            out.print(rs.getString(1)+" "+rs.getString(2)+" ");
                             index++;
                         }
                         if (index == 1) {

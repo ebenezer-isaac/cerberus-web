@@ -70,7 +70,7 @@
             <ul class="sidebar navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-fingerprint"></i>
                         <span>Attendance</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="pagesDropdown">
@@ -87,7 +87,7 @@
                                 ResultSet rs = ps1.executeQuery();
                                 int index = 1;
                                 while (rs.next()) {
-                                    out.print("<a class='dropdown-header' href='/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "'><i class='fas fa-chevron-right'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    out.print("<a class='dropdown-header' href=\"javascript:setContent('/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "');\"><i class='fas fa-chevron-right'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
                                     index++;
                                 }
                                 if (index == 1) {
