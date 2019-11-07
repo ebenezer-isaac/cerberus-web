@@ -1,0 +1,391 @@
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 1, 2017033800104777
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 2, 2017033800104592
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 3, 2017033800104495
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 4, 2017033800104576
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 5, 2017033800106397
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 6, 2017033800106207
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 7, 2017033800104506
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 8, 2017033800104425
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 9, 2017033800106084
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 10, 2017033800106045
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 11, 2017033800106382
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 12, 2017033800104112
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 14, 2017033800104263
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 15, 2017033800104313
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 16, 2017033800104417
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 17, 2017033800106126
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 18, 2017033800104634
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 19, 2017033800106142
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 20, 2017033800104344
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 21, 2017033800104166
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 22, 2017033800106262
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 23, 2017033800106111
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 24, 2017033800106416
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 25, 2017033800107412
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 26, 2017033800104286
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 27, 2017033800106293
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 28, 2017033800106022
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 29, 2017033800104537
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 30, 2017033800104174
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 31, 2017033800107497
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 32, 2017033800106285
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 33, 2017033800104762
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 34, 2017033800104305
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 35, 2017033800107435
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 36, 2017033800104367
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 38, 2017033800104104
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 39, 2017033800104522
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 40, 2017033800104197
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 41, 2017033800104255
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 42, 2017033800104487
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 43, 2017033800104545
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 44, 2017033800104352
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 45, 2017033800104584
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 46, 2017033800106157
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 47, 2017033800106246
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 48, 2017033800106215
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 49, 2017033800106254
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 50, 2017033800104224
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 51, 2017033800106366
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 52, 2017033800105974
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 53, 2017033800106335
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 54, 2017033800104135
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 55, 2017033800104402
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 56, 2017033800104062
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 57, 2017033800107555
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 58, 2017033800104182
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 59, 2017033800104054
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 60, 2017033800104603
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 61, 2017033800107547
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 62, 2017033800106312
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 63, 2017033800104143
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 64, 2017033800106401
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 65, 2017033800107532
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 66, 2017033800104785
+);
+
+INSERT INTO rollcall(classID, rollNo, PRN)
+VALUES
+(
+3, 67, 2017033800104216
+);
+

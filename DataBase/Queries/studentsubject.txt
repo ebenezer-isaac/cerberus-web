@@ -1,0 +1,1153 @@
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104777, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104777, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104777, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104592, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104592, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104592, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104576, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104576, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104576, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106397, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106397, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106397, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106207, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106207, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106207, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104506, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104506, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104506, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104425, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104425, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104425, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106084, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106084, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106084, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106045, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106045, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106045, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106382, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106382, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106382, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104112, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104112, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104112, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104263, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104263, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104263, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104313, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104313, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104313, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104417, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104417, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104417, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106126, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106126, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106126, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104634, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104634, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104634, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106142, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106142, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106142, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104344, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104344, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104344, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104166, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104166, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104166, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106262, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106262, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106262, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106111, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106111, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106111, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106416, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106416, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106416, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107412, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107412, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107412, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104286, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104286, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104286, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106293, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106293, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106293, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106022, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106022, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106022, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104537, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104537, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104537, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104174, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104174, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104174, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107497, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107497, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107497, 'BCA1539', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106285, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106285, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106285, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104762, 'BCA1501', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104762, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104762, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104305, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104305, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104305, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107435, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107435, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107435, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104367, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104367, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104367, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104104, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104104, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104104, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104522, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104522, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104522, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104197, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104197, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104197, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104255, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104255, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104255, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104487, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104487, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104487, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104545, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104545, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104545, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104352, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104352, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104352, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104584, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104584, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104584, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106157, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106157, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106157, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106246, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106246, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106246, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106215, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106215, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106215, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106254, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106254, 'BCA1530', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106254, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104224, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104224, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104224, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106366, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106366, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106366, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800105974, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800105974, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800105974, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106335, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106335, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106335, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104135, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104135, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104135, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104402, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104402, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104402, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104062, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104062, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104062, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107555, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107555, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107555, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104182, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104182, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104182, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104054, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104054, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104054, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104603, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104603, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104603, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107547, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107547, 'BCA1538', 1
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107547, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106312, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106312, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106312, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104143, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104143, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104143, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106401, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106401, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800106401, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107532, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107532, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800107532, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104785, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104785, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104785, 'BCA1539', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104216, 'BCA1501', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104216, 'BCA1538', 2
+);
+
+INSERT INTO studentsubject(PRN, subjectID, batchID)
+VALUES
+(
+2017033800104216, 'BCA1539', 2
+);
+
