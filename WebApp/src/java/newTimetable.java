@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.*;
+import static cerberus.printer.error;
+import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -20,21 +17,18 @@ import javax.servlet.http.HttpServletResponse;
 
 public class newTimetable extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int week = Integer.parseInt(request.getParameter("week"));
-        String pwd = "";
         try {
-            pwd = AttFunctions.hashIt(request.getParameter("pwd"));
-        } catch (NoSuchAlgorithmException e) {
-        }
-        if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
-            int weekid = getWeekID(week);
-            try {
+            String pwd = AttFunctions.hashIt(request.getParameter("pwd"));
+            if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
+                int weekid = getWeekID(week);
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                
                 PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
                 ps5.setInt(1, weekid);
                 ResultSet rs = ps5.executeQuery();
@@ -62,10 +56,10 @@ public class newTimetable extends HttpServlet {
                     }
                 }
                 con.close();
-            } catch (ClassNotFoundException | SQLException e) {
             }
+        } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException e) {
+            error(e.getMessage());
         }
-
     }
 
     @Override

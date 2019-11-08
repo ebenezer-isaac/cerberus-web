@@ -1,4 +1,8 @@
 
+import static cerberus.AttFunctions.prefSubs;
+import static cerberus.printer.tableend;
+import static cerberus.printer.tablehead;
+import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -22,6 +26,7 @@ import javax.servlet.http.HttpSession;
 
 public class viewTimetable extends HttpServlet {
 
+    String heading;
     int week = 0;
     int temp = 0;
     String[] subs;
@@ -30,6 +35,8 @@ public class viewTimetable extends HttpServlet {
     HttpServletRequest request;
     int no_of_class;
     String mon, tue, wed, thu, fri, sat;
+    String wks;
+    String wke;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -68,6 +75,8 @@ public class viewTimetable extends HttpServlet {
                 case 1:
                     LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                     LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
+                    wks = weekstart.toString();
+                    wke = endweek.toString();
                     out.print("<style>"
                             + ".bold {"
                             + " font-weight: bold;"
@@ -106,72 +115,50 @@ public class viewTimetable extends HttpServlet {
                             + "document.getElementById('lab_timetable').style.display = 'none';"
                             + "document.getElementById('timetable').style.display = 'block';"
                             + "}}"
-                            + "</script>"
-                            + "<table width = 100%>"
+                            + "</script>");
+                    heading = "<table width = 100%>"
                             + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "')\" >"
-                            + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\">"
+                            + "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
                             + "<span>Previous</span>"
                             + "</button>"
                             + "</form></td>"
-                            + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "</td>");
-                    out.print("<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
-                            + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
+                            + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
+                            + "<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
+                            + "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
                     if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                        out.print("disabled");
+                        heading += "disabled";
                     }
-                    out.print("><span>Next</span>"
+                    heading += "><span>Next</span>"
                             + "</button>"
-                            + "</form></td>");
-                    out.print("</tr></table><br>");
+                            + "</form></td>";
+                    heading += "</tr></table>";
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps1 = con.prepareStatement("select subject.Abbreviation from facultysubject "
-                                + "inner join subject "
-                                + "on subject.subjectID=facultysubject.subjectID "
-                                + "where facultyID = ?");
-                        ps1.setString(1, session.getAttribute("user").toString());
-                        ResultSet rs = ps1.executeQuery();
-                        int no_of_subs = 0;
-                        while (rs.next()) {
-                            no_of_subs++;
-                        }
-                        subs = new String[no_of_subs];
-                        rs = ps1.executeQuery();
-                        no_of_subs = 0;
-                        while (rs.next()) {
-                            subs[no_of_subs] = rs.getString(1);
-                            no_of_subs++;
-                        }
-                        out.print("<br><div align='center'>");
+                        subs = prefSubs(request, null);
                         out.print("Display Style : <select name = 'timetable_type' id = 'timetable_type' class=\"editSelect\" onchange='changestyle(this.selectedIndex)'>");
                         out.print("<option name='clas' value= '0'>Lab Wise</option>");
                         out.print("<option name='clas' value= '1'>Combined</option>");
-                        out.print("</select><br>");
+                        out.print("</select><br><br>");
                         out.print("Student Class : <select name = 'clas' id = 'clas' class=\"editSelect\" onchange='highlight(this.selectedIndex)'>");
                         out.print("<option name='clas' value= '0'>None</option>");
                         out.print("<option name='clas' value= '0'>Preferences</option>");
                         out.print("<option name='clas' value= '0'>No Labs</option>");
                         Statement stmt = con.createStatement();
-                        rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                        ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                         no_of_class = 0;
                         while (rs.next()) {
                             no_of_class++;
                             out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
                         }
-                        out.print("</select>");
+                        out.print("</select><br><br>");
                     } catch (ClassNotFoundException | SQLException e) {
                         e.printStackTrace();
                     }
-
-                    out.print("<br>");
-                    out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
+                    
                     out.print("<div id='lab_timetable'>");
-                    out.print("<p align='center'>LAB 1 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                     out.print(lab_printTimetable(1));
-                    out.print("<p align='center'>LAB 2 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                     out.print(lab_printTimetable(2));
-                    out.print("<p align='center'>LAB 3 <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
                     out.print(lab_printTimetable(3));
                     out.print("</div>");
                     out.print("<div id='timetable' style='display: none;'>");
@@ -197,18 +184,18 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            timetable += ("<div class=\"table-responsive\">");
-            timetable += ("<table class=\"table table-hover table-bordered\"><thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
-            timetable += ("<tr align = center>");
-            timetable += ("<th>Start Time</th>");
-            timetable += ("<th>End Time</th>");
-            timetable += ("<th>Monday<br>" + mon + "</th>");
-            timetable += ("<th>Tuesday<br>" + tue + "</th>");
-            timetable += ("<th>Wednesday<br>" + wed + "</th>");
-            timetable += ("<th>Thursday<br>" + thu + "</th>");
-            timetable += ("<th>Friday<br>" + fri + "</th>");
-            timetable += ("<th>Saturday<br>" + sat + "</th>");
-            timetable += ("</tr></thead><tbody>");
+            timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wke + "</b></p>", "hover", "studDetails", 0));
+            String header = ("<tr align = center>");
+            header += ("<th>Start Time</th>");
+            header += ("<th>End Time</th>");
+            header += ("<th>Monday<br>" + mon + "</th>");
+            header += ("<th>Tuesday<br>" + tue + "</th>");
+            header += ("<th>Wednesday<br>" + wed + "</th>");
+            header += ("<th>Thursday<br>" + thu + "</th>");
+            header += ("<th>Friday<br>" + fri + "</th>");
+            header += ("<th>Saturday<br>" + sat + "</th>");
+            header += ("</tr>");
+            timetable += (tablehead(header));
             PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = 1 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Monday, "
                     + "MAX(CASE WHEN dayID = 2 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID)) END) as Tuesday, "
@@ -279,7 +266,7 @@ public class viewTimetable extends HttpServlet {
                 }
                 timetable += lines[y];
             }
-            timetable += ("</tbody></table></div><br><br>");
+            timetable += (tableend(null,0));
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -294,18 +281,19 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            timetable += ("<table class=\"table table-striped table-bordered\"><thead>");
-            timetable += ("<tr align = center>");
-            timetable += ("<th>Start Time</th>");
-            timetable += ("<th>End Time</th>");
-            timetable += ("<th>Lab</th>");
-            timetable += ("<th>Monday<br>" + mon + "</th>");
-            timetable += ("<th>Tuesday<br>" + tue + "</th>");
-            timetable += ("<th>Wednesday<br>" + wed + "</th>");
-            timetable += ("<th>Thursday<br>" + thu + "</th>");
-            timetable += ("<th>Friday<br>" + fri + "</th>");
-            timetable += ("<th>Saturday<br>" + sat + "</th>");
-            timetable += ("</tr></thead><tbody>");
+            timetable += (tablestart(heading, "hover", "studDetails", 0));
+            String header = ("<tr align = center>");
+            header += ("<th>Start Time</th>");
+            header += ("<th>End Time</th>");
+            header += ("<th>Lab</th>");
+            header += ("<th>Monday<br>" + mon + "</th>");
+            header += ("<th>Tuesday<br>" + tue + "</th>");
+            header += ("<th>Wednesday<br>" + wed + "</th>");
+            header += ("<th>Thursday<br>" + thu + "</th>");
+            header += ("<th>Friday<br>" + fri + "</th>");
+            header += ("<th>Saturday<br>" + sat + "</th>");
+            header += ("</tr>");
+            timetable += (tablehead(header));
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();
             String slots[][];
@@ -390,7 +378,7 @@ public class viewTimetable extends HttpServlet {
                 timetable += ("</tr>");
                 slot++;
             }
-            timetable += ("</tbody></table><br><br>");
+            timetable += (tableend(null,0));
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

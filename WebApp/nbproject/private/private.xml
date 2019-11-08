@@ -3,28 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/sb-admin.min.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/sb-admin.js</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editTimetable.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/end.jsp</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/index.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editStudDetails.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/attendance.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/cerberus/printer.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/saveStudDetails.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/viewTimetable.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/main.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/index.jsp</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/side-faculty.jsp</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/css/splash.css</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/css/sb-admin.min.css</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editSubSelection.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/login.jsp</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/ajax.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/cerberus/AttFunctions.java</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/side-student.jsp</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/editStudDetails.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/homepage.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/copyTimetable.java</file>
             <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/js/scriptShake.js</file>
-            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/css/sb-admin.css</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/studentProgression.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/cerberus/printer.java</file>
         </group>
     </open-files>
 </project-private>

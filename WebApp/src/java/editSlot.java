@@ -40,7 +40,7 @@ public class editSlot extends HttpServlet {
                                     out.print("<tr><td><input type = 'time' name = 'stime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(2).substring(0, 5) + "' step='60'></td> ");
                                     out.print("<td><input type = 'time' name = 'etime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(3).substring(0, 5) + "' step='60'></td></tr>");
                                 }
-                                out.print("</table><br><button type='submit' class='btn btn-info'>Submit</button>");
+                                out.print("</table><br><button type='submit' class='btn btn-primary'>Submit</button>");
                                 out.print("</form>");
                                 con.close();
                             } catch (ClassNotFoundException | SQLException e) {
@@ -83,7 +83,7 @@ public class editSlot extends HttpServlet {
                                         + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                         + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                         + "<br></fieldset>");
-                                out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-info'>Submit</button></div>");
+                                out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-primary'>Submit</button></div>");
                                 out.print("</form>");
                             } catch (SQLException | ClassNotFoundException e) {
                                 error(e.getMessage());

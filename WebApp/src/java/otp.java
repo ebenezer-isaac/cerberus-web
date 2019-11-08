@@ -60,10 +60,12 @@ public class otp extends HttpServlet {
                 con.close();
             }
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
             request.setAttribute("redirect", "false");
             request.setAttribute("head", "Error");
             request.setAttribute("body", e.getMessage());
+            request.setAttribute("fullpage", "false");
             request.setAttribute("url", "resetpassword.html");
             rd.forward(request, response);
         }
@@ -89,6 +91,7 @@ public class otp extends HttpServlet {
                 request.setAttribute("body", "An One Time High Security Password has been sent to your registered e-mail account.<br>"
                         + "The OTP is valid for only 10 minutes.<br>");
                 request.setAttribute("url", "resetpassword.html");
+                request.setAttribute("fullpage", "false");
                 request.setAttribute("sec", "3");
                 rd.forward(request, response);
                 break;
@@ -99,6 +102,7 @@ public class otp extends HttpServlet {
                 request.setAttribute("head", "Security Firewall");
                 request.setAttribute("body", "An e-mail was not found for the provided username. Please check your username and try again");
                 request.setAttribute("url", "index.jsp");
+                request.setAttribute("fullpage", "false");
                 rd.forward(request, response);
                 break;
             }
@@ -108,6 +112,7 @@ public class otp extends HttpServlet {
                 request.setAttribute("head", "Security Firewall");
                 request.setAttribute("body", "Multiple accounts have been registered with the same email. Please contact Administrator");
                 request.setAttribute("url", "index.jsp");
+                request.setAttribute("fullpage", "false");
                 rd.forward(request, response);
                 break;
             }

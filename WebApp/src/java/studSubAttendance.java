@@ -1,38 +1,33 @@
-import cerberus.*;
+
+import static cerberus.AttFunctions.getAccess;
+import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class studSubAttendance extends HttpServlet {
 
-    int access;
+    private static final long serialVersionUID = 1L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            access = (int) session.getAttribute("access");
+            int access = getAccess(request);
             switch (access) {
                 case 1:
-                    
                     out.println(request.getParameter("sub"));
                     out.println(request.getParameter("prn"));
-                    
                     break;
                 case 0:
                     out.println(request.getParameter("sub"));
-                    
                     break;
                 default:
-                    messages m = new messages();
-                    m.nouser(request, response);
+                    out.print(nouser());
             }
-
         }
     }
 

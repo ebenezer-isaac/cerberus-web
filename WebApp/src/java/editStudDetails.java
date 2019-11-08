@@ -48,7 +48,6 @@ public class editStudDetails extends HttpServlet {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         String cla = getClassName(classID);
-                        out.print("<h3 align='center'>" + cla.toUpperCase() + " Details </h3>");
                         PreparedStatement ps4 = con.prepareStatement("SELECT rollcall.rollNo, student.PRN, student.photo_id ,student.name, student.email,"
                                 + "MAX(CASE WHEN studentfingerprint.templateID = 1 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template1, "
                                 + "MAX(CASE WHEN studentfingerprint.templateID = 2 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template2 "
@@ -104,11 +103,11 @@ public class editStudDetails extends HttpServlet {
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br>"
-                                        + "<input type='submit' value='Submit' align='center'>"
-                                        + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                        + "<input type='text' name='cols' value='" + cols + "' hidden>"
-                                        + "<input type='text' name='rows' value='" + line + "' hidden>"
-                                        + "</form>"));
+                                    + "<input type='submit' value='Submit' align='center'>"
+                                    + "<input type='text' name='division' value='" + classID + "' hidden>"
+                                    + "<input type='text' name='cols' value='" + cols + "' hidden>"
+                                    + "<input type='text' name='rows' value='" + line + "' hidden>"
+                                    + "</form>", 1));
                             out.print("<script>"
                                     + "var btnstatus5 = 0;var line=0;"
                                     + "function checkdupEmail(id) {line=id;"

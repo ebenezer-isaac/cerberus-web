@@ -200,11 +200,6 @@
                         <i class="fas fa-address-card"></i>
                         <span>Student Progression</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tables.html">
-                        <i class="fas fa-fw fa-table"></i>
-                        <span>Timetable</span></a>
-                </li>
             </ul>
 
             <%

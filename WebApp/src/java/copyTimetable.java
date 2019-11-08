@@ -31,7 +31,10 @@ public class copyTimetable extends HttpServlet {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    int flag = 1;
+                    int flag = 0;
+                    PreparedStatement ps = con.prepareStatement("DELETE FROM timetable where weekID = ?");
+                    ps.setInt(1, weekid);
+                    ps.executeUpdate();
                     PreparedStatement ps10 = con.prepareStatement("SELECT weekID FROM `week` ORDER BY `week`.`weekID` DESC");
                     ResultSet rs = ps10.executeQuery();
                     while (rs.next() && flag == 0) {
@@ -39,20 +42,24 @@ public class copyTimetable extends HttpServlet {
                         ps9.setInt(1, rs.getInt(1));
                         ResultSet rs1 = ps9.executeQuery();
                         while (rs1.next()) {
-                            PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID,? , dayID from timetable where weekID = ?;"
-                                    + "DELETE t1 FROM timetable t1 "
-                                    + "INNER JOIN timetable t2 "
-                                    + "WHERE "
-                                    + "t1.scheduleID < t2.scheduleID AND "
-                                    + "t1.slotID = t2.slotID AND "
-                                    + "t1.labID = t2.labID AND "
-                                    + "t1.weekID = t2.weekID AND "
-                                    + "t1.dayID = t2.dayID;");
+                            PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID,? , dayID from timetable where weekID = ?;");
                             ps3.setInt(1, weekid);
                             System.out.println(weekid);
                             ps3.setInt(2, rs.getInt(1));
                             System.out.println(rs.getInt(1));
                             ps3.executeUpdate();
+                            try {
+                                ps3 = con.prepareStatement("DELETE t1 FROM timetable t1 "
+                                        + "INNER JOIN timetable t2 "
+                                        + "WHERE "
+                                        + "t1.scheduleID < t2.scheduleID AND "
+                                        + "t1.slotID = t2.slotID AND "
+                                        + "t1.labID = t2.labID AND "
+                                        + "t1.weekID = t2.weekID AND "
+                                        + "t1.dayID = t2.dayID;");
+                                ps3.executeUpdate();
+                            } catch (Exception e) {
+                            }
                             flag = 1;
                             break;
                         }

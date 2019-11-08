@@ -1,5 +1,3 @@
-alert('asdf');
-
 var emailtf = document.getElementById("email");
 emailtf.addEventListener("keydown", function (e) {
     if (e.keyCode === 13) {

@@ -50,7 +50,7 @@ public class editAddStudent extends HttpServlet {
                                 + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);checkValidations(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='checkValidations(2);'></i></div></td></td></tr> "
                                 + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='checkValidations(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                 + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='checkValidations(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                + "</table><div id='subs'></div><button disabled type='submit' id='studbtn1' class='btn btn-info'>Add Student</button></form>");
+                                + "</table><div id='subs'></div><button disabled type='submit' id='studbtn1' class='btn btn-primary'>Add Student</button></form>");
                         out.print("<script>");
                         rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                         int oddeve = oddEve(request);

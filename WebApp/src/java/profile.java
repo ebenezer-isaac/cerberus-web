@@ -32,7 +32,7 @@ public class profile extends HttpServlet {
                 con.close();
                 if (blob != null) {
                     String imgString = DatatypeConverter.printBase64Binary(blob);
-                    out.print("<img style='border-radius: 10%;' src='data:image/png;base64," + imgString + "'/>");
+                    out.print("<img style='border-radius: 10%;' src='data:image/png;base64," + imgString + "'/><br>"+name);
                 }
             } catch (Exception e) {
             }

@@ -3,11 +3,16 @@ package cerberus;
 public class printer {
 
     public static String tablestart(String heading, String type, String name, int datatype) {
-        String output = "<div class='card-header'>";
+        String output = "<div class='card'><div class='card-header'>";
         output += heading;
         output += "</div>"
                 + "<div class='card-body'>"
                 + "<div class='table-responsive'>"
+                + "<style>"
+                + "tr{vertical-align : middle;text-align:center;}"
+                + "th{vertical-align : middle;text-align:center;}"
+                + "td{vertical-align : middle;text-align:center;}"
+                + "</style>"
                 + "<table class='table table-bordered";
         if (type != null) {
             output += " table-" + type;
@@ -25,14 +30,17 @@ public class printer {
         return output;
     }
 
-    public static String tableend(String footer) {
+    public static String tableend(String footer, int datatype) {
         String output = "</table>"
+                + "</div>"
                 + "</div>"
                 + "</div>";
         if (footer != null) {
             output += "<div class='card-footer small text-muted'>" + footer + "</div>";
         }
-        output += "</div>";
+        if (datatype == 1) {
+            output += "</div><script>$('#dataTable').DataTable();</script>";
+        }
         return output;
     }
 

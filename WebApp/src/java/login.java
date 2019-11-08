@@ -8,10 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
 public class login extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -20,7 +21,7 @@ public class login extends HttpServlet {
             String email = request.getParameter("email");
             String rawpass = request.getParameter("pwd");
             String id = "";
-            if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || email.equals("admin") || rawpass.equals("admin")) {
+            if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || rawpass.equals("admin")) {
                 out.print("2");
             } else {
                 String pass = AttFunctions.hashIt(rawpass);
@@ -38,7 +39,6 @@ public class login extends HttpServlet {
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
-                    e.printStackTrace();
                 }
                 if (corrpass.equals("")) {
                     try {
@@ -54,7 +54,6 @@ public class login extends HttpServlet {
                         access = 1;
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
                     }
                 }
                 if (corrpass.equals(pass)) {
@@ -71,7 +70,7 @@ public class login extends HttpServlet {
                     try {
                         trial = Integer.parseInt(session.getAttribute("count").toString());
                         trial++;
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                     }
                     session.setAttribute("count", ""+trial);
                     if (trial > 5) {
@@ -82,9 +81,8 @@ public class login extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            /*messages m = new messages();
-            m.error(request, response, e.getMessage(), "index.jsp");*/
+            messages m = new messages();
+            m.error(request, response, e.getMessage(), "index.jsp");
         }
     }
 

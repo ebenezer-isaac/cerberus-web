@@ -61,18 +61,16 @@ public class editSubject extends HttpServlet {
                             Class.forName("com.mysql.cj.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                             Statement stmt = con.createStatement();
-                            ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                            int index = 0;
+                            ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                             while (rs.next()) {
-                                index++;
-                                out.print("<option name='Sub' value= '" + index + "'>" + rs.getString(1) + "</option>");
+                                out.print("<option name='Sub' value= '" + rs.getInt(1) + "'>" + rs.getString(2) + "</option>");
                             }
                             out.print("</select>");
                         } catch (ClassNotFoundException | SQLException e) {
                             error(e.getMessage());
                         }
                         out.print("</td></tr>"
-                                + "</table><br><button type='submit' class='btn btn-info'>Submit</button>"
+                                + "</table><br><button type='submit' class='btn btn-primary'>Submit</button>"
                                 + "</form>");
                     } else if (flow.equals("del")) {
                         try {
@@ -104,7 +102,7 @@ public class editSubject extends HttpServlet {
                                     + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                     + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                     + "<br></fieldset>");
-                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-info'>Submit</button></div>");
+                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-primary'>Submit</button></div>");
                             out.print("</form></div>");
 
                             con.close();

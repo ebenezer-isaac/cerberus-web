@@ -1,4 +1,8 @@
-import cerberus.*;
+
+import static cerberus.AttFunctions.getAccess;
+import static cerberus.printer.tableend;
+import static cerberus.printer.tablehead;
+import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -10,7 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import static cerberus.printer.error;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 
 public class viewSubDetails extends HttpServlet {
 
@@ -18,15 +24,13 @@ public class viewSubDetails extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            int access = (int) session.getAttribute("access");
-            int labcount = 0;
+            int access = getAccess(request);
             switch (access) {
                 case 1:
-                    String subcode = request.getParameter("subcode");
-                    
-                    out.print(subcode + " Details");
-                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    int labcount = 0;
+                    try {
+                        String subcode = request.getParameter("subcode");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID)\n"
                                 + "from facultytimetable \n"
                                 + "INNER JOIN timetable\n"
@@ -54,15 +58,16 @@ public class viewSubDetails extends HttpServlet {
                                     + "where timetable.subjectID =? order by date");
                             ps1.setString(1, subcode);
                             ResultSet rs1 = ps1.executeQuery();
-                            out.print("<table class=\"table table-striped table-bordered\"><thead>");
-                            out.print("<tr align = center>");
-                            out.print("<th>Date</th>");
-                            out.print("<th>Start Time</th>");
-                            out.print("<th>End Time</th>");
-                            out.print("<th>Lab</th>");
-                            out.print("<th>Batch</th>");
-                            out.print("<th>Teacher Name</th>");
-                            out.print("</tr></thead><tbody>");
+                            out.print(tablestart(subcode + " Details", "hover", "studDetails", 1) + "");
+                            String header = "<tr align = center>";
+                            header += "<th>Date</th>";
+                            header += "<th>Start Time</th>";
+                            header += "<th>End Time</th>";
+                            header += "<th>Lab</th>";
+                            header += "<th>Batch</th>";
+                            header += "<th>Teacher Name</th>";
+                            header += "</tr>";
+                            out.print(tablehead(header));
                             while (rs1.next()) {
                                 out.print("<tr align='center'>");
                                 for (int i = 1; i <= 6; i++) {
@@ -70,24 +75,20 @@ public class viewSubDetails extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print("</tbody></table>");
-                        }else
-                        {
+                            out.print(tableend(null,0));
+                        } else {
                             out.print("No Data to show");
                         }
                         con.close();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        error(e.getMessage());
                     }
-                    
                     break;
                 case 0:
-                    messages m1 = new messages();
-                    m1.kids(request, response);
+                    out.print(kids());
                     break;
                 default:
-                    messages m2 = new messages();
-                    m2.nouser(request, response);
+                    out.print(nouser());
             }
         }
     }

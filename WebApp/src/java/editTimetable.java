@@ -9,6 +9,9 @@ import cerberus.messages;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
+import static cerberus.printer.tableend;
+import static cerberus.printer.tablehead;
+import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -25,8 +28,6 @@ import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +38,6 @@ public class editTimetable extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     int week = 0;
-    int no_of_subs = 0;
     String subs[][];
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -94,47 +94,50 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).disabled=true;"
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
-                        out.print("<style> th { white-space: nowrap; } </style>");
-                        out.print("<table width = 100%>"
-                                + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
-                                + "<button type=\"submit\" id=\"prev\" class=\"btn btn-info\"");
+                        String heading = "<table><tr><td width = 33% align='left'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
+                                + "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\"";
                         if (week <= currweek) {
-                            out.print("disabled");
+                            heading += "disabled";
                         }
-                        out.print("><span>Previous</span>"
+                        heading += "><span>Previous</span>"
                                 + "</button>"
                                 + "</form></td>"
-                                + "<td width = 33% align='center'>Current Week : " + currweek + "</td>");
-                        out.print("<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
-                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-info\"");
-                        if (week > currweek) {
-                            out.print("disabled");
-                        }
-                        out.print("><span>Next</span>"
-                                + "</button>"
-                                + "</form></td>");
-                        out.print("</tr></table><br><br>");
-                        out.print("<p align='center'>Displaying Timetable of Week : " + week + "</p>");
+                                + "<td width = 33% align='center'>Current Week : " + currweek + "";
+
+                        heading += "<p align='center'>Displaying Timetable of Week : " + week + "</p>";
                         LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
                         LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                        out.print("<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>");
-                        out.print("<div class=\"table-responsive\">");
-                        out.print("<form id='ajaxform' action='saveTimetable' method='post' align='center'>");
-                        out.print(printTimetable(labid));
-                        out.print("<input type='text' name='lab' value='" + labid + "' hidden>");
-                        out.print("<input type='text' name='week' value='" + week + "' hidden>");
-                        out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
-                                + "<span>Save</span>"
-                                + "</button>");
-                        out.print("</form>");
-                        if (week == currweek + 1) {
-                            out.print("<form action='copyTimetable' method='post' align='center'>");
-                            out.print("<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-info\">"
-                                    + "<span>Copy From Previous Week</span>"
-                                    + "</button>");
-                            out.print("</form>");
+                        heading += "<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>";
+                        heading += "</td><td width = 33% align='right'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
+                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
+                        if (week > currweek) {
+                            heading += "disabled";
                         }
-                        out.print("</div>");
+                        heading += "><span>Next</span>"
+                                + "</button>"
+                                + "</form></td>";
+                        heading += "</tr></table>";
+                        out.print("<div class='card'><div class='card-header'>" + heading + "</div>"
+                                + "<div class='card-body'>"
+                                + "<div class='table-responsive'>"
+                                + "<form id='ajaxform' action='saveTimetable' method='post' align='center'>"
+                                + "<table class='table table-bordered table-striped' width='100%' cellspacing='0'>");
+                        out.print(printTimetable(labid));
+                        String end = "</table>"
+                                + "<input type='text' name='lab' value='" + labid + "' hidden>"
+                                + "<input type='text' name='week' value='" + week + "' hidden>"
+                                + "<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
+                                + "<span>Save</span>"
+                                + "</button></form>"
+                                + "</div>"
+                                + "</div>";
+                        if (week == currweek + 1) {
+                            end += "<div class='card-footer small text-muted'><form action='copyTimetable' method='post' align='center'>"
+                                    + "<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
+                                    + "<span>Copy From Previous Week</span>"
+                                    + "</button></form></div>";
+                        }
+                        out.print(end + "</div>");
                         con.close();
                     } catch (ParseException | ClassNotFoundException | SQLException e) {
                         error(e.getMessage());
@@ -172,7 +175,6 @@ public class editTimetable extends HttpServlet {
         cal.set(Calendar.DAY_OF_WEEK, 4);
         date[5] = dt.format(cal.getTime());
         String table = "";
-        table += ("<table class=\"table table-hover table-bordered\"> <thead style=\"font-size: 13.5px; background-color: #f0f2f5;\">");
         table += ("<tr align = center>");
         table += ("<th style=\"white-space:nowrap;\" >Start Time</th>");
         table += ("<th>End Time</th>");
@@ -182,7 +184,8 @@ public class editTimetable extends HttpServlet {
         table += ("<th>Thursday<br>" + date[3] + "</th>");
         table += ("<th>Friday<br>" + date[4] + "</th>");
         table += ("<th>Saturday<br>" + date[5] + "</th>");
-        table += ("</tr></thead><tbody>");
+        table += ("</tr>");
+        table = tablehead(table);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -233,7 +236,6 @@ public class editTimetable extends HttpServlet {
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
                     Date now = new Date();
-
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();
                     String disabled = "";
@@ -256,7 +258,7 @@ public class editTimetable extends HttpServlet {
                         flag = 1;
                     }
                     lines[rs.getInt(1) - 1] += (">No Lab</option>");
-                    for (int k = 0; k <= no_of_subs; k++) {
+                    for (int k = 0; k <= subs.length - 1; k++) {
                         lines[rs.getInt(1) - 1] += ("<option name='Sub' value='" + subs[k][0] + "' ");
                         if (flag == 1) {
                             if (subs[k][0].equals(arrOfsub[0])) {
@@ -327,7 +329,7 @@ public class editTimetable extends HttpServlet {
                         lines[y] += ("<td align='center'>");
                         lines[y] += ("<select class=\"editSelectTimeTable\" name = 'c" + y + "" + j + "' id = 'c" + y + "" + j + "' onchange = 'batchdisable(this.id)' " + disabledstyl + ">");
                         lines[y] += ("<option " + disabled + " name='Sub' value='-' selected>No Lab</option>");
-                        for (int k = 0; k <= no_of_subs; k++) {
+                        for (int k = 0; k <= subs.length - 1; k++) {
                             lines[y] += ("<option " + disabled + " name='Sub' value='" + subs[k][0] + "'>" + subs[k][1] + "</option>");
                         }
                         lines[y] += ("</select><br>");
@@ -347,7 +349,6 @@ public class editTimetable extends HttpServlet {
                 }
                 table += lines[y];
             }
-            table += ("</tbody></table><br><br>");
             con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
             e.printStackTrace();

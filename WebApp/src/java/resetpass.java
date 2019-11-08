@@ -86,6 +86,8 @@ public class resetpass extends HttpServlet {
                             ps.setString(1, pass);
                             ps.setString(2, email);
                             ps.executeUpdate();
+                            ps = con.prepareStatement("DELETE from otp where where email=?");
+                            ps.executeUpdate();
                             con.close();
                             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                             request.setAttribute("redirect", "true");
@@ -93,6 +95,7 @@ public class resetpass extends HttpServlet {
                             request.setAttribute("body", "Your password has been updated.<br> Please login with your new credentials");
                             request.setAttribute("url", "index.jsp");
                             request.setAttribute("sec", "2");
+                            request.setAttribute("fullpage", "false");
                             rd.forward(request, response);
                         } catch (ClassNotFoundException | SQLException e) {
                             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -100,6 +103,7 @@ public class resetpass extends HttpServlet {
                             request.setAttribute("head", "Error");
                             request.setAttribute("body", e.getMessage());
                             request.setAttribute("url", "resetpassword.html");
+                            request.setAttribute("fullpage", "false");
                             rd.forward(request, response);
                         }
                     } else {
@@ -109,6 +113,7 @@ public class resetpass extends HttpServlet {
                         request.setAttribute("body", "Please cheack your Email and the OTP you provided and try again.");
                         request.setAttribute("url", "resetpassword.html");
                         request.setAttribute("button", "Redirect");
+                        request.setAttribute("fullpage", "false");
                         rd.forward(request, response);
                     }
                 } else {
@@ -118,6 +123,7 @@ public class resetpass extends HttpServlet {
                     request.setAttribute("body", "An OTP was not found for the provided Email address.");
                     request.setAttribute("url", "index.jsp");
                     request.setAttribute("button", "Redirect");
+                    request.setAttribute("fullpage", "false");
                     rd.forward(request, response);
                 }
             }

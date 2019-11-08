@@ -24,7 +24,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title> Login </title>
-        <style>html{overflow: hidden;}</style>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="css/shakeEffect.css">
         <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
