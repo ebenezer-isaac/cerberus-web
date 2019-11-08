@@ -59,7 +59,7 @@ public class editStudDetails extends HttpServlet {
                                 + "from rollcall "
                                 + "where rollcall.classID = ?) "
                                 + "GROUP BY student.PRN "
-                                + "ORDER by rollcall.rollNo;");
+                                + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo;");
                         ps4.setInt(1, classID);
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();

@@ -271,7 +271,7 @@ public class editTimetable extends HttpServlet {
                         lines[rs.getInt(1) - 1] += (">" + subs[k][1] + "</option>");
                     }
 
-                    lines[rs.getInt(1) - 1] += ("</select>");
+                    lines[rs.getInt(1) - 1] += ("</select><br>");
                     lines[rs.getInt(1) - 1] += ("<select onchange = 'subsdisable(this.id)' class=\"editSelectTimeTable\" name = 'batch" + (rs.getInt(1) - 1) + "" + j + "' id = 'batch" + (rs.getInt(1) - 1) + "" + j + "'");
                     if (flag == 0) {
                         lines[rs.getInt(1) - 1] += ("disabled  class='not-allowed';");
@@ -330,7 +330,7 @@ public class editTimetable extends HttpServlet {
                         for (int k = 0; k <= no_of_subs; k++) {
                             lines[y] += ("<option " + disabled + " name='Sub' value='" + subs[k][0] + "'>" + subs[k][1] + "</option>");
                         }
-                        lines[y] += ("</select>");
+                        lines[y] += ("</select><br>");
                         lines[y] += ("<select class=\"editSelectTimeTable\" name = 'batch" + y + "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
                         lines[y] += ("<option " + disabled + " name='-' value='-' selected>No Batch</option>");
                         PreparedStatement ps11 = con.prepareStatement("Select name from batch");

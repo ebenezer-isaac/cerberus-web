@@ -98,6 +98,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return 0;
     }
@@ -114,6 +115,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return no_of_labs;
     }
@@ -130,6 +132,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return no_of_slots;
     }
@@ -146,6 +149,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return no_of_class;
     }
@@ -162,6 +166,8 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            e.printStackTrace();
         }
         return no_of_batch;
     }
@@ -205,6 +211,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return prefsubs;
     }
@@ -221,7 +228,9 @@ public class AttFunctions {
             while (rs2.next()) {
                 oddeve = (rs2.getInt(1) % 2);
             }
+            con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+            e.printStackTrace();
         }
         return oddeve;
     }
@@ -249,7 +258,9 @@ public class AttFunctions {
                 subs[no_of_subs][1] = rs.getString(2);
                 no_of_subs++;
             }
+            con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+            e.printStackTrace();
         }
         return subs;
     }
@@ -278,7 +289,9 @@ public class AttFunctions {
                 semsubs[index][1] = rs.getString(2);
                 index++;
             }
+            con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+            e.printStackTrace();
         }
         return semsubs;
     }
@@ -327,7 +340,9 @@ public class AttFunctions {
             while (rs.next()) {
                 cl = rs.getString(1);
             }
+            con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return cl;
     }
@@ -352,7 +367,9 @@ public class AttFunctions {
                     weekID = rs.getInt(1);
                 }
             }
+            con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return weekID;
     }
@@ -377,7 +394,9 @@ public class AttFunctions {
                 slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
                 no_of_slots++;
             }
+            con.close();
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
         return slots;
     }

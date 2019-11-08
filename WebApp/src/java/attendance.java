@@ -6,6 +6,7 @@ import static cerberus.AttFunctions.no_of_batch;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.semSubs;
 import cerberus.messages;
+import static cerberus.printer.error;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -37,9 +38,14 @@ public class attendance extends HttpServlet {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         out.print("<div align='center'>" + cla + "</div><br>");
+                        System.out.println("classID : "+classID);
                         int sem = getSem(oddeve, classID);
+                        System.out.println("sem : "+sem);
                         String[][] subs = semSubs(sem, classID);
                         int no_of_batch = no_of_batch();
+                        System.out.println("no_of_batch : "+no_of_batch);
+                        System.out.println("sub length : "+subs+"\n\n\n");
+                        System.out.println("length : "+subs.length);
                         int no_of_sub = subs.length - 1;
                         out.println("<table class='table table-striped table-bordered'><thead><th>Subject Code</th><th>Subject Abbr</th>");
                         String sql = "select ";
@@ -122,7 +128,7 @@ public class attendance extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                        e.printStackTrace();
+                         error(e.getMessage());
                     }
                     break;
                 case 0:

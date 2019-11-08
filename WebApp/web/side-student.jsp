@@ -90,6 +90,7 @@
                                     out.print("<a class='dropdown-header' href=\"javascript:setContent('/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "');\"><i class='fas fa-chevron-right'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
                                     index++;
                                 }
+                                con.close();
                                 if (index == 1) {
                                     out.print("<a class='dropdown-header' href=''><i class='fas fa-book'></i>&nbsp;&nbsp;No Subjects Available</a>");
                                 }
