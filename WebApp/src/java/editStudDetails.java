@@ -66,7 +66,7 @@ public class editStudDetails extends HttpServlet {
                         int line = 0;
                         if (rs.next()) {
                             out.print("<form action='saveStudDetails' method='post'>");
-                            out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 1) + "");
+                            out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 0) + "");
                             String header = "<tr>";
                             header += "<th> Roll No </th>";
                             header += "<th> PRN </th>";
@@ -105,9 +105,7 @@ public class editStudDetails extends HttpServlet {
                             out.print(tableend("No of students : " + line + "<br>"
                                     + "<input type='submit' value='Submit' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                    + "<input type='text' name='cols' value='" + cols + "' hidden>"
-                                    + "<input type='text' name='rows' value='" + line + "' hidden>"
-                                    + "</form>", 1));
+                                    + "</form>", 0));
                             out.print("<script>"
                                     + "var btnstatus5 = 0;var line=0;"
                                     + "function checkdupEmail(id) {line=id;"
