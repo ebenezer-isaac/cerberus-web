@@ -1,7 +1,4 @@
 </div></div>
-<!-- /.container-fluid -->
-
-<!-- Sticky Footer -->
 <footer class="sticky-footer">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
@@ -9,19 +6,11 @@
         </div>
     </div>
 </footer>
-
 </div>
-<!-- /.content-wrapper -->
-
 </div>
-<!-- /#wrapper -->
-
-<!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-
-<!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -46,8 +35,9 @@
 <script src="vendor/datatables/jquery.dataTables.js"></script>
 <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
 <script src="js/sb-admin.min.js"></script>
-<script src="js/ajax.js"></script></body></html>
+<script src="js/ajax.js"></script>
 <script>
+    var his = ["/Cerberus/homepage"];
     $(document).ready(function () {
     <%
         try {
@@ -57,22 +47,12 @@
         }
     %>
         window.addEventListener('popstate', function (event) {
-            // The popstate event is fired each time when the current history entry changes.
-
-            var r = confirm("You pressed a Back button! Are you sure?!");
-
-            if (r == true) {
-                // Call Back button programmatically as per user confirmation.
-                alert('asdf');
-                //history.back();
-                // Uncomment below line to redirect to the previous page instead.
-                // window.location = document.referrer // Note: IE11 is not supporting this.
-            } else {
-                // Stay on the current page.
-                history.pushState(null, null, window.location.pathname);
-            }
-             history.pushState(null, null, window.location.pathname);
+            alert(his);
+            url = his[his.length-2];
+            his.pop();
+            setContent(url);
+            history.pushState(null, null, window.location.pathname);
         }, false);
     });
-</script>
+</script></body></html>
 

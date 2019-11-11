@@ -1,8 +1,11 @@
 var mains = document.getElementById('main');
 function setContent(url) {
-    temp = url.replace('/Cerberus/','/Cerberus/ajaxContent?url=');
-    window.history.pushState({}, 'Previous',temp);
-    his.push(url);
+    temp = url.replace('/Cerberus/', '/Cerberus/ajaxContent?url=');
+    window.history.pushState({}, 'Previous', temp);
+    if (his[his.length - 1] != url)
+    {
+        his.push(url);
+    }
     //$("#main").html("<div style='height: 100vh;vertical-align: middle;'><div class='loader'><div class='duo duo1'><div class='dot dot-a'></div><div class='dot dot-b'></div></div><div class='duo duo2'><div class='dot dot-a'></div><div class='dot dot-b'></div></div></div></div>");
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
