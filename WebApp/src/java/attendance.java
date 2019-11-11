@@ -66,7 +66,12 @@ public class attendance extends HttpServlet {
                             out.println("<tr><td>" + subs[x][0] + "</td><td>" + subs[x][1] + "</td>");
                             while (rs.next()) {
                                 for (int y = 1; y <= no_of_batch; y++) {
-                                    out.print("<td>" + rs.getInt(y) + "</td>");
+                                    int temp = rs.getInt(y);
+                                    if (temp > 0) {
+                                        out.print("<td><a href = \"javascript:setContent('/Cerberus/batSubAttendance?batchID=" + y + "&subjectID=" + subs[x][0] + "');\">" + temp + "</td>");
+                                    } else {
+                                        out.print("<td>" + temp + "</td>");
+                                    }
                                 }
                             }
                             out.print("</tr>");

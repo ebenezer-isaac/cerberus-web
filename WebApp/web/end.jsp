@@ -47,7 +47,6 @@
         }
     %>
         window.addEventListener('popstate', function (event) {
-            alert(his);
             url = his[his.length-2];
             his.pop();
             setContent(url);
