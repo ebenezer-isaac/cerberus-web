@@ -1238,3 +1238,15 @@
     width: 20px;
     margin: 0px auto;
 }
+
+.snippet{
+    position: relative;
+    background: none;
+}
+
+.stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
