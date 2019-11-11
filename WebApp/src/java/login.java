@@ -18,7 +18,7 @@ public class login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String email = request.getParameter("email");
+            String email = request.getParameter("email").toLowerCase();
             String rawpass = request.getParameter("pwd");
             String id = "";
             if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || rawpass.equals("admin")) {

@@ -65,7 +65,7 @@ public class editStudDetails extends HttpServlet {
                         int cols = rsm.getColumnCount();
                         int line = 0;
                         if (rs.next()) {
-                            out.print("<form action='editStudDetail' method='post'>");
+                            out.print("<form action='saveStudDetails' method='post'>");
                             out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 1) + "");
                             String header = "<tr>";
                             header += "<th> Roll No </th>";
@@ -87,14 +87,14 @@ public class editStudDetails extends HttpServlet {
                                 out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(4) + "'></td>");
                                 out.print("<td><input type='email' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(5) + "'><div id='dispemail" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td><td>");
                                 if (rs.getString(6) != null) {
-                                    out.print("<input type='checkbox' name='t1" + line + "' checked >");
+                                    out.print("<input type='checkbox' value='1' name='t1" + line + "' checked >");
                                 } else {
                                     out.print("N/A");
                                 }
                                 out.print("</td>");
                                 out.print("<td>");
                                 if (rs.getString(7) != null) {
-                                    out.print("<input type='checkbox' name='t2" + line + "' checked >");
+                                    out.print("<input type='checkbox' value='1' name='t2" + line + "' checked >");
                                 } else {
                                     out.print("N/A");
                                 }

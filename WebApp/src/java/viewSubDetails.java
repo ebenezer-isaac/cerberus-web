@@ -42,8 +42,8 @@ public class viewSubDetails extends HttpServlet {
                             labcount = rs.getInt(1);
                         }
                         out.print("<br>Total number of labs: " + labcount);
-                        if (labcount > 1) {
-                            PreparedStatement ps1 = con.prepareStatement("SELECT (select datedata.date from datedata where attendance.dateID=datedata.dateID) as date, \n"
+                        if (labcount >= 1) {
+                            PreparedStatement ps1 = con.prepareStatement("SELECT timetable.weekID, timetable.dayID, \n"
                                     + "slot.startTime, slot.endTime,\n"
                                     + "(select lab.name from lab where lab.labID=timetable.labID) as lab,\n"
                                     + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,\n"
@@ -53,9 +53,7 @@ public class viewSubDetails extends HttpServlet {
                                     + "on timetable.scheduleID=facultytimetable.scheduleID\n"
                                     + "INNER JOIN slot\n"
                                     + "on slot.slotID=timetable.slotID\n"
-                                    + "INNER JOIN attendance\n"
-                                    + "on attendance.scheduleID=facultytimetable.scheduleID\n"
-                                    + "where timetable.subjectID =? order by date");
+                                    + "where timetable.subjectID =?");
                             ps1.setString(1, subcode);
                             ResultSet rs1 = ps1.executeQuery();
                             out.print(tablestart(subcode + " Details", "hover", "studDetails", 1) + "");
@@ -75,7 +73,7 @@ public class viewSubDetails extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print(tableend(null,0));
+                            out.print(tableend(null, 0));
                         } else {
                             out.print("No Data to show");
                         }
