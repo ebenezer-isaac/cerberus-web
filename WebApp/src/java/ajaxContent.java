@@ -25,8 +25,7 @@ public class ajaxContent extends HttpServlet {
                 } catch (Exception x) {
                     url = "homepage";
                 }
-            }
-            System.out.println(url);
+            }   
             if (access == 1) {
                 request.getRequestDispatcher("side-faculty.jsp").include(request, response);
             } else if (access == 0) {

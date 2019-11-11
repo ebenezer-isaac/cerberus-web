@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 public class saveStudDetails extends HttpServlet {
 
+    private static final long serialVersionUID = 470143293826528224L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -24,8 +26,6 @@ public class saveStudDetails extends HttpServlet {
             try {
                 int access = (int) session.getAttribute("access");
                 int classID = Integer.parseInt(request.getParameter("division"));
-                int rows = Integer.parseInt(request.getParameter("rows"));
-                int cols = Integer.parseInt(request.getParameter("cols"));
                 switch (access) {
                     case 1:
                         try {
@@ -53,8 +53,6 @@ public class saveStudDetails extends HttpServlet {
                                 String tname = request.getParameter("name" + index);
                                 String eemail = rs.getString(4);
                                 String temail = request.getParameter("email" + index);
-                                System.out.println(troll + " " + tprn + " " + tname + " " + temail);
-                                System.out.println(eroll + " " + ename + " " + eemail);
                                 if (ename.equals(tname)) {
                                 } else {
                                     PreparedStatement pps = con.prepareStatement("UPDATE student SET name = ? where prn = ?");

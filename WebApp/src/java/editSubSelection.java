@@ -64,7 +64,7 @@ public class editSubSelection extends HttpServlet {
                         int no_of_sub = subs.length - 1;
                         String sql = "SELECT rollcall.rollNo,student.PRN,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat('1',',',(select name from batch where batch.batchID = studentsubject.batchID )) END) as " + subs[index][1].replace('-', '_');
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN (select name from batch where batch.batchID = studentsubject.batchID ) END) as " + subs[index][1].replace('-', '_');
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -78,7 +78,6 @@ public class editSubSelection extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
-                        System.out.println(sql);
                         PreparedStatement ps4 = con.prepareStatement(sql);
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
@@ -87,7 +86,7 @@ public class editSubSelection extends HttpServlet {
                         if (rs.next()) {
                             out.print("<style>.not-allowed {cursor: not-allowed;}</style>"
                                     + "<form action='saveSubSelection' method='post'>");
-                            out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 1) + "");
+                            out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 0) + "");
                             String header = "<tr>";
                             header += "<th> Roll </th>";
                             header += "<th> Name </th>";
@@ -105,27 +104,25 @@ public class editSubSelection extends HttpServlet {
                                 out.print("<td>" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "<input type='text' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
-                                    System.out.println(rs.getString(i));
+                                    index = 0;
                                     int flag = 0;
-                                    String arr[] = null;
-                                    try {
-                                        arr = rs.getString(i).split(",");
+                                    if (rs.getString(i) != null) {
                                         flag = 1;
-                                    } catch (Exception e) {
+                                    } else {
                                         flag = 0;
                                     }
-                                    out.print("<td><input type='checkbox' id='sub" + rsm.getColumnLabel(i) + "" + line + "' name='sub" + rsm.getColumnLabel(i) + "" + line + "' onchange='batchdisable(this.id)'");
+                                    out.print("<td><input type='checkbox' value='1' id='sub" + subs[i-4][0] + "" + line + "' name='sub" + subs[i-4][0] + "" + line + "' onchange='batchdisable(this.id)'");
 
                                     if (flag == 1) {
                                         out.print(" checked");
                                     }
-                                    out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + rsm.getColumnLabel(i) + "" + line + "' id = 'batch" + rsm.getColumnLabel(i) + "" + line + "' class='editSelectTimeTable");
+                                    out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i-4][0] + "" + line + "' id = 'batch" + subs[i-4][0] + "" + line + "' class='editSelectTimeTable");
                                     if (flag == 0) {
                                         out.print(" not-allowed' disabled");
                                     } else {
                                         out.print("'");
                                     }
-                                    out.print("><option name='-' value='-'");
+                                    out.print("><option name='-' value='0'");
                                     if (flag == 0) {
                                         out.print("selected");
                                     }
@@ -134,7 +131,7 @@ public class editSubSelection extends HttpServlet {
                                     rs4.previous();
                                     while (rs4.next()) {
                                         out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'");
-                                        if (flag == 1 && arr[1].equals(rs4.getString(2))) {
+                                        if (flag == 1 && rs.getString(i).equals(rs4.getString(2))) {
                                             out.print("selected");
                                         }
                                         out.print(">" + rs4.getString(2) + "</option>");
@@ -147,9 +144,7 @@ public class editSubSelection extends HttpServlet {
                             out.print(tableend("No of students : " + line + "<br>"
                                     + "<input class='btn-primary btn' type='submit' value='Submit' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                    + "<input type='text' name='cols' value='" + cols + "' hidden>"
-                                    + "<input type='text' name='rows' value='" + line + "' hidden>"
-                                    + "</form>",1));
+                                    + "</form>", 0));
                             out.print("<script>function batchdisable(id) {"
                                     + "if(document.getElementById(id).checked)"
                                     + "{id = id.substr(3);"
