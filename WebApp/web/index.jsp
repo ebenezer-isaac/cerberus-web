@@ -28,7 +28,7 @@
         <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css">
         <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
-        <link rel="stylesheet" href="css/loader.css" type="text/css">
+        <link rel="stylesheet" href="css/loader-index.css" type="text/css">
         <link rel="stylesheet" href="css/splash.css" type="text/css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -46,7 +46,7 @@
                             rd.forward(request, response);
                         }
                     } catch (Exception e) {
-                        out.print("<div id='loader-wrapper'><div id='loader'></div><div class='loader-section section-left'></div><div class='loader-section section-right'></div></div>");
+                        out.print("<div id='splash-wrapper'><div id='splash'></div><div class='splash-section section-left'></div><div class='splash-section section-right'></div></div>");
                     }
                 } catch (Exception m) {
                     m.printStackTrace();

@@ -1,41 +1,4 @@
-/* 
- _____   _           _         _                        _                  
-|_   _| | |         | |       | |                      | |                 
-  | |   | |__   __ _| |_ ___  | |_ ___  _ __ ___   __ _| |_ ___   ___  ___ 
-  | |   | '_ \ / _` | __/ _ \ | __/ _ \| '_ ` _ \ / _` | __/ _ \ / _ \/ __|
- _| |_  | | | | (_| | ||  __/ | || (_) | | | | | | (_| | || (_) |  __/\__ \
- \___/  |_| |_|\__,_|\__\___|  \__\___/|_| |_| |_|\__,_|\__\___/ \___||___/
-
-Oh nice, welcome to the stylesheet of dreams. 
-It has it all. Classes, ID's, comments...the whole lot:)
-Enjoy responsibly!
-@ihatetomatoes
-
-*/
-
-/* ==========================================================================
-   Chrome Frame prompt
-   ========================================================================== */
-
-.chromeframe {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
-
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-p {
-    line-height: 1.33em;
-    color: #7E7E7E;
-}
-h1 {
-    color: #EEEEEE;
-}
-
-#loader-wrapper {
+#splash-wrapper {
     position: fixed;
     top: 0;
     left: 0;
@@ -43,7 +6,7 @@ h1 {
     height: 100%;
     z-index: 1000;
 }
-#loader {
+#splash {
     display: block;
     position: relative;
     left: 50%;
@@ -61,7 +24,7 @@ h1 {
     z-index: 1001;
 }
 
-    #loader:before {
+    #splash:before {
         content: "";
         position: absolute;
         top: 5px;
@@ -76,7 +39,7 @@ h1 {
         animation: spin 3s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
     }
 
-    #loader:after {
+    #splash:after {
         content: "";
         position: absolute;
         top: 15px;
@@ -116,7 +79,7 @@ h1 {
         }
     }
 
-    #loader-wrapper .loader-section {
+    #splash-wrapper .splash-section {
         position: fixed;
         top: 0;
         width: 51%;
@@ -128,16 +91,16 @@ h1 {
         transform: translateX(0);  /* Firefox 16+, IE 10+, Opera */
     }
 
-    #loader-wrapper .loader-section.section-left {
+    #splash-wrapper .splash-section.section-left {
         left: 0;
     }
 
-    #loader-wrapper .loader-section.section-right {
+    #splash-wrapper .splash-section.section-right {
         right: 0;
     }
 
     /* Loaded */
-    .loaded #loader-wrapper .loader-section.section-left {
+    .loaded #splash-wrapper .splash-section.section-left {
         -webkit-transform: translateX(-100%);  /* Chrome, Opera 15+, Safari 3.1+ */
             -ms-transform: translateX(-100%);  /* IE 9 */
                 transform: translateX(-100%);  /* Firefox 16+, IE 10+, Opera */
@@ -146,7 +109,7 @@ h1 {
                 transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
     }
 
-    .loaded #loader-wrapper .loader-section.section-right {
+    .loaded #splash-wrapper .splash-section.section-right {
         -webkit-transform: translateX(100%);  /* Chrome, Opera 15+, Safari 3.1+ */
             -ms-transform: translateX(100%);  /* IE 9 */
                 transform: translateX(100%);  /* Firefox 16+, IE 10+, Opera */
@@ -155,12 +118,12 @@ h1 {
         transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
     }
     
-    .loaded #loader {
+    .loaded #splash {
         opacity: 0;
         -webkit-transition: all 0.3s ease-out;  
                 transition: all 0.3s ease-out;
     }
-    .loaded #loader-wrapper {
+    .loaded #splash-wrapper {
         visibility: hidden;
 
         -webkit-transform: translateY(-100%);  /* Chrome, Opera 15+, Safari 3.1+ */
@@ -172,7 +135,7 @@ h1 {
     }
     
     /* JavaScript Turned Off */
-    .no-js #loader-wrapper {
+    .no-js #splash-wrapper {
         display: none;
     }
     .no-js h1 {

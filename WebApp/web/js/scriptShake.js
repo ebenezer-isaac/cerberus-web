@@ -12,7 +12,7 @@ passtf.addEventListener("keydown", function (e) {
 });
 $('#loginbtn').click(function () {
     $('.alert').fadeIn(500);
-    document.getElementById("mess").innerHTML = "<div class='loader-s'><div class='duo-s duo1-s'><div class='dot-s dot-a-s'></div><div class='dot-s dot-b-s'></div></div><div class='duo-s duo2-s'><div class='dot-s dot-a-s'></div><div class='dot-s dot-b-s'></div></div></div>";
+    document.getElementById("mess").innerHTML = "<div class='loader-index'><div class='dot-floating'></div></div>";
     var mail = document.getElementById('email').value;
     var pwd = document.getElementById('pass').value;
     if (!ValidateEmail(mail))
