@@ -30,6 +30,7 @@
         <link rel="stylesheet" href="css/anim.css" type="text/css">
         <link rel="stylesheet" href="css/loader-index.css" type="text/css">
         <link rel="stylesheet" href="css/splash.css" type="text/css">
+        <link rel="stylesheet" href="css/background.css" type="text/css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
@@ -61,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="particles-js"></div>
+<!--                <div id="particles-js"></div>-->
                 <div class="container">
                     <div class="modal custom_modal_recaptcha" id="modalrecaptcha">
                         <div class="modal-dialog modal-sm">
