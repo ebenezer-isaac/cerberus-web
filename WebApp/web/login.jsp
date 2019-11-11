@@ -78,32 +78,4 @@
 <script defer src="js/scriptShake.js"></script>
 <script defer src="js/main.js"></script>
 <script defer src="js/app.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<script defer src="js/background.js"></script>
