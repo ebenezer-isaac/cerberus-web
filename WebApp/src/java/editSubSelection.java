@@ -86,7 +86,7 @@ public class editSubSelection extends HttpServlet {
                         int line = 0;
                         if (rs.next()) {
                             out.print("<style>.not-allowed {cursor: not-allowed;}</style>"
-                                    + "<form action='editStudDetail' method='post'>");
+                                    + "<form action='saveSubSelection' method='post'>");
                             out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 1) + "");
                             String header = "<tr>";
                             header += "<th> Roll </th>";

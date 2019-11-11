@@ -8,9 +8,6 @@
 <html lang="en" >
     <head>
         <style>
-            .main_content {
-                pointer-events: none;
-            }
             .unselectable {
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
@@ -36,7 +33,7 @@
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
-    <body>
+    <body class='unselectable'>
         <div id="demo-content">
             <%
                 try {
@@ -44,6 +41,7 @@
                     try {
                         access = Integer.parseInt(session.getAttribute("access").toString());
                         if (access == 0 || access == 1) {
+                            System.out.println("hellos");
                             RequestDispatcher rd = request.getRequestDispatcher("ajaxContent?url=homepage");
                             rd.forward(request, response);
                         }
