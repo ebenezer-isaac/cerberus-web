@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/iamvr/Desktop/cerberus-web/WebApp/web/login.jsp</file>
             <file>file:/C:/Users/iamvr/Desktop/cerberus-web/WebApp/src/java/login.java</file>
             <file>file:/C:/Users/iamvr/Desktop/cerberus-web/WebApp/web/js/scriptShake.js</file>
@@ -17,6 +18,13 @@
             <file>file:/C:/Users/iamvr/Desktop/cerberus-web/WebApp/src/java/saveSubSelection.java</file>
             <file>file:/C:/Users/iamvr/Desktop/cerberus-web/WebApp/web/end.jsp</file>
             <file>file:/C:/Users/iamvr/Desktop/cerberus-web/WebApp/src/java/editFaculty.java</file>
+=======
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/viewSubject.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/batSubAttendance.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/saveSubSelection.java</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/web/end.jsp</file>
+            <file>file:/C:/Users/ebene/Desktop/cerberus/cerberus-web/WebApp/src/java/saveStudDetails.java</file>
+>>>>>>> 4e50ad39714689647f74a461a07a41d2f143b32b
         </group>
     </open-files>
 </project-private>
