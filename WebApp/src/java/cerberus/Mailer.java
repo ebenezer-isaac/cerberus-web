@@ -1,6 +1,5 @@
 package cerberus;
 
-
 import static java.lang.Thread.sleep;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -60,14 +59,11 @@ public class Mailer implements Runnable {
                 transport.sendMessage(msg, msg.getAllRecipients());
             }
         } catch (AddressException e) {
-            System.out.println(e.getMessage());
         } catch (MessagingException e) {
-            System.out.println(e.getMessage());
         }
         try {
             sleep(600000);
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -78,7 +74,6 @@ public class Mailer implements Runnable {
                 con.close();
             }
         } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
         }
     }
 }

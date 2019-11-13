@@ -70,8 +70,6 @@ public class saveTimetable extends HttpServlet {
                                     if (table.equals("null , null") || table.equals("- , -") || table.equals("- , null") || table.equals("null , -")) {
                                     } else {
                                         String[] arrOfStr = table.split(" , ");
-                                        System.out.println(arrOfStr[0]);
-                                        System.out.println(arrOfStr[1]);
                                         PreparedStatement pps = con.prepareStatement("INSERT INTO `timetable`(`slotID`, `labID`, `subjectID`, `batchID`, `weekID`, `dayID`) VALUES (?,?,?,?,?,?)");
                                         pps.setInt(1, (slot + 1));
                                         pps.setInt(2, labid);
@@ -80,28 +78,18 @@ public class saveTimetable extends HttpServlet {
                                         pps.setInt(5, weekID);
                                         pps.setInt(6, (j + 1));
                                         pps.executeUpdate();
-                                        System.out.println("c" + slot + (j + 1) + " " + "batch" + slot + (j + 1));
-                                        System.out.println("exist:" + exist + "!!table:" + table);
-                                        System.out.println("insert data");
                                     }
                                 } else if (table.equals("null , null") || table.equals("- , -") || table.equals("- , null") || table.equals("null , -")) {
                                     String[] arrOfStr = exist.split(" , ");
-                                    System.out.println(arrOfStr[0]);
-                                    System.out.println(arrOfStr[1]);
                                     PreparedStatement pps = con.prepareStatement("DELETE from `timetable` where `slotID` = ? and `labID` = ? and `weekID` = ? and `dayID` = ?");
                                     pps.setInt(1, (slot + 1));
                                     pps.setInt(2, labid);
                                     pps.setInt(3, weekID);
                                     pps.setInt(4, (j + 1));
                                     pps.executeUpdate();
-                                    System.out.println("c" + slot + (j + 1) + " " + "batch" + slot + (j + 1));
-                                    System.out.println("exist:" + exist + "!!table:" + table);
-                                    System.out.println("delete data");
                                 } else if (exist.equals(table)) {
                                 } else {
                                     String[] arrOfStr = table.split(" , ");
-                                    System.out.println(arrOfStr[0]);
-                                    System.out.println(arrOfStr[1]);
                                     PreparedStatement pps = con.prepareStatement("UPDATE `timetable` SET `subjectID`=?,`batchID`=? WHERE slotID=? and labID=? and weekID=? and dayID=?");
                                     pps.setString(1, arrOfStr[0]);
                                     pps.setInt(2, Integer.parseInt(arrOfStr[1]));
@@ -110,9 +98,6 @@ public class saveTimetable extends HttpServlet {
                                     pps.setInt(5, weekID);
                                     pps.setInt(6, (j + 1));
                                     pps.executeUpdate();
-                                    System.out.println("c" + slot + (j + 1) + " " + "batch" + slot + (j + 1));
-                                    System.out.println("exist:" + exist + "!!table:" + table);
-                                    System.out.println("update data");
                                 }
                             }
                         }
@@ -124,8 +109,6 @@ public class saveTimetable extends HttpServlet {
                                     if (table.equals("null , null") || table.equals("- , -") || table.equals("- , null") || table.equals("null , -")) {
                                     } else {
                                         String[] arrOfStr = table.split(" , ");
-                                        System.out.println(arrOfStr[0]);
-                                        System.out.println(arrOfStr[1]);
                                         PreparedStatement pps = con.prepareStatement("INSERT INTO `timetable`(`slotID`, `labID`, `subjectID`, `batchID`, `weekID`, `dayID`) VALUES (?,?,?,?,?,?)");
                                         pps.setInt(1, (slot + 1));
                                         pps.setInt(2, labid);
@@ -134,9 +117,6 @@ public class saveTimetable extends HttpServlet {
                                         pps.setInt(5, weekID);
                                         pps.setInt(6, (j + 1));
                                         pps.executeUpdate();
-                                        System.out.println("c" + slot + (j + 1) + " " + "batch" + slot + (j + 1));
-                                        System.out.println("exist:null!!table:" + table);
-                                        System.out.println("insert data");
                                     }
                                 }
                             }

@@ -26,7 +26,6 @@ public class copyTimetable extends HttpServlet {
                 HttpSession session = request.getSession();
                 int week = (int) session.getAttribute("week");
                 week++;
-                System.out.println(week);
                 int weekid = getWeekID(week);
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
@@ -44,9 +43,7 @@ public class copyTimetable extends HttpServlet {
                         while (rs1.next()) {
                             PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID,? , dayID from timetable where weekID = ?;");
                             ps3.setInt(1, weekid);
-                            System.out.println(weekid);
                             ps3.setInt(2, rs.getInt(1));
-                            System.out.println(rs.getInt(1));
                             ps3.executeUpdate();
                             try {
                                 ps3 = con.prepareStatement("DELETE t1 FROM timetable t1 "

@@ -18,7 +18,6 @@ public class delSlot extends HttpServlet {
         switch (access) {
             case 1:
                 String slotID = request.getParameter("slotID");
-                System.out.println(slotID);
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");

@@ -91,3 +91,41 @@ INSERT INTO `timetable` VALUES (11,5,3,"BCA1001",3,1,'mon');
 INSERT INTO `timetable` VALUES (12,1,1,"BCA1538",2,1,'tue');
 INSERT INTO `timetable` VALUES (13,1,2,"BCA1530",1,1,'tue');
 INSERT INTO `timetable` VALUES (14,2,1,"BCA1304",1,1,'tue');
+
+SELECT (select datedata.date from datedata where attendance.dateID=datedata.dateID) as date, 
+slot.startTime, slot.endTime,
+(select lab.name from lab where lab.labID=timetable.labID) as lab,
+(select batch.name from batch where batch.batchID=timetable.batchID) as batch,
+(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher
+from facultytimetable
+INNER JOIN timetable
+on timetable.scheduleID=facultytimetable.scheduleID
+INNER JOIN slot
+on slot.slotID=timetable.slotID
+INNER JOIN attendance
+on attendance.scheduleID=facultytimetable.scheduleID
+where timetable.subjectID =? order by date
+
+
+
+SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date, 
+slot.startTime, slot.endTime,
+(select lab.name from lab where lab.labID=timetable.labID) as lab,
+(select batch.name from batch where batch.batchID=timetable.batchID) as batch,
+(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher
+from facultytimetable
+INNER JOIN timetable
+on timetable.scheduleID=facultytimetable.scheduleID
+INNER JOIN slot
+on slot.slotID=timetable.slotID
+where timetable.subjectID ='BCA1538' order by date
+
+SELECT student.PRN, rollcall.rollNo,student.name,
+MAX(CASE WHEN studentsubject.subjectID = 'BCA1105' THEN concat(' BCA1105',' ') END) as PCDB, 
+MAX(CASE WHEN studentsubject.subjectID = 'BCA1106' THEN concat(' BCA1106',' ') END) as Python, 
+MAX(CASE WHEN studentsubject.subjectID = 'BCA1208' THEN concat(' BCA1208',' ') END) as HTML-1 
+FROM student INNER JOIN studentsubject ON student.PRN = studentsubject.PRN INNER JOIN rollcall  on  rollcall.PRN = student.PRN where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = 1) GROUP BY studentsubject.PRN ORDER by rollcall.rollNo
+				
+SELECT * FROM `timetable` WHERE subjectID ='BCA1305' and batchID=3 and weekID = 7 or subjectID ='BCA1538' and batchID=1 and weekID = 7 order by field(dayID,'mon','tue','wed','thu','fri','sat')
+
+select subject.subjectID, subject.Abbreviation, (select name from batch where batchID = studentsubject.batchID) from studentsubject inner join subject on subject.subjectID=studentsubject.subjectID where PRN = '201703380010'

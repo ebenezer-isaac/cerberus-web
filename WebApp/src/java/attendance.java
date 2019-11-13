@@ -94,7 +94,6 @@ public class attendance extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by rollcall.rollNo";
-                        System.out.println(sql);
                         PreparedStatement ps = con.prepareStatement(sql);
                         ResultSet rs = ps.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();

@@ -67,11 +67,9 @@ public class addStudent extends HttpServlet {
                     ps.setString(1, prn);
                     ps.executeUpdate();
                     String subjects[] = request.getParameterValues("subjects");
-                    System.out.println("hwkki world " + subjects.length);
                     String subsbody = "Subjects Selected:\n";
                     String clas = clas = getClassName(classID);
                     for (String subject : subjects) {
-                        System.out.println(subject);
                         try {
                             int batchid = Integer.parseInt(request.getParameter("batch" + subject));
                             ps = con.prepareStatement("select abbreviation from subject where subjectID = ?");

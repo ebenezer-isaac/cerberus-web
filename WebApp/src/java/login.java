@@ -60,7 +60,6 @@ public class login extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("email", email);
                     session.setAttribute("access", access);
-                    System.out.println("access is "+access);
                     session.setAttribute("user", id);
                     session.setAttribute("pop", 0);
                     out.print("1");

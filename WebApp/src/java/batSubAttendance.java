@@ -45,7 +45,6 @@ public class batSubAttendance extends HttpServlet {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String yearweekday = "" + rs.getInt(4) + String.format("%02d", Integer.parseInt(rs.getString(2))) + rs.getInt(3);
-                    System.out.println(yearweekday);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyywwu");
                     Date date = null;
                     try {
@@ -72,7 +71,6 @@ public class batSubAttendance extends HttpServlet {
                         + "and attendance.PRN in (select studentsubject.PRN from studentsubject where studentsubject.batchID = ? and studentsubject.subjectID = ? ) "
                         + "GROUP BY rollcall.rollNo \n"
                         + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
-                System.out.println(sql);
                 PreparedStatement ps4 = con.prepareStatement(sql);
                 ps4.setString(1, subjectID);
                 ps4.setInt(2, batchID);
