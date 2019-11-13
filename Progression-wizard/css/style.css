@@ -98,7 +98,7 @@ h2 {
 
 body {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 2.6;
   color: #222;
   font-weight: 400;
   font-family: 'Roboto Slab';
@@ -242,7 +242,7 @@ input {
     position: absolute;
     content: '';
     width: 2px;
-    height: 180px;
+    height: 400px;
     background: #ebebeb;
     left: 64px;
     top: 50%;
