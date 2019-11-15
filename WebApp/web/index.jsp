@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-<!--                <div id="particles-js"></div>-->
+                <div id="particles-js"></div>
                 <div class="container">
                     <div class="modal custom_modal_recaptcha" id="modalrecaptcha">
                         <div class="modal-dialog modal-sm">
