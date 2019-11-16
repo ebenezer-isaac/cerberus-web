@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <script src="js/particles.js"></script>
+`        <script src="js/particles.js"></script>
         <script defer src="js/index.js"></script>
         <script src="js/jquery.min.js"></script>
     </body>

@@ -60,4 +60,26 @@ function closemodalrecaptcha()
     document.getElementById("modalrecaptcha").style.display = "none";
 }
 
-//javascript for showing dropdown items in homepage
+function showPassNew() {
+    var x = document.getElementById("newpass");
+    var y = document.getElementById("eyen");
+    if (x.type === "password") {
+        x.type = "text";
+        y.innerHTML = "<i class='fa fa-eye'></i>";
+    } else {
+        x.type = "password";
+        y.innerHTML = "<i class='fa fa-eye-slash'></i>";
+    }
+}
+
+function showPassConf() {
+    var x = document.getElementById("conpass");
+    var y = document.getElementById("eyec");
+    if (x.type === "password") {
+        x.type = "text";
+        y.innerHTML = "<i class='fa fa-eye'></i>";
+    } else {
+        x.type = "password";
+        y.innerHTML = "<i class='fa fa-eye-slash'></i>";
+    }
+}
