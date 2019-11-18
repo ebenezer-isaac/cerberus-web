@@ -28,7 +28,8 @@ public class studentProgression extends HttpServlet {
                     + "</ul><br>We would love to hear your suggestions"
                     + "<br>Please contact us at:"
                     + "<br>+91 89807 77667"
-                    + "<br>+91 98791 92084<br><br>");
+                    + "<br>+91 98791 92084"
+                    + "<br>+91 99249 58115<br><br>");
         }
     }
 

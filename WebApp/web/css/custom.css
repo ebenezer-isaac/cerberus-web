@@ -173,7 +173,7 @@ a:hover
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
-    background: #4CAF50;
+    background: #007BFF;
     width: 100%;
     border: 0;
     padding: 15px;
@@ -255,7 +255,7 @@ a:hover
 /* particles background */
 #particles-js
 {
-    background-color: #000;
+    background: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0, #003073), color-stop(100%, #029797));
     width: 100%;
     height: 100%;
     position: fixed;

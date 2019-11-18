@@ -34,7 +34,7 @@ public class editAddStudent extends HttpServlet {
                         out.print("<br><form action='addStudent' method='post'><table cellspacing='10'>"
                                 + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
                         Statement stmt = con.createStatement();
-                        out.print("<select name = 'clas' id = 'clas' class=\"editSelect\" onchange='checkValidations(2);dissub();'>");
+                        out.print("<select name = 'clas' id = 'clas' style='padding: 5px 109px 5px 8px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' onchange='checkValidations(2);dissub();'>");
                         out.print("<option name='clas' value= '0'>Select Class</option>");
                         ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                         int no_of_class = 0;
