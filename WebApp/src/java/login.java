@@ -21,6 +21,7 @@ public class login extends HttpServlet {
             String email = request.getParameter("email").toLowerCase();
             String rawpass = request.getParameter("pwd");
             String id = "";
+            String name = "";
             if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || rawpass.equals("admin")) {
                 out.print("2");
             } else {
@@ -30,12 +31,13 @@ public class login extends HttpServlet {
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select prn,password from student where email=?");
+                    PreparedStatement ps = con.prepareStatement("select prn,password,name from student where email=?");
                     ps.setString(1, email);
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
                         id = rs.getString(1);
                         corrpass = rs.getString(2);
+                        name = rs.getString(3);
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
@@ -44,12 +46,13 @@ public class login extends HttpServlet {
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("select facultyID, password from faculty where email=?");
+                        PreparedStatement ps = con.prepareStatement("select facultyID,name password from faculty where email=?");
                         ps.setString(1, email);
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
                             id = rs.getString(1);
                             corrpass = rs.getString(2);
+                            name = rs.getString(3);
                         }
                         access = 1;
                         con.close();
@@ -61,6 +64,7 @@ public class login extends HttpServlet {
                     session.setAttribute("email", email);
                     session.setAttribute("access", access);
                     session.setAttribute("user", id);
+                    session.setAttribute("name", name);
                     session.setAttribute("pop", 0);
                     out.print("1");
                 } else {
@@ -71,7 +75,7 @@ public class login extends HttpServlet {
                         trial++;
                     } catch (NumberFormatException e) {
                     }
-                    session.setAttribute("count", ""+trial);
+                    session.setAttribute("count", "" + trial);
                     if (trial > 5) {
                         out.print("3");
                     } else {

@@ -1,5 +1,10 @@
 package cerberus;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -216,23 +221,24 @@ public class AttFunctions {
         return prefsubs;
     }
 
-    public static int oddEve(HttpServletRequest request) {
-        int oddeve = 0;
-        HttpSession session = request.getSession();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement st = con.prepareStatement("SELECT `sem` FROM `subject` where subjectID=(select max(subjectID) from timetable where weekID=(select weekID from week where week = ?)) ");
-            st.setInt(1, Integer.parseInt(session.getAttribute("week").toString()));
-            ResultSet rs2 = st.executeQuery();
-            while (rs2.next()) {
-                oddeve = (rs2.getInt(1) % 2);
+    public static int oddEve(HttpServletRequest request) throws FileNotFoundException, IOException {
+        int result = 0;
+
+        String fileName = "C:\\Users\\iamvr\\Desktop\\cerberus-web\\WebApp\\web\\oddEve.txt";
+        File file = new File(fileName);
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        String text;
+        while ((text = br.readLine()) != null) {
+            try {
+                result = Integer.parseInt(text.trim());
+                break;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-            con.close();
-        } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-            e.printStackTrace();
         }
-        return oddeve;
+        System.out.println("asdfasdf : " + result + ".");
+        return result;
     }
 
     public static String[][] oddEveSubs(int oddeve) {

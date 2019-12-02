@@ -1,5 +1,6 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
 import static cerberus.AttFunctions.getSem;
 import static cerberus.AttFunctions.no_of_batch;
@@ -30,8 +31,7 @@ public class attendance extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            int access = (int) session.getAttribute("access");
+            int access = getAccess(request);
             switch (access) {
                 case 1:
                     int classID = Integer.parseInt(request.getParameter("class"));
@@ -42,6 +42,11 @@ public class attendance extends HttpServlet {
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         int sem = getSem(oddeve, classID);
                         String[][] subs = semSubs(sem, classID);
+                        for(int i = 0;i<subs.length;i++)
+                        {
+                            System.out.println(subs[i][0]);
+                            System.out.println(subs[i][1]);
+                        }
                         int no_of_batch = no_of_batch();
                         int no_of_sub = subs.length - 1;
                         out.print(tablestart(cla, "hover", "studDetails", 0));
@@ -94,6 +99,7 @@ public class attendance extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by rollcall.rollNo";
+                        System.out.println(sql);
                         PreparedStatement ps = con.prepareStatement(sql);
                         ResultSet rs = ps.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();

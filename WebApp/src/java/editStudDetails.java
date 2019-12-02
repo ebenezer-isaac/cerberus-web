@@ -42,13 +42,21 @@ public class editStudDetails extends HttpServlet {
                             + "while (s.length < 2) s = '0' + s;"
                             + "return(s);"
                             + "}"
-                            + "</script>");
+                            + "</script>"
+                            + "<style>"
+                            + ".valid{"
+                            + "border:solid 1px green;"
+                            + "}"
+                            + ".invalid{"
+                            + "border:solid 1px red;"
+                            + "}"
+                            + "</style>");
                     out.print("<div>");
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         String cla = getClassName(classID);
-                        PreparedStatement ps4 = con.prepareStatement("SELECT rollcall.rollNo, student.PRN, student.photo_id ,student.name, student.email,"
+                        PreparedStatement ps4 = con.prepareStatement("SELECT rollcall.rollNo, student.PRN, student.name, student.email,"
                                 + "MAX(CASE WHEN studentfingerprint.templateID = 1 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template1, "
                                 + "MAX(CASE WHEN studentfingerprint.templateID = 2 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template2 "
                                 + "FROM student "
@@ -60,17 +68,18 @@ public class editStudDetails extends HttpServlet {
                                 + "GROUP BY student.PRN "
                                 + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo;");
                         ps4.setInt(1, classID);
+                        System.out.println("hello");
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         int line = 0;
                         if (rs.next()) {
+                            System.out.println("hello");
                             out.print("<form action='saveStudDetails' method='post'>");
                             out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 0) + "");
                             String header = "<tr>";
                             header += "<th> Roll No </th>";
                             header += "<th> PRN </th>";
-                            header += "<th> MSU ID </th>";
                             header += "<th> Name </th>";
                             header += "<th> Email </th>";
                             header += "<th align='center'> Fingerprint <br>1 </th>";
@@ -81,19 +90,18 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr>");
-                                out.print("<td><input type='number' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'><div id='disproll" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td>");
+                                out.print("<td><input type='number' class='valid' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
-                                out.print("<td>" + rs.getString(3) + "</td>");
-                                out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(4) + "'></td>");
-                                out.print("<td><input type='email' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(5) + "'><div id='dispemail" + line + "' ><i class='fa fa-check' aria-hidden='true'></i></div></td><td>");
-                                if (rs.getString(6) != null) {
+                                out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
+                                out.print("<td><input type='email' class='valid' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
+                                if (rs.getString(5) != null) {
                                     out.print("<input type='checkbox' value='1' name='t1" + line + "' checked >");
                                 } else {
                                     out.print("N/A");
                                 }
                                 out.print("</td>");
                                 out.print("<td>");
-                                if (rs.getString(7) != null) {
+                                if (rs.getString(6) != null) {
                                     out.print("<input type='checkbox' value='1' name='t2" + line + "' checked >");
                                 } else {
                                     out.print("N/A");
@@ -102,7 +110,7 @@ public class editStudDetails extends HttpServlet {
 
                                 out.print("</tr>");
                             }
-                            out.print(tableend("No of students : " + line + "<br>"
+                            out.print(tableend("No of students : " + line + "<br><br>"
                                     + "<input type='submit' value='Submit' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form>", 0));
@@ -130,10 +138,10 @@ public class editStudDetails extends HttpServlet {
                                     + "if (request.readyState == 4) {"
                                     + "var val = request.responseText;"
                                     + "if (val == 1) {"
-                                    + "document.getElementById('dispemail'+line).innerHTML = \"<i class='fa fa-check' aria-hidden='true'></i>\";"
+                                    + "document.getElementById('dispemail'+line).classList.add('invalid');"
                                     + "btnstatus5 = 1;"
                                     + "} else {"
-                                    + "document.getElementById('dispemail'+line).innerHTML = \"<i class='fa fa-times' aria-hidden='true'></i>\";"
+                                    + "document.getElementById('dispemail'+line).classList.add('valid');"
                                     + "btnstatus5 = 0;"
                                     + "}"
                                     + "if (btnstatus5 == 1) {"
