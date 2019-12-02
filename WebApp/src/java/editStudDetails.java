@@ -90,7 +90,7 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr>");
-                                out.print("<td><input type='number' class='valid' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
+                                out.print("<td><input type='number' id='roll'" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value);checkRoll()' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
                                 out.print("<td><input type='email' class='valid' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
@@ -150,6 +150,11 @@ public class editStudDetails extends HttpServlet {
                                     + "document.getElementById('studdbtn').disabled = true;"
                                     + "}"
                                     + "}"
+                                    + "}"
+                                    + "function checkRoll() {"
+                                    + "var valueRoll = document.getElementById('roll').value;"
+				    + "document.getElementById('roll').style.borderColor='green';"
+                                    + "alert(valueRoll);"
                                     + "}"
                                     + "</script>");
                         } else {

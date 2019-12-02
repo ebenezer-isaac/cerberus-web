@@ -16,6 +16,23 @@
                 -ms-user-select: none;
                 user-select: none;
             }
+            
+            .tooltipp .tooltiptext {
+                visibility: hidden;
+                
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+            }
+
+            .tooltipp:hover .tooltiptext {
+                visibility: visible;
+            }
         </style>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -79,7 +96,7 @@
                 </div>
             </div>
         </div>
-`        <script src="js/particles.js"></script>
+        `        <script src="js/particles.js"></script>
         <script defer src="js/index.js"></script>
         <script src="js/jquery.min.js"></script>
     </body>
