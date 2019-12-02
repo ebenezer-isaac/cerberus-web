@@ -46,7 +46,7 @@ public class login extends HttpServlet {
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("select facultyID,name password from faculty where email=?");
+                        PreparedStatement ps = con.prepareStatement("select facultyID,password,name from faculty where email=?");
                         ps.setString(1, email);
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
@@ -74,6 +74,7 @@ public class login extends HttpServlet {
                         trial = Integer.parseInt(session.getAttribute("count").toString());
                         trial++;
                     } catch (NumberFormatException e) {
+                         session.setAttribute("count", 0);
                     }
                     session.setAttribute("count", "" + trial);
                     if (trial > 5) {
