@@ -33,7 +33,7 @@
 
             <div class="tooltipp">
                 <h3> The Attendance Initiative </h3>
-                <span class="tooltiptext bg-danger"> The Avengers Initiative had Copyright Issues </span>
+                <span class="tooltiptext"> The Avengers Initiative had Copyright Issues </span>
             </div>
         </div>
     </div>
