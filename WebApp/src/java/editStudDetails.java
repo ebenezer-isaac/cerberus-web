@@ -90,7 +90,7 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr>");
-                                out.print("<td><input type='number' id='roll'" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='this.value = zeroPad(this.value);checkRoll()' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
+                                out.print("<td><input type='number' id='roll" + line + "' name='roll" + line + "' min='1' max='120' class='valid' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
                                 out.print("<td><input type='email' class='valid' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
@@ -115,6 +115,7 @@ public class editStudDetails extends HttpServlet {
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form>", 0));
                             out.print("<script>"
+                                    + "var studs = " + line + ";"
                                     + "var btnstatus5 = 0;var line=0;"
                                     + "function checkdupEmail(id) {line=id;"
                                     + "prn = document.getElementById('prn'+id).value;"
@@ -151,10 +152,26 @@ public class editStudDetails extends HttpServlet {
                                     + "}"
                                     + "}"
                                     + "}"
-                                    + "function checkRoll() {"
-                                    + "var valueRoll = document.getElementById('roll').value;"
-				    + "document.getElementById('roll').style.borderColor='green';"
-                                    + "alert(valueRoll);"
+                                    + "function checkRoll(rollNum) {"
+                                    + "var valueRoll = parseInt(document.getElementById(rollNum).value,10);"
+                                    + "if (valueRoll<1 || valueRoll>120) {"
+                                    + "console.log(valueRoll);"
+                                    + "document.getElementById(rollNum).style.borderColor='red';"
+                                    + "}"
+                                    + "else {"
+                                    + "document.getElementById(rollNum).style.borderColor='green';"
+                                    + "for (var i=1; i<=studs; i++) { "
+                                    + "var value = parseInt(document.getElementById('roll'+i).value,10);"
+                                    + "if (value==valueRoll && rollNum!='roll'+i) {"
+                                    + "document.getElementById('roll'+i).style.borderColor='red';"
+                                    + "document.getElementById(rollNum).style.borderColor='red';"
+                                    + "}"
+                                    + "else {"
+                                    + "document.getElementById('roll'+i).style.borderColor='green';"
+                                    + "}"
+                                    + "}"
+                                    + "}"
+                                    + "document.getElementById(rollNum).value = zeroPad(valueRoll);"
                                     + "}"
                                     + "</script>");
                         } else {
