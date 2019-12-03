@@ -224,7 +224,7 @@ public class AttFunctions {
     public static int oddEve(HttpServletRequest request) throws FileNotFoundException, IOException {
         int result = 0;
 
-        String fileName = "C:\\Users\\iamvr\\Desktop\\cerberus-web\\WebApp\\web\\oddEve.txt";
+        String fileName = "D:\\oddEve.txt";
         File file = new File(fileName);
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);

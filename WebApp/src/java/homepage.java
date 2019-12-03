@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import cerberus.EnglishNumberToWords;
+import static cerberus.printer.nouser;
 
 public class homepage extends HttpServlet {
 
@@ -51,8 +52,7 @@ public class homepage extends HttpServlet {
                     }
                     break;
                 default:
-                    messages m = new messages();
-                    m.nouser(request, response);
+                    nouser();
             }
         }
     }

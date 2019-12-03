@@ -49,7 +49,8 @@ public class printer {
     }
 
     public static String nouser() {
-        return "Sorry!!<br>An active session was not found. Please login again to continue";
+        return "Sorry!!<br>An active session was not found. Please login again to continue<br>"
+                + "<button type='submit' onclick=\"window.location.href='index.jsp'\"class='btn btn-primary'><span>Redirect</span></button>";
     }
 
     public static String error(String error) {
