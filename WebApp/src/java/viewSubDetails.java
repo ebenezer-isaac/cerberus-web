@@ -43,7 +43,7 @@ public class viewSubDetails extends HttpServlet {
                         }
                         out.print("<br>Total number of labs: " + labcount);
                         if (labcount >= 1) {
-                            PreparedStatement ps1 = con.prepareStatement("SELECT timetable.weekID, timetable.dayID, \n"
+                            PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date, \n"
                                     + "slot.startTime, slot.endTime,\n"
                                     + "(select lab.name from lab where lab.labID=timetable.labID) as lab,\n"
                                     + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,\n"
@@ -53,7 +53,7 @@ public class viewSubDetails extends HttpServlet {
                                     + "on timetable.scheduleID=facultytimetable.scheduleID\n"
                                     + "INNER JOIN slot\n"
                                     + "on slot.slotID=timetable.slotID\n"
-                                    + "where timetable.subjectID =?");
+                                    + "where timetable.subjectID =? order by date,slot.startTime;");
                             ps1.setString(1, subcode);
                             ResultSet rs1 = ps1.executeQuery();
                             out.print(tablestart(subcode + " Details", "hover", "studDetails", 1) + "");
@@ -73,7 +73,7 @@ public class viewSubDetails extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print(tableend(null, 0));
+                            out.print(tableend(null, 1));
                         } else {
                             out.print("No Data to show");
                         }

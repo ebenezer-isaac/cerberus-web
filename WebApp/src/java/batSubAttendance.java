@@ -9,13 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,71 +24,87 @@ public class batSubAttendance extends HttpServlet {
             int batchID = Integer.parseInt(request.getParameter("batchID"));
             String subjectID = request.getParameter("subjectID");
             String sql = "SELECT rollcall.rollNo as Roll,student.name as Name,";
+            String dates[][];
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select timetable.scheduleID, timetable.weekID, timetable.dayID, (select week.year from week where weekID=timetable.weekID) from timetable \n"
-                        + "inner join facultytimetable \n"
-                        + "on timetable.scheduleID =  facultytimetable.scheduleID\n"
-                        + "inner join week\n"
-                        + "on timetable.weekID = week.weekID\n"
-                        + "where timetable.subjectID = ? \n"
-                        + "and timetable.batchID = ?");
+                PreparedStatement ps = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date,"
+                        + " timetable.scheduleID as ScheduleID"
+                        + ",(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher "
+                        + "from facultytimetable\n"
+                        + "INNER JOIN timetable\n"
+                        + "on timetable.scheduleID=facultytimetable.scheduleID\n"
+                        + "INNER JOIN slot\n"
+                        + "on slot.slotID=timetable.slotID\n"
+                        + "where timetable.subjectID =? and timetable.batchID=? order by date,slot.startTime;");
                 ps.setString(1, subjectID);
                 ps.setInt(2, batchID);
                 ResultSet rs = ps.executeQuery();
+                int no_of_dates = 0;
                 while (rs.next()) {
-                    String yearweekday = "" + rs.getInt(4) + String.format("%02d", Integer.parseInt(rs.getString(2))) + rs.getInt(3);
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyywwu");
-                    Date date = null;
-                    try {
-                        date = sdf.parse(yearweekday);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    sql += "MAX(CASE WHEN attendance.PRN = student.PRN THEN '1' END) as  '" + date.getDate() + "/" + date.getMonth() + "/" + (date.getYear() + 1901) + "' ";
-                    if (rs.next()) {
-                        sql += ", ";
-                        rs.previous();
-                    }
+                    no_of_dates++;
                 }
-                sql += "FROM timetable \n"
-                        + "inner join facultytimetable \n"
-                        + "on timetable.scheduleID = facultytimetable.scheduleID \n"
-                        + "Inner join attendance \n"
-                        + "on attendance.scheduleID = facultytimetable.scheduleID \n"
-                        + "INNER JOIN student \n"
-                        + "ON student.PRN = attendance.PRN \n"
-                        + "INNER JOIN rollcall  \n"
-                        + "on  rollcall.PRN = student.PRN \n"
-                        + "where timetable.subjectID = ? and timetable.batchID = ?\n"
-                        + "and attendance.PRN in (select studentsubject.PRN from studentsubject where studentsubject.batchID = ? and studentsubject.subjectID = ? ) "
-                        + "GROUP BY rollcall.rollNo \n"
-                        + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
-                PreparedStatement ps4 = con.prepareStatement(sql);
-                ps4.setString(1, subjectID);
-                ps4.setInt(2, batchID);
-                ps4.setInt(3, batchID);
-                ps4.setString(4, subjectID);
-                rs = ps4.executeQuery();
-                ResultSetMetaData rsm = rs.getMetaData();
-                out.print(tablestart("Subjects", "hover", "studDetails", 1));
-                String header = "<tr>";
-                int cols = rsm.getColumnCount();
-                for (int i = 1; i <= cols; i++) {
-                    header += "<th>" + rsm.getColumnLabel(i) + "</th>";
+                System.out.println("NO of dates :" + no_of_dates);
+                dates = new String[no_of_dates][3];
+                rs.first();
+                rs.previous();
+                int index = 0;
+                while (rs.next()) {
+                    dates[index][0] = rs.getString(1);
+                    dates[index][1] = rs.getString(2);
+                    dates[index][2] = rs.getString(3);
+                    index++;
+                }
+                ps = con.prepareStatement("select rollcall.rollNo, studentsubject.PRN, student.name from studentsubject INNER JOIN rollcall on studentsubject.PRN = rollcall.PRN INNER JOIN student on student.PRN = studentsubject.PRN where studentsubject.subjectID = ? and studentsubject.batchID = ?");
+                ps.setString(1, subjectID);
+                ps.setInt(2, batchID);
+                rs = ps.executeQuery();
+                String studs[][];
+                int no_of_studs = 0;
+                while (rs.next()) {
+                    no_of_studs++;
+                }
+                studs = new String[no_of_studs][3];
+                rs.first();
+                rs.previous();
+                index = 0;
+                while (rs.next()) {
+                    studs[index][0] = rs.getString(1);
+                    studs[index][1] = rs.getString(2);
+                    studs[index][2] = rs.getString(3);
+                    index++;
+                }
+                System.out.println("NO of studs :" + no_of_studs);
+                out.print(tablestart(subjectID + " " + batchID + " Details", "hover", "studDetails", 1) + "");
+                String header = "<tr align = center>";
+                header += "<th>Roll</th>";
+                header += "<th>Name</th>";
+                for (int i = 0; i < no_of_dates; i++) {
+                    header += "<th>" + dates[i][0] + "</th>";
                 }
                 header += "</tr>";
                 out.print(tablehead(header));
-                while (rs.next()) {
-                    out.print("<tr>");
-                    for (int i = 1; i <= cols; i++) {
-                        header += "<td>" + rs.getString(i) + "</td>";
+                for (int i = 0; i < no_of_studs; i++) {
+                    out.print("<tr><td>" + studs[i][0] + "</td><td>" + studs[i][2] + "</td>");
+                    for (int j = 0; j < no_of_dates; j++) {
+                        out.print("<td>");
+                        ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
+                        ps.setString(1, studs[i][1]);
+                        ps.setInt(2, Integer.parseInt(dates[j][1]));
+                        rs = ps.executeQuery();
+                        if (rs.next()) {
+                            out.print("P");
+                        } else {
+                            out.print("-");
+                        }
+                        out.print("</td>");
                     }
                     out.print("</tr>");
                 }
-                out.print(tableend(null, 0));
+                out.print(tableend(null, 1));
+                con.close();
             } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
                 error(e.getMessage());
             }
         }
