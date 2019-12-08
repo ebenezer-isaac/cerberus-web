@@ -16,7 +16,7 @@
                 -ms-user-select: none;
                 user-select: none;
             }
-            
+
             .tooltipp .tooltiptext {
                 visibility: hidden;
                 background-color: #0d0d0d;
@@ -37,6 +37,11 @@
             body
             {
                 height: 100%;
+            }
+            
+            .abt:hover
+            {
+                text-decoration: none;
             }
         </style>
         <meta charset="utf-8">
@@ -82,6 +87,11 @@
                             <div id='loginform'>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 bg-transparent text-center text-white">
+                                <p class="m-3"> <a href="aboutus.html" target="_blank" class="text-white abt"> About Us </a> <br/> &#169; Copyright 2019 &nbsp; C E R B E R U S - All Rights Reserved  </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="particles-js"></div>
@@ -101,7 +111,7 @@
                 </div>
             </div>
         </div>
-        `        <script src="js/particles.js"></script>
+        <script src="js/particles.js"></script>
         <script defer src="js/index.js"></script>
         <script src="js/jquery.min.js"></script>
     </body>

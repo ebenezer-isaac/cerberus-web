@@ -19,7 +19,7 @@
 <div class="row custom_row">
     <div class="col-lg-6 my-auto">
         <div class="main_content mx-auto">
-            <img src="images/logomain.png" style="width: 101px; height: 101px; margin-bottom: 70px; pointer-events: none;">
+            <div data-tilt> <img src="images/logomain.png" style="width: 101px; height: 101px; margin-bottom: 70px; pointer-events: none;" /> </div>
             <svg width="331" height="34" viewBox="0 0 331 34" fill="none" id="logo">
             <path d="M7.61 1.9C1.633 1.9 1.633 7.877 1.633 7.877V26.023C1.633 26.023 1.633 32 7.61 32H14.49C15.393 32 15.78 31.613 15.78 30.71V30.151C15.78 29.248 15.393 28.861 14.49 28.861H7.61C4.987 28.861 4.987 26.238 4.987 26.238V7.662C4.987 7.662 4.987 5.039 7.61 5.039H14.49C15.393 5.039 15.78 4.652 15.78 3.749V3.19C15.78 2.287 15.393 1.9 14.49 1.9H7.61Z" stroke="white" stroke-width="1" mask="url(#path-1-outside-1)"/>
             <path d="M48.1852 32H60.8702C61.7732 32 62.1602 31.613 62.1602 30.71V29.936C62.1602 29.033 61.7732 28.646 60.8702 28.646H52.0552C51.1522 28.646 50.7652 28.259 50.7652 27.356V19.573C50.7652 18.67 51.1522 18.283 52.0552 18.283H58.7202C59.6232 18.283 60.0102 17.896 60.0102 16.993V16.219C60.0102 15.316 59.6232 14.929 58.7202 14.929H52.0552C51.1522 14.929 50.7652 14.542 50.7652 13.639V6.544C50.7652 5.641 51.1522 5.254 52.0552 5.254H60.7842C61.6872 5.254 62.0742 4.867 62.0742 3.964V3.19C62.0742 2.287 61.6872 1.9 60.7842 1.9H48.1852C47.7122 1.9 47.3682 2.287 47.3682 2.717V31.183C47.3682 31.613 47.7122 32 48.1852 32Z" stroke="white" stroke-width="1" mask="url(#path-1-outside-1)"/>
@@ -82,3 +82,4 @@
 <script defer src="js/scriptShake.js"></script>
 <script defer src="js/main.js"></script>
 <script defer src="js/app.js"></script>
+<script src="js/tilt.jquery.js"></script>
