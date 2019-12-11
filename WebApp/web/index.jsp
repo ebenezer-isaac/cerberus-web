@@ -37,6 +37,17 @@
             body
             {
                 height: 100%;
+                overflow-y: scroll;
+            }
+
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            ::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* Hide scrollbar for IE and Edge */
+            body {
+                -ms-overflow-style: none;
             }
             
             .abt:hover
@@ -85,11 +96,6 @@
                     <div class="main_body">
                         <div class="container custom_container">
                             <div id='loginform'>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 bg-transparent text-center text-white">
-                                <p class="m-3"> <a href="aboutus.html" target="_blank" class="text-white abt"> About Us </a> <br/> &#169; Copyright 2019 &nbsp; C E R B E R U S - All Rights Reserved  </p>
                             </div>
                         </div>
                     </div>
