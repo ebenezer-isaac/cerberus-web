@@ -1,8 +1,7 @@
 
 import cerberus.AttFunctions;
-import static cerberus.AttFunctions.*;
+import static cerberus.AttFunctions.getWeekID;
 import static cerberus.printer.error;
-import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -10,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,8 @@ public class newTimetable extends HttpServlet {
         try {
             String pwd = AttFunctions.hashIt(request.getParameter("pwd"));
             if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
-                int weekid = getWeekID(week);
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                int weekid = getWeekID(week,year);
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                 PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");

@@ -16,28 +16,30 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ajaxCheckPRN extends HttpServlet {
 
+    private static final long serialVersionUID = -1922384727783540241L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
-            if (access == 1 || access == 0) {
-                int flag = 0;
+            if (access == 1) {
                 String prn = request.getParameter("prn");
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                        PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
-                        ps.setString(1, prn);
-                        ResultSet rs = ps.executeQuery();
-                        while (rs.next()) {
-                            flag = 1;
-                        }
-                        con.close();
-                    }
-                } catch (ClassNotFoundException | SQLException e) {
-                }
                 if (Pattern.matches("^20\\d{14}$", prn)) {
+                    int flag = 0;
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                            PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
+                            ps.setString(1, prn);
+                            ResultSet rs = ps.executeQuery();
+                            while (rs.next()) {
+                                flag = 1;
+                            }
+                            con.close();
+                        }
+                    } catch (ClassNotFoundException | SQLException e) {
+                    }
                     if (flag == 0) {
                         out.print("1");
                     } else {

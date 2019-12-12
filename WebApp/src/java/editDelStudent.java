@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class editDelStudent extends HttpServlet {
 
+    private static final long serialVersionUID = -2195939141769356066L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

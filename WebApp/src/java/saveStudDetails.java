@@ -1,6 +1,5 @@
 
-import cerberus.*;
-import com.mysql.cj.util.StringUtils;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -94,12 +93,12 @@ public class saveStudDetails extends HttpServlet {
                                 }
                                 index++;
                             }
+                            messages a = new messages();
+                            a.success(request, response, "Student Details has been saved", "editStudDetails?class=" + classID);
                         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                             messages a = new messages();
                             a.dberror(request, response, e.getMessage(), "viewTimetable");
                         }
-                        messages a = new messages();
-                        a.success(request, response, "Student Details has been saved", "editStudDetails?class="+classID);
                         break;
                     default:
                         messages b = new messages();

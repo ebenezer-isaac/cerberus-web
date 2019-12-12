@@ -15,17 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ajaxCheckRoll extends HttpServlet {
 
+    private static final long serialVersionUID = 3446099052676979807L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
-            if (access == 1 || access == 0) {
-
+            if (access == 1) {
                 int roll = Integer.parseInt(request.getParameter("roll"));
                 int clas = Integer.parseInt(request.getParameter("clas"));
-                System.out.println(roll);
-                System.out.println(clas);
                 if (roll >= 1 && roll <= 120) {
                     int flag = 0;
                     try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {

@@ -9,10 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 
 public class resetpass extends HttpServlet {
+
+    private static final long serialVersionUID = 8478417136338882914L;
 
     public static String hashIt(String raw) throws NoSuchAlgorithmException {
         raw = raw + "msubca";

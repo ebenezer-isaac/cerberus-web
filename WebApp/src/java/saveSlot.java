@@ -1,18 +1,21 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
-import static cerberus.printer.error;
-import static cerberus.printer.kids;
-import static cerberus.printer.nouser;
+import java.sql.PreparedStatement;
 
 public class saveSlot extends HttpServlet {
+
+    private static final long serialVersionUID = 7604818262598475744L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,6 +43,9 @@ public class saveSlot extends HttpServlet {
                                 pps.executeUpdate();
                             }
                         }
+                        con.close();
+                        messages a = new messages();
+                        a.success(request, response, "Your changes to timing have been saved", "viewTimetable");
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages b = new messages();
                         b.error(request, response, e.getMessage(), "/Cerberus/homepage");

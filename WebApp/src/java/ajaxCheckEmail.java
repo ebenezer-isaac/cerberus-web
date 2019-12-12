@@ -16,36 +16,38 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ajaxCheckEmail extends HttpServlet {
 
+    private static final long serialVersionUID = -1766378544994615176L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
-            if (access == 1 || access == 0) {
-                int flag = 0;
+            if (access == 1) {
                 String email = request.getParameter("email");
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                        PreparedStatement ps = con.prepareStatement("select email from student where email=?");
-                        ps.setString(1, email);
-                        ResultSet rs = ps.executeQuery();
-                        while (rs.next()) {
-                            flag = 1;
-                        }
-                        if (flag == 0) {
-                            ps = con.prepareStatement("select email from faculty where email=?");
+                if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
+                    int flag = 0;
+                    try {
+                        Class.forName("com.mysql.cj.jdbc.Driver");
+                        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                            PreparedStatement ps = con.prepareStatement("select email from student where email=?");
                             ps.setString(1, email);
-                            rs = ps.executeQuery();
+                            ResultSet rs = ps.executeQuery();
                             while (rs.next()) {
                                 flag = 1;
                             }
+                            if (flag == 0) {
+                                ps = con.prepareStatement("select email from faculty where email=?");
+                                ps.setString(1, email);
+                                rs = ps.executeQuery();
+                                while (rs.next()) {
+                                    flag = 1;
+                                }
+                            }
+                            con.close();
                         }
-                        con.close();
+                    } catch (ClassNotFoundException | SQLException e) {
                     }
-                } catch (ClassNotFoundException | SQLException e) {
-                }
-                if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
                     if (flag == 0) {
                         out.print("1");
                     } else {

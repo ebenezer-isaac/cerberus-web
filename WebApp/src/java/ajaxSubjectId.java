@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ajaxSubjectId extends HttpServlet {
 
+    private static final long serialVersionUID = 5796355184061482334L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
-            if (access == 1 || access == 0) {
+            if (access == 1) {
                 int flag = 0;
                 String subjectID = request.getParameter("subjectid").toUpperCase();
                 try {
@@ -33,8 +34,6 @@ public class ajaxSubjectId extends HttpServlet {
                         while (rs.next()) {
                             flag = 1;
                         }
-                        
-                        
                         con.close();
                     }
                 } catch (ClassNotFoundException | SQLException e) {
@@ -63,8 +62,4 @@ public class ajaxSubjectId extends HttpServlet {
         processRequest(request, response);
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
 }

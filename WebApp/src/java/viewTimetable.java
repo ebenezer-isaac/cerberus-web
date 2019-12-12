@@ -12,7 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class viewTimetable extends HttpServlet {
+
+    private static final long serialVersionUID = 1318699662544398556L;
 
     String heading;
     int week = 0;
@@ -155,7 +158,7 @@ public class viewTimetable extends HttpServlet {
                     } catch (ClassNotFoundException | SQLException e) {
                         e.printStackTrace();
                     }
-                    
+
                     out.print("<div id='lab_timetable'>");
                     out.print(lab_printTimetable(1));
                     out.print(lab_printTimetable(2));
@@ -186,8 +189,8 @@ public class viewTimetable extends HttpServlet {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
             timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wke + "</b></p>", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
-            header += ("<th>Start Time</th>");
-            header += ("<th>End Time</th>");
+            header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
+            header += ("<th style='vertical-align : middle;text-align:center;'>End Time</th>");
             header += ("<th>Monday<br>" + mon + "</th>");
             header += ("<th>Tuesday<br>" + tue + "</th>");
             header += ("<th>Wednesday<br>" + wed + "</th>");
@@ -235,8 +238,8 @@ public class viewTimetable extends HttpServlet {
             }
             while (lab1.next()) {
                 lines[lab1.getInt(1) - 1] = ("<tr align='center'>");
-                lines[lab1.getInt(1) - 1] += ("<th>" + slots[lab1.getInt(1) - 1][0] + "</th>");
-                lines[lab1.getInt(1) - 1] += ("<th>" + slots[lab1.getInt(1) - 1][1] + "</th>");
+                lines[lab1.getInt(1) - 1] += ("<th style='vertical-align : middle;text-align:center;'>" + slots[lab1.getInt(1) - 1][0] + "</th>");
+                lines[lab1.getInt(1) - 1] += ("<th style='vertical-align : middle;text-align:center;'>" + slots[lab1.getInt(1) - 1][1] + "</th>");
                 for (int j = 1; j <= 6; j++) {
                     if (lab1.getString(j + 3) != null) {
                         String[] arrOfStr = lab1.getString(j + 3).split(",");
@@ -247,7 +250,7 @@ public class viewTimetable extends HttpServlet {
 
                         }
                     } else {
-                        lines[lab1.getInt(1) - 1] += ("<td><div id = 'nolab" + temp + "'>No Lab </div></td>");
+                        lines[lab1.getInt(1) - 1] += ("<td><div id = 'nolab" + temp + "'>No Lab<br><br></div></td>");
                     }
                     temp++;
                 }
@@ -256,17 +259,17 @@ public class viewTimetable extends HttpServlet {
             for (int y = 0; y <= no_of_slots; y++) {
                 if (lines[y].equals("")) {
                     lines[y] = ("<tr align='center'>");
-                    lines[y] += ("<th>" + slots[y][0] + "</th>");
-                    lines[y] += ("<th>" + slots[y][1] + "</th>");
+                    lines[y] += ("<th style='vertical-align : middle;text-align:center;'>" + slots[y][0] + "</th>");
+                    lines[y] += ("<th style='vertical-align : middle;text-align:center;'>" + slots[y][1] + "</th>");
                     for (int j = 1; j <= 6; j++) {
-                        lines[y] += ("<td><div id = 'nolab" + temp + "'>No Lab</div></td>");
+                        lines[y] += ("<td><div id = 'nolab" + temp + "'>No Lab<br><br></div></td>");
                         temp++;
                     }
                     lines[y] += ("</tr>");
                 }
                 timetable += lines[y];
             }
-            timetable += (tableend(null,0));
+            timetable += (tableend(null, 0));
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
@@ -283,9 +286,9 @@ public class viewTimetable extends HttpServlet {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
             timetable += (tablestart(heading, "hover", "studDetails", 0));
             String header = ("<tr align = center>");
-            header += ("<th>Start Time</th>");
-            header += ("<th>End Time</th>");
-            header += ("<th>Lab</th>");
+            header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
+            header += ("<th style='vertical-align : middle;text-align:center;'>End Time</th>");
+            header += ("<th style='vertical-align : middle;text-align:center;'>Lab</th>");
             header += ("<th>Monday<br>" + mon + "</th>");
             header += ("<th>Tuesday<br>" + tue + "</th>");
             header += ("<th>Wednesday<br>" + wed + "</th>");
@@ -348,7 +351,7 @@ public class viewTimetable extends HttpServlet {
                                 labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'subclass" + arrOfStr[1] + "" + temp + "'>" + arrOfStr[0] + " </div></td>");
                             }
                         } else {
-                            labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'nolab" + temp + "'>No Lab </div></td>");
+                            labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'nolab" + temp + "'>No Lab<br><br></div></td>");
                         }
                         temp++;
                     }
@@ -357,7 +360,7 @@ public class viewTimetable extends HttpServlet {
                     if (labs[l][y].equals("")) {
                         labs[l][y] = "";
                         for (int j = 1; j <= 6; j++) {
-                            labs[l][y] += ("<td><div id = 'nolab" + temp + "'>No Lab </div></td>");
+                            labs[l][y] += ("<td><div id = 'nolab" + temp + "'>No Lab<br><br></div></td>");
                             temp++;
                         }
                     }
@@ -371,14 +374,14 @@ public class viewTimetable extends HttpServlet {
                 timetable += ("<th style='vertical-align : middle;text-align:center;' rowspan='4'>" + slots[slot][0] + "</th>");
                 timetable += ("<th style='vertical-align : middle;text-align:center;' rowspan='4'>" + slots[slot][1] + "</th></tr>");
                 for (int lab = 0; lab <= no_of_labs - 1; lab++) {
-                    timetable += ("<td  align='center'>Lab " + (lab + 1) + "</td>");
+                    timetable += ("<td  style='vertical-align : middle;text-align:center;' align='center'>Lab " + (lab + 1) + "</td>");
                     timetable += (labs[lab][slot]);
                     timetable += ("</tr>");
                 }
                 timetable += ("</tr>");
                 slot++;
             }
-            timetable += (tableend(null,0));
+            timetable += (tableend(null, 0));
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

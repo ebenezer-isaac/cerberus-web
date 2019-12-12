@@ -58,6 +58,21 @@ public class AttFunctions {
         }
     }
 
+    public static String nameProcessor(String str) {
+        char ch[] = str.toCharArray();
+        for (int i = 0; i < str.length(); i++) {
+            if (i == 0 && ch[i] != ' ' || ch[i] != ' ' && ch[i - 1] == ' ') {
+                if (ch[i] >= 'a' && ch[i] <= 'z') {
+                    ch[i] = (char) (ch[i] - 'a' + 'A');
+                }
+            } else if (ch[i] >= 'A' && ch[i] <= 'Z') {
+                ch[i] = (char) (ch[i] + 'a' - 'A');
+            }
+        }
+        String st = new String(ch);
+        return st;
+    }
+
     public static String hashIt(String raw) throws NoSuchAlgorithmException {
         raw = raw + "msubca";
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -323,7 +338,7 @@ public class AttFunctions {
 
     public static int getWeek(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        int week = 0;
+        int week;
         try {
             week = (int) session.getAttribute("week");
         } catch (Exception e) {
@@ -353,20 +368,22 @@ public class AttFunctions {
         return cl;
     }
 
-    public static int getWeekID(int week) {
+    public static int getWeekID(int week, int year) {
         int weekID = 0;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("SELECT weekID FROM WEEK where week = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT weekID FROM WEEK where week = ? and year =?");
             ps.setInt(1, week);
+            ps.setInt(2, year);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 weekID = rs.getInt(1);
             }
             if (weekID == 0) {
-                PreparedStatement ps2 = con.prepareStatement("insert into week(`week`) values(?)");
+                PreparedStatement ps2 = con.prepareStatement("insert into week(`week`,`year`) values(?,?)");
                 ps2.setInt(1, week);
+                ps2.setInt(2, year);
                 ps2.executeUpdate();
                 rs = ps.executeQuery();
                 while (rs.next()) {

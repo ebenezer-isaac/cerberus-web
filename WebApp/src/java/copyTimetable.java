@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class copyTimetable extends HttpServlet {
+
+    private static final long serialVersionUID = 1307628222749536806L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -26,7 +29,8 @@ public class copyTimetable extends HttpServlet {
                 HttpSession session = request.getSession();
                 int week = (int) session.getAttribute("week");
                 week++;
-                int weekid = getWeekID(week);
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                int weekid = getWeekID(week,year);
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");

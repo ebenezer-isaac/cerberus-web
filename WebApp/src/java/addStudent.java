@@ -3,12 +3,17 @@ import cerberus.Mailer;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
+import static cerberus.AttFunctions.nameProcessor;
 import cerberus.messages;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -18,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class addStudent extends HttpServlet {
 
+    private static final long serialVersionUID = -8855276564876004731L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -25,7 +32,7 @@ public class addStudent extends HttpServlet {
         switch (access) {
             case 1:
                 String prn = request.getParameter("prn");
-                String name = request.getParameter("name");
+                String name = nameProcessor(request.getParameter("name"));
                 String email = request.getParameter("email");
                 int classID = Integer.parseInt(request.getParameter("clas"));
                 int roll = Integer.parseInt(request.getParameter("roll"));

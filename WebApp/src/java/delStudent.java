@@ -3,7 +3,6 @@ import static cerberus.AttFunctions.getAccess;
 import cerberus.Mailer;
 import cerberus.messages;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class delStudent extends HttpServlet {
+
+    private static final long serialVersionUID = 3530925199821402303L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

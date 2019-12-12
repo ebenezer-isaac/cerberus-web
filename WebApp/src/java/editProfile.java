@@ -1,4 +1,4 @@
-import cerberus.*;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -17,6 +17,8 @@ import javax.servlet.http.Part;
 
 @MultipartConfig(maxFileSize = 16177215)
 public class editProfile extends HttpServlet {
+
+    private static final long serialVersionUID = -3034680778908831068L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

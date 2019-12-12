@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class signout extends HttpServlet {
 
+    private static final long serialVersionUID = -9020441331001780983L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

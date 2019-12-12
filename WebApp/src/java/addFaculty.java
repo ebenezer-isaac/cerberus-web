@@ -1,11 +1,15 @@
 
 import cerberus.AttFunctions;
 import cerberus.Mailer;
-import static cerberus.AttFunctions.*;
+import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.nameProcessor;
 import cerberus.messages;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -15,13 +19,15 @@ import javax.servlet.http.HttpServletResponse;
 
 public class addFaculty extends HttpServlet {
 
+    private static final long serialVersionUID = 5523616611204304202L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int access = getAccess(request);
         switch (access) {
             case 1:
-                String name = request.getParameter("title") + request.getParameter("name");
+                String name = request.getParameter("title") + nameProcessor(request.getParameter("name"));
                 String email = request.getParameter("email");
                 String pass = "";
                 int index = email.indexOf("@");

@@ -2,7 +2,6 @@
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
-import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.semSubs;
 import static cerberus.printer.error;
@@ -19,14 +18,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class editSubSelection extends HttpServlet {
+
+    private static final long serialVersionUID = -4900973394776460938L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -20,6 +20,8 @@ import static cerberus.printer.nouser;
 
 public class viewSubDetails extends HttpServlet {
 
+    private static final long serialVersionUID = -8921011621421523305L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");

@@ -2,15 +2,18 @@
 import cerberus.AttFunctions;
 import cerberus.messages;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
-import javax.servlet.RequestDispatcher;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class addSubject extends HttpServlet {
+
+    private static final long serialVersionUID = -9146526388180484963L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

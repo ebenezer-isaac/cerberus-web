@@ -1,7 +1,6 @@
 
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
-import static cerberus.AttFunctions.getWeek;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
@@ -22,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class editStudDetails extends HttpServlet {
+
+    private static final long serialVersionUID = 8429145304207385844L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -75,10 +76,10 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr id='row" + line + "'>");
-                                out.print("<td><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid #e6e6e6; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
+                                out.print("<td><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid green; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
-                                out.print("<td><input type='email'  class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
+                                out.print("<td><input type='email' style='border: 2px solid green;'class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
                                 if (rs.getString(5) != null) {
                                     out.print("<input type='checkbox' value='1' name='t1" + line + "' checked >");
                                 } else {
@@ -95,7 +96,7 @@ public class editStudDetails extends HttpServlet {
 
                                 out.print("</tr>");
                             }
-                            out.print(tableend("No of students : " + line + "<br><br>"
+                            out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'><br></div>"
                                     + "<input type='submit' value='Submit' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form>", 0));
@@ -125,26 +126,36 @@ public class editStudDetails extends HttpServlet {
                                     + "var val = request.responseText;"
                                     + "if (val == 1) {"
                                     + "document.getElementById('email'+line).style.borderColor='green';"
+                                    + "if(document.getElementById('email'+line).style.borderColor=='green'&&document.getElementById('roll'+line).style.borderColor=='green'){"
+                                    + "var element = document.getElementById('row'+line);"
+                                    + "element.classList.remove('table-danger');}"
                                     + "btnstatus5 = 1;"
                                     + "} else {"
                                     + "document.getElementById('email'+line).style.borderColor='red';"
+                                    + "var element = document.getElementById('row'+line);"
+                                    + "element.classList.add('table-danger');"
                                     + "btnstatus5 = 0;"
                                     + "show()"
                                     + "}"
                                     + "if (btnstatus5 == 1) {"
                                     + "document.getElementById('subBtn').disabled = false;"
+                                    + "document.getElementById('validations').innerHTML = '<br>';"
                                     + "} else {"
                                     + "document.getElementById('subBtn').disabled = true;"
+                                    + "document.getElementById('validations').innerHTML = 'Validations Error';"
                                     + "}"
                                     + "}"
                                     + "}"
                                     + "function checkRoll() {"
-                                    + "for (var j=1; j<=studs; j++) {var rollNum='roll'+j; "
+                                    + "for (var j=1; j<=studs; j++) {var rollNum='roll'+j; var rowNum='row'+j;"
                                     + "document.getElementById('subBtn').disabled=false;"
+                                    + "document.getElementById('validations').innerHTML = '<br>';"
                                     + "var valueRoll = parseInt(document.getElementById(rollNum).value,10);"
                                     + "if (valueRoll<1 || valueRoll>120) {"
                                     + "console.log(valueRoll);"
                                     + "document.getElementById(rollNum).style.borderColor='red';"
+                                    + "var element = document.getElementById(rowNum);\n"
+                                    + "element.classList.add('table-danger');"
                                     + "}"
                                     + "else {"
                                     + "var flag=0;"
@@ -155,13 +166,20 @@ public class editStudDetails extends HttpServlet {
                                     + "document.getElementById(rollNum).style.borderColor='red';"
                                     + "var element = document.getElementById('row'+i);\n"
                                     + "element.classList.add('table-danger');"
+                                    + "var element = document.getElementById(rowNum);\n"
+                                    + "element.classList.add('table-danger');"
                                     + "document.getElementById('subBtn').disabled=true;"
+                                    + "document.getElementById('validations').innerHTML = 'Validations Error';"
                                     + "}"
                                     + "}if(flag==0){"
                                     + "document.getElementById(rollNum).style.borderColor='green';"
-                                    + "var element = document.getElementById('row'+i);\n"
-                                    + "element.classList.remove('table-danger');"
-                                    + "}else{document.getElementById(rollNum).style.borderColor='red';}"
+                                    + "if(document.getElementById('email'+j).style.borderColor=='green'&&document.getElementById('roll'+j).style.borderColor=='green'){"
+                                    + "var element = document.getElementById(rowNum);\n"
+                                    + "element.className = '';}"
+                                    + "}else{document.getElementById(rollNum).style.borderColor='red';"
+                                    + "var element = document.getElementById(rowNum);\n"
+                                    + "element.classList.add('table-danger');"
+                                    + "}"
                                     + "}"
                                     + "document.getElementById(rollNum).value = zeroPad(valueRoll);"
                                     + "}"

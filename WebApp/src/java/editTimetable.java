@@ -1,17 +1,12 @@
 
-import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.oddEveSubs;
-import static cerberus.AttFunctions.semSubs;
-import cerberus.messages;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
-import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
-import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -19,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;

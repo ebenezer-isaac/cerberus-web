@@ -266,9 +266,9 @@
             <div id="content-wrapper">
                 <div class="container-fluid">
                     <!-- Breadcrumbs-->
-                    <ol class="breadcrumb">
+                    <ol class="breadcrumb" id='navigator'>
                         <li class="breadcrumb-item">
-                            <a href="#">Dashboard</a>
+                            <a href="javascript:setContent('/Cerberus/homepage');">Homepage</a>
                         </li>
                         <li class="breadcrumb-item active">Overview</li>
                     </ol>

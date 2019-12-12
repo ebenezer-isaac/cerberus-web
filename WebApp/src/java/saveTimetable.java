@@ -1,26 +1,22 @@
-
-import cerberus.*;
-import com.mysql.cj.util.StringUtils;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getWeekID;
-import static cerberus.printer.error;
-import static cerberus.printer.kids;
-import static cerberus.printer.nouser;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class saveTimetable extends HttpServlet {
+
+    private static final long serialVersionUID = 584397678136844754L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -40,7 +36,8 @@ public class saveTimetable extends HttpServlet {
                         while (rs1.next()) {
                             no_of_slots++;
                         }
-                        int weekID = getWeekID(week);
+                        int year = Calendar.getInstance().get(Calendar.YEAR);
+                        int weekID = getWeekID(week, year);
                         PreparedStatement ps4 = con.prepareStatement("SELECT timetable.slotID,"
                                 + "MAX(CASE WHEN dayID = 1 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Monday, "
                                 + "MAX(CASE WHEN dayID = 2 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Tuesday, "
@@ -123,6 +120,8 @@ public class saveTimetable extends HttpServlet {
 
                         }
                         con.close();
+                        messages a = new messages();
+                        a.success(request, response, "Your changes to the timetable have been saved", "viewTimetable");
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages b = new messages();
                         b.error(request, response, e.getMessage(), "/Cerberus/homepage");
