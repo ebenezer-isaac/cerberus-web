@@ -70,7 +70,7 @@ public class editSubject extends HttpServlet {
                             error(e.getMessage());
                         }
                         out.print("</td></tr>"
-                                + "</table><br><button type='submit' id='studbtn1' class='btn btn-primary'>Submit</button>"
+                                + "</table><br><button type='submit' id='studbtn1' style='width:200px;' class='btn btn-primary'>Submit</button>"
                                 + "</form>");
                     } else if (flow.equals("del")) {
                         try {
@@ -102,7 +102,7 @@ public class editSubject extends HttpServlet {
                                     + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                     + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                     + "<br></fieldset>");
-                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-primary'>Submit</button></div>");
+                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></div>");
                             out.print("</form></div>");
 
                             con.close();

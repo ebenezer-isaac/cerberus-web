@@ -36,14 +36,6 @@ public class editStudDetails extends HttpServlet {
                     } catch (NumberFormatException e) {
                         classID = 3;
                     }
-                    out.print("<script>"
-                            + "function zeroPad(num) {"
-                            + "var s = num+'';"
-                            + "while (s.length < 3) {s = '0' + s;}"
-                            + "return(s);"
-                            + "}"
-                            + "</script>"
-                            + "<style>");
                     out.print("<div>");
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -82,7 +74,7 @@ public class editStudDetails extends HttpServlet {
                             rs.previous();
                             while (rs.next()) {
                                 line++;
-                                out.print("<tr>");
+                                out.print("<tr id='row" + line + "'>");
                                 out.print("<td><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid #e6e6e6; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
@@ -104,10 +96,7 @@ public class editStudDetails extends HttpServlet {
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br><br>"
-                                    + "<div id=\"tooltipp\">\n"
                                     + "<input type='submit' value='Submit' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
-                                    + "<span class=\"tooltiptext\" id=\"hoverText\"> <font style='color: red; font-size: 14px;'>Validations Error</font> </span>\n"
-                                    + "</div>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form>", 0));
                             out.print("<script>"
@@ -149,7 +138,8 @@ public class editStudDetails extends HttpServlet {
                                     + "}"
                                     + "}"
                                     + "}"
-                                    + "function checkRoll(rollNum) {"
+                                    + "function checkRoll() {"
+                                    + "for (var j=1; j<=studs; j++) {var rollNum='roll'+j; "
                                     + "document.getElementById('subBtn').disabled=false;"
                                     + "var valueRoll = parseInt(document.getElementById(rollNum).value,10);"
                                     + "if (valueRoll<1 || valueRoll>120) {"
@@ -157,20 +147,20 @@ public class editStudDetails extends HttpServlet {
                                     + "document.getElementById(rollNum).style.borderColor='red';"
                                     + "}"
                                     + "else {"
-                                    + "document.getElementById(rollNum).style.borderColor='green';"
+                                    + "var flag=0;"
                                     + "for (var i=1; i<=studs; i++) { "
                                     + "var value = parseInt(document.getElementById('roll'+i).value,10);"
-                                    + "if (value==valueRoll && rollNum!='roll'+i) {"
+                                    + "if (value==valueRoll && rollNum!='roll'+i) {flag=1;"
                                     + "document.getElementById('roll'+i).style.borderColor='red';"
                                     + "document.getElementById(rollNum).style.borderColor='red';"
                                     + "document.getElementById('subBtn').disabled=true;"
                                     + "}"
-                                    + "else {"
-                                    + "document.getElementById('roll'+i).style.borderColor='green';"
-                                    + "}"
-                                    + "}"
+                                    + "}if(flag==0){"
+                                    + "document.getElementById(rollNum).style.borderColor='green';"
+                                    + "}else{document.getElementById(rollNum).style.borderColor='red';}"
                                     + "}"
                                     + "document.getElementById(rollNum).value = zeroPad(valueRoll);"
+                                    + "}"
                                     + "}"
                                     + "$(document).ready(function() {\n"
                                     + "$(\"#hoverText\").hide();"

@@ -99,7 +99,7 @@ public class saveStudDetails extends HttpServlet {
                             a.dberror(request, response, e.getMessage(), "viewTimetable");
                         }
                         messages a = new messages();
-                        a.success(request, response, "TimeTable has been saved", "viewTimetable");
+                        a.success(request, response, "Student Details has been saved", "editStudDetails?class="+classID);
                         break;
                     default:
                         messages b = new messages();

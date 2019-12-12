@@ -45,7 +45,7 @@ function checkValidations(x) {
         v = document.getElementById('roll').value;
         cl = document.getElementById('clas').selectedIndex;
         var url = "ajaxCheckRoll?roll=" + v + "&clas=" + cl;
-    }else if (x == 3) {
+    } else if (x == 3) {
         v = document.getElementById('subid').value;
         var url = "ajaxSubjectId?subjectid=" + v;
     }
@@ -68,58 +68,59 @@ function getValidations() {
         var val = request.responseText;
         if (id == 0) {
             if (val == 0) {
-                document.getElementById('disp1').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i>";
+                document.getElementById('disp1').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>Email not valid</span>";
                 btnstatus1 = 1;
             } else if (val == 1) {
-                document.getElementById('disp1').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i>";
+                document.getElementById('disp1').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>Email valid</span>";
                 btnstatus1 = 0;
             } else if (val == 2) {
-                document.getElementById('disp1').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i>";
+                document.getElementById('disp1').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Email already registered</span>";
                 btnstatus1 = 1;
             }
         } else if (id == 1) {
             if (val == 0) {
-                document.getElementById('disp2').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i>";
+                document.getElementById('disp2').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>PRN not valid</span>";
                 btnstatus2 = 1;
             } else if (val == 1) {
-                document.getElementById('disp2').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i>";
+                document.getElementById('disp2').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>PRN valid</span>";
                 btnstatus2 = 0;
             } else if (val == 2) {
-                document.getElementById('disp2').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i>";
+                document.getElementById('disp2').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>PRN already registered</span>";
                 btnstatus2 = 1;
             }
         } else if (id == 2) {
             if (val == 0) {
-                document.getElementById('disp3').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i>";
+                document.getElementById('disp3').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>Roll Number not valid</span>";
                 btnstatus3 = 1;
             } else if (val == 1) {
-                document.getElementById('disp3').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i>";
+                document.getElementById('disp3').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>Roll Number valid</span>";
                 btnstatus3 = 0;
             } else if (val == 2) {
-                document.getElementById('disp3').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i>";
+                document.getElementById('disp3').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Roll Number already registered</span>";
                 btnstatus3 = 1;
             }
-        }
-        else if (id == 3) {
+        } else if (id == 3) {
             if (val == 0) {
-                document.getElementById('subid').style.borderColor="green";
+                document.getElementById('subid').style.borderColor = "green";
                 btnstatus4 = 0;
-                
+
             } else if (val == 1) {
-                document.getElementById('subid').style.borderColor="red";
+                document.getElementById('subid').style.borderColor = "red";
                 btnstatus4 = 1;
-                
             }
         }
-        if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
-            document.getElementById('studbtn1').disabled = false;
+        if (id == 3) {
+            if (btnstatus4 == 0) {
+                document.getElementById('studbtn1').disabled = false;
+            } else {
+                document.getElementById('studbtn1').disabled = true;
+            }
         } else {
-            document.getElementById('studbtn1').disabled = true;
-        }
-        if (btnstatus4 == 0 ) {
-            document.getElementById('studbtn1').disabled = false;
-        } else {
-            document.getElementById('studbtn1').disabled = true;
+            if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
+                document.getElementById('studbtn1').disabled = false;
+            } else {
+                document.getElementById('studbtn1').disabled = true;
+            }
         }
     }
 }
@@ -170,10 +171,10 @@ function getInf() {
     if (request.readyState == 4) {
         var val = request.responseText;
         if (val == 2) {
-            document.getElementById('disp4').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i>";
+            document.getElementById('disp4').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Student found</span>";
             btnstatus4 = 1;
         } else {
-            document.getElementById('disp4').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i>";
+            document.getElementById('disp4').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>No Student with that PRN found</span>";
             btnstatus4 = 0;
         }
         if (btnstatus4 == 1) {
@@ -223,4 +224,11 @@ function unfade(element) {
         element.style.display = 'block';
         op += op * 0.08;
     }, 10);
+}
+function zeroPad(num) {
+    var s = num + '';
+    while (s.length < 3) {
+        s = '0' + s;
+    }
+    return(s);
 }

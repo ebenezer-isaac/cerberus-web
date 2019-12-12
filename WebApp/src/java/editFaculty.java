@@ -42,7 +42,7 @@ public class editFaculty extends HttpServlet {
                                 + "width: 40px;"
                                 + "} "
                                 + "</style>");
-                        out.print("<br><div align='center'><form action='addFaculty' method='post'><table cellspacing='10'>"
+                        out.print("<br><br><div align='center'><form action='addFaculty' method='post'><table cellspacing='10'>"
                                 + "<tr><td class=\"editSubjectStyle\">Faculty Name</td><td> : </td><td>"
                                 + "<select name='title' class=\"editSelectFaculty\">"
                                 + "<option value='Mr. '>Mr.</option>"
@@ -53,7 +53,7 @@ public class editFaculty extends HttpServlet {
                                 + "</select>"
                                 + "<input type='text' name='name' class=\"editSubjectForm\" placeholder='Narendra Modi'/></td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input type='email' name='email' style='width: 303.3px' class=\"editSubjectForm\" placeholder='narendramodi@gmail.com'/></td></tr> "
-                                + "</table><br><button type='submit' class='btn btn-primary'>Add Faculty</button></form>");
+                                + "</table><br><button style='width:200px;' type='submit' class='btn btn-primary'>Add Faculty</button></form></div>");
                     } else if (flow.equals("del")) {
                         HttpSession session = request.getSession(false);
                         out.print("<body onload='myFunction()'>");
@@ -89,8 +89,8 @@ public class editFaculty extends HttpServlet {
                                     + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                     + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                     + "<br></fieldset>");
-                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-primary'>Submit</button></div>");
-                            out.print("</form></div>");
+                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></div>");
+                            out.print("</form></div></div>");
                         } catch (ClassNotFoundException | SQLException e) {
                             error(e.getMessage());
                         }

@@ -31,7 +31,7 @@ public class editAddStudent extends HttpServlet {
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        out.print("<br><form action='addStudent' method='post'><table cellspacing='10'>"
+                        out.print("<br><form action='addStudent' method='post'><table cellspacing='10' cellpadding=3>"
                                 + "<tr><td class=\"editSubjectStyle\">Student Class</td><td> : </td><td>");
                         Statement stmt = con.createStatement();
                         out.print("<select name = 'clas' id = 'clas' style='padding: 5px 109px 5px 8px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' onchange='checkValidations(2);dissub();'>");
@@ -46,10 +46,10 @@ public class editAddStudent extends HttpServlet {
                         int year = d.getYear() + 1900;
                         out.print("</select>");
                         out.print("</td></tr><tr><td class=\"editSubjectStyle\">Student Name</td><td> : </td><td><input type='text' name='name' class=\"editSubjectForm\" placeholder='Mark Zuckerberg'/></td></tr>"
-                                + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='this.value = zeroPad(this.value);checkValidations(2);' value = '01' placeholder='xx' min='1' max='150'/><td><div id='disp3' ><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='checkValidations(2);'></i></div></td></td></tr> "
-                                + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onkeyup='checkValidations(1)' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
-                                + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onkeyup='checkValidations(0)' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                + "</table><div id='subs'></div><button disabled type='submit' id='studbtn1' class='btn btn-primary'>Add Student</button></form>");
+                                + "<tr><td class=\"editSubjectStyle\">Roll No</td><td> : </td><td><input type='number' name='roll' id='roll' class=\"editSubjectForm\" style= 'width: 216px' onchange='checkValidations(2);this.value = zeroPad(this.value);' value = '001' placeholder='xx' min='1' max='150'/><td><div id='disp3'class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\" onk eyup='checkValidations(2);'></i></div></td></td></tr> "
+                                + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onchange='checkValidations(1);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
+                                + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onchange='checkValidations(0);' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
+                                + "</table><div id='subs'></div><br><button disabled type='submit' style='width:200px;' id='studbtn1' class='btn btn-primary'>Add Student</button></form>");
                         out.print("<script>");
                         rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
                         int oddeve = oddEve(request);

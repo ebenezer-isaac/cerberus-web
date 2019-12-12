@@ -35,10 +35,10 @@ public class editSlot extends HttpServlet {
                                 Statement stmt = con.createStatement();
                                 String sql = "SELECT `slotID`,`startTime`,`endTime` from `slot` order by startTime,endTime ASC;";
                                 ResultSet rs = stmt.executeQuery(sql);
-                                out.print("<table><th>Start Time</th><th>End Time</th></tr>");
+                                out.print("<table cellpadding=5><tr align='center'><th >Start Time</th><th>&nbsp&nbsp&nbsp&nbsp</th><th>End Time</th></tr>");
                                 while (rs.next()) {
-                                    out.print("<tr><td><input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; border-radius: 4px;' name = 'stime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(2).substring(0, 5) + "' step='60'></td> ");
-                                    out.print("<td><input type = 'time' style='background: #e6e6e6;  font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; border-radius: 4px;' name = 'etime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(3).substring(0, 5) + "' step='60'></td></tr>");
+                                    out.print("<tr><td ><input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; border-radius: 4px;' name = 'stime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(2).substring(0, 5) + "' step='60'></td> ");
+                                    out.print("<td>&nbsp&nbsp&nbsp&nbsp</td><td><input type = 'time' style='background: #e6e6e6;  font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; border-radius: 4px;' name = 'etime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(3).substring(0, 5) + "' step='60'></td></tr>");
                                 }
                                 out.print("</table><br><button type='submit' style='width: 200px;' class='btn btn-primary'>Submit</button>");
                                 out.print("</form>");
@@ -48,9 +48,9 @@ public class editSlot extends HttpServlet {
                             }
                             break;
                         case "add":
-                            out.print("<form action = 'addSlot' method='post'>"
-                                    + "Start Time : <input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px; border-radius: 4px;' name = 'stime' id = 'stime'  value='08:00' step='60'><br>"
-                                    + "End Time : <input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px 0 12px 6px; border-radius: 4px;' name = 'etime' id = 'etime'  value='13:00' step='60'><br>"
+                            out.print("<br><br><form action = 'addSlot' method='post'>"
+                                    + "Start Time : &nbsp<input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px; border-radius: 4px;' name = 'stime' id = 'stime'  value='08:00' step='60'><br>"
+                                    + "End Time : &nbsp<input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px 0 12px 6px; border-radius: 4px;' name = 'etime' id = 'etime'  value='13:00' step='60'><br>"
                                     + "<button type = 'submit' style='width: 200px;' class='btn btn-primary'>Add</button>"
                                     + "</form");
                             break;

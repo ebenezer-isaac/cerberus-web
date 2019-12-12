@@ -1,7 +1,9 @@
 
 import static cerberus.AttFunctions.getAccess;
+import cerberus.messages;
 import static cerberus.printer.nouser;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ public class ajaxContent extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int access = getAccess(request);
+        System.out.println(access);
         if (access == 1 || access == 0) {
             String url;
             try {
@@ -25,7 +28,7 @@ public class ajaxContent extends HttpServlet {
                 } catch (Exception x) {
                     url = "homepage";
                 }
-            }   
+            }
             if (access == 1) {
                 request.getRequestDispatcher("side-faculty.jsp").include(request, response);
             } else if (access == 0) {
@@ -34,7 +37,8 @@ public class ajaxContent extends HttpServlet {
             request.setAttribute("url", url);
             request.getRequestDispatcher("end.jsp").include(request, response);
         } else {
-           nouser();
+            messages c = new messages();
+            c.nouser(request, response);
         }
     }
 

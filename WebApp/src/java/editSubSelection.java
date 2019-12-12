@@ -141,10 +141,10 @@ public class editSubSelection extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print(tableend("No of students : " + line + "<br>"
-                                    + "<input class='btn-primary btn' type='submit' value='Submit' align='center'>"
+                            out.print(tableend("No of students : " + line + "<br><br>"
+                                    + "<input class='btn-primary btn' type='submit' style='width: 200px;' value='Submit' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                    + "</form>", 0));
+                                    + "</form><br>", 0));
                             out.print("<script>function batchdisable(id) {"
                                     + "if(document.getElementById(id).checked)"
                                     + "{id = id.substr(3);"

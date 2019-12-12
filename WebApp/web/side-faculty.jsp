@@ -66,7 +66,8 @@
                 text-align: center;
                 border-radius: 6px;
                 padding: 7px;
-
+                margin-left:10px;
+                margin-top:10px;
                 /* Position the tooltip */
                 position: absolute;
                 z-index: 1;
@@ -80,7 +81,7 @@
     <body id="page-top">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
             <img src="images/logomain.png"  height="27" align='center' width="27">
-            <a class="navbar-brand mr-1" href="index.html">Cerberus</a>
+            <a class="navbar-brand mr-1" href="index.jsp">Cerberus</a>
             <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
                 <i class="fas fa-bars"></i>
             </button>
@@ -90,14 +91,14 @@
             <!-- Navbar -->
             <ul class="navbar-nav ml-auto ml-md-0">
                 <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a id='profile-menu' class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div id='pic'></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="javascript:setContent('/Cerberus/profile');">Settings</a>
                         <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                        <a class="dropdown-item" href="#" id='logout-modal' data-toggle="modal" data-target="#logoutModal">Logout</a>
                     </div>
                 </li>
             </ul>

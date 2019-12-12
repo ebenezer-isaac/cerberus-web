@@ -1,11 +1,5 @@
+<br><br>
 </div></div>
-<footer class="sticky-footer">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright © Cerberus 2019</span>
-        </div>
-    </div>
-</footer>
 </div>
 </div>
 <a class="scroll-to-top rounded" href="#page-top">
@@ -23,7 +17,9 @@
             <div class="modal-body">Select "Logout" below to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="/Cerberus/signout">Logout</a>
+                <form action='signout' method='post'>
+                    <button type='submit' class="btn btn-primary" id='logout-btn'>Logout</button>
+                </form>
             </div>
         </div>
     </div>
@@ -37,7 +33,8 @@
 <script src="js/sb-admin.min.js"></script>
 <script src="js/ajax.js"></script>
 <script>
-    var his = ["/Cerberus/homepage"];
+    var his = [" ", "/Cerberus/homepage"];
+    console.log(his);
     $(document).ready(function () {
     <%
         try {
@@ -46,12 +43,28 @@
         } catch (Exception e) {
         }
     %>
-        window.addEventListener('popstate', function (event) {
-            url = his[his.length-2];
-            his.pop();
+    });
+    window.addEventListener('popstate', function (event) {
+        url = his[his.length - 2];
+        his.pop();
+        if (his.length <= 1) {
+            $("#profile-menu").click();
+            $("#logout-modal").click();
+        } else {
             setContent(url);
             history.pushState(null, null, window.location.pathname);
-        }, false);
-    });
+        }
+    }, false);
+    window.addEventListener('unload', function (event) {
+        url = his[his.length - 2];
+        his.pop();
+        if (his.length <= 1) {
+            $("#profile-menu").click();
+            $("#logout-modal").click();
+        } else {
+            setContent(url);
+            history.pushState(null, null, window.location.pathname);
+        }
+    }, false);
 </script></body></html>
 

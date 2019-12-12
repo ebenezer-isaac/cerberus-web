@@ -124,14 +124,17 @@ public class saveTimetable extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                        error(e.getMessage());
+                        messages b = new messages();
+                        b.error(request, response, e.getMessage(), "/Cerberus/homepage");
                     }
                     break;
                 case 0:
-                    out.print(kids());
+                    messages b = new messages();
+                    b.kids(request, response);
                     break;
                 default:
-                    out.print(nouser());
+                    messages c = new messages();
+                    c.nouser(request, response);
             }
         }
     }

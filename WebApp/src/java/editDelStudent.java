@@ -20,7 +20,7 @@ public class editDelStudent extends HttpServlet {
                 case 1:
                     out.print("<form action='delStudent' method='post'>");
                     out.print("<br>Enter the PRN of the student: <br><br>");
-                    out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='checkPRN();' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr></table>");
+                    out.print("<table><tr><td>PRN : <input type='text' name='prn' id='prn' onkeyup='checkPRN();' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' class=\"tooltipp\" style='width:100px' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i><span class=\"tooltiptext\">No Student with that PRN found</span></div></td></tr></table>");
                     out.print("<br><br><fieldset>"
                             + "<legend><br>Warning - The following changes will be made:<br></legend>"
                             + "<p>1. All Attendance Records for the Student will be deleted.</p>"

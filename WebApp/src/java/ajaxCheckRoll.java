@@ -21,21 +21,24 @@ public class ajaxCheckRoll extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
             if (access == 1 || access == 0) {
-                int flag = 0;
+
                 int roll = Integer.parseInt(request.getParameter("roll"));
-                int clas = Integer.parseInt(request.getParameter("clas")) + 1;
-                try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
-                    PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where rollNo=? and classID = ?");
-                    ps.setInt(1, roll);
-                    ps.setInt(2, clas);
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        flag = 1;
-                    }
-                    con.close();
-                } catch (SQLException e) {
-                }
+                int clas = Integer.parseInt(request.getParameter("clas"));
+                System.out.println(roll);
+                System.out.println(clas);
                 if (roll >= 1 && roll <= 120) {
+                    int flag = 0;
+                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                        PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where rollNo=? and classID = ?");
+                        ps.setInt(1, roll);
+                        ps.setInt(2, clas);
+                        ResultSet rs = ps.executeQuery();
+                        while (rs.next()) {
+                            flag = 1;
+                        }
+                        con.close();
+                    } catch (SQLException e) {
+                    }
                     if (flag == 0) {
                         out.print("1");
                     } else {

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static cerberus.AttFunctions.getAccess;
+import cerberus.messages;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
@@ -40,14 +41,17 @@ public class saveSlot extends HttpServlet {
                             }
                         }
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                        error(e.getMessage());
+                        messages b = new messages();
+                        b.error(request, response, e.getMessage(), "/Cerberus/homepage");
                     }
                     break;
                 case 0:
-                    out.print(kids());
+                    messages b = new messages();
+                    b.kids(request, response);
                     break;
                 default:
-                    out.print(nouser());
+                    messages c = new messages();
+                    c.nouser(request, response);
             }
         }
     }

@@ -95,7 +95,7 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
                         String heading = "<table><tr><td width = 33% align='left'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
-                                + "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\"";
+                                + "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
                         if (week <= currweek) {
                             heading += "disabled";
                         }
@@ -109,7 +109,7 @@ public class editTimetable extends HttpServlet {
                         LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
                         heading += "<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>";
                         heading += "</td><td width = 33% align='right'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
-                                + "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
+                                + "<button type=\"submit\"  style='width: 100px;' id=\"next\" class=\"btn btn-primary\"";
                         if (week > currweek) {
                             heading += "disabled";
                         }
@@ -126,14 +126,14 @@ public class editTimetable extends HttpServlet {
                         String end = "</table>"
                                 + "<input type='text' name='lab' value='" + labid + "' hidden>"
                                 + "<input type='text' name='week' value='" + week + "' hidden>"
-                                + "<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
+                                + "<button align='center' style='width: 200px;'type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
                                 + "<span>Save</span>"
                                 + "</button></form>"
                                 + "</div>"
                                 + "</div>";
                         if (week == currweek + 1) {
                             end += "<div class='card-footer small text-muted'><form action='copyTimetable' method='post' align='center'>"
-                                    + "<button align='center' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
+                                    + "<button align='center' style='width: 200px;' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
                                     + "<span>Copy From Previous Week</span>"
                                     + "</button></form></div>";
                         }

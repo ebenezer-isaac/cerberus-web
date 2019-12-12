@@ -23,7 +23,7 @@ public class ajaxSubjectId extends HttpServlet {
             int access = getAccess(request);
             if (access == 1 || access == 0) {
                 int flag = 0;
-                String subjectID = request.getParameter("subjectid");
+                String subjectID = request.getParameter("subjectid").toUpperCase();
                 try {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
