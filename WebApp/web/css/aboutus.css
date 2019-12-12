@@ -6,8 +6,8 @@
 .card
 {
 	position: relative;
-	width: 300px;
-	height: 380px;
+	width: 250px;
+	height: 300px;
 	margin: 0 auto;
 	background: #ccc;
 	overflow: hidden;
@@ -46,10 +46,10 @@
 {
 	position: absolute;
 	width: 100%;
-	height: 60%;
+	height: 100%;
 	bottom: -100%;
 	padding: 20px;
-	padding-top: 60px;
+	padding-top: 170px;
 	box-sizing: border-box;
 	text-align: center;
 	transition: 0.5s;
