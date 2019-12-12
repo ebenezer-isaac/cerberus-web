@@ -39,18 +39,11 @@ public class editStudDetails extends HttpServlet {
                     out.print("<script>"
                             + "function zeroPad(num) {"
                             + "var s = num+'';"
-                            + "while (s.length < 2) s = '0' + s;"
+                            + "while (s.length < 3) {s = '0' + s;}"
                             + "return(s);"
                             + "}"
                             + "</script>"
-                            + "<style>"
-                            + ".valid{"
-                            + "border:solid 1px green;"
-                            + "}"
-                            + ".invalid{"
-                            + "border:solid 1px red;"
-                            + "}"
-                            + "</style>");
+                            + "<style>");
                     out.print("<div>");
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -90,10 +83,10 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr>");
-                                out.print("<td><input type='number' id='roll" + line + "' name='roll" + line + "' min='1' max='120' class='valid' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "'></td>");
+                                out.print("<td><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid #e6e6e6; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
-                                out.print("<td><input type='text' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
-                                out.print("<td><input type='email' class='valid' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
+                                out.print("<td><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
+                                out.print("<td><input type='email'  class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
                                 if (rs.getString(5) != null) {
                                     out.print("<input type='checkbox' value='1' name='t1" + line + "' checked >");
                                 } else {
@@ -111,7 +104,10 @@ public class editStudDetails extends HttpServlet {
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br><br>"
-                                    + "<input type='submit' value='Submit' class='btn btn-primary' align='center' id='subBtn'>"
+                                    + "<div id=\"tooltipp\">\n"
+                                    + "<input type='submit' value='Submit' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
+                                    + "<span class=\"tooltiptext\" id=\"hoverText\"> <font style='color: red; font-size: 14px;'>Validations Error</font> </span>\n"
+                                    + "</div>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form>", 0));
                             out.print("<script>"
@@ -144,6 +140,7 @@ public class editStudDetails extends HttpServlet {
                                     + "} else {"
                                     + "document.getElementById('email'+line).style.borderColor='red';"
                                     + "btnstatus5 = 0;"
+                                    + "show()"
                                     + "}"
                                     + "if (btnstatus5 == 1) {"
                                     + "document.getElementById('subBtn').disabled = false;"
@@ -174,6 +171,15 @@ public class editStudDetails extends HttpServlet {
                                     + "}"
                                     + "}"
                                     + "document.getElementById(rollNum).value = zeroPad(valueRoll);"
+                                    + "}"
+                                    + "$(document).ready(function() {\n"
+                                    + "$(\"#hoverText\").hide();"
+                                    + "});"
+                                    + "function show() {"
+                                    + "$.myjQuery();"
+                                    + "}"
+                                    + "$.myjQuery = function() {\n"
+                                    + "$(\"#hoverText\").show();"
                                     + "}"
                                     + "</script>");
                         } else {

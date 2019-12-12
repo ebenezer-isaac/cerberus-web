@@ -32,7 +32,7 @@ function getInfo() {
 var btnstatus1 = 1;
 var btnstatus2 = 1;
 var btnstatus3 = 1;
-
+var btnstatus4 = 1;
 function checkValidations(x) {
     id = x;
     if (x == 0) {
@@ -45,6 +45,9 @@ function checkValidations(x) {
         v = document.getElementById('roll').value;
         cl = document.getElementById('clas').selectedIndex;
         var url = "ajaxCheckRoll?roll=" + v + "&clas=" + cl;
+    }else if (x == 3) {
+        v = document.getElementById('subid').value;
+        var url = "ajaxSubjectId?subjectid=" + v;
     }
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
@@ -97,7 +100,23 @@ function getValidations() {
                 btnstatus3 = 1;
             }
         }
+        else if (id == 3) {
+            if (val == 0) {
+                document.getElementById('subid').style.borderColor="green";
+                btnstatus4 = 0;
+                
+            } else if (val == 1) {
+                document.getElementById('subid').style.borderColor="red";
+                btnstatus4 = 1;
+                
+            }
+        }
         if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
+            document.getElementById('studbtn1').disabled = false;
+        } else {
+            document.getElementById('studbtn1').disabled = true;
+        }
+        if (btnstatus4 == 0 ) {
             document.getElementById('studbtn1').disabled = false;
         } else {
             document.getElementById('studbtn1').disabled = true;

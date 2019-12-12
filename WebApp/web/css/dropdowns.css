@@ -9,8 +9,8 @@
     padding: 4px 22px;
     border: none;
     background-color: #e6e6e6;
+    border: 2px solid #e6e6e6;
     border-radius: 4px;
-    outline: none;
     margin: 6px;
     font-size: 14.5px;
 }

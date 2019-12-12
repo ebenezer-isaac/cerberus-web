@@ -58,6 +58,23 @@
             ::-webkit-scrollbar-thumb:hover {
                 background: #555; 
             }
+            .tooltipp .tooltiptext {
+                visibility: hidden;
+                background-color: #0d0d0d;
+                font-size: 12px;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 7px;
+
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+            }
+
+            .tooltipp:hover .tooltiptext {
+                visibility: visible;
+            }
         </style>
     </head>
     <body id="page-top">

@@ -51,7 +51,7 @@ public class editSubject extends HttpServlet {
                                 + "}"
                                 + "</script>");
                         out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
-                                + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input type='text' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' placeholder='BCAxxxx'/></td></tr>"
+                                + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input type='text' id='subid' onkeyup='checkValidations(3)' onchange='checkValidations(3)' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' placeholder='BCAxxxx'/></td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Subject Name</td><td> : </td><td><input type='text' name='subject' class=\"editSubjectForm\" placeholder='Artificial Intelligence'/></td></tr></tr><td colspan=2></td><td align='center'><font style=\"font-size: 12.5px; color: red;\"> *Please do not use abbreviations in Subject Name </font> </td></tr> "
                                 + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI'/> </td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> <font style=\"font-size: 14.5px;\"> Odd </font>\n"
@@ -70,7 +70,7 @@ public class editSubject extends HttpServlet {
                             error(e.getMessage());
                         }
                         out.print("</td></tr>"
-                                + "</table><br><button type='submit' class='btn btn-primary'>Submit</button>"
+                                + "</table><br><button type='submit' id='studbtn1' class='btn btn-primary'>Submit</button>"
                                 + "</form>");
                     } else if (flow.equals("del")) {
                         try {

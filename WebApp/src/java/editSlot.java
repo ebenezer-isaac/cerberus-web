@@ -40,7 +40,7 @@ public class editSlot extends HttpServlet {
                                     out.print("<tr><td><input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; border-radius: 4px;' name = 'stime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(2).substring(0, 5) + "' step='60'></td> ");
                                     out.print("<td><input type = 'time' style='background: #e6e6e6;  font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; border-radius: 4px;' name = 'etime" + rs.getString(1) + "' id = 'stime" + rs.getString(1) + "'  value='" + rs.getString(3).substring(0, 5) + "' step='60'></td></tr>");
                                 }
-                                out.print("</table><br><button type='submit' class='btn btn-primary'>Submit</button>");
+                                out.print("</table><br><button type='submit' style='width: 200px;' class='btn btn-primary'>Submit</button>");
                                 out.print("</form>");
                                 con.close();
                             } catch (ClassNotFoundException | SQLException e) {
@@ -51,7 +51,7 @@ public class editSlot extends HttpServlet {
                             out.print("<form action = 'addSlot' method='post'>"
                                     + "Start Time : <input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px; border-radius: 4px;' name = 'stime' id = 'stime'  value='08:00' step='60'><br>"
                                     + "End Time : <input type = 'time' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px 0 12px 6px; border-radius: 4px;' name = 'etime' id = 'etime'  value='13:00' step='60'><br>"
-                                    + "<button type = 'submit' class='btn btn-primary'>Add</button>"
+                                    + "<button type = 'submit' style='width: 200px;' class='btn btn-primary'>Add</button>"
                                     + "</form");
                             break;
                         case "del":
@@ -83,7 +83,7 @@ public class editSlot extends HttpServlet {
                                         + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
                                         + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                         + "<br></fieldset>");
-                                out.print("<br><div id = 'butt' style='display:none;'><button type='submit' class='btn btn-primary'>Submit</button></div>");
+                                out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width: 200px;' class='btn btn-primary'>Submit</button></div>");
                                 out.print("</form>");
                             } catch (SQLException | ClassNotFoundException e) {
                                 error(e.getMessage());
