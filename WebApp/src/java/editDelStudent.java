@@ -28,9 +28,9 @@ public class editDelStudent extends HttpServlet {
                             + "<p>1. All Attendance Records for the Student will be deleted.</p>"
                             + "<p>2. Subject Selection of all Students will be erased for this subject.</p>"
                             + "<p>3. Data of the No of Labs conducted will be deleted.</p>"
-                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/>I have read all the Warnings!"
+                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> I have read all the Warnings!"
                             + "<br><br></fieldset>");
-                    out.print("<br><div id = 'butt' style='display:none;' ><button id='studbtn2' disabled type='submit'>Submit</button></div>");
+                    out.print("<br><div id = 'butt' style='display:none;' ><button class='btn btn-primary' style='width:200px' id='studbtn2' disabled type='submit'>Submit</button></div>");
                     out.print("</form>");
                     break;
                 case 0:

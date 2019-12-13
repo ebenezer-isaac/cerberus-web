@@ -55,8 +55,7 @@ public class editTimetable extends HttpServlet {
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        int oddeve = oddEve(request);
-                        subs = oddEveSubs(oddeve);
+                        subs = oddEveSubs();
                         out.print("<style>"
                                 + "input[type=number]{"
                                 + "width: 61px;"
@@ -279,7 +278,7 @@ public class editTimetable extends HttpServlet {
                         lines[rs.getInt(1) - 1] += (disabled);
                     }
                     lines[rs.getInt(1) - 1] += (">No Batch</option>");
-                    PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                    PreparedStatement ps11 = con.prepareStatement("Select name from batch where batchid>0");
                     ResultSet rs3 = ps11.executeQuery();
                     int index = 1;
                     while (rs3.next()) {

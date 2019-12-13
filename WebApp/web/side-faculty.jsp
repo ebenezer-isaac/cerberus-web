@@ -95,7 +95,7 @@
                         <div id='pic'></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/profile');">Settings</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/profile');">My Profile</a>
                         <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" id='logout-modal' data-toggle="modal" data-target="#logoutModal">Logout</a>

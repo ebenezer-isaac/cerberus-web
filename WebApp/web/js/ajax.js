@@ -33,21 +33,23 @@ var btnstatus1 = 1;
 var btnstatus2 = 1;
 var btnstatus3 = 1;
 var btnstatus4 = 1;
+
 function checkValidations(x) {
+    var url;
     id = x;
     if (x == 0) {
         v = document.getElementById('email').value;
-        var url = "ajaxCheckEmail?email=" + v;
+        url = "ajaxCheckEmail?email=" + v;
     } else if (x == 1) {
         v = document.getElementById('prn').value;
-        var url = "ajaxCheckPRN?prn=" + v;
+        url = "ajaxCheckPRN?prn=" + v;
     } else if (x == 2) {
         v = document.getElementById('roll').value;
         cl = document.getElementById('clas').selectedIndex;
-        var url = "ajaxCheckRoll?roll=" + v + "&clas=" + cl;
+        url = "ajaxCheckRoll?roll=" + v + "&clas=" + cl;
     } else if (x == 3) {
         v = document.getElementById('subid').value;
-        var url = "ajaxSubjectId?subjectid=" + v;
+        url = "ajaxSubjectId?subjectid=" + v;
     }
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
@@ -116,8 +118,11 @@ function getValidations() {
                 document.getElementById('studbtn1').disabled = true;
             }
         } else {
-            if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
-                document.getElementById('studbtn1').disabled = false;
+            var index = document.getElementById('clas').selectedIndex;
+            if (index != 0 ) {
+                if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
+                    document.getElementById('studbtn1').disabled = false;
+                }
             } else {
                 document.getElementById('studbtn1').disabled = true;
             }

@@ -35,7 +35,7 @@ public class saveSubSelection extends HttpServlet {
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         String cla = getClassName(classID);
                         int index = 0;
-                        int oddeve = oddEve(request);
+                        int oddeve = oddEve();
                         int sem = AttFunctions.getSem(oddeve, classID);
                         String[][] subs = semSubs(sem, classID);
                         int no_of_sub = subs.length - 1;
@@ -62,12 +62,10 @@ public class saveSubSelection extends HttpServlet {
                             String prn = request.getParameter("prn" + index);
                             int subsele[][] = new int[subs.length][2];
                             for (int i = 0; i < subs.length; i++) {
-                                int eflag = 0;
                                 String arr[] = null;
                                 String estring = rs.getString(2 + i);
                                 try {
                                     arr = estring.split(",");
-                                    eflag = 1;
                                 } catch (Exception e) {
                                 }
 
@@ -81,37 +79,23 @@ public class saveSubSelection extends HttpServlet {
                                 } catch (NumberFormatException e) {
                                     subsele[i][1] = 0;
                                 }
-                                if (subsele[i][0] == 0 && eflag == 1) {
-                                    PreparedStatement pps = con.prepareStatement("DELETE from studentsubject where prn = ? and subjectID = ?");
-                                    pps.setString(1, prn);
-                                    pps.setString(2, subs[i][0]);
+                                if (subsele[i][1] == Integer.parseInt(arr[1])) {
+                                } else {
+                                    PreparedStatement pps = con.prepareStatement("update studentsubject set batchID=? where prn = ? and subjectID = ?");
+                                    pps.setInt(1, subsele[i][1]);
+                                    pps.setString(2, prn);
+                                    pps.setString(3, subs[i][0]);
                                     pps.executeUpdate();
-                                } else if (subsele[i][0] == 1 && eflag == 0) {
-                                    PreparedStatement pps = con.prepareStatement("insert into studentsubject values(?,?,?)");
-                                    pps.setString(1, prn);
-                                    pps.setString(2, subs[i][0]);
-                                    pps.setInt(3, subsele[i][1]);
-                                    pps.executeUpdate();
-                                } else if (subsele[i][0] == 1 && eflag == 1) {
-                                    if (subsele[i][1] == Integer.parseInt(arr[1])) {
-                                    } else {
-                                        PreparedStatement pps = con.prepareStatement("update studentsubject set batchID=? where prn = ? and subjectID = ?");
-                                        pps.setInt(1, subsele[i][1]);
-                                        pps.setString(2, prn);
-                                        pps.setString(3, subs[i][0]);
-                                        pps.executeUpdate();
-                                    }
                                 }
-                                if (subsele[i][0] == 0 && eflag == 0) {
-                                }
+
                             }
                             index++;
                         }
                         messages a = new messages();
-                        a.success(request, response, "Subject Selection has been saved", "editSubSelection?class="+classID+"");
+                        a.success(request, response, "Subject Selection has been saved", "editSubSelection?class=" + classID);
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages a = new messages();
-                        a.dberror(request, response, e.getMessage(), "viewTimetable");
+                        a.dberror(request, response, e.getMessage(), "editSubSelection?class=" + classID);
                     }
                     break;
                 case 0:

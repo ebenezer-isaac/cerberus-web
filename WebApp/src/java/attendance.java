@@ -36,15 +36,14 @@ public class attendance extends HttpServlet {
             switch (access) {
                 case 1:
                     int classID = Integer.parseInt(request.getParameter("class"));
-                    int oddeve = oddEve(request);
+                    int oddeve = oddEve();
                     String cla = getClassName(classID);
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         int sem = getSem(oddeve, classID);
                         String[][] subs = semSubs(sem, classID);
-                        for(int i = 0;i<subs.length;i++)
-                        {
+                        for (int i = 0; i < subs.length; i++) {
                             System.out.println(subs[i][0]);
                             System.out.println(subs[i][1]);
                         }
@@ -86,7 +85,7 @@ public class attendance extends HttpServlet {
                         int index = 0;
                         sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(' " + subs[index][0] + "',' ') END) as '" + subs[index][1].replace("-", "_") + "'";
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN studentsubject.batchID END) as '" + subs[index][1].replace("-", "_") + "'";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -122,12 +121,12 @@ public class attendance extends HttpServlet {
                                 out.print("<td>" + rs.getString(2) + "</td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
-                                    if (rs.getString(i) != null) {
+                                    if (rs.getString(i).equals("0")) {
+                                        out.print("<td>NA</td>");
+                                    } else {
                                         out.print("<td><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + rs.getString(i) + "');\" style='display:block;text-decoration:none;'>");
                                         out.print(String.format("%.02f", AttFunctions.calPercentage(prn, rs.getString(i))) + "%");
                                         out.print("</a></td>");
-                                    } else {
-                                        out.print("<td>NA</td>");
                                     }
                                 }
                                 out.print("</tr>");

@@ -103,6 +103,17 @@ public class AttFunctions {
         return salt.toString();
     }
 
+    public static String generatePassword() throws NoSuchAlgorithmException {
+        String otpchars = "ABCDEFGHJKLMNPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 8) {
+            int index = (int) (rnd.nextFloat() * otpchars.length());
+            salt.append(otpchars.charAt(index));
+        }
+        return salt.toString();
+    }
+
     public static float calPercentage(String prn, String subid) {
         prn = prn.trim();
         subid = subid.trim();
@@ -180,7 +191,7 @@ public class AttFunctions {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT count(batchID) FROM `batch`");
+            ResultSet rs = stmt.executeQuery("SELECT count(batchID) FROM `batch` where batchID>0");
             while (rs.next()) {
                 no_of_batch = rs.getInt(1);
             }
@@ -210,10 +221,10 @@ public class AttFunctions {
                         + "on subject.subjectID=facultysubject.subjectID "
                         + "where facultyID = ?");
             } else {
-                ps = con.prepareStatement("select subject.Abbreviation from facultysubject "
+                ps = con.prepareStatement("select subject.Abbreviation from studentsubject "
                         + "inner join subject "
-                        + "on subject.subjectID=facultysubject.subjectID "
-                        + "where facultyID = ?");
+                        + "on subject.subjectID=studentsubject.subjectID "
+                        + "where prn = ? and studentsubject.batchID not '0'");
             }
             ps.setString(1, user);
             ResultSet rs = ps.executeQuery();
@@ -236,7 +247,7 @@ public class AttFunctions {
         return prefsubs;
     }
 
-    public static int oddEve(HttpServletRequest request) throws FileNotFoundException, IOException {
+    public static int oddEve() throws FileNotFoundException, IOException {
         int result = 0;
 
         String fileName = "D:\\oddEve.txt";
@@ -256,7 +267,8 @@ public class AttFunctions {
         return result;
     }
 
-    public static String[][] oddEveSubs(int oddeve) {
+    public static String[][] oddEveSubs() throws IOException {
+        int oddeve = oddEve();
         String subs[][] = null;
         int no_of_subs = 0;
         try {

@@ -32,7 +32,7 @@ public class viewSubject extends HttpServlet {
                     out.print("<style>tr:hover {"
                             + "background: #a8a3a3;"
                             + "}</style>");
-                    out.print(tablestart("Subjects", "hover", "studDetails", 1));
+                    out.print(tablestart("Subjects", "hover", "studDetails", 0));
                     String header = "<tr>";
                     header += "<th>Subject Code</th>";
                     header += "<th>Semester</th>";

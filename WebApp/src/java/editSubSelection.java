@@ -57,7 +57,7 @@ public class editSubSelection extends HttpServlet {
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
                         String cla = getClassName(classID);
                         int index = 0;
-                        int oddeve = oddEve(request);
+                        int oddeve = oddEve();
                         int sem = AttFunctions.getSem(oddeve, classID);
                         String[][] subs = semSubs(sem, classID);
                         int no_of_sub = subs.length - 1;
@@ -87,35 +87,35 @@ public class editSubSelection extends HttpServlet {
                                     + "<form action='saveSubSelection' method='post'>");
                             out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 0) + "");
                             String header = "<tr>";
-                            header += "<th> Roll </th>";
-                            header += "<th> Name </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;'> Roll </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;'> Name </th>";
                             for (int i = 4; i <= cols; i++) {
-                                header += "<th> " + rsm.getColumnLabel(i) + " </th>";
+                                header += "<th style='vertical-align : middle;text-align:center;'> " + rsm.getColumnLabel(i) + " </th>";
                             }
                             header += "</tr>";
                             out.print(tablehead(header));
                             rs.previous();
-                            PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch");
+                            PreparedStatement ps11 = con.prepareStatement("Select batchID, name from batch where batchID>0");
                             ResultSet rs4 = ps11.executeQuery();
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr>");
-                                out.print("<td>" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "<input type='text' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
-                                out.print("<td>" + rs.getString(3) + "</td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'>" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "<input type='text' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
                                     index = 0;
                                     int flag = 0;
-                                    if (rs.getString(i) != null) {
-                                        flag = 1;
-                                    } else {
+                                    if (rs.getString(i).equals("Batch 0")) {
                                         flag = 0;
+                                    } else {
+                                        flag = 1;
                                     }
-                                    out.print("<td><input type='checkbox' value='1' id='sub" + subs[i-4][0] + "" + line + "' name='sub" + subs[i-4][0] + "" + line + "' onchange='batchdisable(this.id)'");
+                                    out.print("<td style='vertical-align : middle;text-align:center;'><input type='checkbox' value='1' id='sub" + subs[i - 4][0] + "" + line + "' name='sub" + subs[i - 4][0] + "" + line + "' onchange='batchdisable(this.id)'");
 
                                     if (flag == 1) {
                                         out.print(" checked");
                                     }
-                                    out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i-4][0] + "" + line + "' id = 'batch" + subs[i-4][0] + "" + line + "' class='editSelectTimeTable");
+                                    out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i - 4][0] + "" + line + "' id = 'batch" + subs[i - 4][0] + "" + line + "' class='editSelectTimeTable");
                                     if (flag == 0) {
                                         out.print(" not-allowed' disabled");
                                     } else {

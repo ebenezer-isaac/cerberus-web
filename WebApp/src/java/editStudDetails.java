@@ -64,29 +64,29 @@ public class editStudDetails extends HttpServlet {
                             out.print("<form action='saveStudDetails' method='post'>");
                             out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 0) + "");
                             String header = "<tr>";
-                            header += "<th> Roll No </th>";
-                            header += "<th> PRN </th>";
-                            header += "<th> Name </th>";
-                            header += "<th> Email </th>";
-                            header += "<th align='center'> Fingerprint <br>1 </th>";
-                            header += "<th align='center'> Fingerprint <br>2 </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;'> Roll No </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;'> PRN </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;'> Name </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;'> Email </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;' align='center'> Fingerprint <br>1 </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;' align='center'> Fingerprint <br>2 </th>";
                             header += "</tr>";
                             out.print(tablehead(header));
                             rs.previous();
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr id='row" + line + "'>");
-                                out.print("<td><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid green; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
-                                out.print("<td><div>" + rs.getString(2) + "</div><input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
-                                out.print("<td><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
-                                out.print("<td><input type='email' style='border: 2px solid green;'class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid green; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'>" + rs.getString(2) + "<input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'><input type='email' style='border: 2px solid green;'class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td style='vertical-align : middle;text-align:center;'>");
                                 if (rs.getString(5) != null) {
                                     out.print("<input type='checkbox' value='1' name='t1" + line + "' checked >");
                                 } else {
                                     out.print("N/A");
                                 }
                                 out.print("</td>");
-                                out.print("<td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'>");
                                 if (rs.getString(6) != null) {
                                     out.print("<input type='checkbox' value='1' name='t2" + line + "' checked >");
                                 } else {
