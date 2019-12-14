@@ -1,133 +1,197 @@
 .row-background
 {
-	background: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0, #003073), color-stop(100%, #029797));
+    background: -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0, #003073), color-stop(100%, #029797));
 }
 
 .card
 {
-	position: relative;
-	width: 250px;
-	height: 300px;
-	margin: 0 auto;
-	background: #ccc;
-	overflow: hidden;
-	border-radius: 10px;
-	transition: 0.5s;
+    position: relative;
+    width: 250px;
+    height: 300px;
+    margin: 0 auto;
+    background: #ccc;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
 }
 
 .card:hover
 {
-	transform: translate(0, -20px);
-	box-shadow: 0 20px 20px rgba(0,0,0,.2);
+    transform: translate(0, -20px);
+    box-shadow: 0 20px 20px rgba(0,0,0,.2);
 }
 
 .card .img-box
 {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	transition: 0.5s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: 0.5s;
 }
 
 .card:hover .img-box
 {
-	opacity: 1;
+    opacity: 1;
 }
 
 .card .img-box img
 {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .card .content
 {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	bottom: -100%;
-	padding: 20px;
-	padding-top: 170px;
-	box-sizing: border-box;
-	text-align: center;
-	transition: 0.5s;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: -100%;
+    padding: 20px;
+    padding-top: 120px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: 0.5s;
+}
+
+.card .contentt
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: -100%;
+    padding: 20px;
+    padding-top: 166px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: 0.5s;
 }
 
 .card:hover .content
 {
-	bottom: 0;
+    bottom: 0;
+}
+
+.card:hover .contentt
+{
+    bottom: 0;
 }
 
 .bg-1
 {
-	background: linear-gradient(0deg, #c21833, transparent);
+    background: linear-gradient(0deg, #c21833, transparent);
 }
 
 .bg-2
 {
-	background: linear-gradient(0deg, #8012a5, transparent);
+    background: linear-gradient(0deg, #8012a5, transparent);
 }
 
 .bg-3
 {
-	background: linear-gradient(0deg, #3a414c, transparent);
+    background: linear-gradient(0deg, #3a414c, transparent);
 }
 
 .card .content h2
 {
-	margin: 0 0 10px;
-	padding: 0;
-	color: #fff;
-	font-size: 20px;
+    margin: 0 0 10px;
+    padding: 0;
+    color: #fff;
+    font-size: 20px;
+}
+
+.card .contentt h2
+{
+    margin: 0 0 10px;
+    padding: 0;
+    color: #fff;
+    font-size: 20px;
 }
 
 .card .content h2 span
 {
-	color: #ffeb3b;
-	font-size: 16px;
+    color: #ffeb3b;
+    font-size: 16px;
+}
+
+.card .contentt h2 span
+{
+    color: #ffeb3b;
+    font-size: 16px;
 }
 
 .card .content p
 {
-	margin: 0;
-	padding: 0;
-	color: #fff;
-	font-size: 14px;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    font-size: 14px;
+}
+
+.card .contentt p
+{
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    font-size: 14px;
 }
 
 .card .content ul
 {
-	display: flex;
-	margin: 20px 0 0;
-	padding: 0;
-	color: #fff;
-	align-items: center;
-	justify-content: center;
-	font-size: 16px;
+    display: flex;
+    margin: 20px 0 0;
+    padding: 0;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.card .contentt ul
+{
+    display: flex;
+    margin: 20px 0 0;
+    padding: 0;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
 }
 
 .card .content ul li
 {
-	list-style: none;
+    list-style: none;
+}
+
+.card .contentt ul li
+{
+    list-style: none;
 }
 
 .card .content ul li a
 {
-	color: #fff;
-	padding: 0 10px;
-	font-size: 18px;
-	transition: 0.5s;
+    color: #fff;
+    padding: 0 10px;
+    font-size: 18px;
+    transition: 0.5s;
+}
+
+.card .contentt ul li a
+{
+    color: #fff;
+    padding: 0 10px;
+    font-size: 18px;
+    transition: 0.5s;
 }
 
 .mbr-text
 {
-	font-style: normal;
-  	line-height: 1.6;
+    font-style: normal;
+    line-height: 1.6;
 }
 
 .display-5
 {
-  font-size: 1.4rem;
+    font-size: 1.4rem;
 }
