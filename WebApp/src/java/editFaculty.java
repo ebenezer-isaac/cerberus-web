@@ -53,8 +53,8 @@ public class editFaculty extends HttpServlet {
                                 + "<option value='Dr. '>Dr.</option>"
                                 + "<option value='Prof. '>Prof.</option>"
                                 + "</select>"
-                                + "<input type='text' name='name' class=\"editSubjectForm\" placeholder='Narendra Modi'/></td></tr>"
-                                + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input type='email' name='email' style='width: 303.3px' class=\"editSubjectForm\" placeholder='narendramodi@gmail.com'/></td></tr> "
+                                + "<input type='text' name='name' class=\"editSubjectForm\" placeholder='First Name' maxlength='15'/></td></tr>"
+                                + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input type='email' name='email' style='width: 303.3px' class=\"editSubjectForm\" placeholder='zuck@gmail.com'/></td></tr> "
                                 + "</table><br><button style='width:200px;' type='submit' class='btn btn-primary'>Add Faculty</button></form></div>");
                     } else if (flow.equals("del")) {
                         HttpSession session = request.getSession(false);

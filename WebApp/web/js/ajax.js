@@ -71,41 +71,49 @@ function getValidations() {
         if (id == 0) {
             if (val == 0) {
                 document.getElementById('disp1').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>Email not valid</span>";
+                document.getElementById('email').style.borderColor = "red";
                 btnstatus1 = 1;
             } else if (val == 1) {
                 document.getElementById('disp1').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>Email valid</span>";
+                document.getElementById('email').style.borderColor = "green";
                 btnstatus1 = 0;
             } else if (val == 2) {
                 document.getElementById('disp1').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Email already registered</span>";
+                document.getElementById('email').style.borderColor = "red";
                 btnstatus1 = 1;
             }
         } else if (id == 1) {
             if (val == 0) {
                 document.getElementById('disp2').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>PRN not valid</span>";
+                document.getElementById('prn').style.borderColor = "red";
                 btnstatus2 = 1;
             } else if (val == 1) {
                 document.getElementById('disp2').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>PRN valid</span>";
+                document.getElementById('prn').style.borderColor = "green";
                 btnstatus2 = 0;
             } else if (val == 2) {
                 document.getElementById('disp2').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>PRN already registered</span>";
+                document.getElementById('prn').style.borderColor = "red";
                 btnstatus2 = 1;
             }
         } else if (id == 2) {
             if (val == 0) {
                 document.getElementById('disp3').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>Roll Number not valid</span>";
+                document.getElementById('roll').style.borderColor = "red";
                 btnstatus3 = 1;
             } else if (val == 1) {
                 document.getElementById('disp3').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>Roll Number valid</span>";
+                document.getElementById('roll').style.borderColor = "green";
                 btnstatus3 = 0;
             } else if (val == 2) {
                 document.getElementById('disp3').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Roll Number already registered</span>";
+                document.getElementById('roll').style.borderColor = "red";
                 btnstatus3 = 1;
             }
         } else if (id == 3) {
             if (val == 0) {
                 document.getElementById('subid').style.borderColor = "green";
                 btnstatus4 = 0;
-
             } else if (val == 1) {
                 document.getElementById('subid').style.borderColor = "red";
                 btnstatus4 = 1;
@@ -114,17 +122,21 @@ function getValidations() {
         if (id == 3) {
             if (btnstatus4 == 0) {
                 document.getElementById('studbtn1').disabled = false;
+                document.getElementById('validations').innerHTML = '<br>';
             } else {
                 document.getElementById('studbtn1').disabled = true;
+                document.getElementById('validations').innerHTML = 'Validations Error';
             }
         } else {
             var index = document.getElementById('clas').selectedIndex;
-            if (index != 0 ) {
+            if (index != 0) {
                 if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
                     document.getElementById('studbtn1').disabled = false;
+                    document.getElementById('validations').innerHTML = '<br>';
                 }
             } else {
                 document.getElementById('studbtn1').disabled = true;
+                document.getElementById('validations').innerHTML = 'Validations Error';
             }
         }
     }
@@ -177,15 +189,20 @@ function getInf() {
         var val = request.responseText;
         if (val == 2) {
             document.getElementById('disp4').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Student found</span>";
+            document.getElementById('prn').style.borderColor = "green";
             btnstatus4 = 1;
+
         } else {
             document.getElementById('disp4').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>No Student with that PRN found</span>";
+            document.getElementById('prn').style.borderColor = "red";
             btnstatus4 = 0;
         }
         if (btnstatus4 == 1) {
             document.getElementById('studbtn2').disabled = false;
+            document.getElementById('validations').innerHTML = '<br>';
         } else {
             document.getElementById('studbtn2').disabled = true;
+            document.getElementById('validations').innerHTML = 'Validations Error';
         }
     }
 }
