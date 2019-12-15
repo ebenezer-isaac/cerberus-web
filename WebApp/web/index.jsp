@@ -8,15 +8,6 @@
 <html lang="en" >
     <head>
         <style>
-            .unselectable {
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
             .tooltipp .tooltiptext {
                 visibility: hidden;
                 background-color: #0d0d0d;
@@ -38,6 +29,12 @@
             {
                 height: 100%;
                 overflow-y: scroll;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
             }
 
             /* Hide scrollbar for Chrome, Safari and Opera */
@@ -49,7 +46,7 @@
             body {
                 -ms-overflow-style: none;
             }
-            
+
             .abt:hover
             {
                 text-decoration: none;
@@ -68,7 +65,6 @@
         <link rel="stylesheet" href="css/anim.css" type="text/css">
         <link rel="stylesheet" href="css/loader-index.css" type="text/css">
         <link rel="stylesheet" href="css/splash.css" type="text/css">
-        <link rel="stylesheet" href="css/background.css" type="text/css">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>

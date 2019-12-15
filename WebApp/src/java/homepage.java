@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import static cerberus.printer.nouser;
+import java.util.Date;
 
 public class homepage extends HttpServlet {
 
@@ -33,6 +34,11 @@ public class homepage extends HttpServlet {
             switch (access) {
                 case 1:
                     out.println("Home Page");
+                    Date date = new Date();
+
+                    System.out.println((date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+                    System.out.println(String.format("%02d", date.getHours()) + ":" + String.format("%02d", date.getMinutes()) + ":" + String.format("%02d", date.getSeconds()));
+
                     break;
                 case 0:
                     try {
@@ -46,7 +52,7 @@ public class homepage extends HttpServlet {
                         ResultSet rs = ps1.executeQuery();
                         int index = 1;
                         while (rs.next()) {
-                            out.print(rs.getString(1)+" "+rs.getString(2)+"<br>");
+                            out.print(rs.getString(1) + " " + rs.getString(2) + "<br>");
                             index++;
                         }
                         if (index == 1) {

@@ -125,7 +125,7 @@ function getValidations() {
                 document.getElementById('validations').innerHTML = '<br>';
             } else {
                 document.getElementById('studbtn1').disabled = true;
-                document.getElementById('validations').innerHTML = 'Validations Error';
+                document.getElementById('validations').innerHTML = 'Subject Code Already Registered';
             }
         } else {
             var index = document.getElementById('clas').selectedIndex;
@@ -133,6 +133,9 @@ function getValidations() {
                 if (btnstatus1 == 0 && btnstatus2 == 0 && btnstatus3 == 0) {
                     document.getElementById('studbtn1').disabled = false;
                     document.getElementById('validations').innerHTML = '<br>';
+                } else {
+                    document.getElementById('studbtn1').disabled = true;
+                    document.getElementById('validations').innerHTML = 'Validations Error';
                 }
             } else {
                 document.getElementById('studbtn1').disabled = true;

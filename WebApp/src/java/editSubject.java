@@ -71,7 +71,7 @@ public class editSubject extends HttpServlet {
                             error(e.getMessage());
                         }
                         out.print("</td></tr>"
-                                + "</table><br><button type='submit' id='studbtn1' style='width:200px;' class='btn btn-primary'>Submit</button>"
+                                + "</table><br><div id='validations' style='color:red;font-size:14px;'><br></div><br><button type='submit' id='studbtn1' style='width:200px;' class='btn btn-primary'>Submit</button>"
                                 + "</form>");
                     } else if (flow.equals("del")) {
                         try {

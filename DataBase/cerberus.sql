@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 13, 2019 at 06:38 PM
+-- Generation Time: Dec 15, 2019 at 11:41 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `batch` (
 --
 
 INSERT INTO `batch` (`batchID`, `name`) VALUES
+(0, 'Batch 0'),
 (1, 'Batch A'),
 (2, 'Batch B'),
 (3, 'Batch C');
@@ -95,7 +96,15 @@ CREATE TABLE IF NOT EXISTS `datedata` (
   `dateID` int(3) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   PRIMARY KEY (`dateID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `datedata`
+--
+
+INSERT INTO `datedata` (`dateID`, `date`) VALUES
+(1, '2019-12-14'),
+(2, '2019-12-15');
 
 -- --------------------------------------------------------
 
@@ -168,9 +177,12 @@ CREATE TABLE IF NOT EXISTS `facultyfingerprint` (
   `facultyID` int(3) NOT NULL,
   `templateID` tinyint(1) NOT NULL,
   `template` blob,
+  `dateID` int(3) NOT NULL,
+  `timeID` int(5) NOT NULL,
   PRIMARY KEY (`facultyID`,`templateID`),
-  KEY `facultyID_2` (`facultyID`,`templateID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `facultyID` (`facultyID`),
+  KEY `dateID` (`dateID`,`timeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 -- --------------------------------------------------------
 
@@ -191,6 +203,10 @@ CREATE TABLE IF NOT EXISTS `facultysubject` (
 --
 
 INSERT INTO `facultysubject` (`facultyID`, `subjectID`) VALUES
+(1, 'BCA1305'),
+(1, 'BCA1306'),
+(1, 'BCA1308'),
+(1, 'BCA1501'),
 (1, 'BCA1538');
 
 -- --------------------------------------------------------
@@ -239,36 +255,13 @@ INSERT INTO `lab` (`labID`, `name`) VALUES
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `logID` int(4) NOT NULL AUTO_INCREMENT,
-  `logTypeID` tinyint(1) NOT NULL,
   `dateID` int(3) NOT NULL,
   `timeID` int(5) NOT NULL,
   `comments` varchar(200) NOT NULL,
   PRIMARY KEY (`logID`),
   KEY `dateID` (`dateID`,`timeID`),
-  KEY `logTypeID` (`logTypeID`),
   KEY `timeID` (`timeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `logtype`
---
-
-DROP TABLE IF EXISTS `logtype`;
-CREATE TABLE IF NOT EXISTS `logtype` (
-  `logTypeID` tinyint(1) NOT NULL,
-  `logType` varchar(25) NOT NULL,
-  PRIMARY KEY (`logTypeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `logtype`
---
-
-INSERT INTO `logtype` (`logTypeID`, `logType`) VALUES
-(1, 'Fingerprint'),
-(2, 'Manual Attendance');
 
 -- --------------------------------------------------------
 
@@ -305,6 +298,13 @@ CREATE TABLE IF NOT EXISTS `rollcall` (
   KEY `classID` (`classID`),
   KEY `classID_2` (`classID`,`rollNo`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rollcall`
+--
+
+INSERT INTO `rollcall` (`classID`, `rollNo`, `PRN`) VALUES
+(3, '1', 2017033800104472);
 
 -- --------------------------------------------------------
 
@@ -346,6 +346,13 @@ CREATE TABLE IF NOT EXISTS `student` (
   PRIMARY KEY (`PRN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `student`
+--
+
+INSERT INTO `student` (`PRN`, `name`, `email`, `password`) VALUES
+(2017033800104472, 'Ebenezer', 'deadshotbenz@gmail.com', '6c45b32d2663c59d7d253ffedaf2299cc628bba1d46d09099f8deb919cd35c34');
+
 -- --------------------------------------------------------
 
 --
@@ -357,9 +364,20 @@ CREATE TABLE IF NOT EXISTS `studentfingerprint` (
   `PRN` bigint(16) NOT NULL,
   `templateID` tinyint(1) NOT NULL,
   `template` blob,
+  `dateID` int(3) NOT NULL,
+  `timeID` int(5) NOT NULL,
   PRIMARY KEY (`PRN`,`templateID`),
-  KEY `PRN` (`PRN`,`templateID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `PRN` (`PRN`),
+  KEY `dateID` (`dateID`,`timeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
+
+--
+-- Dumping data for table `studentfingerprint`
+--
+
+INSERT INTO `studentfingerprint` (`PRN`, `templateID`, `template`, `dateID`, `timeID`) VALUES
+(2017033800104472, 1, NULL, 2, 3),
+(2017033800104472, 2, NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -389,6 +407,16 @@ CREATE TABLE IF NOT EXISTS `studentsubject` (
   KEY `subjectID` (`subjectID`),
   KEY `PRN_2` (`PRN`,`subjectID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `studentsubject`
+--
+
+INSERT INTO `studentsubject` (`PRN`, `subjectID`, `batchID`) VALUES
+(2017033800104472, 'BCA1538', 0),
+(2017033800104472, 'BCA1539', 0),
+(2017033800104472, 'BCA1501', 1),
+(2017033800104472, 'BCA1530', 3);
 
 -- --------------------------------------------------------
 
@@ -449,6 +477,15 @@ CREATE TABLE IF NOT EXISTS `timedata` (
   PRIMARY KEY (`timeID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `timedata`
+--
+
+INSERT INTO `timedata` (`timeID`, `time`) VALUES
+(1, '15:50:20'),
+(2, '15:50:21'),
+(3, '13:14:00');
+
 -- --------------------------------------------------------
 
 --
@@ -471,7 +508,7 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   KEY `batchID` (`batchID`),
   KEY `weekID` (`weekID`),
   KEY `dayID` (`dayID`)
-) ENGINE=InnoDB AUTO_INCREMENT=226 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timetable`
@@ -488,14 +525,15 @@ INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`
 (8, 4, 3, 'BCA1208', 3, 1, 1),
 (18, 2, 1, 'BCA1301', 3, 1, 2),
 (19, 3, 1, 'BCA1307', 3, 1, 2),
-(21, 1, 1, 'BCA1308', 3, 1, 6),
+(21, 1, 1, 'BCA1308', 1, 1, 6),
 (22, 2, 3, 'BCA1208', 1, 1, 6),
 (23, 4, 3, 'BCA1301', 1, 1, 6),
 (24, 1, 3, 'BCA1501', 1, 1, 6),
 (26, 5, 3, 'BCA1301', 1, 1, 6),
 (27, 5, 1, 'BCA1106', 1, 1, 6),
 (28, 1, 2, 'BCA1304', 1, 1, 6),
-(29, 5, 2, 'BCA1105', 1, 1, 6);
+(29, 5, 2, 'BCA1105', 1, 1, 6),
+(226, 3, 1, 'BCA1501', 1, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -510,7 +548,7 @@ CREATE TABLE IF NOT EXISTS `week` (
   `year` int(4) NOT NULL,
   PRIMARY KEY (`weekID`),
   UNIQUE KEY `week` (`week`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `week`
@@ -555,7 +593,6 @@ ALTER TABLE `facultytimetable`
 -- Constraints for table `log`
 --
 ALTER TABLE `log`
-  ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`logTypeID`) REFERENCES `logtype` (`logTypeID`),
   ADD CONSTRAINT `log_ibfk_2` FOREIGN KEY (`timeID`) REFERENCES `timedata` (`timeID`),
   ADD CONSTRAINT `log_ibfk_3` FOREIGN KEY (`dateID`) REFERENCES `datedata` (`dateID`);
 

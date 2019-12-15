@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -407,6 +408,70 @@ public class AttFunctions {
             e.printStackTrace();
         }
         return weekID;
+    }
+
+    public static String getCurrDate() {
+        Date date = new Date();
+        return (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    }
+
+    public static int getDateID(String date) {
+        int dateID = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps = con.prepareStatement("SELECT dateID FROM datedata where date = ?");
+            ps.setString(1, date);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dateID = rs.getInt(1);
+            }
+            if (dateID == 0) {
+                PreparedStatement ps2 = con.prepareStatement("insert into datedata(`date`) values(?)");
+                ps2.setString(1, date);
+                ps2.executeUpdate();
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    dateID = rs.getInt(1);
+                }
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return dateID;
+    }
+
+    public static String getCurrTime() {
+        Date date = new Date();
+        return String.format("%02d", date.getHours()) + ":" + String.format("%02d", date.getMinutes()) + ":" + String.format("%02d", date.getSeconds());
+    }
+
+    public static int getTimeID(String time) {
+        int timeID = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps = con.prepareStatement("SELECT timeID FROM timedata where time = ?");
+            ps.setString(1, time);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                timeID = rs.getInt(1);
+            }
+            if (timeID == 0) {
+                PreparedStatement ps2 = con.prepareStatement("insert into timedata(`time`) values(?)");
+                ps2.setString(1, time);
+                ps2.executeUpdate();
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    timeID = rs.getInt(1);
+                }
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return timeID;
     }
 
     public static String[][] getSlots() {

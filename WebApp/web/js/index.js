@@ -38,5 +38,4 @@ function disableSelection(element) {
 }
 $(document).ready(function () {
     setContent();
-    document.getElementsByTagName('body').classList.add("unselectable");
 });

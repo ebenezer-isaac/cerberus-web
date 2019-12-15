@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.prefSubs;
 import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
@@ -37,49 +39,30 @@ public class viewTimetable extends HttpServlet {
     HttpServletResponse response;
     HttpServletRequest request;
     int no_of_class;
-    String mon, tue, wed, thu, fri, sat;
-    String wks;
-    String wke;
+    LocalDate wks, mon, tue, wed, thu, fri, sat, wke;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            Calendar cal = Calendar.getInstance();
-            Date d = new Date();
-            int year = d.getYear();
-            cal.set(Calendar.WEEK_OF_YEAR, week - 1);
-            cal.set(Calendar.YEAR, year);
-            cal.setFirstDayOfWeek(Calendar.SATURDAY);
-            cal.set(Calendar.DAY_OF_WEEK, 6);
-            mon = sdf.format(cal.getTime());
-            cal.set(Calendar.WEEK_OF_YEAR, week);
-            cal.set(Calendar.DAY_OF_WEEK, 0);
-            tue = sdf.format(cal.getTime());
-            cal.set(Calendar.DAY_OF_WEEK, 1);
-            wed = sdf.format(cal.getTime());
-            cal.set(Calendar.DAY_OF_WEEK, 2);
-            thu = sdf.format(cal.getTime());
-            cal.set(Calendar.DAY_OF_WEEK, 3);
-            fri = sdf.format(cal.getTime());
-            cal.set(Calendar.DAY_OF_WEEK, 4);
-            sat = sdf.format(cal.getTime());
-            HttpSession session = request.getSession();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+            HttpSession session = request.getSession(false);
             try {
                 week = Integer.parseInt(request.getParameter("week"));
             } catch (NumberFormatException e) {
+                week = getWeek(request);
             }
-            access = (int) session.getAttribute("access");
-            if (week == 0) {
-                week = (int) session.getAttribute("week");
-            }
+            access = getAccess(request);
+            wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week - 1);
+            mon = wks.plusDays(1);
+            tue = wks.plusDays(2);
+            wed = wks.plusDays(3);
+            thu = wks.plusDays(4);
+            fri = wks.plusDays(5);
+            sat = wks.plusDays(6);
+            wke = wks.plusDays(7);
             switch (access) {
                 case 1:
-                    LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                    LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                    wks = weekstart.toString();
-                    wke = endweek.toString();
                     out.print("<style>"
                             + ".bold {"
                             + " font-weight: bold;"
@@ -120,13 +103,13 @@ public class viewTimetable extends HttpServlet {
                             + "}}"
                             + "</script>");
                     heading = "<table width = 100%>"
-                            + "<tr><td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "')\" >"
+                            + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "')\" >"
                             + "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
                             + "<span>Previous</span>"
                             + "</button>"
                             + "</form></td>"
-                            + "<td width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
-                            + "<td width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
+                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
+                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
                             + "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
                     if (week > Integer.parseInt(session.getAttribute("week").toString())) {
                         heading += "disabled";
@@ -134,7 +117,7 @@ public class viewTimetable extends HttpServlet {
                     heading += "><span>Next</span>"
                             + "</button>"
                             + "</form></td>";
-                    heading += "</tr></table>";
+                    heading += "</tr></table>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -187,7 +170,7 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wke + "</b></p>", "hover", "studDetails", 0));
+            timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br></p>", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
             header += ("<th style='vertical-align : middle;text-align:center;'>End Time</th>");

@@ -30,8 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 public class editTimetable extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
+    LocalDate wks;
     int week = 0;
+    String date[] = new String[6];
     String subs[][];
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,8 +45,6 @@ public class editTimetable extends HttpServlet {
                     try {
                         week = Integer.parseInt(request.getParameter("week"));
                     } catch (NumberFormatException e) {
-                    }
-                    if (week == 0) {
                         week = currweek;
                     }
                     int labid = Integer.parseInt(request.getParameter("lab"));
@@ -87,6 +86,13 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).disabled=true;"
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
+                        wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week - 1);
+                        date[0] = wks.plusDays(1) + "";
+                        date[1] = wks.plusDays(2) + "";
+                        date[2] = wks.plusDays(3) + "";
+                        date[3] = wks.plusDays(4) + "";
+                        date[4] = wks.plusDays(5) + "";
+                        date[5] = wks.plusDays(6) + "";
                         String heading = "<table><tr><td width = 33% align='left'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
                                 + "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
                         if (week <= currweek) {
@@ -98,9 +104,7 @@ public class editTimetable extends HttpServlet {
                                 + "<td width = 33% align='center'>Current Week : " + currweek + "";
 
                         heading += "<p align='center'>Displaying Timetable of Week : " + week + "</p>";
-                        LocalDate weekstart = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(1)));
-                        LocalDate endweek = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week + 1).with(TemporalAdjusters.previousOrSame(DayOfWeek.of(6)));
-                        heading += "<p align='center'>LAB " + labid + " <br><b>" + weekstart + "</b> to <b>" + endweek + "</b></p>";
+                        heading += "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wks.plusDays(7) + "</b></p>";
                         heading += "</td><td width = 33% align='right'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
                                 + "<button type=\"submit\"  style='width: 100px;' id=\"next\" class=\"btn btn-primary\"";
                         if (week > currweek) {
@@ -146,27 +150,7 @@ public class editTimetable extends HttpServlet {
     }
 
     public String printTimetable(int labID) throws ParseException {
-        String date[] = new String[6];
-        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yy");
-        Calendar cal = Calendar.getInstance();
-        Date d = new Date();
-        int year = d.getYear();
-        cal.set(Calendar.WEEK_OF_YEAR, week - 1);
-        cal.set(Calendar.YEAR, year);
-        cal.setFirstDayOfWeek(Calendar.SATURDAY);
-        cal.set(Calendar.DAY_OF_WEEK, 6);
-        date[0] = dt.format(cal.getTime());
-        cal.set(Calendar.WEEK_OF_YEAR, week);
-        cal.set(Calendar.DAY_OF_WEEK, 0);
-        date[1] = dt.format(cal.getTime());
-        cal.set(Calendar.DAY_OF_WEEK, 1);
-        date[2] = dt.format(cal.getTime());
-        cal.set(Calendar.DAY_OF_WEEK, 2);
-        date[3] = dt.format(cal.getTime());
-        cal.set(Calendar.DAY_OF_WEEK, 3);
-        date[4] = dt.format(cal.getTime());
-        cal.set(Calendar.DAY_OF_WEEK, 4);
-        date[5] = dt.format(cal.getTime());
+
         String table = "";
         table += ("<tr align = center>");
         table += ("<th style=\"white-space:nowrap;\" >Start Time</th>");
