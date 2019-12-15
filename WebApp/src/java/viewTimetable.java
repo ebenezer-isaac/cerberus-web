@@ -45,7 +45,6 @@ public class viewTimetable extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
             HttpSession session = request.getSession(false);
             try {
                 week = Integer.parseInt(request.getParameter("week"));

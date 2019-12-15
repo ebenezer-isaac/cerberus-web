@@ -312,7 +312,7 @@ public class editTimetable extends HttpServlet {
                         lines[y] += ("</select><br>");
                         lines[y] += ("<select class=\"editSelectTimeTable\" name = 'batch" + y + "" + j + "' id = 'batch" + y + "" + j + "' disabled class='not-allowed'>");
                         lines[y] += ("<option " + disabled + " name='-' value='-' selected>No Batch</option>");
-                        PreparedStatement ps11 = con.prepareStatement("Select name from batch");
+                        PreparedStatement ps11 = con.prepareStatement("Select name from batch where batchid>0");
                         ResultSet rs3 = ps11.executeQuery();
                         int index = 1;
                         while (rs3.next()) {

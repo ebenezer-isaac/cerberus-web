@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 15, 2019 at 11:41 AM
+-- Generation Time: Dec 15, 2019 at 07:23 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   KEY `PRN` (`PRN`),
   KEY `scheduleID` (`scheduleID`) USING BTREE,
   KEY `timeID` (`timeID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -304,7 +304,8 @@ CREATE TABLE IF NOT EXISTS `rollcall` (
 --
 
 INSERT INTO `rollcall` (`classID`, `rollNo`, `PRN`) VALUES
-(3, '1', 2017033800104472);
+(3, '1', 2017033800104472),
+(3, '3', 2017033800104747);
 
 -- --------------------------------------------------------
 
@@ -351,7 +352,8 @@ CREATE TABLE IF NOT EXISTS `student` (
 --
 
 INSERT INTO `student` (`PRN`, `name`, `email`, `password`) VALUES
-(2017033800104472, 'Ebenezer', 'deadshotbenz@gmail.com', '6c45b32d2663c59d7d253ffedaf2299cc628bba1d46d09099f8deb919cd35c34');
+(2017033800104472, 'Ebenezer', 'deadshotbenz@gmail.com', '6c45b32d2663c59d7d253ffedaf2299cc628bba1d46d09099f8deb919cd35c34'),
+(2017033800104747, 'Vraj Kotwala', 'deadshotben@gmail.com', 'f3abf43e4590b1f822f18a51667179d92c0e6c9a6aa358ad67ee5b9ac5905bfd');
 
 -- --------------------------------------------------------
 
@@ -376,8 +378,10 @@ CREATE TABLE IF NOT EXISTS `studentfingerprint` (
 --
 
 INSERT INTO `studentfingerprint` (`PRN`, `templateID`, `template`, `dateID`, `timeID`) VALUES
-(2017033800104472, 1, NULL, 2, 3),
-(2017033800104472, 2, NULL, 1, 1);
+(2017033800104472, 1, 0x041b66006922b830c9f60fffbd02b7a3c4a63e00dedab7ac0987bed901ebb6a189d8fae8e98ab8b509677ed1368bb6a10519c1e82ac3b42ac1b97b07222bb5a181c739e83aabb5a5c2973be801f3b8bf4949d0c73a2bb8baca7932c1353389c8852bc4bfc523b8cd8579ba981d3c89d2025bfee79db4b6ef8978f620ea0cb60e454974e8e1c4b86a46bd09e73225b870899d4befe51d860dc22bfeef4532b72d04f647ffbacab42c81f93bef2e7b8955c2fbc1fd3233b7b059da72d172ea88b8b04bfec751d2b52e42f73bff766ab52cc2f901ef820ab52d84fd01ef0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000062232143414934311274546a127351208523152514564783563116322136153385593543a46317f351a6371844f933468101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d585, 2, 0),
+(2017033800104472, 2, NULL, 1, 1),
+(2017033800104747, 1, NULL, 2, 5),
+(2017033800104747, 2, NULL, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -387,7 +391,7 @@ INSERT INTO `studentfingerprint` (`PRN`, `templateID`, `template`, `dateID`, `ti
 
 DROP TABLE IF EXISTS `studentphoto`;
 CREATE TABLE IF NOT EXISTS `studentphoto` (
-  `PRN` varchar(16) NOT NULL,
+  `PRN` bigint(16) NOT NULL,
   `photo` blob
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -413,9 +417,13 @@ CREATE TABLE IF NOT EXISTS `studentsubject` (
 --
 
 INSERT INTO `studentsubject` (`PRN`, `subjectID`, `batchID`) VALUES
-(2017033800104472, 'BCA1538', 0),
 (2017033800104472, 'BCA1539', 0),
+(2017033800104747, 'BCA1501', 0),
+(2017033800104747, 'BCA1530', 0),
+(2017033800104747, 'BCA1538', 0),
+(2017033800104747, 'BCA1539', 0),
 (2017033800104472, 'BCA1501', 1),
+(2017033800104472, 'BCA1538', 1),
 (2017033800104472, 'BCA1530', 3);
 
 -- --------------------------------------------------------
@@ -475,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `timedata` (
   `timeID` int(5) NOT NULL AUTO_INCREMENT,
   `time` time NOT NULL,
   PRIMARY KEY (`timeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timedata`
@@ -484,7 +492,10 @@ CREATE TABLE IF NOT EXISTS `timedata` (
 INSERT INTO `timedata` (`timeID`, `time`) VALUES
 (1, '15:50:20'),
 (2, '15:50:21'),
-(3, '13:14:00');
+(3, '13:14:00'),
+(4, '10:30:15'),
+(5, '18:08:39'),
+(6, '18:22:42');
 
 -- --------------------------------------------------------
 
@@ -508,7 +519,7 @@ CREATE TABLE IF NOT EXISTS `timetable` (
   KEY `batchID` (`batchID`),
   KEY `weekID` (`weekID`),
   KEY `dayID` (`dayID`)
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=230 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `timetable`
@@ -533,7 +544,10 @@ INSERT INTO `timetable` (`scheduleID`, `slotID`, `labID`, `subjectID`, `batchID`
 (27, 5, 1, 'BCA1106', 1, 1, 6),
 (28, 1, 2, 'BCA1304', 1, 1, 6),
 (29, 5, 2, 'BCA1105', 1, 1, 6),
-(226, 3, 1, 'BCA1501', 1, 1, 6);
+(226, 3, 1, 'BCA1501', 1, 1, 6),
+(227, 1, 1, 'BCA1538', 2, 2, 1),
+(228, 2, 1, 'BCA1538', 3, 2, 1),
+(229, 3, 1, 'BCA1538', 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -548,14 +562,15 @@ CREATE TABLE IF NOT EXISTS `week` (
   `year` int(4) NOT NULL,
   PRIMARY KEY (`weekID`),
   UNIQUE KEY `week` (`week`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `week`
 --
 
 INSERT INTO `week` (`weekID`, `week`, `year`) VALUES
-(1, 50, 2019);
+(1, 50, 2019),
+(2, 51, 2019);
 
 --
 -- Constraints for dumped tables

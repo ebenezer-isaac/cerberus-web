@@ -82,6 +82,13 @@ public class attendance extends HttpServlet {
                             out.print("</tr>");
                         }
                         out.print(tableend(null, 0));
+                        out.print("<br><fieldset style='border-radius: 4px; border: solid 1px black;'><br><table width = 100%><tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Select Subject : </td>"
+                                + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>"
+                                + "<select name = 'subject' id = 'subject' style='padding: 5px 109px 5px 8px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' onchange=\"if(this.selectedIndex==0){document.getElementById('newFacTime-btn').disabled = true;}else{document.getElementById('newFacTime-btn').disabled = false;}\"><option value= '0'>Select Subject</option>");
+                        for (String sub[] : subs) {
+                            out.print("<option value= '" + sub[0] + "'>" + sub[0] + " " + sub[1] + "</option>");
+                        }
+                        out.print("</select></td><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><button disabled onclick=\"var e = document.getElementById('subject');setContent('/Cerberus/newFacultyTimetable?subjectid='+e.options[e.selectedIndex].value);\" style='width:200px;' id='newFacTime-btn' class='btn btn-primary'>Edit Attendance</button></td></tr><tr><td></td><td></td><td><div id='validations' style='color:red;font-size:14px;'>*Or to Conduct New Lab Session</div></td></tr></table></fieldset><br>");
                         int index = 0;
                         sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {

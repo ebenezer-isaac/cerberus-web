@@ -1,4 +1,8 @@
 
+import static cerberus.AttFunctions.getCurrDate;
+import static cerberus.AttFunctions.getCurrTime;
+import static cerberus.AttFunctions.getDateID;
+import static cerberus.AttFunctions.getTimeID;
 import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -77,8 +81,12 @@ public class saveStudDetails extends HttpServlet {
                                 if (et1 != null) {
                                     int tt1 = Integer.parseInt(request.getParameter("t1" + index));
                                     if (tt1 != 1) {
-                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null where prn = ? and templateID = 1");
+                                        int dateID = getDateID(getCurrDate());
+                                        int timeID = getTimeID(getCurrTime());
+                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, SET dateID = ?, SET timeID = ? where prn = ? and templateID = 1");
                                         pps.setString(1, tprn);
+                                        pps.setInt(2, dateID);
+                                        pps.setInt(3, timeID);
                                         pps.executeUpdate();
                                     }
                                 }
@@ -86,8 +94,12 @@ public class saveStudDetails extends HttpServlet {
                                 if (et2 != null) {
                                     int tt2 = Integer.parseInt(request.getParameter("t2" + index));
                                     if (tt2 != 1) {
-                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null where prn = ? and templateID = 2");
+                                        int dateID = getDateID(getCurrDate());
+                                        int timeID = getTimeID(getCurrTime());
+                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, SET dateID = ?, SET timeID = ? where prn = ? and templateID = 2");
                                         pps.setString(1, tprn);
+                                        pps.setInt(2, dateID);
+                                        pps.setInt(3, timeID);
                                         pps.executeUpdate();
                                     }
                                 }

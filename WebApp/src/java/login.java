@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpSession;
 
 public class login extends HttpServlet {
@@ -22,35 +23,41 @@ public class login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String email = request.getParameter("email").toLowerCase();
-            String rawpass = request.getParameter("pwd");
-            String id = "";
-            String name = "";
-            if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || rawpass.equals("admin")) {
-                out.print("2");
+            HttpSession session = request.getSession(true);
+            try {
+                session.getAttribute("week");
+            } catch (Exception e) {
+                java.util.Date date = new java.util.Date();
+                SimpleDateFormat ft = new SimpleDateFormat("w");
+                int week = Integer.parseInt(ft.format(date));
+                session.setAttribute("week", week);
+                request.getRequestDispatcher("newTimetable?week=" + week + "&pwd=cerberus@123").include(request, response);
+            }
+            int trial = 0;
+            try {
+                trial = Integer.parseInt(session.getAttribute("count").toString());
+                trial++;
+                session.setAttribute("count", trial);
+            } catch (Exception e) {
+                session.setAttribute("count", 0);
+            }
+            if (trial > 5) {
+                out.print("3");
             } else {
-                String pass = AttFunctions.hashIt(rawpass);
-                int access = 0;
-                String corrpass = "";
-                try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                    PreparedStatement ps = con.prepareStatement("select prn,password,name from student where email=?");
-                    ps.setString(1, email);
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        id = rs.getString(1);
-                        corrpass = rs.getString(2);
-                        name = rs.getString(3);
-                    }
-                    con.close();
-                } catch (ClassNotFoundException | SQLException e) {
-                }
-                if (corrpass.equals("")) {
+                String email = request.getParameter("email").toLowerCase();
+                String rawpass = request.getParameter("pwd");
+                String id = "";
+                String name = "";
+                if (AttFunctions.trimSQLInjection(rawpass).equals("'''='") || rawpass.equals("admin")) {
+                    out.print("2");
+                } else {
+                    String pass = AttFunctions.hashIt(rawpass);
+                    int access = 0;
+                    String corrpass = "";
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("select facultyID,password,name from faculty where email=?");
+                        PreparedStatement ps = con.prepareStatement("select prn,password,name from student where email=?");
                         ps.setString(1, email);
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
@@ -58,37 +65,41 @@ public class login extends HttpServlet {
                             corrpass = rs.getString(2);
                             name = rs.getString(3);
                         }
-                        access = 1;
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                     }
-                }
-                if (corrpass.equals(pass)) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("email", email);
-                    session.setAttribute("access", access);
-                    session.setAttribute("user", id);
-                    session.setAttribute("name", name);
-                    session.setAttribute("pop", 0);
-                    out.print("1");
-                } else {
-                    HttpSession session = request.getSession();
-                    int trial = 1;
-                    try {
-                        trial = Integer.parseInt(session.getAttribute("count").toString());
-                        trial++;
-                    } catch (NumberFormatException e) {
-                         session.setAttribute("count", 0);
+                    if (corrpass.equals("")) {
+                        try {
+                            Class.forName("com.mysql.cj.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            PreparedStatement ps = con.prepareStatement("select facultyID,password,name from faculty where email=?");
+                            ps.setString(1, email);
+                            ResultSet rs = ps.executeQuery();
+                            while (rs.next()) {
+                                id = rs.getString(1);
+                                corrpass = rs.getString(2);
+                                name = rs.getString(3);
+                            }
+                            access = 1;
+                            con.close();
+                        } catch (ClassNotFoundException | SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    session.setAttribute("count", "" + trial);
-                    if (trial > 5) {
-                        out.print("3");
+                    if (corrpass.equals(pass)) {
+                        session.setAttribute("email", email);
+                        session.setAttribute("access", access);
+                        session.setAttribute("user", id);
+                        session.setAttribute("name", name);
+                        session.setAttribute("pop", 0);
+                        out.print("1");
                     } else {
                         out.print("0");
                     }
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             messages m = new messages();
             m.error(request, response, e.getMessage(), "index.jsp");
         }

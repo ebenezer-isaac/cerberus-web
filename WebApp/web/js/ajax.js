@@ -1,5 +1,39 @@
 var mains = document.getElementById('main');
+var url_main;
+
 function setContent(url) {
+    url_main = url;
+    if (window.XMLHttpRequest) {
+        request = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+        request = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    try {
+        request.onreadystatechange = getInfoSession;
+        request.open("GET", "/Cerberus/ajaxCheckSession", true);
+        request.send();
+    } catch (e) {
+        alert("Unable to connect to server");
+    }
+
+}
+
+function getInfoSession() {
+    if (request.readyState == 4) {
+        var val = request.responseText;
+        if (val == 2) {
+            window.location.replace("/Cerberus/ajaxContent?url=homepage");
+        } else {
+            setContent_main(url_main);
+        }
+    }
+    $("#main").html("");
+    $("#main").html(val);
+    unfade(mains);
+}
+
+
+function setContent_main(url) {
     temp = url.replace('/Cerberus/', '/Cerberus/ajaxContent?url=');
     window.history.pushState({}, 'Previous', temp);
     if (his[his.length - 1] != url)
@@ -19,8 +53,8 @@ function setContent(url) {
     } catch (e) {
         alert("Unable to connect to server");
     }
-
 }
+
 function getInfo() {
     if (request.readyState == 4) {
         var val = request.responseText;
@@ -29,6 +63,7 @@ function getInfo() {
         unfade(mains);
     }
 }
+
 var btnstatus1 = 1;
 var btnstatus2 = 1;
 var btnstatus3 = 1;

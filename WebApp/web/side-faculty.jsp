@@ -130,8 +130,7 @@
                         %>
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header" align='center'>Management : </h6>
-                        <a class="dropdown-item" href="#">404 Page</a>
-                        <a class="dropdown-item" href="#">Blank Page</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/newFacultyTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Attendance</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

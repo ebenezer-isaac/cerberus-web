@@ -129,3 +129,24 @@ FROM student INNER JOIN studentsubject ON student.PRN = studentsubject.PRN INNER
 SELECT * FROM `timetable` WHERE subjectID ='BCA1305' and batchID=3 and weekID = 7 or subjectID ='BCA1538' and batchID=1 and weekID = 7 order by field(dayID,'mon','tue','wed','thu','fri','sat')
 
 select subject.subjectID, subject.Abbreviation, (select name from batch where batchID = studentsubject.batchID) from studentsubject inner join subject on subject.subjectID=studentsubject.subjectID where PRN = '201703380010'
+
+select 
+	concat(studentfingerprint.PRN,'-',studentfingerprint.templateID) as template_name, 
+	(select datedata.date from datedata where studentfingerprint.dateID = datedata.dateID) as Date , 
+	(select timedata.time from timedata where studentfingerprint.timeID = timedata.timeID) as Time, 
+	case 
+		when studentfingerprint.template is null then '0' 
+		when studentfingerprint.template is not null then '1' 
+	end as status 
+from studentfingerprint 
+union all 
+select 
+	concat(facultyfingerprint.facultyID,'-',facultyfingerprint.templateID) as template_name, 
+    (select datedata.date from datedata where facultyfingerprint.dateID = datedata.dateID) as Date , 
+    (select timedata.time from timedata where facultyfingerprint.timeID = timedata.timeID) as Time, 
+	case 
+		when facultyfingerprint.template is null then '0' 
+		when facultyfingerprint.template is not null then '1' 
+	end as status 
+from facultyfingerprint 
+ORDER BY template_name;

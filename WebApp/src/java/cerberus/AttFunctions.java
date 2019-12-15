@@ -20,6 +20,10 @@ import java.util.Date;
 import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class AttFunctions {
 
@@ -56,6 +60,19 @@ public class AttFunctions {
                 }
             default:
                 return 0;
+        }
+    }
+
+    public boolean checkInternetConnection() {
+        try {
+            URL url = new URL("http://www.google.com");
+            URLConnection connection = url.openConnection();
+            connection.connect();
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
         }
     }
 
@@ -337,6 +354,11 @@ public class AttFunctions {
             access = (int) session.getAttribute("access");
         } catch (Exception e) {
             createSession(request);
+            java.util.Date date = new java.util.Date();
+            SimpleDateFormat ft = new SimpleDateFormat("w");
+            int week = Integer.parseInt(ft.format(date));
+            session.setAttribute("week", week);
+            session.setAttribute("access", 2);
             access = 2;
         }
         return access;
