@@ -20,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 public class rapidAttendance extends HttpServlet {
 
+    private static final long serialVersionUID = -2432453047898760987L;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -69,7 +71,7 @@ public class rapidAttendance extends HttpServlet {
                                     out.print("</td></tr>");
                                     line++;
                                 }
-                                out.print(tableend("No of students : " + line + "<br><br>"
+                                out.print(tableend("No of students : " + (line-1) + "<br><br>"
                                         + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                         + "<input type='text' name='scheduleid' value='" + scheduleid + "' hidden><input type='text' name='line' value='" + line + "' hidden>"
                                         + "</form>", 1));

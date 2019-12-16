@@ -175,7 +175,7 @@ public class AttFunctions {
                 labs = rs.getInt(1);
             }
             if (labs > 0) {
-                ps = con.prepareStatement("select count(attendance.scheduleID) from timetable inner join attendance on attendance.scheduleID = timetable.scheduleID inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and batchid = ? and attendance.PRN = ?");
+                ps = con.prepareStatement("select count(attendance.attendanceID) from timetable inner join attendance on attendance.scheduleID = timetable.scheduleID inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and batchid = ? and attendance.PRN = ?");
                 ps.setString(1, subid);
                 ps.setString(2, batch);
                 ps.setString(3, prn);
@@ -188,8 +188,9 @@ public class AttFunctions {
                 System.out.println("prn : " + prn);
                 System.out.println("presents : " + presents);
                 System.out.println("labs : " + labs);
-
-                return ((presents / labs) * 100);
+                float perc = ((float)(presents) / (float)labs) * 100;
+                System.out.println("perc : " + perc);
+                return (perc);
             } else {
                 return 0;
             }
