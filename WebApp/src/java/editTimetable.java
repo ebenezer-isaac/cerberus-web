@@ -47,10 +47,16 @@ public class editTimetable extends HttpServlet {
                     } catch (NumberFormatException e) {
                         week = currweek;
                     }
-                    int labid = Integer.parseInt(request.getParameter("lab"));
+                    int labid = 0;
+                    try {
+                        labid = Integer.parseInt(request.getParameter("lab"));
+                    } catch (NumberFormatException e) {
+                        labid = 1;
+                    }
                     if (labid >= 4 || labid <= 0) {
                         labid = 1;
                     }
+
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
