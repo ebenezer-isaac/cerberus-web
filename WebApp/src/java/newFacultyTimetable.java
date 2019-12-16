@@ -32,8 +32,8 @@ public class newFacultyTimetable extends HttpServlet {
                 out.print("<tr><td align='center'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[5] + "</td></tr></table>"
                         + "<br><font style=\"font-size: 20px;\"><b> Warning - The following changes will be made:</b></font><br><br>"
                         + "<p> <font style=\"font-size: 15.5px;\"> 1. The selected Lab will be marked as conducted. </font> </p>"
-                        + "<p> <font style=\"font-size: 15.5px;\"> 2. Any attendance marked via the fingerprint system will be void. </font> </p>"
-                        + "<p> <font style=\"font-size: 15.5px;\"> 3. Attendance marked by will be overwritten with express authority. </font> </p>"
+                        + "<p> <font style=\"font-size: 15.5px;\"> 2. Any attendance marked via the fingerprint system meanwhile, will be void. </font> </p>"
+                        + "<p> <font style=\"font-size: 15.5px;\"> 3. Attendance marked by you will be overwritten with express authority. </font> </p>"
                         + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                         + "<br></fieldset>");
                 out.print("<br><div id = 'butt' style='display:none;'><form action='saveNewAttendance' method='post'>"

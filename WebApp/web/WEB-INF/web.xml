@@ -201,7 +201,7 @@
         <servlet-class>newFacultyTimetable</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>saveNewFacultyTimetable</servlet-name>
+        <servlet-name>saveNewAttendance</servlet-name>
         <servlet-class>saveNewAttendance</servlet-class>
     </servlet>
     <servlet>
@@ -211,6 +211,10 @@
     <servlet>
         <servlet-name>ajaxSchedules</servlet-name>
         <servlet-class>ajaxSchedules</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>rapidAttendance</servlet-name>
+        <servlet-class>rapidAttendance</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -413,8 +417,8 @@
         <url-pattern>/newFacultyTimetable</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>saveNewFacultyTimetable</servlet-name>
-        <url-pattern>/saveNewFacultyTimetable</url-pattern>
+        <servlet-name>saveNewAttendance</servlet-name>
+        <url-pattern>/saveNewAttendance</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>editNewAttendance</servlet-name>
@@ -423,6 +427,10 @@
     <servlet-mapping>
         <servlet-name>ajaxSchedules</servlet-name>
         <url-pattern>/ajaxSchedules</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>rapidAttendance</servlet-name>
+        <url-pattern>/rapidAttendance</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
