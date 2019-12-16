@@ -353,12 +353,12 @@ public class AttFunctions {
         try {
             access = (int) session.getAttribute("access");
         } catch (Exception e) {
-            createSession(request);
+            HttpSession sess = request.getSession(true);
             java.util.Date date = new java.util.Date();
             SimpleDateFormat ft = new SimpleDateFormat("w");
             int week = Integer.parseInt(ft.format(date));
-            session.setAttribute("week", week);
-            session.setAttribute("access", 2);
+            sess.setAttribute("week", week);
+            sess.setAttribute("access", 2);
             access = 2;
         }
         return access;
