@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
@@ -23,21 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author ebene
- */
 public class rapidAttendance extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -55,14 +37,15 @@ public class rapidAttendance extends HttpServlet {
                             ResultSet rs = ps.executeQuery();
                             if (rs.next()) {
                                 String schedule[] = get_schedule_det(rs.getInt(1));
+                                out.print("<form action='saveRapidAttendance' method='post'>");
                                 String head = "";
-                               head+=("<table align='center' width = 30%><tr><td align='center' width = 14%><b>Date</b></td><td align='center' width = 2%> : </td><td align='center' width = 14%>" + schedule[0] + "</td></tr>");
-                               head+=("<tr><td align='center'><b>Start Time</b></td><td align='center'> : </td><td align='center'>" + schedule[1] + "</td></tr>");
-                               head+=("<tr><td align='center'><b>End Time</b></td><td align='center'> : </td><td align='center'>" + schedule[2] + "</td></tr>");
-                               head+=("<tr><td align='center'><b>Lab</b></td><td align='center'> : </td><td align='center'>" + schedule[3] + "</td></tr>");
-                               head+=("<tr><td align='center'><b>Subject ID</b></td><td align='center'> : </td><td align='center'>" + schedule[4] + "</td></tr>");
-                               head+=("<tr><td align='center'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[5] + "</td></tr></table>");
-                                out.print(tablestart(""+head, "hover", "studDetails", 0));
+                                head += ("<table align='center' width = 30%><tr><td align='center' width = 14%><b>Date</b></td><td align='center' width = 2%> : </td><td align='center' width = 14%>" + schedule[0] + "</td></tr>");
+                                head += ("<tr><td align='center'><b>Start Time</b></td><td align='center'> : </td><td align='center'>" + schedule[1] + "</td></tr>");
+                                head += ("<tr><td align='center'><b>End Time</b></td><td align='center'> : </td><td align='center'>" + schedule[2] + "</td></tr>");
+                                head += ("<tr><td align='center'><b>Lab</b></td><td align='center'> : </td><td align='center'>" + schedule[3] + "</td></tr>");
+                                head += ("<tr><td align='center'><b>Subject ID</b></td><td align='center'> : </td><td align='center'>" + schedule[4] + "</td></tr>");
+                                head += ("<tr><td align='center'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[5] + "</td></tr></table>");
+                                out.print(tablestart("" + head, "hover", "studDetails", 0));
                                 String header = "<tr>";
                                 header += "<th>Roll No</th>";
                                 header += "<th>Name</th>";
@@ -81,12 +64,15 @@ public class rapidAttendance extends HttpServlet {
                                     if (rs1.next()) {
                                         out.print("<input type='checkbox' value='1' name='att" + line + "' checked >");
                                     } else {
-                                        out.print("<input type='checkbox' value='0' name='att" + line + "' >");
+                                        out.print("<input type='checkbox' value='1' name='att" + line + "' >");
                                     }
                                     out.print("</td></tr>");
                                     line++;
                                 }
-                                out.print(tableend(null, 1));
+                                out.print(tableend("No of students : " + line + "<br><br>"
+                                        + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
+                                        + "<input type='text' name='scheduleid' value='" + scheduleid + "' hidden><input type='text' name='line' value='" + line + "' hidden>"
+                                        + "</form>", 1));
                             } else {
                                 out.print("No students belonging to batch have opted for this subject");
                             }
@@ -110,43 +96,15 @@ public class rapidAttendance extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

@@ -104,7 +104,7 @@ public class attendance extends HttpServlet {
                         index = 0;
                         sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN studentsubject.batchID END) as '" + subs[index][1].replace("-", "_") + "'";
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(studentsubject.batchID,',',studentsubject.subjectID) END) as '" + subs[index][1].replace("-", "_") + "'";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -140,11 +140,12 @@ public class attendance extends HttpServlet {
                                 out.print("<td>" + rs.getString(2) + "</td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
                                 for (int i = 4; i <= cols; i++) {
-                                    if (rs.getString(i).equals("0")) {
+                                    String result[] = rs.getString(i).split(",");
+                                    if (result[0].equals("0")) {
                                         out.print("<td>NA</td>");
                                     } else {
-                                        out.print("<td><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + rs.getString(i) + "');\" style='display:block;text-decoration:none;'>");
-                                        out.print(String.format("%.02f", AttFunctions.calPercentage(prn, rs.getString(i))) + "%");
+                                        out.print("<td><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
+                                        out.print(String.format("%.02f", AttFunctions.calPercentage(prn, result[1],result[0])) + "%");
                                         out.print("</a></td>");
                                     }
                                 }

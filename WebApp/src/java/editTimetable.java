@@ -92,13 +92,13 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).disabled=true;"
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
-                        wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week - 1);
-                        date[0] = wks.plusDays(1) + "";
-                        date[1] = wks.plusDays(2) + "";
-                        date[2] = wks.plusDays(3) + "";
-                        date[3] = wks.plusDays(4) + "";
-                        date[4] = wks.plusDays(5) + "";
-                        date[5] = wks.plusDays(6) + "";
+                        wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week);
+                        date[0] = wks.plusDays(0) + "";
+                        date[1] = wks.plusDays(1) + "";
+                        date[2] = wks.plusDays(2) + "";
+                        date[3] = wks.plusDays(3) + "";
+                        date[4] = wks.plusDays(4) + "";
+                        date[5] = wks.plusDays(5) + "";
                         String heading = "<table><tr><td width = 33% align='left'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
                                 + "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
                         if (week <= currweek) {
@@ -215,7 +215,7 @@ public class editTimetable extends HttpServlet {
                 lines[rs.getInt(1) - 1] += ("<th>" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "</th>");
                 lines[rs.getInt(1) - 1] += ("<th>" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "</th>");
                 for (int j = 1; j <= 6; j++) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
                     Date now = new Date();
@@ -297,7 +297,7 @@ public class editTimetable extends HttpServlet {
                     lines[y] += ("<th>" + String.format("%02d", Integer.parseInt(slots[y][0].substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(slots[y][0].substring(3, 5))) + "</th>");
                     lines[y] += ("<th>" + String.format("%02d", Integer.parseInt(slots[y][1].substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(slots[y][1].substring(3, 5))) + "</th>");
                     for (int j = 1; j <= 6; j++) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy hh:mm:ss");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                         String dateInString = date[j - 1] + " " + slots[y][0] + ":00";
                         Date datetime = sdf.parse(dateInString);
                         Date now = new Date();

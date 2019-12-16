@@ -108,7 +108,7 @@ public class AttFunctions {
             while (rs.next()) {
                 int index = 0;
                 while (index < 6) {
-                    schedule[index] = rs.getString(index+1);
+                    schedule[index] = rs.getString(index + 1);
                     index = index + 1;
                 }
             }
@@ -160,20 +160,39 @@ public class AttFunctions {
         return salt.toString();
     }
 
-    public static float calPercentage(String prn, String subid) {
+    public static float calPercentage(String prn, String subid, String batch) {
         prn = prn.trim();
         subid = subid.trim();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("select ((count(attendance.scheduleID)*100)/count(facultytimetable.scheduleID)) from timetable inner join attendance on attendance.scheduleID = timetable.scheduleID inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and attendance.PRN = ?");
+            PreparedStatement ps = con.prepareStatement("select count(timetable.scheduleID) from timetable inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and batchid = ?");
             ps.setString(1, subid);
-            ps.setString(2, prn);
+            ps.setString(2, batch);
+            int labs = 0;
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getFloat(1);
+                labs = rs.getInt(1);
             }
-            con.close();
+            if (labs > 0) {
+                ps = con.prepareStatement("select count(attendance.scheduleID) from timetable inner join attendance on attendance.scheduleID = timetable.scheduleID inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and batchid = ? and attendance.PRN = ?");
+                ps.setString(1, subid);
+                ps.setString(2, batch);
+                ps.setString(3, prn);
+                rs = ps.executeQuery();
+                int presents = 0;
+                while (rs.next()) {
+                    presents = rs.getInt(1);
+                }
+                con.close();
+                System.out.println("prn : " + prn);
+                System.out.println("presents : " + presents);
+                System.out.println("labs : " + labs);
+
+                return ((presents / labs) * 100);
+            } else {
+                return 0;
+            }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
