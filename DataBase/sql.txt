@@ -150,3 +150,12 @@ select
 	end as status 
 from facultyfingerprint 
 ORDER BY template_name;
+
+
+select (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as Date, 
+(select slot.startTime from slot where slot.slotID = timetable.slotID) as startTime,
+(select slot.endTime from slot where slot.slotID = timetable.slotID) as endTime, 
+(select lab.name from lab where lab.labID = timetable.labID) as Lab, 
+(select subject.subjectID from subject where subject.subjectID = timetable.subjectID) as SubjectID, 
+(select subject.subject from subject where subject.subjectID = timetable.subjectID) as Subject 
+from timetable

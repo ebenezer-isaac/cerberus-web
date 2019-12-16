@@ -76,7 +76,6 @@
                     try {
                         access = Integer.parseInt(session.getAttribute("access").toString());
                         if (access == 0 || access == 1) {
-                            System.out.println("hellos");
                             RequestDispatcher rd = request.getRequestDispatcher("ajaxContent?url=homepage");
                             rd.forward(request, response);
                         }

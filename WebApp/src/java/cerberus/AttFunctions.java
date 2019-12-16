@@ -91,6 +91,34 @@ public class AttFunctions {
         return st;
     }
 
+    public static String[] get_schedule_det(int scheduleID) {
+        String schedule[] = new String[6];
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps = con.prepareStatement("select (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as Date, \n"
+                    + "(select slot.startTime from slot where slot.slotID = timetable.slotID) as startTime,\n"
+                    + "(select slot.endTime from slot where slot.slotID = timetable.slotID) as endTime, \n"
+                    + "(select lab.name from lab where lab.labID = timetable.labID) as Lab, \n"
+                    + "(select subject.subjectID from subject where subject.subjectID = timetable.subjectID) as SubjectID, \n"
+                    + "(select subject.subject from subject where subject.subjectID = timetable.subjectID) as Subject \n"
+                    + "from timetable where scheduleID = ?");
+            ps.setInt(1, scheduleID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int index = 0;
+                while (index < 6) {
+                    schedule[index] = rs.getString(index+1);
+                    index = index + 1;
+                }
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return schedule;
+    }
+
     public static String hashIt(String raw) throws NoSuchAlgorithmException {
         raw = raw + "msubca";
         MessageDigest md = MessageDigest.getInstance("SHA-256");
