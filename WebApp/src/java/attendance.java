@@ -49,6 +49,9 @@ public class attendance extends HttpServlet {
                         }
                         int no_of_batch = no_of_batch();
                         int no_of_sub = subs.length - 1;
+                        out.print("<form>"
+                                + "<input type='number' min='0' max='100'>"
+                                + "</form><br>");
                         out.print(tablestart(cla, "hover", "studDetails", 0));
                         String header = "<th>Subject Code</th><th>Subject Abbr</th>";
                         String sql = "select ";
@@ -88,7 +91,7 @@ public class attendance extends HttpServlet {
                         for (String sub[] : subs) {
                             out.print("<option value= '" + sub[0] + "'>" + sub[0] + " " + sub[1] + "</option>");
                         }
-                        
+
                         out.print("</select>");
                         out.print("<select onchange = \"if(this.selectedIndex==0){document.getElementById('subject').selectedIndex=0; this.disabled= true;document.getElementById('newFacTime-btn').disabled=true;}\" class=\"editSelectTimeTable\" name = 'batch' id = 'batch' disabled  class='not-allowed';>"
                                 + "<option name='-' value='-' selected >No Batch</option>");
@@ -135,6 +138,8 @@ public class attendance extends HttpServlet {
                             out.print(tablehead(header));
                             rs.previous();
                             while (rs.next()) {
+                                int line = 0;
+                                line++;
                                 String prn = rs.getString(1);
                                 out.print("<tr>");
                                 out.print("<td>" + rs.getString(2) + "</td>");
@@ -144,14 +149,26 @@ public class attendance extends HttpServlet {
                                     if (result[0].equals("0")) {
                                         out.print("<td>NA</td>");
                                     } else {
-                                        out.print("<td><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
-                                        out.print(String.format("%.02f", AttFunctions.calPercentage(prn, result[1],result[0])) + "%");
+                                        out.print("<td id='" + rsm.getColumnLabel(i) + line + "'><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
+                                        out.print(String.format("%.02f", AttFunctions.calPercentage(prn, result[1], result[0])) + "%");
                                         out.print("</a></td>");
                                     }
                                 }
                                 out.print("</tr>");
                             }
                             out.print(tableend(null, 1));
+
+                            out.print("<script>"
+                                    + "var line = 0;"
+                                    + "line++"
+                                    + "var value = document.getElementById('XML'+line).innerHTML;"
+                                    + "alert(value)"
+                                    + "var str = value.toString();"
+                                    + "var str2 = str.slice(145,149);"
+                                    + "if(str2 == 0.00) {"
+                                    + "document.getElementById('XML'+line).classList.add('table-danger');"
+                                    + "}"
+                                    + "</script>");
                         } else {
                             out.print("<div align='center'>Student Data Unavailable</div>");
                         }
