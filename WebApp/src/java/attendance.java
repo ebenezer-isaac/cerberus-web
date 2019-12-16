@@ -49,26 +49,23 @@ public class attendance extends HttpServlet {
                         }
                         int no_of_batch = no_of_batch();
                         int no_of_sub = subs.length - 1;
-                        out.print("<form>"
-                                + "<input type='number' min='0' max='100'>"
-                                + "</form><br>");
-                        out.print(tablestart(cla, "hover", "studDetails", 0));
+                        out.print(tablestart(cla , "hover", "studDetails", 0));
                         String header = "<th>Subject Code</th><th>Subject Abbr</th>";
-                        String sql = "select ";
+                        String sql_subject = "select ";
                         for (int x = 1; x <= no_of_batch; x++) {
-                            sql += "count(CASE WHEN timetable.batchID = '" + x + "' THEN '' END) ";
+                            sql_subject += "count(CASE WHEN timetable.batchID = '" + x + "' THEN '' END) ";
                             header += "<th>Batch " + x + " </th>";
                             if (x != no_of_batch) {
-                                sql += ", ";
+                                sql_subject += ", ";
                             }
                         }
-                        sql += "from timetable \n"
+                        sql_subject += "from timetable \n"
                                 + "inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID \n"
                                 + "inner join subject on timetable.subjectID = subject.subjectID \n"
                                 + "where subject.subjectID = ?";
                         out.print(tablehead(header));
                         for (int x = 0; x <= no_of_sub; x++) {
-                            PreparedStatement ps = con.prepareStatement(sql);
+                            PreparedStatement ps = con.prepareStatement(sql_subject);
                             ps.setString(1, subs[x][0]);
                             ResultSet rs = ps.executeQuery();
                             out.println("<tr><td>" + subs[x][0] + "</td><td>" + subs[x][1] + "</td>");
@@ -105,7 +102,7 @@ public class attendance extends HttpServlet {
                         out.print("</select>");
                         out.print("</td><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><button disabled onclick=\"var e = document.getElementById('subject');var b = document.getElementById('batch');setContent('/Cerberus/newFacultyTimetable?subjectid='+e.options[e.selectedIndex].value+'&batch='+b.selectedIndex);\" style='width:200px;' id='newFacTime-btn' class='btn btn-primary'>Edit Attendance</button></td></tr><tr><td></td><td></td><td><div id='validations' style='color:red;font-size:14px;'>*Or to Conduct New Lab Session</div></td></tr></table></fieldset><br>");
                         index = 0;
-                        sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
+                        String sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
                             sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat(studentsubject.batchID,',',studentsubject.subjectID) END) as '" + subs[index][1].replace("-", "_") + "'";
                             if (index <= (no_of_sub - 1)) {
@@ -127,47 +124,72 @@ public class attendance extends HttpServlet {
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         if (rs.next()) {
-                            out.print(tablestart("Student Average Attendance", "hover", "studDetails", 1));
+                            int line = 0;
+                            out.print(tablestart("Student Average Attendance<br>Percentage Criteria : <input type='number' min='0' max='100'  class=\"editSelectTimeTable\" id = 'criteriaPerc' value='80' onkeyup='checkPerc(this.value)' onchange='checkPerc(this.value)'>", "hover", "studDetails", 1));
                             header = "<tr>";
                             header += "<th> Roll </th>";
                             header += "<th> Name </th>";
                             for (int i = 4; i <= cols; i++) {
                                 header += "<th> " + rsm.getColumnLabel(i) + " </th>";
                             }
+                            header += "<th> Average </th>";
                             header += "</tr>";
                             out.print(tablehead(header));
                             rs.previous();
+
                             while (rs.next()) {
-                                int line = 0;
                                 line++;
                                 String prn = rs.getString(1);
-                                out.print("<tr>");
+                                out.print("<tr id='row" + line + "'>");
                                 out.print("<td>" + rs.getString(2) + "</td>");
                                 out.print("<td>" + rs.getString(3) + "</td>");
+                                float total = 0;
+                                float count = 0;
                                 for (int i = 4; i <= cols; i++) {
                                     String result[] = rs.getString(i).split(",");
+                                    ps = con.prepareStatement("select count(facultytimetable.scheduleID) from facultytimetable inner join timetable on facultytimetable.scheduleID = timetable.scheduleID where subjectID = ? and batchID = ?");
+                                    ps.setString(1, result[1]);
+                                    ps.setString(2, result[0]);
+                                    ResultSet rs_subject = ps.executeQuery();
+                                    int temp = 0;
+                                    while (rs_subject.next()) {
+                                        if (rs_subject.getInt(1) > 0) {
+                                            temp = 1;
+                                        }
+                                    }
+                                    System.out.println("temp ::::::::::::::" + temp);
                                     if (result[0].equals("0")) {
-                                        out.print("<td>NA</td>");
+                                        out.print("<td>N/A</td>");
+                                    } else if (temp == 0) {
+                                        out.print("<td>No Labs</td>");
                                     } else {
-                                        out.print("<td id='" + rsm.getColumnLabel(i) + line + "'><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
-                                        out.print(String.format("%.02f", AttFunctions.calPercentage(prn, result[1], result[0])) + "%");
+                                        count++;
+                                        out.print("<td ><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
+                                        float currPerc = AttFunctions.calPercentage(prn, result[1], result[0]);
+                                        total = total + currPerc;
+                                        out.print(String.format("%.02f", total) + "%");
                                         out.print("</a></td>");
                                     }
                                 }
-                                out.print("</tr>");
+                                float perc = 0;
+                                if (count > 0) {
+                                    perc = total / count;
+                                }
+                                out.print("<td id='perc" + line + "'>" + String.format("%.02f", perc) + "%" + "</td></tr>");
                             }
                             out.print(tableend(null, 1));
-
-                            out.print("<script>"
-                                    + "var line = 0;"
-                                    + "line++"
-                                    + "var value = document.getElementById('XML'+line).innerHTML;"
-                                    + "alert(value)"
-                                    + "var str = value.toString();"
-                                    + "var str2 = str.slice(145,149);"
-                                    + "if(str2 == 0.00) {"
-                                    + "document.getElementById('XML'+line).classList.add('table-danger');"
+                            out.print("<script>var line =" + line + ";"
+                                    + "function checkPerc(criteria){"
+                                    + "if(criteria>100){document.getElementById('criteriaPerc').value=100;}else{"
+                                    + "for(var i=1;i<=line;i++){var value = document.getElementById('perc'+i).innerHTML;"
+                                    + "value = value.substring(0, value.length - 1);"
+                                    + "value = parseFloat(value);"
+                                    + "if(value<criteria){"
+                                    + "document.getElementById('row'+i).classList.add('table-danger');document.getElementById('row'+i).classList.remove('table-success');"
+                                    + "}else{"
+                                    + "document.getElementById('row'+i).classList.remove('table-danger');document.getElementById('row'+i).classList.add('table-success');}"
                                     + "}"
+                                    + "}}checkPerc(80);"
                                     + "</script>");
                         } else {
                             out.print("<div align='center'>Student Data Unavailable</div>");
