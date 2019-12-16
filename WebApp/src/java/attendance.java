@@ -100,7 +100,7 @@ public class attendance extends HttpServlet {
                             index++;
                         }
                         out.print("</select>");
-                        out.print("</td><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><button disabled onclick=\"var e = document.getElementById('subject');var b = document.getElementById('batch');setContent('/Cerberus/newFacultyTimetable?subjectid='+e.options[e.selectedIndex].value+'&batch='+e.selectedIndex);\" style='width:200px;' id='newFacTime-btn' class='btn btn-primary'>Edit Attendance</button></td></tr><tr><td></td><td></td><td><div id='validations' style='color:red;font-size:14px;'>*Or to Conduct New Lab Session</div></td></tr></table></fieldset><br>");
+                        out.print("</td><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><button disabled onclick=\"var e = document.getElementById('subject');var b = document.getElementById('batch');setContent('/Cerberus/newFacultyTimetable?subjectid='+e.options[e.selectedIndex].value+'&batch='+b.selectedIndex);\" style='width:200px;' id='newFacTime-btn' class='btn btn-primary'>Edit Attendance</button></td></tr><tr><td></td><td></td><td><div id='validations' style='color:red;font-size:14px;'>*Or to Conduct New Lab Session</div></td></tr></table></fieldset><br>");
                         index = 0;
                         sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
