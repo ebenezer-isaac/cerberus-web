@@ -93,12 +93,12 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
                         wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week);
-                        date[0] = wks.plusDays(0) + "";
-                        date[1] = wks.plusDays(1) + "";
-                        date[2] = wks.plusDays(2) + "";
-                        date[3] = wks.plusDays(3) + "";
-                        date[4] = wks.plusDays(4) + "";
-                        date[5] = wks.plusDays(5) + "";
+                        date[0] = wks.plusDays(-1) + "";
+                        date[1] = wks.plusDays(0) + "";
+                        date[2] = wks.plusDays(1) + "";
+                        date[3] = wks.plusDays(2) + "";
+                        date[4] = wks.plusDays(3) + "";
+                        date[5] = wks.plusDays(4) + "";
                         String heading = "<table><tr><td width = 33% align='left'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
                                 + "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
                         if (week <= currweek) {
@@ -130,7 +130,7 @@ public class editTimetable extends HttpServlet {
                                 + "<input type='text' name='lab' value='" + labid + "' hidden>"
                                 + "<input type='text' name='week' value='" + week + "' hidden>"
                                 + "<button align='center' style='width: 200px;'type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
-                                + "<span>Save</span>"
+                                + "<span>Save Timetable</span>"
                                 + "</button></form>"
                                 + "</div>"
                                 + "</div>";
@@ -219,8 +219,13 @@ public class editTimetable extends HttpServlet {
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
                     Date now = new Date();
+
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();
+                    System.out.println("now : " + now);
+                    System.out.println("tbd : " + datetime);
+                    System.out.println("now : " + nowmill);
+                    System.out.println("tbd : " + datetimemill);
                     String disabled = "";
                     String disabledstyl = "style='border:solid 1px green'";
                     if (nowmill > datetimemill) {
@@ -303,6 +308,10 @@ public class editTimetable extends HttpServlet {
                         Date now = new Date();
                         long nowmill = now.getTime();
                         long datetimemill = datetime.getTime();
+                        System.out.println("now : " + now);
+                        System.out.println("tbd : " + datetime);
+                        System.out.println("now : " + nowmill);
+                        System.out.println("tbd : " + datetimemill);
                         String disabled = "";
                         String disabledstyl = "style='border:solid 1px green'";
                         if (nowmill > datetimemill) {

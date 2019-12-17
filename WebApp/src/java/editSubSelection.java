@@ -140,10 +140,10 @@ public class editSubSelection extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print(tableend("No of students : " + line + "<br><br>"
-                                    + "<input class='btn-primary btn' type='submit' style='width: 200px;' value='Submit' align='center'>"
+                            out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'>Changing the batch of a student mid - semester is not advised.<br>All attendance pertaining to the previously set batch will not be calculated when displaying attendance of that student.</div>"
+                                    + "<br><input class='btn-primary btn' type='Save' style='width: 200px;' value='Save Details' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                    + "</form><br>", 0));
+                                    + "</form><br><br>", 0));
                             out.print("<script>function batchdisable(id) {"
                                     + "if(document.getElementById(id).checked)"
                                     + "{id = id.substr(3);"

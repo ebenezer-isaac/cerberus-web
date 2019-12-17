@@ -52,14 +52,16 @@ public class viewTimetable extends HttpServlet {
                 week = getWeek(request);
             }
             access = getAccess(request);
-            wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week - 1);
-            mon = wks.plusDays(1);
-            tue = wks.plusDays(2);
-            wed = wks.plusDays(3);
-            thu = wks.plusDays(4);
-            fri = wks.plusDays(5);
-            sat = wks.plusDays(6);
-            wke = wks.plusDays(7);
+            wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week);
+           
+            mon = wks.plusDays(-1);
+            tue = wks.plusDays(0);
+            wed = wks.plusDays(1);
+            thu = wks.plusDays(2);
+            fri = wks.plusDays(3);
+            sat = wks.plusDays(4);
+            wke = wks.plusDays(5);
+             wks = wks.plusDays(-2);
             switch (access) {
                 case 1:
                     out.print("<style>"

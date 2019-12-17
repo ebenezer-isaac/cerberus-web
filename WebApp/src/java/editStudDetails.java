@@ -97,7 +97,7 @@ public class editStudDetails extends HttpServlet {
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'><br></div>"
-                                    + "<input type='submit' value='Submit' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
+                                    + "<input type='submit' value='Save Details' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form>", 0));
                             out.print("<script>"

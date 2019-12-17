@@ -71,7 +71,7 @@ public class editSubject extends HttpServlet {
                             error(e.getMessage());
                         }
                         out.print("</td></tr>"
-                                + "</table><br><div id='validations' style='color:red;font-size:14px;'><br></div><br><button type='submit' id='studbtn1' style='width:200px;' class='btn btn-primary'>Submit</button>"
+                                + "</table><br><div id='validations' style='color:red;font-size:14px;'><br></div><br><button type='submit' id='studbtn1' style='width:200px;' class='btn btn-primary'>Add Subject</button>"
                                 + "</form>");
                     } else if (flow.equals("del")) {
                         try {
@@ -98,12 +98,11 @@ public class editSubject extends HttpServlet {
                             out.print(select);
                             out.print("<br><fieldset>"
                                     + "<legend><br> <font style=\"font-size: 20px;\"> Warning - The following changes will be made: </font> <br></legend>"
-                                    + "<p> <font style=\"font-size: 15.5px;\"> 1. All Attendance Records for the Subject will be deleted. </font> </p>"
-                                    + "<p> <font style=\"font-size: 15.5px;\"> 2. Subject Selection of all Students will be erased for this subject. </font> </p>"
-                                    + "<p> <font style=\"font-size: 15.5px;\"> 3. Data of the No of Labs conducted will be deleted. </font> </p>"
+                                    + "<p> <font style=\"font-size: 15.5px;\"> 1. Subjects with alloted lab session cannot be deleted. </font> </p>"
+                                    + "<p> <font style=\"font-size: 15.5px;\"> 2. A subject opted by any student cannot be deleted. </font> </p>"
                                     + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
                                     + "<br></fieldset>");
-                            out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></div>");
+                            out.print("<br><div id = 'butt' style='display:none;'><button type='Delete' style='width:200px;' class='btn btn-primary'>Delete Subject</button></div>");
                             out.print("</form></div>");
 
                             con.close();
