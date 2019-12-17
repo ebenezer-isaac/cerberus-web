@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Calendar;
 
 public class AttFunctions {
 
@@ -63,6 +64,33 @@ public class AttFunctions {
         }
     }
 
+    /*public static String get_next_schedule(HttpServletRequest request) {
+       /* int week = getWeek(request);
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        String time = getCurrTime();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
+                    + "MAX(CASE WHEN dayID = ? THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) "
+                    + "FROM timetable "
+                    + "INNER JOIN slot "
+                    + "ON timetable.slotID = slot.slotID "
+                    + "where labID=? and weekID=(select weekID from week where week = ?) "
+                    + "GROUP BY slot.startTime, slot.endTime ASC "
+                    + "ORDER BY slot.startTime, slot.endTime ASC;");
+            ps4.setInt(1, day);
+            ResultSet nextSchedule = ps4.executeQuery();
+            while (nextSchedule.next()) {
+                
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return nextSchedule;
+    }*/
+
     public boolean checkInternetConnection() {
         try {
             URL url = new URL("http://www.google.com");
@@ -92,6 +120,7 @@ public class AttFunctions {
     }
 
     public static String[] get_schedule_det(int scheduleID) {
+
         String schedule[] = new String[6];
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -188,7 +217,7 @@ public class AttFunctions {
                 System.out.println("prn : " + prn);
                 System.out.println("presents : " + presents);
                 System.out.println("labs : " + labs);
-                float perc = ((float)(presents) / (float)labs) * 100;
+                float perc = ((float) (presents) / (float) labs) * 100;
                 System.out.println("perc : " + perc);
                 return (perc);
             } else {

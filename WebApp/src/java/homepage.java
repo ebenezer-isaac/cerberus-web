@@ -36,9 +36,6 @@ public class homepage extends HttpServlet {
                     out.println("Home Page");
                     Date date = new Date();
 
-                    System.out.println((date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate());
-                    System.out.println(String.format("%02d", date.getHours()) + ":" + String.format("%02d", date.getMinutes()) + ":" + String.format("%02d", date.getSeconds()));
-
                     break;
                 case 0:
                     try {
