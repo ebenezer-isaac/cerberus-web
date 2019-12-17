@@ -27,9 +27,6 @@ function getInfoSession() {
             setContent_main(url_main);
         }
     }
-    $("#main").html("");
-    $("#main").html(val);
-    unfade(mains);
 }
 
 

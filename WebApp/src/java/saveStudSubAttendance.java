@@ -2,6 +2,7 @@
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getTimeID;
+import static cerberus.AttFunctions.get_class_from_sub;
 import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +25,7 @@ public class saveStudSubAttendance extends HttpServlet {
         switch (access) {
             case 1:
                 try {
+                    String subjectID = request.getParameter("subjectid");
                     String prn = request.getParameter("prn");
                     String schedules[] = (request.getParameter("schedules")).split(",");
                     int no_of_subs = schedules.length;
@@ -75,7 +77,7 @@ public class saveStudSubAttendance extends HttpServlet {
                         }
                     }
                     messages a = new messages();
-                    a.success(request, response, "Attendance has been saved", "viewTimetable");
+                    a.success(request, response, "Attendance has been saved", "attendance?class="+get_class_from_sub(subjectID));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     messages b = new messages();

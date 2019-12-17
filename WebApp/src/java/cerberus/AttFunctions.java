@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
 import java.util.Calendar;
 
 public class AttFunctions {
@@ -64,34 +65,128 @@ public class AttFunctions {
         }
     }
 
-    /*public static String get_next_schedule(HttpServletRequest request) {
-       /* int week = getWeek(request);
+    public static String[] get_next_schedule(HttpServletRequest request, int labid) {
+        String nextSchedule[] = new String[2];
+        int week = getWeek(request);
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        String time = getCurrTime();
+        day = 1;
+        String time = "13:40:00";
+        System.out.println("day : " + day);
+        System.out.println("labid : " + labid);
+        System.out.println("week : " + week);
+        System.out.println("time : " + time);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
-                    + "MAX(CASE WHEN dayID = ? THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) "
+            PreparedStatement ps = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
+                    + "MAX(CASE WHEN dayID = ? THEN timetable.scheduleID END) "
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
+                    + "INNER JOIN subject "
+                    + "ON timetable.subjectID = subject.subjectID "
                     + "where labID=? and weekID=(select weekID from week where week = ?) "
                     + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;");
-            ps4.setInt(1, day);
-            ResultSet nextSchedule = ps4.executeQuery();
-            while (nextSchedule.next()) {
-                
+            ps.setInt(1, day);
+            ps.setInt(2, labid);
+            ps.setInt(3, week);
+            ResultSet rs = ps.executeQuery();
+            int slots = no_of_slots();
+            String schedule[][] = new String[slots][4];
+            int count = 0;
+            while (rs.next()) {
+                schedule[count][0] = rs.getString(1);
+                schedule[count][1] = rs.getString(2);
+                schedule[count][2] = rs.getString(3);
+                schedule[count][3] = rs.getString(4);
+                System.out.println(schedule[count][0] + " " + schedule[count][1] + " " + schedule[count][2] + " " + schedule[count][3]);
+                count++;
+            }
+            if (count > 0) {
+                long startmill = 0;
+                long timemill = 0;
+                long endmill = 0;
+                for (int x = 0; x < slots; x++) {
+                    try {
+                        String startDate = "2014/10/29 " + schedule[x][1];
+                        String timeDate = "2014/10/29 " + time;
+                        String endDate = "2014/10/29 " + schedule[x][2];
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date startD = sdf.parse(startDate);
+                        Date timeD = sdf.parse(timeDate);
+                        Date endD = sdf.parse(endDate);
+                        startmill = startD.getTime();
+                        timemill = timeD.getTime();
+                        endmill = endD.getTime();
+                    } catch (Exception e) {
+                    }
+                    if (startmill < timemill && timemill < endmill) {
+                        nextSchedule[0] = "2";
+                        String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
+
+                        try {
+                            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                            final Date dateObj = sdf.parse(schedule[x][1]);
+                            System.out.println(dateObj);
+                            schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
+                        } catch (final ParseException e) {
+                            e.printStackTrace();
+                        }
+                        nextSchedule[1] = "Lab Started at " + schedule[x][1] + "<br>"
+                                + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
+                                + "Subject : " + details[5] + "<br>"
+                                + "Batch : " + details[6] + "," + schedule[x][3];
+                        return nextSchedule;
+                    }
+                }
+                for (int x = 0; x < slots; x++) {
+                    if (schedule[x][3] != null) {
+                        try {
+                            String startDate = "2014/10/29 " + schedule[x][1];
+                            String timeDate = "2014/10/29 " + time;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date startD = sdf.parse(startDate);
+                            Date timeD = sdf.parse(timeDate);
+                            startmill = startD.getTime();
+                            timemill = timeD.getTime();
+                        } catch (ParseException e) {
+                        }
+                        if (timemill < startmill) {
+                            nextSchedule[0] = "3";
+                            try {
+                                final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                                final Date dateObj = sdf.parse(schedule[x][1]);
+                                System.out.println(dateObj);
+                                schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
+                            } catch (final ParseException e) {
+                                e.printStackTrace();
+                            }
+                            String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
+                            nextSchedule[1] = "Next Lab starts at " + schedule[x][1] + "<br>"
+                                    + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
+                                    + "Subject : " + details[5] + "<br>"
+                                    + "Batch : " + details[6];
+                            return nextSchedule;
+                        }
+                    }
+                }
+                nextSchedule[0] = "1";
+                nextSchedule[1] = "All Labs Over";
+                return nextSchedule;
+            } else {
+                nextSchedule[0] = "0";
+                nextSchedule[1] = "No Labs Today";
+                return nextSchedule;
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return nextSchedule;
-    }*/
+    }
 
-    public boolean checkInternetConnection() {
+    public static boolean checkInternetConnection() {
         try {
             URL url = new URL("http://www.google.com");
             URLConnection connection = url.openConnection();
@@ -121,7 +216,7 @@ public class AttFunctions {
 
     public static String[] get_schedule_det(int scheduleID) {
 
-        String schedule[] = new String[6];
+        String schedule[] = new String[8];
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
@@ -130,13 +225,15 @@ public class AttFunctions {
                     + "(select slot.endTime from slot where slot.slotID = timetable.slotID) as endTime, \n"
                     + "(select lab.name from lab where lab.labID = timetable.labID) as Lab, \n"
                     + "(select subject.subjectID from subject where subject.subjectID = timetable.subjectID) as SubjectID, \n"
-                    + "(select subject.subject from subject where subject.subjectID = timetable.subjectID) as Subject \n"
+                    + "(select subject.subject from subject where subject.subjectID = timetable.subjectID) as Subject, \n"
+                    + "(select batch.name from batch where batch.batchID = timetable.batchID) as Batch, \n"
+                    + "(select subject.classID from subject where subject.subjectID = timetable.subjectID) as ClassID \n"
                     + "from timetable where scheduleID = ?");
             ps.setInt(1, scheduleID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int index = 0;
-                while (index < 6) {
+                while (index < 8) {
                     schedule[index] = rs.getString(index + 1);
                     index = index + 1;
                 }
@@ -296,6 +393,24 @@ public class AttFunctions {
             e.printStackTrace();
         }
         return no_of_batch;
+    }
+
+    public static int get_class_from_sub(String subjectID) {
+        int classID = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            PreparedStatement stmt = con.prepareStatement("select classId from subject where subjectID = ?");
+            stmt.setString(1, subjectID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                classID = rs.getInt(1);
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return classID;
     }
 
     public static String[] prefSubs(HttpServletRequest request, String user) {

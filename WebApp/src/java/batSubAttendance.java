@@ -108,6 +108,7 @@ public class batSubAttendance extends HttpServlet {
                             }
                             header += "</tr>";
                             out.print(tablehead(header));
+                            int temp = 0;
                             for (int i = 0; i < no_of_studs; i++) {
                                 out.print("<tr><td>" + studs[i][0] + "<input type='text' name = 'prn" + (i + 1) + "' value='" + studs[i][1] + "' hidden></td><td>" + studs[i][2] + "</td>");
                                 for (int j = 0; j < no_of_dates; j++) {
@@ -117,9 +118,11 @@ public class batSubAttendance extends HttpServlet {
                                     ps.setInt(2, Integer.parseInt(dates[j][1]));
                                     rs = ps.executeQuery();
                                     if (rs.next()) {
-                                        out.print("<center><input type='checkbox' value='1' id='att" + (i + 1) + "," + dates[j][1] + "' name='att" + (i + 1) + "," + dates[j][1] + "' checked ><label for='att" + (i + 1) + "," + dates[j][1] + "'></label></center>");
+                                        out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[j][1] + "' checked ><label for='" + temp + "'></label></center>");
+                                        temp++;
                                     } else {
-                                        out.print("<center><input type='checkbox' value='1' id='att" + (i + 1) + "," + dates[j][1] + "' name='att" + (i + 1) + "," + dates[j][1] + "'><label for='att" + (i + 1) + "," + dates[j][1] + "'></label></center>");
+                                        out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[j][1] + "'><label for='" + temp + "'></label></center>");
+                                        temp++;
                                     }
                                     out.print("</td>");
                                 }
@@ -134,6 +137,7 @@ public class batSubAttendance extends HttpServlet {
                                     + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='line' value='" + (no_of_studs + 1) + "' hidden>"
                                     + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
+                                    + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
                                     + "</form>", 0));
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {

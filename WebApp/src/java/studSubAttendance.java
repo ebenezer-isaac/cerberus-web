@@ -93,12 +93,13 @@ public class studSubAttendance extends HttpServlet {
                                 roll = rs.getString(1);
                                 name = rs.getString(2);
                             }
-                            out.print(tablestart("<b>PRN</b> : " + prn + "<br>" +"<b>Roll</b> : " + roll + "<br>" +"<b>Name</b> : " + name + "<br><b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 0) + "");
+                            out.print(tablestart("<b>PRN</b> : " + prn + "<br>" + "<b>Roll</b> : " + roll + "<br>" + "<b>Name</b> : " + name + "<br><b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 0) + "");
                             String header = "<tr align = center>";
                             header += "<th>Date</th>";
                             header += "<th>Status</th>";
                             header += "</tr>";
                             out.print(tablehead(header));
+                            int temp = 0;
                             for (int i = 0; i < no_of_dates; i++) {
                                 out.print("<tr><td>" + dates[i][0] + "</td><td>");
                                 ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
@@ -106,9 +107,11 @@ public class studSubAttendance extends HttpServlet {
                                 ps.setInt(2, Integer.parseInt(dates[i][1]));
                                 rs = ps.executeQuery();
                                 if (rs.next()) {
-                                    out.print("<center><input type='checkbox' value='1' id='warn' name='att" + (i + 1) + "," + dates[i][1] + "' checked ><label for='warn'></label></center>");
+                                    out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[i][1] + "' checked ><label for='" + temp + "'></label></center>");
+                                    temp++;
                                 } else {
-                                    out.print("<center><input type='checkbox' value='1' id='warn' name='att" + (i + 1) + "," + dates[i][1] + "' ><label for='warn'></label></center>");
+                                    out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[i][1] + "' ><label for='" + temp + "'></label></center>");
+                                    temp++;
                                 }
                                 out.print("</td>");
                                 out.print("</tr>");
@@ -126,6 +129,7 @@ public class studSubAttendance extends HttpServlet {
                                     + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='prn' value='" + prn + "' hidden>"
                                     + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
+                                    + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
                                     + "</form>", 0));
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
@@ -193,7 +197,7 @@ public class studSubAttendance extends HttpServlet {
                             if (rs.next()) {
                                 batch = rs.getString(1);
                             }
-                            out.print(tablestart("<b>"+subject + " - " + batch+"</b>", "hover", "studDetails", 0) + "");
+                            out.print(tablestart("<b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 0) + "");
                             String header = "<tr align = center>";
                             header += "<th>Date</th>";
                             header += "<th>Status</th>";
