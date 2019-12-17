@@ -79,11 +79,11 @@ public class profile extends HttpServlet {
                         for (String[] sub : subs) {
                             out.print("<tr><td style='vertical-align : middle;text-align:center;'>" + sub[0] + "</td>"
                                     + "<td style='vertical-align : middle;text-align:center;'>" + sub[1] + "</td>"
-                                    + "<td style='vertical-align : middle;text-align:center;'><input type='checkbox' value='" + sub[0] + "' name='subjects'");
+                                    + "<td style='vertical-align : middle;text-align:center;'><input type='checkbox' id='warn' value='" + sub[0] + "' name='subjects'");
                             if (isfav(sub[0])) {
                                 out.print(" checked ");
                             }
-                            out.print("></td><tr>");
+                            out.print("><label for='warn'></label></td><tr>");
                         }
 
                         out.print(tableend("<br><button class='btn btn-primary' style='width:200px' type='submit'>Submit</button><br><br>"

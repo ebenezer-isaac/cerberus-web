@@ -100,7 +100,7 @@ public class editSubject extends HttpServlet {
                                     + "<legend><br> <font style=\"font-size: 20px;\"> Warning - The following changes will be made: </font> <br></legend>"
                                     + "<p> <font style=\"font-size: 15.5px;\"> 1. Subjects with alloted lab session cannot be deleted. </font> </p>"
                                     + "<p> <font style=\"font-size: 15.5px;\"> 2. A subject opted by any student cannot be deleted. </font> </p>"
-                                    + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
+                                    + "<br><table><tr><td><input type='checkbox' id='warn' onclick='myFunction()'><label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                                     + "<br></fieldset>");
                             out.print("<br><div id = 'butt' style='display:none;'><button type='Delete' style='width:200px;' class='btn btn-primary'>Delete Subject</button></div>");
                             out.print("</form></div>");

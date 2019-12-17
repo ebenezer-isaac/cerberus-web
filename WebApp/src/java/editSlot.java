@@ -85,7 +85,7 @@ public class editSlot extends HttpServlet {
                                 out.print("<br><fieldset>"
                                         + "<legend><br> <font style=\"font-size: 20px;\"> Warning : </font> <br></legend>"
                                         + "<p> <font style=\"font-size: 15.5px;\"> 1. The slot cannot be deleted if a lab session has been alloted for the same. </font> </p>"
-                                        + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
+                                        + "<br><table><tr><td><input type='checkbox' id='warn'onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                                         + "<br></fieldset>");
                                 out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width: 200px;' class='btn btn-primary'>Delete Timings</button></div>");
                                 out.print("</form>");

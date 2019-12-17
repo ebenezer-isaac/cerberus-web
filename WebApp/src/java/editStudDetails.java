@@ -81,14 +81,14 @@ public class editStudDetails extends HttpServlet {
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='email' style='border: 2px solid green;'class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td style='vertical-align : middle;text-align:center;'>");
                                 if (rs.getString(5) != null) {
-                                    out.print("<input type='checkbox' value='1' name='t1" + line + "' checked >");
+                                    out.print("<input type='checkbox' value='1' id='warn' name='t1" + line + "' checked ><label for='warn'></label>");
                                 } else {
                                     out.print("N/A");
                                 }
                                 out.print("</td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'>");
                                 if (rs.getString(6) != null) {
-                                    out.print("<input type='checkbox' value='1' name='t2" + line + "' checked >");
+                                    out.print("<input type='checkbox' value='1' id='warn' name='t2" + line + "' checked ><label for='warn'></label>");
                                 } else {
                                     out.print("N/A");
                                 }

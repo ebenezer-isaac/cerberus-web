@@ -115,7 +115,7 @@ public class editSubSelection extends HttpServlet {
                                     if (flag == 1) {
                                         out.print(" checked");
                                     }
-                                    out.print("><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i - 4][0] + "" + line + "' id = 'batch" + subs[i - 4][0] + "" + line + "' class='editSelectTimeTable");
+                                    out.print("><label for='sub'></label><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i - 4][0] + "" + line + "' id = 'batch" + subs[i - 4][0] + "" + line + "' class='editSelectTimeTable");
                                     if (flag == 0) {
                                         out.print(" not-allowed' disabled");
                                     } else {

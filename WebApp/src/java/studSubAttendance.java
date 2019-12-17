@@ -106,9 +106,9 @@ public class studSubAttendance extends HttpServlet {
                                 ps.setInt(2, Integer.parseInt(dates[i][1]));
                                 rs = ps.executeQuery();
                                 if (rs.next()) {
-                                    out.print("<input type='checkbox' value='1' name='att" + (i + 1) + "," + dates[i][1] + "' checked >");
+                                    out.print("<center><input type='checkbox' value='1' id='warn' name='att" + (i + 1) + "," + dates[i][1] + "' checked ><label for='warn'></label></center>");
                                 } else {
-                                    out.print("<input type='checkbox' value='1' name='att" + (i + 1) + "," + dates[i][1] + "' >");
+                                    out.print("<center><input type='checkbox' value='1' id='warn' name='att" + (i + 1) + "," + dates[i][1] + "' ><label for='warn'></label></center>");
                                 }
                                 out.print("</td>");
                                 out.print("</tr>");

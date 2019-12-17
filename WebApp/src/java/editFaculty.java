@@ -89,7 +89,7 @@ public class editFaculty extends HttpServlet {
                                     + "<p> <font style=\"font-size: 15.5px;\"> 1. A mail will be sent to the respective faculty informing that they wont be able to access this portal anymore.</font> </p>"
                                     + "<p> <font style=\"font-size: 15.5px;\"> 2. Fingerprint data belonging to the faculty will be deleted permanently </font> </p>"
                                     + "<p> <font style=\"font-size: 15.5px;\"> 3. A Faculty who has conducted a lab cannot be deleted. </font> </p>"
-                                    + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font>"
+                                    + "<br><table><tr><td><input type='checkbox' id='warn'onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                                     + "<br></fieldset>");
                             out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width:200px;' class='btn btn-primary'>Delete Faculty</button></div>");
                             out.print("</form></div></div>");

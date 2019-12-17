@@ -117,9 +117,9 @@ public class batSubAttendance extends HttpServlet {
                                     ps.setInt(2, Integer.parseInt(dates[j][1]));
                                     rs = ps.executeQuery();
                                     if (rs.next()) {
-                                        out.print("<input type='checkbox' value='1' name='att" + (i + 1) + "," + dates[j][1] + "' checked >");
+                                        out.print("<center><input type='checkbox' value='1' id='att" + (i + 1) + "," + dates[j][1] + "' name='att" + (i + 1) + "," + dates[j][1] + "' checked ><label for='att" + (i + 1) + "," + dates[j][1] + "'></label></center>");
                                     } else {
-                                        out.print("<input type='checkbox' value='1' name='att" + (i + 1) + "," + dates[j][1] + "' >");
+                                        out.print("<center><input type='checkbox' value='1' id='att" + (i + 1) + "," + dates[j][1] + "' name='att" + (i + 1) + "," + dates[j][1] + "'><label for='att" + (i + 1) + "," + dates[j][1] + "'></label></center>");
                                     }
                                     out.print("</td>");
                                 }

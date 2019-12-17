@@ -29,7 +29,7 @@ public class editDelStudent extends HttpServlet {
                             + "<p>1. Students with attendance records will not be deleted</p>"
                             + "<p>2. Subject selection of the student will be deleted.</p>"
                             + "<p>3. All fingerprint data of the student will be deleted permanently.</p>"
-                            + "<br><input type='checkbox' id='warn'onclick='myFunction()'/> I have read all the Warnings!"
+                            + "<br><table><tr><td><input type='checkbox' id='warn'onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                             + "<br></fieldset>");
                     out.print("<br><div id = 'butt' style='display:none;' ><button class='btn btn-primary' style='width:200px' id='studbtn2' disabled type='submit'>Delete Student</button></div>");
                     out.print("</form>");
