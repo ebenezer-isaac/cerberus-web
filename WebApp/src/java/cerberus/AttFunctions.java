@@ -70,12 +70,7 @@ public class AttFunctions {
         int week = getWeek(request);
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        day = 1;
-        String time = "13:40:00";
-        System.out.println("day : " + day);
-        System.out.println("labid : " + labid);
-        System.out.println("week : " + week);
-        System.out.println("time : " + time);
+        String time = getCurrTime();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");

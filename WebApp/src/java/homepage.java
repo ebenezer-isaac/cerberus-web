@@ -1,6 +1,7 @@
 
 import static cerberus.AttFunctions.get_next_schedule;
 import static cerberus.AttFunctions.no_of_labs;
+import static cerberus.printer.error;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -13,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import static cerberus.printer.nouser;
+import static cerberus.printer.tableend;
+import static cerberus.printer.tablehead;
+import static cerberus.printer.tablestart;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class homepage extends HttpServlet {
@@ -35,13 +40,13 @@ public class homepage extends HttpServlet {
             access = (int) session.getAttribute("access");
             switch (access) {
                 case 1:
-                    out.print("<div class='row''>");
+                    out.print("<div class='row'>");
                     int labs = no_of_labs();
                     for (int i = 1; i <= labs; i++) {
                         String testing[] = get_next_schedule(request, i);
                         switch (testing[0]) {
                             case "0":
-                                out.print("<div class='col mb-3' align='center'>"
+                                out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
                                         + "<div class='card text-white bg-danger o-hidden h-100'>"
                                         + "<a class='card-header text-white clearfix'>"
                                         + "<span class='float-middle'>Lab " + i + "</span>"
@@ -50,7 +55,7 @@ public class homepage extends HttpServlet {
                                         + "<div class='card-body-icon'>"
                                         + "<i class=\"fas fa-times\"></i>"
                                         + "</div>"
-                                        + "<div class='mr-5'><br>No Labs Today<br><br></div>"
+                                        + "<div class='mr-2' align='center'><br>No Labs Today<br><br></div>"
                                         + "</div>"
                                         + "<a class='card-footer text-white clearfix small z-1' href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + i + "');\">"
                                         + "<span class='float-left'>Edit Timetable</span>"
@@ -62,16 +67,16 @@ public class homepage extends HttpServlet {
                                         + "</div>");
                                 break;
                             case "1":
-                                out.print("<div class='col mb-3' align='center'>"
-                                        + "<div class='card text-white bg-primary o-hidden h-100'>"
+                                out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                        + "<div class='card text-white bg-success o-hidden h-100'>"
                                         + "<a class='card-header text-white clearfix'>"
                                         + "<span class='float-middle'>Lab " + i + "</span>"
                                         + "</a>"
                                         + "<div class='card-body'>"
                                         + "<div class='card-body-icon'>"
-                                        + "<i class='fas fa-desktop'></i>"
+                                        + "<i class='fas fa-check'></i>"
                                         + "</div>"
-                                        + "<div class='mr-5'><br>All Labs are Over<br><br></div>"
+                                        + "<div class='mr-2' align='center'><br>All Labs are Over<br><br></div>"
                                         + "</div>"
                                         + "<a class='card-footer text-white clearfix small z-1' href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + i + "');\">"
                                         + "<span class='float-left'>Edit Timetable</span>"
@@ -83,16 +88,16 @@ public class homepage extends HttpServlet {
                                         + "</div>");
                                 break;
                             case "2":
-                                out.print("<div class='col mb-3' align='center'>"
-                                        + "<div class='card text-white bg-success o-hidden h-100'>"
+                                out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                        + "<div class='card text-white bg-primary o-hidden h-100'>"
                                         + "<a class='card-header text-white clearfix'>"
                                         + "<span class='float-middle'>Lab " + i + "</span>"
                                         + "</a>"
                                         + "<div class='card-body'>"
                                         + "<div class='card-body-icon'>"
-                                        + "<i class='fas fa-check'></i>"
+                                        + "<i class='fas fa-desktop'></i>"
                                         + "</div>"
-                                        + "<div class='mr-5'>" + testing[1].split(",")[0] + "</div>"
+                                        + "<div class='mr-2' align='center'>" + testing[1].split(",")[0] + "</div>"
                                         + "</div>"
                                         + "<a class='card-footer text-white clearfix small z-1' href=\"javascript:setContent('/Cerberus/rapidAttendance?scheduleid=" + testing[1].split(",")[1] + "');\">"
                                         + "<span class='float-left'>Edit Attendance</span>"
@@ -104,7 +109,7 @@ public class homepage extends HttpServlet {
                                         + "</div>");
                                 break;
                             case "3":
-                                out.print("<div class='col mb-3' align='center'>"
+                                out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
                                         + "<div class='card text-white bg-warning o-hidden h-100'>"
                                         + "<a class='card-header text-white clearfix'>"
                                         + "<span class='float-middle'>Lab " + i + "</span>"
@@ -113,7 +118,7 @@ public class homepage extends HttpServlet {
                                         + "<div class='card-body-icon'>"
                                         + "<i class='fas fa-forward'></i>"
                                         + "</div>"
-                                        + "<div class='mr-5'>" + testing[1] + "</div>"
+                                        + "<div class='mr-2' align='center'>" + testing[1] + "</div>"
                                         + "</div>"
                                         + "<a class='card-footer text-white clearfix small z-1' href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + i + "');\">"
                                         + "<span class='float-left'>Edit Timetable</span>"
@@ -128,6 +133,67 @@ public class homepage extends HttpServlet {
                         }
                     }
                     out.print("</div>");
+                    int labcount = 0;
+
+                    String faculty_id = (String) session.getAttribute("user");
+                    String faculty_name = (String) session.getAttribute("name");
+                    System.out.println("fac" + faculty_id);
+                    try {
+                        String subcode = request.getParameter("subcode");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID) "
+                                + "from facultytimetable "
+                                + "INNER JOIN timetable "
+                                + "on timetable.scheduleID=facultytimetable.scheduleID "
+                                + "where facultytimetable.facultyID = ?");
+                        ps.setString(1, faculty_id);
+                        ResultSet rs = ps.executeQuery();
+                        while (rs.next()) {
+                            labcount = rs.getInt(1);
+                        }
+                        out.print("<br>");
+                        if (labcount >= 1) {
+                            PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date, "
+                                    + "slot.startTime, slot.endTime,"
+                                    + "(select lab.name from lab where lab.labID=timetable.labID) as lab,"
+                                    + "(select subject.abbreviation from subject where subject.subjectID=timetable.subjectID) as Subject,"
+                                    + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,timetable.subjectID, timetable.batchID "
+                                    + "from facultytimetable "
+                                    + "INNER JOIN timetable "
+                                    + "on timetable.scheduleID=facultytimetable.scheduleID "
+                                    + "INNER JOIN slot "
+                                    + "on slot.slotID=timetable.slotID "
+                                    + "where facultytimetable.facultyID =? order by date,slot.startTime;");
+                            ps1.setString(1, faculty_id);
+                            ResultSet rs1 = ps1.executeQuery();
+                            out.print(tablestart("<b>" + faculty_name + "</b><br>Total number of labs conducted : " + labcount + "",
+                                    "hover", "studDetails", 1) + "");
+                            String header = "<tr align = center>";
+                            header += "<th>Date</th>";
+                            header += "<th>Start Time</th>";
+                            header += "<th>End Time</th>";
+                            header += "<th>Lab</th>";
+                            header += "<th>Subject</th>";
+                            header += "<th>Batch</th>";
+                            header += "</tr>";
+                            out.print(tablehead(header));
+                            while (rs1.next()) {
+                                out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/batSubAttendance?batchID=" + rs1.getString(8) + "&subjectID=" + rs1.getString(7) + "');\">");
+                                for (int i = 1; i <= 6; i++) {
+                                    out.print("<td>" + rs1.getString(i) + "</td>");
+                                }
+                                out.print("</tr>");
+                            }
+                            out.print(tableend(null, 1));
+                        } else {
+                            out.print("No Data to show");
+                        }
+                        con.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        error(e.getMessage());
+                    }
+                    out.print("");
                     break;
                 case 0:
                     try {

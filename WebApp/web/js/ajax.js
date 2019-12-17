@@ -65,11 +65,12 @@ var btnstatus1 = 1;
 var btnstatus2 = 1;
 var btnstatus3 = 1;
 var btnstatus4 = 1;
+var btnstatus6 = 1;
 
 function checkValidations(x) {
     var url;
     id = x;
-    if (x == 0) {
+    if (x == 0 || x == 4) {
         v = document.getElementById('email').value;
         url = "ajaxCheckEmail?email=" + v;
     } else if (x == 1) {
@@ -150,6 +151,20 @@ function getValidations() {
                 document.getElementById('subid').style.borderColor = "red";
                 btnstatus4 = 1;
             }
+        } else if (id == 4) {
+            if (val == 0) {
+                document.getElementById('disp1').innerHTML = "<i class='fa fa-times' aria-hidden='true'></i><span class='tooltiptext'>Email not valid</span>";
+                document.getElementById('email').style.borderColor = "red";
+                btnstatus6 = 1;
+            } else if (val == 1) {
+                document.getElementById('disp1').innerHTML = "<i class='fa fa-check' aria-hidden='true'></i><span class='tooltiptext'>Email valid</span>";
+                document.getElementById('email').style.borderColor = "green";
+                btnstatus6 = 0;
+            } else if (val == 2) {
+                document.getElementById('disp1').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Email already registered</span>";
+                document.getElementById('email').style.borderColor = "red";
+                btnstatus6 = 1;
+            }
         }
         if (id == 3) {
             if (btnstatus4 == 0) {
@@ -158,6 +173,14 @@ function getValidations() {
             } else {
                 document.getElementById('studbtn1').disabled = true;
                 document.getElementById('validations').innerHTML = 'Subject Code Already Registered';
+            }
+        } else if (id == 4) {
+            if (btnstatus6 == 0) {
+                document.getElementById('facbtn1').disabled = false;
+                document.getElementById('validations').innerHTML = '<br>';
+            } else {
+                document.getElementById('facbtn1').disabled = true;
+                document.getElementById('validations').innerHTML = 'Email Validation Error';
             }
         } else {
             var index = document.getElementById('clas').selectedIndex;
@@ -176,6 +199,7 @@ function getValidations() {
         }
     }
 }
+
 
 function batchdisable(id) {
     if (document.getElementById('subject' + id).checked == true) {

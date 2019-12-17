@@ -49,13 +49,15 @@ public class attendance extends HttpServlet {
                         }
                         int no_of_batch = no_of_batch();
                         int no_of_sub = subs.length - 1;
-                        out.print(tablestart(cla , "hover", "studDetails", 0));
+                        out.print(tablestart(cla, "hover", "studDetails", 0));
                         String header = "<th>Subject Code</th><th>Subject Abbr</th>";
+                        PreparedStatement ps = con.prepareStatement("select * from batch where batchID>0");
+                        ResultSet rs = ps.executeQuery();
                         String sql_subject = "select ";
-                        for (int x = 1; x <= no_of_batch; x++) {
-                            sql_subject += "count(CASE WHEN timetable.batchID = '" + x + "' THEN '' END) ";
-                            header += "<th>Batch " + x + " </th>";
-                            if (x != no_of_batch) {
+                        while (rs.next()) {
+                            sql_subject += "count(CASE WHEN timetable.batchID = '" + rs.getString(1) + "' THEN '' END) ";
+                            header += "<th>" + rs.getString(2) + " </th>";
+                            if (rs.getInt(1) != no_of_batch) {
                                 sql_subject += ", ";
                             }
                         }
@@ -65,9 +67,9 @@ public class attendance extends HttpServlet {
                                 + "where subject.subjectID = ?";
                         out.print(tablehead(header));
                         for (int x = 0; x <= no_of_sub; x++) {
-                            PreparedStatement ps = con.prepareStatement(sql_subject);
+                            ps = con.prepareStatement(sql_subject);
                             ps.setString(1, subs[x][0]);
-                            ResultSet rs = ps.executeQuery();
+                            rs = ps.executeQuery();
                             out.println("<tr><td>" + subs[x][0] + "</td><td>" + subs[x][1] + "</td>");
                             while (rs.next()) {
                                 for (int y = 1; y <= no_of_batch; y++) {
@@ -82,15 +84,17 @@ public class attendance extends HttpServlet {
                             out.print("</tr>");
                         }
                         out.print(tableend(null, 0));
-                        out.print("<br><fieldset style='border-radius: 4px; border: solid 1px black;'><br><table width = 100%><tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Select Subject : </td>"
-                                + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>"
-                                + "<select name = 'subject' id = 'subject' style='padding: 5px 109px 5px 8px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' onchange=\"if(this.selectedIndex==0){document.getElementById('batch').disabled = true;}else{document.getElementById('batch').disabled = false;document.getElementById('batch').selectedIndex=1;document.getElementById('newFacTime-btn').disabled=false;}\"><option value= '0'>Select Subject</option>");
+                        out.print("<br><div class='row' style='border-radius: 4px; border: solid 1px black;'><div class='col-xl-4 col-sm-6' align='center'><br>Select Subject : </div>"
+                                + "<div class='col-xl-4 col-sm-6' style='vertical-align : middle;text-align:center;' align='center'>"
+                                + "<select name = 'subject' id = 'subject' style='width:200px; padding: 5px 5px 5px 5px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' "
+                                + "onchange=\"if(this.selectedIndex==0){document.getElementById('batch').disabled = true;}else{document.getElementById('batch').disabled = false;document.getElementById('batch').selectedIndex=1;document.getElementById('newFacTime-btn').disabled=false;}\"><option value= '0'>Select Subject</option>");
                         for (String sub[] : subs) {
                             out.print("<option value= '" + sub[0] + "'>" + sub[0] + " " + sub[1] + "</option>");
                         }
 
                         out.print("</select>");
-                        out.print("<select onchange = \"if(this.selectedIndex==0){document.getElementById('subject').selectedIndex=0; this.disabled= true;document.getElementById('newFacTime-btn').disabled=true;}\" class=\"editSelectTimeTable\" name = 'batch' id = 'batch' disabled  class='not-allowed';>"
+                        out.print("<select style='width:200px; padding: 5px 5px 5px 5px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' "
+                                + "onchange = \"if(this.selectedIndex==0){document.getElementById('subject').selectedIndex=0; this.disabled= true;document.getElementById('newFacTime-btn').disabled=true;}\" class=\"editSelectTimeTable\" name = 'batch' id = 'batch' disabled  class='not-allowed';>"
                                 + "<option name='-' value='-' selected >No Batch</option>");
                         PreparedStatement ps11 = con.prepareStatement("Select name from batch where batchid>0");
                         ResultSet rs3 = ps11.executeQuery();
@@ -100,7 +104,9 @@ public class attendance extends HttpServlet {
                             index++;
                         }
                         out.print("</select>");
-                        out.print("</td><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><button disabled onclick=\"var e = document.getElementById('subject');var b = document.getElementById('batch');setContent('/Cerberus/newFacultyTimetable?subjectid='+e.options[e.selectedIndex].value+'&batch='+b.selectedIndex);\" style='width:200px;' id='newFacTime-btn' class='btn btn-primary'>Edit Attendance</button></td></tr><tr><td></td><td></td><td><div id='validations' style='color:red;font-size:14px;'>*Or to Conduct New Lab Session</div></td></tr></table></fieldset><br>");
+                        out.print("</div><div class='col-xl-4 col-sm-6' style='vertical-align : middle;text-align:center;' align='center'>"
+                                + "<br><button disabled onclick=\"var e = document.getElementById('subject');var b = document.getElementById('batch');setContent('/Cerberus/newFacultyTimetable?subjectid='+e.options[e.selectedIndex].value+'&batch='+b.selectedIndex);\" style='width:200px;' id='newFacTime-btn' class='btn btn-primary'>Edit Attendance</button>"
+                                + "<br><div id='validations' style='color:red;font-size:14px;'>*Or to Conduct New Lab Session</div></div></div><br>");
                         index = 0;
                         String sql = "SELECT student.PRN, rollcall.rollNo,student.name,";
                         while (index <= no_of_sub) {
@@ -119,8 +125,8 @@ public class attendance extends HttpServlet {
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by rollcall.rollNo";
                         System.out.println(sql);
-                        PreparedStatement ps = con.prepareStatement(sql);
-                        ResultSet rs = ps.executeQuery();
+                        ps = con.prepareStatement(sql);
+                        rs = ps.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         if (rs.next()) {
@@ -180,7 +186,7 @@ public class attendance extends HttpServlet {
                             out.print(tableend(null, 1));
                             out.print("<script>var line =" + line + ";"
                                     + "function checkPerc(criteria){"
-                                    + "if(criteria>100){document.getElementById('criteriaPerc').value=100;}else{"
+                                    + "if(criteria>100){document.getElementById('criteriaPerc').value=100;checkPerc(100);}else{"
                                     + "for(var i=1;i<=line;i++){var value = document.getElementById('perc'+i).innerHTML;"
                                     + "value = value.substring(0, value.length - 1);"
                                     + "value = parseFloat(value);"

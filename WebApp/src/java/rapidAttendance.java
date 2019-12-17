@@ -64,9 +64,9 @@ public class rapidAttendance extends HttpServlet {
                                     ps.setInt(2, scheduleid);
                                     ResultSet rs1 = ps.executeQuery();
                                     if (rs1.next()) {
-                                        out.print("<center><input type='checkbox' value='1' id='warn" + line + "' name='att" + line + "' checked ><label for='warn" + line + "'></label></center>");
+                                        out.print("<center><input type='checkbox' value='1' id='warn" + line + "' name='att" + line + "' checked >");
                                     } else {
-                                        out.print("<center><input type='checkbox' value='1' id='warn" + line + "' name='att" + line + "' ><label for='warn" + line + "'></label></center>");
+                                        out.print("<center><input type='checkbox' value='1' id='warn" + line + "' name='att" + line + "' >");
                                     }
                                     out.print("</td></tr>");
                                     line++;

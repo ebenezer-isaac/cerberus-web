@@ -52,7 +52,7 @@ public class profile extends HttpServlet {
                         }
                         out.print("<br><br>");
                         out.print("<form action='savePref' method='post'>");
-                        out.print(tablestart("My Preferences", "hover", "preferences", 0));
+                        out.print(tablestart("Subject Preferences", "hover", "preferences", 0));
                         String header = "<tr>";
                         header += "<th style='vertical-align : middle;text-align:center;'>Subject Code</th>";
                         header += "<th style='vertical-align : middle;text-align:center;'>Abbreviation</th>";
@@ -79,14 +79,15 @@ public class profile extends HttpServlet {
                         for (String[] sub : subs) {
                             out.print("<tr><td style='vertical-align : middle;text-align:center;'>" + sub[0] + "</td>"
                                     + "<td style='vertical-align : middle;text-align:center;'>" + sub[1] + "</td>"
-                                    + "<td style='vertical-align : middle;text-align:center;'><input type='checkbox' id='warn' value='" + sub[0] + "' name='subjects'");
+                                    + "<td style='vertical-align : middle;text-align:center;'><center><input type='checkbox' id='" + index + "' value='" + sub[0] + "' name='subjects'");
                             if (isfav(sub[0])) {
                                 out.print(" checked ");
                             }
-                            out.print("><label for='warn'></label></td><tr>");
+                            out.print("><label for='" + index + "'></label></center></td><tr>");
+                            index++;
                         }
 
-                        out.print(tableend("<br><button class='btn btn-primary' style='width:200px' type='submit'>Submit</button><br><br>"
+                        out.print(tableend("<br><button class='btn btn-primary' style='width:200px' type='submit'>Save Preferences</button><br><br>"
                                 + "</form>", 0));
                         con.close();
                     } catch (Exception e) {
@@ -103,9 +104,9 @@ public class profile extends HttpServlet {
     }
 
     public boolean isfav(String subject) {
-        System.out.println("finding "+ subject);
+        System.out.println("finding " + subject);
         for (String sub : prefSub) {
-            System.out.println("checking "+sub);
+            System.out.println("checking " + sub);
             int index = subject.indexOf(sub);
             if (index != -1) {
                 return true;

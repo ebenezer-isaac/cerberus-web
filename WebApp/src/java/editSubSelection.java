@@ -110,12 +110,12 @@ public class editSubSelection extends HttpServlet {
                                     } else {
                                         flag = 1;
                                     }
-                                    out.print("<td style='vertical-align : middle;text-align:center;'><input type='checkbox' value='1' id='sub" + subs[i - 4][0] + "" + line + "' name='sub" + subs[i - 4][0] + "" + line + "' onchange='batchdisable(this.id)'");
+                                    out.print("<td style='vertical-align : middle;text-align:center;'><input class='mt-6' type='checkbox' value='1' id='sub" + subs[i - 4][0] + "" + line + "' name='sub" + subs[i - 4][0] + "" + line + "' onchange='batchdisable(this.id)'");
 
                                     if (flag == 1) {
                                         out.print(" checked");
                                     }
-                                    out.print("><label for='sub'></label><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i - 4][0] + "" + line + "' id = 'batch" + subs[i - 4][0] + "" + line + "' class='editSelectTimeTable");
+                                    out.print("><label for='sub" + subs[i - 4][0] + "" + line + "'></label><select onchange = 'subsdisable(this.id)' name = 'batch" + subs[i - 4][0] + "" + line + "' id = 'batch" + subs[i - 4][0] + "" + line + "' class='editSelectTimeTable");
                                     if (flag == 0) {
                                         out.print(" not-allowed' disabled");
                                     } else {
@@ -141,7 +141,7 @@ public class editSubSelection extends HttpServlet {
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'>Changing the batch of a student mid - semester is not advised.<br>All attendance pertaining to the previously set batch will not be calculated when displaying attendance of that student.</div>"
-                                    + "<br><input class='btn-primary btn' type='Save' style='width: 200px;' value='Save Details' align='center'>"
+                                    + "<br><input class='btn-primary btn' type='submit' style='width: 200px;' value='Save Details' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form><br><br>", 0));
                             out.print("<script>function batchdisable(id) {"

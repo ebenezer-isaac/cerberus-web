@@ -58,7 +58,7 @@ public class newFacultyTimetable extends HttpServlet {
                     Statement stmt = con.createStatement();
                     String sql = "SELECT `subjectID`,`abbreviation` from `subject`;";
                     ResultSet rs = stmt.executeQuery(sql);
-                    out.print("<select id = 'subject'  onclick='checkVal()' class=\"editSelect\">");
+                    out.print("<select id = 'subject'  onclick='checkVal()' style='width:200px;padding: 5px 5px 5px 5px;border-radius: 4px;border: none;background-color: #e6e6e6;outline: none;margin: 6px;font-size: 14.5px;'>");
                     out.print("<option");
                     if (subjectflag == 1) {
                         out.print(" selected");
@@ -71,7 +71,7 @@ public class newFacultyTimetable extends HttpServlet {
                         }
                         out.print("> " + rs.getString(1) + " - " + rs.getString(2) + " </option>");
                     }
-                    out.print("</select><br><select id = 'batch' onclick='checkVal()' class=\"editSelect\">");
+                    out.print("</select><br><select id = 'batch' onclick='checkVal()' style='width:200px;padding: 5px 5px 5px 5px;border-radius: 4px;border: none;background-color: #e6e6e6;outline: none;margin: 6px;font-size: 14.5px;'>");
                     sql = "SELECT * from `batch` where batchId>0;";
                     out.print("<option");
                     if (batchflag == 1) {

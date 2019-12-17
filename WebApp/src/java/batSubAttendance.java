@@ -109,30 +109,34 @@ public class batSubAttendance extends HttpServlet {
                             header += "</tr>";
                             out.print(tablehead(header));
                             int temp = 0;
-                            for (int i = 0; i < no_of_studs; i++) {
-                                out.print("<tr><td>" + studs[i][0] + "<input type='text' name = 'prn" + (i + 1) + "' value='" + studs[i][1] + "' hidden></td><td>" + studs[i][2] + "</td>");
-                                for (int j = 0; j < no_of_dates; j++) {
-                                    out.print("<td>");
-                                    ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
-                                    ps.setString(1, studs[i][1]);
-                                    ps.setInt(2, Integer.parseInt(dates[j][1]));
-                                    rs = ps.executeQuery();
-                                    if (rs.next()) {
-                                        out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[j][1] + "' checked ><label for='" + temp + "'></label></center>");
-                                        temp++;
-                                    } else {
-                                        out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[j][1] + "'><label for='" + temp + "'></label></center>");
-                                        temp++;
-                                    }
-                                    out.print("</td>");
-                                }
-                                out.print("</tr>");
-                            }
                             String schedules = "";
-                            for (int x = 0; x < (dates.length - 1); x++) {
-                                schedules += dates[x][1] + ",";
+                            if (no_of_studs > 0) {
+                                for (int i = 0; i < no_of_studs; i++) {
+                                    out.print("<tr><td>" + studs[i][0] + "<input type='text' name = 'prn" + (i + 1) + "' value='" + studs[i][1] + "' hidden></td><td>" + studs[i][2] + "</td>");
+                                    for (int j = 0; j < no_of_dates; j++) {
+                                        out.print("<td>");
+                                        ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
+                                        ps.setString(1, studs[i][1]);
+                                        ps.setInt(2, Integer.parseInt(dates[j][1]));
+                                        rs = ps.executeQuery();
+                                        if (rs.next()) {
+                                            out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[j][1] + "' checked ><label for='" + temp + "'></label></center>");
+                                            temp++;
+                                        } else {
+                                            out.print("<center><input type='checkbox' value='1' id='" + temp + "' name='att" + (i + 1) + "," + dates[j][1] + "'><label for='" + temp + "'></label></center>");
+                                            temp++;
+                                        }
+                                        out.print("</td>");
+                                    }
+                                    out.print("</tr>");
+                                }
+                                for (int x = 0; x < (dates.length - 1); x++) {
+                                    schedules += dates[x][1] + ",";
+                                }
+                                schedules += dates[dates.length - 1][1];
+                            } else {
+                                out.print("<tr><td colspan=3>No Students are who have opted for " + subject + " have been alloted to " + batch+"</td></tr>");
                             }
-                            schedules += dates[dates.length - 1][1];
                             out.print(tableend("No of students : " + (no_of_studs) + "<br><br>"
                                     + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='line' value='" + (no_of_studs + 1) + "' hidden>"
@@ -145,7 +149,7 @@ public class batSubAttendance extends HttpServlet {
                             error(e.getMessage());
                         }
                     } else {
-                        out.print("<script>setContent('/Cerberus/viewTimetable');</script>");
+                        out.print("<script>setContent('/Cerberus/homepage');</script>");
                     }
                     break;
                 case 0:

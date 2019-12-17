@@ -116,7 +116,7 @@
                                         + "<div class='dot dot-b'>"
                                         + "</div>"
                                         + "</div>"
-                                        + "</div>");
+                                        + "</div><br>");
                             } else {
                                 out.print("<br><form action='");
                                 if (ajax == 1) {

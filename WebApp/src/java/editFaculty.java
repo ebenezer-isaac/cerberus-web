@@ -53,9 +53,10 @@ public class editFaculty extends HttpServlet {
                                 + "<option value='Dr. '>Dr.</option>"
                                 + "<option value='Prof. '>Prof.</option>"
                                 + "</select>"
-                                + "<input type='text' name='name' class=\"editSubjectForm\" placeholder='First Name' minlength='5' maxlength='15'/></td></tr>"
-                                + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input required type='email' name='email' id='email' onchange='checkValidations(0);' style='width: 303.3px' class=\"editSubjectForm\" placeholder='zuck@gmail.com'/></td><td><div id='disp1' class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
-                                + "</table><br><button style='width:200px;' required type='submit' class='btn btn-primary'>Add Faculty</button></form></div>");
+                                + "<input type='text' required name='name' class=\"editSubjectForm\" placeholder='First Name' minlength='5' maxlength='15'/></td></tr>"
+                                + "<tr><td class=\"editSubjectStyle\">Faculty Email</td><td> : </td><td><input required type='email' name='email' id='email' onchange='checkValidations(4);' style='width: 303.3px' class=\"editSubjectForm\" placeholder='zuck@gmail.com'/></td>"
+                                + "<td><div id='disp1' class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
+                                + "</table><div id='validations' style='color:red;font-size:14px;' class='mt-2 mb-2'><br></div><button style='width:200px;' required type='submit' disabled id='facbtn1' class='btn btn-primary'>Add Faculty</button></form></div>");
                     } else if (flow.equals("del")) {
                         HttpSession session = request.getSession(false);
                         out.print("<body onload='myFunction()'>");

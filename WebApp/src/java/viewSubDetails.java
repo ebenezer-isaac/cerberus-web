@@ -43,7 +43,7 @@ public class viewSubDetails extends HttpServlet {
                         while (rs.next()) {
                             labcount = rs.getInt(1);
                         }
-                        out.print("<br>Total number of labs: " + labcount);
+                        out.print("<br>Total number of labs Conducted : " + labcount+"<br>");
                         if (labcount >= 1) {
                             PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date, \n"
                                     + "slot.startTime, slot.endTime,\n"
