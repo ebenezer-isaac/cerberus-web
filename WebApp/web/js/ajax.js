@@ -22,7 +22,7 @@ function getInfoSession() {
     if (request.readyState == 4) {
         var val = request.responseText;
         if (val == 2) {
-            window.location.replace("/Cerberus/index.js");
+            window.location.replace("/Cerberus/");
         } else {
             setContent_main(url_main);
         }

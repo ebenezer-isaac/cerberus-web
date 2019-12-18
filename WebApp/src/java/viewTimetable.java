@@ -1,5 +1,6 @@
 
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.prefSubs;
 import static cerberus.printer.tableend;
@@ -18,6 +19,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
@@ -32,7 +34,7 @@ public class viewTimetable extends HttpServlet {
     private static final long serialVersionUID = 1318699662544398556L;
 
     String heading;
-    int week = 0;
+    int week = 0, year = 0;
     int temp = 0;
     String[] subs;
     int access;
@@ -48,20 +50,25 @@ public class viewTimetable extends HttpServlet {
             HttpSession session = request.getSession(false);
             try {
                 week = Integer.parseInt(request.getParameter("week"));
+                year = Integer.parseInt(request.getParameter("year"));
             } catch (NumberFormatException e) {
                 week = getWeek(request);
+                year = getCurrYear();
             }
             access = getAccess(request);
-            wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week);
-           
-            mon = wks.plusDays(-1);
-            tue = wks.plusDays(0);
-            wed = wks.plusDays(1);
-            thu = wks.plusDays(2);
-            fri = wks.plusDays(3);
-            sat = wks.plusDays(4);
-            wke = wks.plusDays(5);
-             wks = wks.plusDays(-2);
+            LocalDate date = LocalDate.now()
+                    .withYear(year) // year
+                    .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
+                    .with(WeekFields.ISO.dayOfWeek(), 7);
+            System.out.println("date stack : "+date);
+            wks = date.plusDays(-7);
+            mon = wks.plusDays(1);
+            tue = wks.plusDays(2);
+            wed = wks.plusDays(3);
+            thu = wks.plusDays(4);
+            fri = wks.plusDays(5);
+            sat = wks.plusDays(6);
+            wke = wks.plusDays(7);
             switch (access) {
                 case 1:
                     out.print("<style>"
@@ -104,16 +111,26 @@ public class viewTimetable extends HttpServlet {
                             + "}}"
                             + "</script>");
                     heading = "<table width = 100%>"
-                            + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "')\" >"
-                            + "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
+                            + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+                    if (week == 1) {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=52&year=" + (year - 1) + "')\" >";
+                    } else {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
+                    }
+                    heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
                             + "<span>Previous</span>"
                             + "</button>"
                             + "</form></td>"
                             + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
-                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
-                            + "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
+                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+                    if (week == 52) {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=1&year=" + (year + 1) + "')\" >";
+                    } else {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
+                    }
+                    heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
                     if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                        heading += "disabled";
+                        heading += "";
                     }
                     heading += "><span>Next</span>"
                             + "</button>"
@@ -193,11 +210,12 @@ public class viewTimetable extends HttpServlet {
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
-                    + "where labID=? and weekID=(select weekID from week where week = ?) "
+                    + "where labID=? and weekID=(select weekID from week where week = ? and year=?) "
                     + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;");
             ps4.setInt(1, labid);
             ps4.setInt(2, week);
+            ps4.setInt(3, year);
             ResultSet lab1 = ps4.executeQuery();
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();
@@ -316,10 +334,11 @@ public class viewTimetable extends HttpServlet {
                         + "FROM timetable "
                         + "INNER JOIN slot "
                         + "ON timetable.slotID = slot.slotID "
-                        + "where labID=? and weekID=(select weekID from week where week = ?) "
+                        + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) "
                         + "GROUP BY slot.startTime, slot.endTime;");
                 ps4.setInt(1, l + 1);
                 ps4.setInt(2, week);
+                ps4.setInt(3, year);
                 ResultSet lab1 = ps4.executeQuery();
                 for (int y = 0; y <= no_of_slots; y++) {
                     labs[l][y] = "";
