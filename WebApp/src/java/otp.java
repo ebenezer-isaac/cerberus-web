@@ -73,8 +73,8 @@ public class otp extends HttpServlet {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                         String dateInString = rs.getString(1) + " " + rs.getString(2);
                         Date datetime = sdf.parse(dateInString);
-                        System.out.println(datetime);
-                        if (datetime.compareTo(now) < 0) {
+                        long diff = ((now.getTime() - datetime.getTime()) / 1000) / 60;
+                        if (diff < 10) {
                             spam = 1;
                         }
                     } catch (SQLException | ParseException e) {
@@ -123,7 +123,7 @@ public class otp extends HttpServlet {
                         Mailer mail = new Mailer();
                         mail.send(this.email, "Password for Cerberus", this.body);
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
+                        request.setAttribute("redirect", "false");
                         request.setAttribute("head", "OTP Status");
                         request.setAttribute("body", "An One Time High Security Password has been sent to your registered e-mail account.<br>"
                                 + "The OTP is valid for only 10 minutes.<br>");
