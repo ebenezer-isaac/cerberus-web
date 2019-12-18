@@ -6,7 +6,7 @@
     } catch (Exception e) {
         e.printStackTrace();
     }
-    String redirect = "", head = "", body = "", fullpage = "", sec = "", type = "", url = "";
+    String redirect = "false", head = "Hi", body = "", fullpage = "true", sec = "", type = "", url = "index.jsp";
     try {
         type = request.getAttribute("type").toString();
     } catch (Exception e) {

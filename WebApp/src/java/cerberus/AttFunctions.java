@@ -119,21 +119,22 @@ public class AttFunctions {
                     }
                     if (startmill < timemill && timemill < endmill) {
                         nextSchedule[0] = "2";
-                        String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
-
-                        try {
-                            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
-                            final Date dateObj = sdf.parse(schedule[x][1]);
-                            System.out.println(dateObj);
-                            schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
-                        } catch (final ParseException e) {
-                            e.printStackTrace();
+                        if (schedule[x][3] != null) {
+                            String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
+                            try {
+                                final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                                final Date dateObj = sdf.parse(schedule[x][1]);
+                                System.out.println(dateObj);
+                                schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
+                            } catch (final ParseException e) {
+                                e.printStackTrace();
+                            }
+                            nextSchedule[1] = "Lab Started at " + schedule[x][1] + "<br>"
+                                    + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
+                                    + "Subject : " + details[5] + "<br>"
+                                    + "Batch : " + details[6] + "," + schedule[x][3];
+                            return nextSchedule;
                         }
-                        nextSchedule[1] = "Lab Started at " + schedule[x][1] + "<br>"
-                                + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
-                                + "Subject : " + details[5] + "<br>"
-                                + "Batch : " + details[6] + "," + schedule[x][3];
-                        return nextSchedule;
                     }
                 }
                 for (int x = 0; x < slots; x++) {
@@ -622,6 +623,10 @@ public class AttFunctions {
     public static String getCurrDate() {
         Date date = new Date();
         return (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    }
+    public static int getCurrYear() {
+        Date date = new Date();
+        return (date.getYear() + 1900);
     }
 
     public static int getDateID(String date) {
