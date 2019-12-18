@@ -60,8 +60,8 @@ public class resetpass extends HttpServlet {
                 otp = otp.toUpperCase();
                 otp = hashIt(otp);
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
                         PreparedStatement ps = con.prepareStatement("select otp from `otp` where email=?");
                         ps.setString(1, email);
                         ResultSet rs = ps.executeQuery();
@@ -82,8 +82,8 @@ public class resetpass extends HttpServlet {
                 if (otp_count == 1) {
                     if (corrotp.equals(otp)) {
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             PreparedStatement ps = con.prepareStatement("UPDATE `student` SET password = ? where email=?");
                             ps.setString(1, pass);
                             ps.setString(2, email);

@@ -72,8 +72,8 @@ public class AttFunctions {
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         String time = getCurrTime();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = ? THEN timetable.scheduleID END) "
                     + "FROM timetable "
@@ -129,10 +129,17 @@ public class AttFunctions {
                             } catch (final ParseException e) {
                                 e.printStackTrace();
                             }
+                            int studs = 0;
+                            ps = con.prepareStatement("SELECT count(attendance.attendanceID) from attendance where scheduleID = ?");
+                            ps.setString(1, schedule[x][3]);
+                            rs = ps.executeQuery();
+                            if (rs.next()) {
+                                studs = rs.getInt(1);
+                            }
                             nextSchedule[1] = "Lab Started at " + schedule[x][1] + "<br>"
                                     + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
                                     + "Subject : " + details[5] + "<br>"
-                                    + "Batch : " + details[6] + "," + schedule[x][3];
+                                    + "Batch : " + details[6] + "," + schedule[x][3] + "," + studs;
                             return nextSchedule;
                         }
                     }
@@ -212,24 +219,25 @@ public class AttFunctions {
 
     public static String[] get_schedule_det(int scheduleID) {
 
-        String schedule[] = new String[8];
+        String schedule[] = new String[9];
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-            PreparedStatement ps = con.prepareStatement("select (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as Date, \n"
-                    + "(select slot.startTime from slot where slot.slotID = timetable.slotID) as startTime,\n"
-                    + "(select slot.endTime from slot where slot.slotID = timetable.slotID) as endTime, \n"
-                    + "(select lab.name from lab where lab.labID = timetable.labID) as Lab, \n"
-                    + "(select subject.subjectID from subject where subject.subjectID = timetable.subjectID) as SubjectID, \n"
-                    + "(select subject.subject from subject where subject.subjectID = timetable.subjectID) as Subject, \n"
-                    + "(select batch.name from batch where batch.batchID = timetable.batchID) as Batch, \n"
-                    + "(select subject.classID from subject where subject.subjectID = timetable.subjectID) as ClassID \n"
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+            PreparedStatement ps = con.prepareStatement("select STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w'), \n"
+                    + "(select slot.startTime from slot where slot.slotID = timetable.slotID) ,\n"
+                    + "(select slot.endTime from slot where slot.slotID = timetable.slotID), \n"
+                    + "(select lab.name from lab where lab.labID = timetable.labID), \n"
+                    + "(select subject.subjectID from subject where subject.subjectID = timetable.subjectID), \n"
+                    + "(select subject.subject from subject where subject.subjectID = timetable.subjectID), \n"
+                    + "(select batch.name from batch where batch.batchID = timetable.batchID), \n"
+                    + "(select subject.classID from subject where subject.subjectID = timetable.subjectID),  \n"
+                    + "(select subject.abbreviation from subject where subject.subjectID = timetable.subjectID)  \n"
                     + "from timetable where scheduleID = ?");
             ps.setInt(1, scheduleID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int index = 0;
-                while (index < 8) {
+                while (index < 9) {
                     schedule[index] = rs.getString(index + 1);
                     index = index + 1;
                 }
@@ -286,8 +294,8 @@ public class AttFunctions {
         prn = prn.trim();
         subid = subid.trim();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("select count(timetable.scheduleID) from timetable inner join facultytimetable on timetable.scheduleID = facultytimetable.scheduleID where timetable.subjectID=? and batchid = ?");
             ps.setString(1, subid);
             ps.setString(2, batch);
@@ -325,8 +333,8 @@ public class AttFunctions {
     public static int no_of_labs() {
         int no_of_labs = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(labID) FROM `lab`");
             while (rs.next()) {
@@ -342,8 +350,8 @@ public class AttFunctions {
     public static int no_of_slots() {
         int no_of_slots = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(slotID) FROM `slot`");
             while (rs.next()) {
@@ -359,8 +367,8 @@ public class AttFunctions {
     public static int no_of_class() {
         int no_of_class = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(classID) FROM `class`");
             while (rs.next()) {
@@ -376,8 +384,8 @@ public class AttFunctions {
     public static int no_of_batch() {
         int no_of_batch = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT count(batchID) FROM `batch` where batchID>0");
             while (rs.next()) {
@@ -394,8 +402,8 @@ public class AttFunctions {
     public static int get_class_from_sub(String subjectID) {
         int classID = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement stmt = con.prepareStatement("select classId from subject where subjectID = ?");
             stmt.setString(1, subjectID);
             ResultSet rs = stmt.executeQuery();
@@ -418,8 +426,8 @@ public class AttFunctions {
             user = session.getAttribute("user").toString();
         }
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps;
             if (access == 1) {
                 ps = con.prepareStatement("select subject.Abbreviation from facultysubject "
@@ -478,8 +486,8 @@ public class AttFunctions {
         String subs[][] = null;
         int no_of_subs = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("SELECT subjectID,`Abbreviation` FROM `subject` where `sem` in(?,?,?) ORDER BY `subject`.`Abbreviation` ASC;");
             ps.setInt(1, oddeve);
             ps.setInt(2, oddeve + 2);
@@ -507,8 +515,8 @@ public class AttFunctions {
     public static String[][] semSubs(int sem, int classID) {
         String semsubs[][] = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ? and classID = ?");
             ps.setInt(1, sem);
             ps.setInt(2, classID);
@@ -576,8 +584,8 @@ public class AttFunctions {
         String cl = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps1 = con.prepareStatement("Select class from class where classID=?");
             ps1.setInt(1, classID);
             ResultSet rs = ps1.executeQuery();
@@ -594,8 +602,8 @@ public class AttFunctions {
     public static int getWeekID(int week, int year) {
         int weekID = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("SELECT weekID FROM WEEK where week = ? and year =?");
             ps.setInt(1, week);
             ps.setInt(2, year);
@@ -624,6 +632,7 @@ public class AttFunctions {
         Date date = new Date();
         return (date.getYear() + 1900) + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     }
+
     public static int getCurrYear() {
         Date date = new Date();
         return (date.getYear() + 1900);
@@ -632,8 +641,8 @@ public class AttFunctions {
     public static int getDateID(String date) {
         int dateID = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("SELECT dateID FROM datedata where date = ?");
             ps.setString(1, date);
             ResultSet rs = ps.executeQuery();
@@ -664,8 +673,8 @@ public class AttFunctions {
     public static int getTimeID(String time) {
         int timeID = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps = con.prepareStatement("SELECT timeID FROM timedata where time = ?");
             ps.setString(1, time);
             ResultSet rs = ps.executeQuery();
@@ -691,8 +700,8 @@ public class AttFunctions {
     public static String[][] getSlots() {
         String slots[][] = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();
             int no_of_slots = 0;

@@ -137,8 +137,8 @@ public class viewTimetable extends HttpServlet {
                             + "</form></td>";
                     heading += "</tr></table>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         subs = prefSubs(request, null);
                         out.print("Display Style : <select name = 'timetable_type' id = 'timetable_type' class=\"editSelect\" onchange='changestyle(this.selectedIndex)'>");
                         out.print("<option name='clas' value= '0'>Lab Wise</option>");
@@ -186,8 +186,8 @@ public class viewTimetable extends HttpServlet {
     public String lab_printTimetable(int labid) {
         String timetable = "";
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br></p>", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
@@ -284,8 +284,8 @@ public class viewTimetable extends HttpServlet {
     public String printTimetable() {
         String timetable = "";
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             timetable += (tablestart(heading, "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");

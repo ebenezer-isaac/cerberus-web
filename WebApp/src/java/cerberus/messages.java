@@ -73,11 +73,10 @@ public class messages extends HttpServlet {
             throws ServletException, IOException {
         try {
             try (PrintWriter out = response.getWriter()) {
-                this.redirect = "true";
+                this.redirect = "false";
                 this.head = "Request Successfull";
                 this.body = body;
                 this.url = url;
-                this.sec = 2;
                 processRequest(request, response);
             }
         } catch (Exception e) {
@@ -88,7 +87,7 @@ public class messages extends HttpServlet {
     public void failed(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
-            this.redirect = "true";
+            this.redirect = "false";
             this.head = "Request Unsuccessfull";
             this.body = body;
             this.url = url;

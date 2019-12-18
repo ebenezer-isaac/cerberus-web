@@ -11,109 +11,13 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
-        <title>Cerberus</title>
-        <!-- Custom fonts for this template-->
+        <title>C E R B E R U S</title>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <!-- Page level plugin CSS-->
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-        <!-- Custom styles for this template-->
         <link href="css/sb-admin.css" rel="stylesheet">
         <link href="css/dropdowns.css" rel="stylesheet">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
-        <style>
-            .warning{
-                background-color:red;
-                color:white;
-            }
-            .success{
-                background-color:green;
-                color:white;
-            }
-            img {
-                pointer-events: none;
-            }
-            .unselectable {
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-            /* width */
-            ::-webkit-scrollbar {
-                width: 10px;
-            }
-
-            /* Track */
-            ::-webkit-scrollbar-track {
-                background: #f1f1f1; 
-            }
-
-            /* Handle */
-            ::-webkit-scrollbar-thumb {
-                background: #888; 
-            }
-
-            /* Handle on hover */
-            ::-webkit-scrollbar-thumb:hover {
-                background: #555; 
-            }
-            .tooltipp .tooltiptext {
-                visibility: hidden;
-                background-color: #0d0d0d;
-                font-size: 12px;
-                color: #fff;
-                text-align: center;
-                border-radius: 6px;
-                padding: 7px;
-                margin-left:10px;
-                margin-top:10px;
-                /* Position the tooltip */
-                position: absolute;
-                z-index: 1;
-            }
-
-            .tooltipp:hover .tooltiptext {
-                visibility: visible;
-            }
-            /*Checkboxes styles*/
-            input[type="checkbox"] { display: none; }
-
-            input[type="checkbox"] + label {
-                display: block;
-                color: #ddd;
-                cursor: pointer;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-            }
-
-            input[type="checkbox"] + label:last-child { margin-bottom: 0; }
-
-            input[type="checkbox"] + label:before {
-                content: '';
-                display: block;
-                width: 15px;
-                height: 15px;
-                border: 1px solid blue;
-                opacity: .6;
-                -webkit-transition: all .12s, border-color .08s;
-                transition: all .12s, border-color .08s;
-            }
-
-            input[type="checkbox"]:checked + label:before {
-                width: 7.5px;
-                top: -5px;
-                left: 5px;
-                border-radius: 0;
-                opacity: 1;
-                border-top-color: transparent;
-                border-left-color: transparent;
-                -webkit-transform: rotate(45deg);
-                transform: rotate(45deg);
-            }
-        </style>
+        <link rel="stylesheet" href="css/side.css" type="text/css">
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
@@ -166,8 +70,8 @@
                         <h6 class="dropdown-header" align='center'>View : </h6>
                         <%
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                                 while (rs.next()) {
@@ -195,8 +99,8 @@
                         <h6 class="dropdown-header" align='center'>Edit :</h6>
                         <%
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT labID, name FROM `lab` ORDER BY `labID` ASC");
                                 while (rs.next()) {
@@ -224,8 +128,8 @@
                         <h6 class="dropdown-header" align='center'>Details : </h6>
                         <%
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                                 while (rs.next()) {
@@ -241,8 +145,8 @@
                         <h6 class="dropdown-header" align='center'>Subject Selection : </h6>
                         <%
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                                 while (rs.next()) {
@@ -291,9 +195,9 @@
             </ul>
 
             <%
-                Class.forName("com.mysql.cj.jdbc.Driver");
+                Class.forName("com.mysql.jdbc.Driver");
                 try {
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                     PreparedStatement ps2 = con.prepareStatement("SELECT name, photo FROM faculty WHERE facultyID = ?");
                     ps2.setString(1, session.getAttribute("user").toString());
                     byte[] blob = null;

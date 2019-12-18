@@ -33,8 +33,8 @@ public class saveStudSubAttendance extends HttpServlet {
                         int scheduleid = Integer.parseInt(schedules[x]);
                         int timeID = getTimeID(getCurrTime());
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             PreparedStatement insert = con.prepareStatement("insert into attendance values(null,?,?,?)");
                             PreparedStatement delete = con.prepareStatement("delete from attendance where scheduleid=? and prn = ?");
                             String att = request.getParameter("att" + (x + 1) + "," + scheduleid);

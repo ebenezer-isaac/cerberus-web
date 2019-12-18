@@ -31,8 +31,8 @@ public class saveSubSelection extends HttpServlet {
                 case 1:
                     int classID = Integer.parseInt(request.getParameter("division"));
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         String cla = getClassName(classID);
                         int index = 0;
                         int oddeve = oddEve();

@@ -32,7 +32,8 @@ public class viewSubject extends HttpServlet {
                     out.print("<style>tr:hover {"
                             + "background: #a8a3a3;"
                             + "}</style>");
-                    out.print(tablestart("Subjects", "hover", "studDetails", 0));
+                    out.print(tablestart("Subjects<div id='validations' style='color:red;font-size:14px;' class='mt-2 mb-2'>"
+                            + "Select a Subject to view list of Labs conducted.</div>", "hover", "studDetails", 0));
                     String header = "<tr>";
                     header += "<th>Subject Code</th>";
                     header += "<th>Semester</th>";
@@ -42,8 +43,8 @@ public class viewSubject extends HttpServlet {
                     header += "</tr>";
                     out.print(tablehead(header));
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         Statement stmt = con.createStatement();
                         ResultSet rs = stmt.executeQuery("Select subject.subjectID, subject.sem, subject.subject, subject.Abbreviation, (select class.class from class where subject.classID = class.classID) from `subject` ORDER BY `sem` ASC");
                         while (rs.next()) {

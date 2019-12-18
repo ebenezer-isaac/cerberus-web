@@ -32,7 +32,9 @@ public class editDelStudent extends HttpServlet {
                             + "<br><table><tr><td><input type='checkbox' id='warn'onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                             + "<br></fieldset>");
                     out.print("<br><div id = 'butt' style='display:none;' ><button class='btn btn-primary' style='width:200px' id='studbtn2' disabled type='submit'>Delete Student</button></div>");
-                    out.print("</form>");
+                    out.print("</form><style type='text/css'>\n"
+                            + "@import url('css/checkbox.css');\n"
+                            + "</style>");
                     break;
                 case 0:
                     out.print(kids());

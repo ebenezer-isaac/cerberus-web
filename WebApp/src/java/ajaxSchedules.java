@@ -29,14 +29,31 @@ public class ajaxSchedules extends HttpServlet {
             String batch = request.getParameter("bat");
 
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                PreparedStatement ps = con.prepareStatement("select timetable.scheduleID from timetable where timetable.subjectID = ? and timetable.batchID = ? order by timetable.weekID and timetable.dayID");
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                PreparedStatement ps = con.prepareStatement("select subject.subject from subject where subjectID = ?");
                 ps.setString(1, subject);
-                ps.setString(2, batch);
+                String subjectName = "";
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    out.print(tablestart("Lab Sessions", "hover", "studDetails", 0));
+                    subjectName = rs.getString(1);
+                }
+                ps = con.prepareStatement("select batch.name from batch where batchID = ?");
+                ps.setString(1, batch);
+                rs = ps.executeQuery();
+                String batchName = "";
+                if (rs.next()) {
+                    batchName = rs.getString(1);
+                }
+                ps = con.prepareStatement("select timetable.scheduleID from timetable where timetable.subjectID = ? and timetable.batchID = ? order by timetable.weekID and timetable.dayID DESC");
+                ps.setString(1, subject);
+                ps.setString(2, batch);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    System.out.println("ajax schedules");
+                    out.print(tablestart("List of Lab Session scheduled for " + batchName + " of " + subjectName + ""
+                            + "<div id='validations' style='color:red;font-size:14px;' class='mt-2 mb-2'>"
+                            + "Select a Lab Session listed below to mark it as conducted and to edit its Attendance.</div>", "hover", "studDetails", 0));
                     String header = "<tr>";
                     header += "<th>Date</th>";
                     header += "<th>Start Time</th>";
@@ -45,6 +62,7 @@ public class ajaxSchedules extends HttpServlet {
                     header += "<th>Subject ID</th>";
                     header += "<th>Subject</th>";
                     header += "</tr>";
+                    System.out.println(header);
                     out.print(tablehead(header));
                     rs.previous();
                     while (rs.next()) {
@@ -59,9 +77,13 @@ public class ajaxSchedules extends HttpServlet {
                         out.print("</tr>");
                     }
                     out.print(tableend(null, 0));
-                }else{out.print("No Lab Sessions were Scheduled for "+subject+" "+batch+".<br>You can schedule Lab Sessions from by <a href=\"javascript:setContent('/Cerberus/editTimetable');\">Editing Timetable</a>");}
+                } else {
+                    out.print("No Lab Sessions were Scheduled for " + subject + " " + batch + ".<br><br>You can schedule Lab Sessions from by <br><br>"
+                            + "<a href=\"javascript:setContent('/Cerberus/editTimetable');\">Editing Timetable</a>");
+                }
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
                 error(e.getMessage());
             }
             out.print("");
