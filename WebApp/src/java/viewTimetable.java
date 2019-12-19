@@ -51,8 +51,11 @@ public class viewTimetable extends HttpServlet {
             HttpSession session = request.getSession(false);
             String user = (String) session.getAttribute("user");
             try {
+                week = getWeek(request);
+
                 week = Integer.parseInt(request.getParameter("week"));
                 year = Integer.parseInt(request.getParameter("year"));
+
             } catch (NumberFormatException e) {
                 week = getWeek(request);
                 year = getCurrYear();
