@@ -69,6 +69,7 @@ public class studSubAttendance extends HttpServlet {
                                 dates[index][1] = rs.getString(2);
                                 index++;
                             }
+                            System.out.println(index);
                             out.print("<form action='saveStudSubAttendance' method='post'>");
                             ps = con.prepareStatement("select subject.subject from subject where subject.subjectID = ?");
                             ps.setString(1, subjectID);
@@ -116,6 +117,9 @@ public class studSubAttendance extends HttpServlet {
                                 out.print("</td>");
                                 out.print("</tr>");
                             }
+                            if(temp==0){
+                            out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
+                            }
                             String schedules = "";
                             if (dates.length > 1) {
                                 for (int x = 0; x < (dates.length - 1); x++) {
@@ -133,6 +137,7 @@ public class studSubAttendance extends HttpServlet {
                                     + "</form><style type='text/css'>\n"
                                     + "@import url('css/checkbox.css');\n"
                                     + "</style>", 0));
+
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
                             e.printStackTrace();
@@ -205,7 +210,8 @@ public class studSubAttendance extends HttpServlet {
                             header += "<th>Status</th>";
                             header += "</tr>";
                             out.print(tablehead(header));
-                            for (int i = 0; i < no_of_dates; i++) {
+                            int temp = 0;
+                            for (int i = 0; i < no_of_dates; i++) {temp++;
                                 out.print("<tr><td>" + dates[i][0] + "</td><td>");
                                 ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
                                 ps.setString(1, prn);
@@ -218,6 +224,9 @@ public class studSubAttendance extends HttpServlet {
                                 }
                                 out.print("</td>");
                                 out.print("</tr>");
+                            }
+                            if(temp==0){
+                            out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
                             }
                             out.print(tableend("No of Labs : " + (dates.length) + "<br><br>", 0));
                             con.close();

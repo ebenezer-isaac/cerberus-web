@@ -51,7 +51,7 @@ public class editAddStudent extends HttpServlet {
                                 + "<tr><td class=\"editSubjectStyle\">PRN</td><td> : </td><td><input type='TEXT' name='prn' id='prn' onchange='checkValidations(1);' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/><td><div id='disp2' class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></td></tr> "
                                 + "<tr><td class=\"editSubjectStyle\">Student Email</td><td> : </td><td><input type='email' id='email' name='email' onchange='checkValidations(0);' class=\"editSubjectForm\" placeholder='zuck@gmail.com' /></td><td><div id='disp1' class=\"tooltipp\" style='width:100px'><i class=\"fa fa-times\" aria-hidden=\"true\"></i></div></td></tr> "
                                 + "<tr><td></td><td></td><td class='text-center'><div id='validations' style='color:red;font-size:14px;'><br></div></td></tr>"
-                                + "</table><div id='subs'></div><br><button disabled type='submit' style='width:200px;' id='studbtn1' class='btn btn-primary'>Add Student</button></form>");
+                                + "</table><br><button disabled type='submit' style='width:200px;' id='studbtn1' class='btn btn-primary'>Add Student</button></form>");
 
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {

@@ -200,31 +200,6 @@ function getValidations() {
     }
 }
 
-
-function batchdisable(id) {
-    if (document.getElementById('subject' + id).checked == true) {
-        document.getElementById('batch' + id).selectedIndex = 1;
-        document.getElementById('batch' + id).disabled = false;
-        document.getElementById('batch' + id).classList.remove('not-allowed');
-    } else {
-        document.getElementById('batch' + id).selectedIndex = 0;
-        document.getElementById('batch' + id).disabled = true;
-        document.getElementById('batch' + id).classList.add('not-allowed');
-    }
-}
-var request;
-var id;
-
-function subsdisable(id) {
-    var index = document.getElementById(id).selectedIndex;
-    if (index == 0) {
-        id = id.substr(5);
-        document.getElementById('subject' + id).checked = false;
-    }
-    document.getElementById('batch' + id).disabled = true;
-    document.getElementById('batch' + id).classList.add('not-allowed');
-}
-
 var btnstatus4 = 0;
 function checkPRN() {
     v = document.getElementById('prn').value;

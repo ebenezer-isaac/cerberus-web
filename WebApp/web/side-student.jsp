@@ -16,6 +16,7 @@
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <link href="css/sb-admin.css" rel="stylesheet">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
+        <link rel="stylesheet" href="css/dropdowns.css" type="text/css">
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
@@ -59,7 +60,7 @@
                         <span>Homepage</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:setContent('/Cerberus/homepage');">
+                    <a class="nav-link" href="javascript:setContent('/Cerberus/viewTimetable');">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Timetable</span></a>
                 </li>
@@ -70,7 +71,7 @@
                         PreparedStatement ps1 = con.prepareStatement("select subject.subjectID, subject.Abbreviation from studentsubject "
                                 + "inner join subject "
                                 + "on subject.subjectID=studentsubject.subjectID "
-                                + "where PRN = ?");
+                                + "where PRN = ? and studentsubject.batchID!=0");
                         ps1.setString(1, session.getAttribute("user").toString());
                         ResultSet rs = ps1.executeQuery();
                         int index = 1;

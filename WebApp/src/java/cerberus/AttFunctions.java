@@ -91,7 +91,11 @@ public class AttFunctions {
             int slots = no_of_slots();
             String schedule[][] = new String[slots][4];
             int count = 0;
+            int nullcount = 0;
             while (rs.next()) {
+                if (rs.getString(4) == null) {
+                    nullcount++;
+                }
                 schedule[count][0] = rs.getString(1);
                 schedule[count][1] = rs.getString(2);
                 schedule[count][2] = rs.getString(3);
@@ -99,7 +103,7 @@ public class AttFunctions {
                 System.out.println(schedule[count][0] + " " + schedule[count][1] + " " + schedule[count][2] + " " + schedule[count][3]);
                 count++;
             }
-            if (count > 0) {
+            if (count > 0&& count>nullcount) {
                 long startmill = 0;
                 long timemill = 0;
                 long endmill = 0;
@@ -438,7 +442,7 @@ public class AttFunctions {
                 ps = con.prepareStatement("select subject.Abbreviation from studentsubject "
                         + "inner join subject "
                         + "on subject.subjectID=studentsubject.subjectID "
-                        + "where prn = ? and studentsubject.batchID not '0'");
+                        + "where prn = ? and studentsubject.batchID != 0");
             }
             ps.setString(1, user);
             ResultSet rs = ps.executeQuery();

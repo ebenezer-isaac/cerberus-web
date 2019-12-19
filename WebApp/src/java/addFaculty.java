@@ -79,10 +79,10 @@ public class addFaculty extends HttpServlet {
                         ps.executeUpdate();
                         String body = "Hello " + name + ",\n    This mail is in response to a request to add you as a faculty at MSU-CA Department.\n\n"
                                 + "Email/Username : " + email + "\n"
-                                + "One Time Password : " + rawpass + "\n\n"
+                                + "Password : " + rawpass + "\n\n"
                                 + "You can now login with given username and password at at CA Department's Intranet WebSite\n"
                                 + "and wield admin privileges to manage timetable, students' details and attendance amoung other things through this portal.\n\n"
-                                + "Note: You will be prompted to change password on first login.\n\n"
+                                + "Note: You can change your password in the My Profie section.\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
                                 + "Regards\nCerberus Support Team";
                         Mailer mail = new Mailer();

@@ -1,6 +1,7 @@
 
 import static cerberus.AttFunctions.get_next_schedule;
 import static cerberus.AttFunctions.no_of_labs;
+import cerberus.messages;
 import static cerberus.printer.error;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +20,7 @@ import static cerberus.printer.tablehead;
 import static cerberus.printer.tablestart;
 import java.sql.SQLException;
 import java.util.Date;
+import javax.servlet.RequestDispatcher;
 
 public class homepage extends HttpServlet {
 
@@ -38,10 +40,13 @@ public class homepage extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
             access = (int) session.getAttribute("access");
+            if (access == 0) {
+
+            }
             switch (access) {
                 case 1:
                     String faculty_name = (String) session.getAttribute("name");
-                    out.print("<b>" + faculty_name + "</b><br><div class='row'>");
+                    out.print("<b>" + faculty_name + "</b><br><br><div class='row'>");
                     int labs = no_of_labs();
                     for (int i = 1; i <= labs; i++) {
                         String testing[] = get_next_schedule(request, i);
@@ -136,7 +141,6 @@ public class homepage extends HttpServlet {
                                         + "</div>"
                                         + "</div>");
                                 break;
-
                         }
                     }
                     out.print("</div>");
@@ -201,24 +205,27 @@ public class homepage extends HttpServlet {
                     out.print("");
                     break;
                 case 0:
+                    int count = 0;
+                    String prn = (String) session.getAttribute("user");
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                        PreparedStatement ps1 = con.prepareStatement("select subject.subjectID, subject.Abbreviation, (select name from batch where batchID = studentsubject.batchID) from studentsubject "
-                                + "inner join subject "
-                                + "on subject.subjectID=studentsubject.subjectID "
-                                + "where PRN = ?");
-                        ps1.setString(1, session.getAttribute("user").toString());
-                        ResultSet rs = ps1.executeQuery();
-                        int index = 1;
+                        PreparedStatement ps = con.prepareStatement("select count(batchID) from studentsubject where prn = ? and batchID !=0");
+                        ps.setString(1, prn);
+                        ResultSet rs = ps.executeQuery();
+
                         while (rs.next()) {
-                            out.print(rs.getString(1) + " " + rs.getString(2) + "<br>");
-                            index++;
+                            count = rs.getInt(1);
                         }
-                        if (index == 1) {
-                            out.print("No Subjects Selected");
-                        }
-                    } catch (Exception e) {
+
+                    } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+                        messages b = new messages();
+                        b.error(request, response, e.getMessage(), "homepage");
+                    }
+                    if (count < 1) {
+                       out.print("<script>window.location.replace('/Cerberus/details.jsp')</script>");
+                    } else {
+                        out.print("Homepage");
                     }
                     break;
                 default:

@@ -16,9 +16,8 @@
                 text-align: center;
                 border-radius: 6px;
                 padding: 7px;
-
                 /* Position the tooltip */
-                position: absolute;
+              
                 z-index: 1;
             }
 
@@ -35,18 +34,14 @@
                 -moz-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
+                -ms-overflow-style: none;
             }
 
             /* Hide scrollbar for Chrome, Safari and Opera */
             ::-webkit-scrollbar {
                 display: none;
             }
-
             /* Hide scrollbar for IE and Edge */
-            body {
-                -ms-overflow-style: none;
-            }
-
             .abt:hover
             {
                 text-decoration: none;

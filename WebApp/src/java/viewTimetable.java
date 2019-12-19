@@ -38,6 +38,7 @@ public class viewTimetable extends HttpServlet {
     int temp = 0;
     String[] subs;
     int access;
+    int classID = 0;
     HttpServletResponse response;
     HttpServletRequest request;
     int no_of_class;
@@ -48,6 +49,7 @@ public class viewTimetable extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(false);
+            String user = (String) session.getAttribute("user");
             try {
                 week = Integer.parseInt(request.getParameter("week"));
                 year = Integer.parseInt(request.getParameter("year"));
@@ -56,11 +58,12 @@ public class viewTimetable extends HttpServlet {
                 year = getCurrYear();
             }
             access = getAccess(request);
+
             LocalDate date = LocalDate.now()
                     .withYear(year) // year
                     .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
                     .with(WeekFields.ISO.dayOfWeek(), 7);
-            System.out.println("date stack : "+date);
+            System.out.println("date stack : " + date);
             wks = date.plusDays(-7);
             mon = wks.plusDays(1);
             tue = wks.plusDays(2);
@@ -69,117 +72,122 @@ public class viewTimetable extends HttpServlet {
             fri = wks.plusDays(5);
             sat = wks.plusDays(6);
             wke = wks.plusDays(7);
-            switch (access) {
-                case 1:
-                    out.print("<style>"
-                            + ".bold {"
-                            + " font-weight: bold;"
-                            + "}"
-                            + "</style>"
-                            + "<script>"
-                            + "function highlight(classid)"
-                            + "{"
-                            + "if(classid==1)"
-                            + "{"
-                            + "$(\"div[id^='fav']\").addClass('bold');"
-                            + "$(\"div[id^='nolab']\").removeClass('bold');"
-                            + "$(\"div[id^='subclass']\").removeClass('bold');"
-                            + "}"
-                            + "else if (classid==2)"
-                            + "{"
-                            + "$(\"div[id^='nolab']\").addClass('bold');"
-                            + "$(\"div[id^='fav']\").removeClass('bold');"
-                            + "$(\"div[id^='subclass']\").removeClass('bold');"
-                            + "}"
-                            + "else{classid = classid+-2;"
-                            + "$(\"div[id^='fav']\").removeClass('bold');"
-                            + "$(\"div[id^='nolab']\").removeClass('bold');"
-                            + "$(\"div[id^='subclass']\").removeClass('bold');"
-                            + "$(\"div[id^='subclass\" + classid + \"']\").addClass('bold');"
-                            + "}}"
-                            + "function changestyle(index)"
-                            + "{"
-                            + "if(index==0)"
-                            + "{"
-                            + "document.getElementById('lab_timetable').style.display = 'block';"
-                            + "document.getElementById('timetable').style.display = 'none';"
-                            + "}"
-                            + "else"
-                            + "{"
-                            + "document.getElementById('lab_timetable').style.display = 'none';"
-                            + "document.getElementById('timetable').style.display = 'block';"
-                            + "}}"
-                            + "</script>");
-                    heading = "<table width = 100%>"
-                            + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
-                    if (week == 1) {
-                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=52&year=" + (year - 1) + "')\" >";
-                    } else {
-                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
+            out.print("<style>"
+                    + ".bold {"
+                    + " font-weight: bold;"
+                    + "}"
+                    + "</style>"
+                    + "<script>"
+                    + "function highlight(classid)"
+                    + "{"
+                    + "if(classid==1)"
+                    + "{"
+                    + "$(\"div[id^='fav']\").addClass('bold');"
+                    + "$(\"div[id^='nolab']\").removeClass('bold');"
+                    + "$(\"div[id^='subclass']\").removeClass('bold');"
+                    + "}"
+                    + "else if (classid==2)"
+                    + "{"
+                    + "$(\"div[id^='nolab']\").addClass('bold');"
+                    + "$(\"div[id^='fav']\").removeClass('bold');"
+                    + "$(\"div[id^='subclass']\").removeClass('bold');"
+                    + "}"
+                    + "else{classid = classid+-2;"
+                    + "$(\"div[id^='fav']\").removeClass('bold');"
+                    + "$(\"div[id^='nolab']\").removeClass('bold');"
+                    + "$(\"div[id^='subclass']\").removeClass('bold');"
+                    + "$(\"div[id^='subclass\" + classid + \"']\").addClass('bold');"
+                    + "}}"
+                    + "function changestyle(index)"
+                    + "{"
+                    + "if(index==0)"
+                    + "{"
+                    + "document.getElementById('lab_timetable').style.display = 'block';"
+                    + "document.getElementById('timetable').style.display = 'none';"
+                    + "}"
+                    + "else"
+                    + "{"
+                    + "document.getElementById('lab_timetable').style.display = 'none';"
+                    + "document.getElementById('timetable').style.display = 'block';"
+                    + "}}"
+                    + "</script>");
+            heading = "<table width = 100%>"
+                    + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+            if (week == 1) {
+                heading += "javascript:setContent('/Cerberus/viewTimetable?week=52&year=" + (year - 1) + "')\" >";
+            } else {
+                heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
+            }
+            heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
+                    + "<span>Previous</span>"
+                    + "</button>"
+                    + "</form></td>"
+                    + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
+                    + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+            if (week == 52) {
+                heading += "javascript:setContent('/Cerberus/viewTimetable?week=1&year=" + (year + 1) + "')\" >";
+            } else {
+                heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
+            }
+            heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
+            if (week > Integer.parseInt(session.getAttribute("week").toString())) {
+                heading += "";
+            }
+            heading += "><span>Next</span>"
+                    + "</button>"
+                    + "</form></td>";
+            heading += "</tr></table>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                subs = prefSubs(request, null);
+                out.print("Display Style : <select name = 'timetable_type' id = 'timetable_type' class=\"editSelect\" onchange='changestyle(this.selectedIndex)'>");
+                out.print("<option name='clas' value= '0'>Lab Wise</option>");
+                out.print("<option name='clas' value= '1'>Combined</option>");
+                out.print("</select><br><br>");
+                out.print("Highlight Type: <select name = 'clas' id = 'clas' class=\"editSelect\" onchange='highlight(this.selectedIndex)'>");
+                out.print("<option name='clas' value= '0'>None</option>");
+                out.print("<option name='clas' value= '0'>Preferences</option>");
+                out.print("<option name='clas' value= '0'>No Labs</option>");
+                if (access != 0) {
+                    Statement stmt = con.createStatement();
+                    ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
+                    no_of_class = 0;
+                    while (rs.next()) {
+                        no_of_class++;
+                        out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
                     }
-                    heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
-                            + "<span>Previous</span>"
-                            + "</button>"
-                            + "</form></td>"
-                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
-                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
-                    if (week == 52) {
-                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=1&year=" + (year + 1) + "')\" >";
-                    } else {
-                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
+                }
+                out.print("</select><br><br>");
+                if (access == 0) {
+                    PreparedStatement ps = con.prepareStatement("SELECT rollcall.classID from rollcall where prn=?");
+                    ps.setString(1, user);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        classID = rs.getInt(1);
                     }
-                    heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
-                    if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                        heading += "";
-                    }
-                    heading += "><span>Next</span>"
-                            + "</button>"
-                            + "</form></td>";
-                    heading += "</tr></table>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
-                    try {
-                        Class.forName("com.mysql.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                        subs = prefSubs(request, null);
-                        out.print("Display Style : <select name = 'timetable_type' id = 'timetable_type' class=\"editSelect\" onchange='changestyle(this.selectedIndex)'>");
-                        out.print("<option name='clas' value= '0'>Lab Wise</option>");
-                        out.print("<option name='clas' value= '1'>Combined</option>");
-                        out.print("</select><br><br>");
-                        out.print("Student Class : <select name = 'clas' id = 'clas' class=\"editSelect\" onchange='highlight(this.selectedIndex)'>");
-                        out.print("<option name='clas' value= '0'>None</option>");
-                        out.print("<option name='clas' value= '0'>Preferences</option>");
-                        out.print("<option name='clas' value= '0'>No Labs</option>");
-                        Statement stmt = con.createStatement();
-                        ResultSet rs = stmt.executeQuery("SELECT `class` FROM `class` ORDER BY `class` ASC");
-                        no_of_class = 0;
-                        while (rs.next()) {
-                            no_of_class++;
-                            out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
-                        }
-                        out.print("</select><br><br>");
-                    } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
-                    }
+                }
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
 
-                    out.print("<div id='lab_timetable'>");
-                    out.print(lab_printTimetable(1));
-                    out.print(lab_printTimetable(2));
-                    out.print(lab_printTimetable(3));
-                    out.print("</div>");
-                    out.print("<div id='timetable' style='display: none;'>");
-                    out.print(printTimetable());
-                    out.print("</div>");
-                    break;
-
-                default:
+            out.print("<div id='lab_timetable'>");
+            out.print(lab_printTimetable(1));
+            out.print(lab_printTimetable(2));
+            out.print(lab_printTimetable(3));
+            out.print("</div>");
+            out.print("<div id='timetable' style='display: none;'>");
+            out.print(printTimetable());
+            out.print("</div>");
+            /*
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                     request.setAttribute("redirect", "true");
                     request.setAttribute("head", "Hey 'Kid'!");
                     request.setAttribute("body", "You are not authorized to view this page");
                     request.setAttribute("url", "homepage");
                     request.setAttribute("sec", "2");
-                    rd.forward(request, response);
-                    break;
-            }
+                    rd.forward(request, response);*/
+
         }
     }
 
@@ -200,7 +208,7 @@ public class viewTimetable extends HttpServlet {
             header += ("<th>Saturday<br>" + sat + "</th>");
             header += ("</tr>");
             timetable += (tablehead(header));
-            PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
+            String sql = "SELECT slot.slotID,slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = 1 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) as Monday, "
                     + "MAX(CASE WHEN dayID = 2 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) as Tuesday, "
                     + "MAX(CASE WHEN dayID = 3 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) as Wednesday, "
@@ -210,12 +218,26 @@ public class viewTimetable extends HttpServlet {
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
-                    + "where labID=? and weekID=(select weekID from week where week = ? and year=?) "
-                    + "GROUP BY slot.startTime, slot.endTime ASC "
-                    + "ORDER BY slot.startTime, slot.endTime ASC;");
-            ps4.setInt(1, labid);
-            ps4.setInt(2, week);
-            ps4.setInt(3, year);
+                    + "inner join subject "
+                    + "on timetable.subjectID = subject.subjectID "
+                    + "where labID=? and weekID=(select weekID from week where week = ? and year=?) ";
+            if (access == 0) {
+                sql += " and subject.classID = ? ";
+            }
+            sql += "GROUP BY slot.startTime, slot.endTime ASC "
+                    + "ORDER BY slot.startTime, slot.endTime ASC;";
+            System.out.println(sql);
+            PreparedStatement ps4 = con.prepareStatement(sql);
+            if (access == 0) {
+                ps4.setInt(1, labid);
+                ps4.setInt(2, week);
+                ps4.setInt(3, year);
+                ps4.setInt(4, classID);
+            } else {
+                ps4.setInt(1, labid);
+                ps4.setInt(2, week);
+                ps4.setInt(3, year);
+            }
             ResultSet lab1 = ps4.executeQuery();
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();
@@ -324,7 +346,7 @@ public class viewTimetable extends HttpServlet {
             }
             String labs[][] = new String[no_of_labs][(no_of_slots + 2)];
             for (int l = 0; l <= no_of_labs - 1; l++) {
-                PreparedStatement ps4 = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
+                String sql = "SELECT slot.slotID,slot.startTime, slot.endTime, "
                         + "MAX(CASE WHEN dayID = 1 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) as Monday, "
                         + "MAX(CASE WHEN dayID = 2 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) as Tuesday, "
                         + "MAX(CASE WHEN dayID = 3 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),' </br> ',(select batch.name from batch where timetable.batchID=batch.batchID),',',(select subject.classID from subject where timetable.subjectID=subject.subjectID),',',timetable.scheduleID) END) as Wednesday, "
@@ -334,11 +356,25 @@ public class viewTimetable extends HttpServlet {
                         + "FROM timetable "
                         + "INNER JOIN slot "
                         + "ON timetable.slotID = slot.slotID "
-                        + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) "
-                        + "GROUP BY slot.startTime, slot.endTime;");
-                ps4.setInt(1, l + 1);
-                ps4.setInt(2, week);
-                ps4.setInt(3, year);
+                        + "inner join subject "
+                        + "on timetable.subjectID = subject.subjectID "
+                        + "where labID=? and weekID=(select weekID from week where week = ? and year = ?)";
+                if (access == 0) {
+                    sql += " and subject.classID = ? ";
+                }
+                sql += "GROUP BY slot.startTime, slot.endTime ASC "
+                        + "ORDER BY slot.startTime, slot.endTime ASC;";
+                PreparedStatement ps4 = con.prepareStatement(sql);
+                if (access == 0) {
+                    ps4.setInt(1, l + 1);
+                    ps4.setInt(2, week);
+                    ps4.setInt(3, year);
+                    ps4.setInt(4, classID);
+                } else {
+                    ps4.setInt(1, l + 1);
+                    ps4.setInt(2, week);
+                    ps4.setInt(3, year);
+                }
                 ResultSet lab1 = ps4.executeQuery();
                 for (int y = 0; y <= no_of_slots; y++) {
                     labs[l][y] = "";
