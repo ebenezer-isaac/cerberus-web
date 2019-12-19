@@ -53,8 +53,8 @@ public class editSubSelection extends HttpServlet {
                             + "}</style>");
                     out.print("<div>");
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         String cla = getClassName(classID);
                         int index = 0;
                         int oddeve = oddEve();
@@ -143,7 +143,9 @@ public class editSubSelection extends HttpServlet {
                             out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'>Changing the batch of a student mid - semester is not advised.<br>All attendance pertaining to the previously set batch will not be calculated when displaying attendance of that student.</div>"
                                     + "<br><input class='btn-primary btn' type='submit' style='width: 200px;' value='Save Details' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
-                                    + "</form><br><br>", 0));
+                                    + "</form><br><br><style type='text/css'>\n"
+                                    + "@import url('css/checkbox.css');\n"
+                                    + "</style>", 0));
                             out.print("<script>function batchdisable(id) {"
                                     + "if(document.getElementById(id).checked)"
                                     + "{id = id.substr(3);"

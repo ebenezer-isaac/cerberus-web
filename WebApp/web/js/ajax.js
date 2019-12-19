@@ -22,7 +22,7 @@ function getInfoSession() {
     if (request.readyState == 4) {
         var val = request.responseText;
         if (val == 2) {
-            window.location.replace("/Cerberus/index.js");
+            window.location.replace("/Cerberus/");
         } else {
             setContent_main(url_main);
         }
@@ -37,7 +37,7 @@ function setContent_main(url) {
     {
         his.push(url);
     }
-    //$("#main").html("<div style='height: 100vh;vertical-align: middle;'><div class='loader'><div class='duo duo1'><div class='dot dot-a'></div><div class='dot dot-b'></div></div><div class='duo duo2'><div class='dot dot-a'></div><div class='dot dot-b'></div></div></div></div>");
+    $("#main").html("<div style='height: 100vh;vertical-align: middle;'><div class='loader'><div class='duo duo1'><div class='dot dot-a'></div><div class='dot dot-b'></div></div><div class='duo duo2'><div class='dot dot-a'></div><div class='dot dot-b'></div></div></div></div>");
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
     } else if (window.ActiveXObject) {

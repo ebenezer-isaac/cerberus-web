@@ -35,9 +35,9 @@ public class batSubAttendance extends HttpServlet {
                         String sql = "SELECT rollcall.rollNo as Roll,student.name as Name,";
                         String dates[][];
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                            PreparedStatement ps = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date,"
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                            PreparedStatement ps = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date,"
                                     + " timetable.scheduleID as ScheduleID"
                                     + ",(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher "
                                     + "from facultytimetable\n"
@@ -135,21 +135,24 @@ public class batSubAttendance extends HttpServlet {
                                 }
                                 schedules += dates[dates.length - 1][1];
                             } else {
-                                out.print("<tr><td colspan=3>No Students are who have opted for " + subject + " have been alloted to " + batch+"</td></tr>");
+                                out.print("<tr><td colspan=3>No Students are who have opted for " + subject + " have been alloted to " + batch + "</td></tr>");
                             }
                             out.print(tableend("No of students : " + (no_of_studs) + "<br><br>"
                                     + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='line' value='" + (no_of_studs + 1) + "' hidden>"
                                     + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
                                     + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
-                                    + "</form>", 0));
+                                    + "</form><style type='text/css'>\n"
+                                    + "@import url('css/checkbox.css');\n"
+                                    + "</style>", 0));
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
                             e.printStackTrace();
                             error(e.getMessage());
                         }
                     } else {
-                        out.print("<script>setContent('/Cerberus/homepage');</script>");
+                        out.print("<script>setContent('/Cerberus/homepage');</script>"
+                                + "");
                     }
                     break;
                 case 0:

@@ -27,7 +27,7 @@ public class ajaxCheckRoll extends HttpServlet {
                 int clas = Integer.parseInt(request.getParameter("clas"));
                 if (roll >= 1 && roll <= 120) {
                     int flag = 0;
-                    try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                    try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
                         PreparedStatement ps = con.prepareStatement("select rollNo from rollcall where rollNo=? and classID = ?");
                         ps.setInt(1, roll);
                         ps.setInt(2, clas);

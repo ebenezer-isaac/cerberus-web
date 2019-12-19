@@ -71,21 +71,23 @@ public class messages extends HttpServlet {
 
     public void success(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
-        try{
-        try (PrintWriter out = response.getWriter()) {
-            this.redirect = "true";
-            this.head = "Request Successfull";
-            this.body = body;
-            this.url = url;
-            this.sec = 2;
-            processRequest(request, response);
-        }}catch(Exception e){e.printStackTrace();}
+        try {
+            try (PrintWriter out = response.getWriter()) {
+                this.redirect = "false";
+                this.head = "Request Successfull";
+                this.body = body;
+                this.url = url;
+                processRequest(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void failed(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
-            this.redirect = "true";
+            this.redirect = "false";
             this.head = "Request Unsuccessfull";
             this.body = body;
             this.url = url;
@@ -110,6 +112,16 @@ public class messages extends HttpServlet {
             this.url = "homepage";
         }
         this.sec = 2;
+        processRequest(request, response);
+    }
+
+    public void firewall(HttpServletRequest request, HttpServletResponse response, String body, String url)
+            throws ServletException, IOException {
+        this.redirect = "false";
+        this.head = "Security Firewall";
+        this.body = body;
+        this.url = url;
+        this.fullpage = "false";
         processRequest(request, response);
     }
 

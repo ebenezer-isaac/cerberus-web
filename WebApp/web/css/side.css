@@ -1,0 +1,38 @@
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+.tooltipp .tooltiptext {
+    visibility: hidden;
+    background-color: #0d0d0d;
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 7px;
+    margin-left:10px;
+    margin-top:10px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltipp:hover .tooltiptext {
+    visibility: visible;
+}

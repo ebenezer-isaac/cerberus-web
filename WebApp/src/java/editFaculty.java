@@ -70,8 +70,8 @@ public class editFaculty extends HttpServlet {
                         out.print("<form action='deltFaculty' method='post'>");
                         out.print("<div align='center'><br> <font style=\"font-size: 17px; color: red;\"> Select the Faculty you want to delete : </font> <br><br>");
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             Statement stmt = con.createStatement();
                             String sql = "SELECT `facultyID`,`name` from `faculty`;";
                             ResultSet rs = stmt.executeQuery(sql);
@@ -93,7 +93,9 @@ public class editFaculty extends HttpServlet {
                                     + "<br><table><tr><td><input type='checkbox' id='warn'onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                                     + "<br></fieldset>");
                             out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width:200px;' class='btn btn-primary'>Delete Faculty</button></div>");
-                            out.print("</form></div></div>");
+                            out.print("</form></div></div><style type='text/css'>\n"
+                                    + "@import url('css/checkbox.css');\n"
+                                    + "</style>");
                         } catch (ClassNotFoundException | SQLException e) {
                             error(e.getMessage());
                         }

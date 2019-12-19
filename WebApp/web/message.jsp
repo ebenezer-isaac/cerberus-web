@@ -6,7 +6,7 @@
     } catch (Exception e) {
         e.printStackTrace();
     }
-    String redirect = "", head = "", body = "", fullpage = "", sec = "", type = "", url = "";
+    String redirect = "false", head = "Hi", body = "", fullpage = "true", sec = "", type = "", url = "index.jsp";
     try {
         type = request.getAttribute("type").toString();
     } catch (Exception e) {
@@ -25,9 +25,10 @@
         fullpage = "false";
     } else if (type.equals("login1")) {
         if (access == 1 || access == 0) {
-            redirect = "true";
+            redirect = "false";
             head = "Login Successfull";
-            body = "Populating your profile";
+            body = "<font size = '3'>We are still at testing phase.<br><br>If you find any bugs <i class='fas fa-bug fa-lg'></i> , please feel free to report to us. "
+                    + "We have hungry developers looking to eat some.<br><br>We would also love to hear your suggestions.</font>";
             url = "homepage";
             sec = "2";
             fullpage = "true";
@@ -77,7 +78,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> Server Message </title>
+        <title> Message </title>
         <style> html {overflow: hidden;}</style>
         <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
         <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -91,7 +92,7 @@
         </style>
     </head>
     <body style="background-color: #black;">
-        
+
         <div class="container" >
             <div class="reset_page" >
                 <div class="form_reset">

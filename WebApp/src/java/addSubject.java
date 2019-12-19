@@ -1,5 +1,6 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,30 +22,32 @@ public class addSubject extends HttpServlet {
         int access = getAccess(request);
         switch (access) {
             case 1:
-
-                String sid = request.getParameter("subjectID").toUpperCase();
-                String name = request.getParameter("subject");
-                String abbreviation = request.getParameter("abbr");
-
-                int oddeve = Integer.parseInt(request.getParameter("sem"));
-                int classID = Integer.parseInt(request.getParameter("class"));
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    String sid = request.getParameter("subjectID").toUpperCase();
+                    String name = request.getParameter("subject");
+                    String abbreviation = request.getParameter("abbr");
+
+                    int oddeve = Integer.parseInt(request.getParameter("sem"));
+                    int classID = Integer.parseInt(request.getParameter("class"));
+
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                     PreparedStatement ps = con.prepareStatement("INSERT INTO `subject` VALUES (?,?,?,?,?)");
                     int semNum = AttFunctions.getSem(oddeve, classID);
                     ps.setString(1, sid.toUpperCase());
-                    ps.setInt(2, semNum);
-                    ps.setString(3, name);
+                    ps.setString(2, name);
+                    ps.setInt(3, semNum);
                     ps.setString(4, abbreviation);
                     ps.setInt(5, classID);
                     ps.executeUpdate();
                     con.close();
                     messages a = new messages();
-                    a.success(request, response, "The subject was added successfully<br>SubjectID : " + sid, "homepage");
+                    a.success(request, response, "The subject was added successfully<br>Subject Code : " + sid, "homepage");
                 } catch (ClassNotFoundException | SQLException e) {
+                    System.out.println(e);
+                    e.printStackTrace();
                     messages a = new messages();
-                    a.dberror(request, response, e.getMessage(), "homepage");
+                    a.dberror(request, response, e.getMessage(), "viewSubject");
                 }
                 break;
 
@@ -68,9 +71,5 @@ public class addSubject extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    private int getAccess(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

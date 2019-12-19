@@ -28,8 +28,8 @@ public class ajaxCheckEmail extends HttpServlet {
                 if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
                     int flag = 0;
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "")) {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
                             PreparedStatement ps = con.prepareStatement("select email from student where email=?");
                             ps.setString(1, email);
                             ResultSet rs = ps.executeQuery();

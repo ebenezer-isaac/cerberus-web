@@ -28,8 +28,8 @@ public class newTimetable extends HttpServlet {
             if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
                 int year = Calendar.getInstance().get(Calendar.YEAR);
                 int weekid = getWeekID(week,year);
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                 PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
                 ps5.setInt(1, weekid);
                 ResultSet rs = ps5.executeQuery();

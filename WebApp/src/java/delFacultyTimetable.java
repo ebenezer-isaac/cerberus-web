@@ -1,7 +1,9 @@
 
 import static cerberus.AttFunctions.getAccess;
+import cerberus.Mailer;
 import cerberus.messages;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,9 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class deltSubject extends HttpServlet {
-
-    private static final long serialVersionUID = -7656776598974905541L;
+public class delFacultyTimetable extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -22,28 +22,19 @@ public class deltSubject extends HttpServlet {
         int access = getAccess(request);
         switch (access) {
             case 1:
-                String subjectID = request.getParameter("subject");
+                String scheduleid = request.getParameter("scheduleid");
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                    PreparedStatement ps = con.prepareStatement("Select * from `timetable` where `subjectID` = ?");
-                    ps.setString(1, subjectID);
-                    ResultSet rs = ps.executeQuery();
-                    int flag = 0;
-                    while (rs.next()) {
-                        flag = 1;
-                        break;
-                    }
-                    if (flag == 0) {
-                        PreparedStatement stmt = con.prepareStatement("Delete from `subject` where `subjectID` = ?;");
-                        stmt.setString(1, subjectID);
-                        stmt.executeUpdate();
-                        messages a = new messages();
-                        a.success(request, response, "The subject was deleted successfully<br>SubjectID : " + subjectID, "viewSubject");
-                    } else {
-                        messages a = new messages();
-                        a.failed(request, response, "The subject cannot be deleted because timetable sessions are dependent on it", "homepage");
-                    }
+                    PreparedStatement ps = con.prepareStatement("Delete from `attendance` where `scheduleid` = ?;");
+                    ps.setString(1, scheduleid);
+                    ps.executeUpdate();
+                    ps = con.prepareStatement("Delete from `facultytimetable` where `scheduleid` = ?;");
+                    ps.setString(1, scheduleid);
+                    ps.executeUpdate();
+                    con.close();
+                    messages a = new messages();
+                    a.success(request, response, "The Lab Session has been marked as not conducted and its attendance has been deleted permanently.", "viewTimetable");
                 } catch (ClassNotFoundException | SQLException e) {
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "homepage");
@@ -60,13 +51,13 @@ public class deltSubject extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

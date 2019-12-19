@@ -34,8 +34,8 @@ public class studSubAttendance extends HttpServlet {
                     if (prn != null && subjectID != null) {
                         String dates[][];
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             PreparedStatement ps = con.prepareStatement("select studentsubject.batchID from studentsubject where studentsubject.PRN = ? and studentsubject.subjectID = ?");
                             ps.setString(1, prn);
                             ps.setString(2, subjectID);
@@ -44,7 +44,7 @@ public class studSubAttendance extends HttpServlet {
                             while (rs.next()) {
                                 batchID = rs.getInt(1);
                             }
-                            ps = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date,"
+                            ps = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date,"
                                     + " timetable.scheduleID as ScheduleID "
                                     + "from facultytimetable\n"
                                     + "INNER JOIN timetable\n"
@@ -130,7 +130,9 @@ public class studSubAttendance extends HttpServlet {
                                     + "<input type='text' name='prn' value='" + prn + "' hidden>"
                                     + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
                                     + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
-                                    + "</form>", 0));
+                                    + "</form><style type='text/css'>\n"
+                                    + "@import url('css/checkbox.css');\n"
+                                    + "</style>", 0));
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
                             e.printStackTrace();
@@ -149,8 +151,8 @@ public class studSubAttendance extends HttpServlet {
                     if (prn != null && subjectID != null) {
                         String dates[][];
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             PreparedStatement ps = con.prepareStatement("select studentsubject.batchID from studentsubject where studentsubject.PRN = ? and studentsubject.subjectID = ?");
                             ps.setString(1, prn);
                             ps.setString(2, subjectID);
@@ -159,7 +161,7 @@ public class studSubAttendance extends HttpServlet {
                             while (rs.next()) {
                                 batchID = rs.getInt(1);
                             }
-                            ps = con.prepareStatement("SELECT (STR_TO_DATE(concat(YEAR(CURDATE()),' ',timetable.weekID,' ',timetable.dayID),'%X %V %w')) as date,"
+                            ps = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date,"
                                     + " timetable.scheduleID as ScheduleID "
                                     + "from facultytimetable\n"
                                     + "INNER JOIN timetable\n"

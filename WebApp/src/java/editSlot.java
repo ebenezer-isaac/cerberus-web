@@ -36,8 +36,8 @@ public class editSlot extends HttpServlet {
                         case "edit":
                             out.print("<form action ='saveSlot' method='post'>");
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 String sql = "SELECT `slotID`,`startTime`,`endTime` from `slot` order by startTime,endTime ASC;";
                                 ResultSet rs = stmt.executeQuery(sql);
@@ -71,8 +71,8 @@ public class editSlot extends HttpServlet {
                             out.print("<form action='delSlot' method='post'>");
                             out.print("<br> <font style=\"font-size: 17px; color: red;\"> Select the Slot you want to delete : </font> <br><br>");
                             try {
-                                Class.forName("com.mysql.cj.jdbc.Driver");
-                                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 String sql = "SELECT `slotID`,`startTime`,`endTime` from `slot` order by startTime,endTime ASC;";
                                 ResultSet rs = stmt.executeQuery(sql);
@@ -88,7 +88,9 @@ public class editSlot extends HttpServlet {
                                         + "<br><table><tr><td><input type='checkbox' id='warn'onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
                                         + "<br></fieldset>");
                                 out.print("<br><div id = 'butt' style='display:none;'><button type='submit' style='width: 200px;' class='btn btn-primary'>Delete Timings</button></div>");
-                                out.print("</form>");
+                                out.print("</form><style type='text/css'>\n"
+                                        + "@import url('css/checkbox.css');\n"
+                                        + "</style>");
                             } catch (SQLException | ClassNotFoundException e) {
                                 error(e.getMessage());
                             }

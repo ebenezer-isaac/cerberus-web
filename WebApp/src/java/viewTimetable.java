@@ -1,5 +1,6 @@
 
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.prefSubs;
 import static cerberus.printer.tableend;
@@ -18,6 +19,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
@@ -32,7 +34,7 @@ public class viewTimetable extends HttpServlet {
     private static final long serialVersionUID = 1318699662544398556L;
 
     String heading;
-    int week = 0;
+    int week = 0, year = 0;
     int temp = 0;
     String[] subs;
     int access;
@@ -47,21 +49,30 @@ public class viewTimetable extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(false);
             try {
+<<<<<<< HEAD
                 week = getWeek(request);
+=======
+                week = Integer.parseInt(request.getParameter("week"));
+                year = Integer.parseInt(request.getParameter("year"));
+>>>>>>> 79283f1f15db71e2afec11c67f3ecce7b250b91f
             } catch (NumberFormatException e) {
                 week = getWeek(request);
+                year = getCurrYear();
             }
             access = getAccess(request);
-            wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week);
-           
-            mon = wks.plusDays(-1);
-            tue = wks.plusDays(0);
-            wed = wks.plusDays(1);
-            thu = wks.plusDays(2);
-            fri = wks.plusDays(3);
-            sat = wks.plusDays(4);
-            wke = wks.plusDays(5);
-             wks = wks.plusDays(-2);
+            LocalDate date = LocalDate.now()
+                    .withYear(year) // year
+                    .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
+                    .with(WeekFields.ISO.dayOfWeek(), 7);
+            System.out.println("date stack : "+date);
+            wks = date.plusDays(-7);
+            mon = wks.plusDays(1);
+            tue = wks.plusDays(2);
+            wed = wks.plusDays(3);
+            thu = wks.plusDays(4);
+            fri = wks.plusDays(5);
+            sat = wks.plusDays(6);
+            wke = wks.plusDays(7);
             switch (access) {
                 case 1:
                     out.print("<style>"
@@ -104,24 +115,34 @@ public class viewTimetable extends HttpServlet {
                             + "}}"
                             + "</script>");
                     heading = "<table width = 100%>"
-                            + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "')\" >"
-                            + "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
+                            + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+                    if (week == 1) {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=52&year=" + (year - 1) + "')\" >";
+                    } else {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
+                    }
+                    heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
                             + "<span>Previous</span>"
                             + "</button>"
                             + "</form></td>"
                             + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
-                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "');\">"
-                            + "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
+                            + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+                    if (week == 52) {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=1&year=" + (year + 1) + "')\" >";
+                    } else {
+                        heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
+                    }
+                    heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
                     if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                        heading += "disabled";
+                        heading += "";
                     }
                     heading += "><span>Next</span>"
                             + "</button>"
                             + "</form></td>";
                     heading += "</tr></table>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         subs = prefSubs(request, null);
                         out.print("Display Style : <select name = 'timetable_type' id = 'timetable_type' class=\"editSelect\" onchange='changestyle(this.selectedIndex)'>");
                         out.print("<option name='clas' value= '0'>Lab Wise</option>");
@@ -169,8 +190,8 @@ public class viewTimetable extends HttpServlet {
     public String lab_printTimetable(int labid) {
         String timetable = "";
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br></p>", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
@@ -193,11 +214,12 @@ public class viewTimetable extends HttpServlet {
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
-                    + "where labID=? and weekID=(select weekID from week where week = ?) "
+                    + "where labID=? and weekID=(select weekID from week where week = ? and year=?) "
                     + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;");
             ps4.setInt(1, labid);
             ps4.setInt(2, week);
+            ps4.setInt(3, year);
             ResultSet lab1 = ps4.executeQuery();
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();
@@ -266,8 +288,8 @@ public class viewTimetable extends HttpServlet {
     public String printTimetable() {
         String timetable = "";
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
             timetable += (tablestart(heading, "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
@@ -316,10 +338,11 @@ public class viewTimetable extends HttpServlet {
                         + "FROM timetable "
                         + "INNER JOIN slot "
                         + "ON timetable.slotID = slot.slotID "
-                        + "where labID=? and weekID=(select weekID from week where week = ?) "
+                        + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) "
                         + "GROUP BY slot.startTime, slot.endTime;");
                 ps4.setInt(1, l + 1);
                 ps4.setInt(2, week);
+                ps4.setInt(3, year);
                 ResultSet lab1 = ps4.executeQuery();
                 for (int y = 0; y <= no_of_slots; y++) {
                     labs[l][y] = "";

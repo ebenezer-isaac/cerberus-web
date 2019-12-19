@@ -1,3 +1,3 @@
-CREATE USER 'phpmyadmin'@'%' IDENTIFIED BY '<please_replace_this>';
-GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'%' WITH GRANT OPTION;
+CREATE USER 'cerberus'@'%' IDENTIFIED BY 'abc@123';
+GRANT ALL PRIVILEGES ON *.* TO 'cerberus'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;

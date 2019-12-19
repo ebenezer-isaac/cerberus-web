@@ -32,8 +32,8 @@ public class copyTimetable extends HttpServlet {
                 int year = Calendar.getInstance().get(Calendar.YEAR);
                 int weekid = getWeekID(week,year);
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                     int flag = 0;
                     PreparedStatement ps = con.prepareStatement("DELETE FROM timetable where weekID = ?");
                     ps.setInt(1, weekid);

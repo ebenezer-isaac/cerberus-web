@@ -2,6 +2,11 @@
 import cerberus.Mailer;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.checkInternetConnection;
+import static cerberus.AttFunctions.getCurrDate;
+import static cerberus.AttFunctions.getCurrTime;
+import static cerberus.AttFunctions.getDateID;
+import static cerberus.AttFunctions.getTimeID;
+import cerberus.messages;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -14,7 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -46,8 +53,8 @@ public class otp extends HttpServlet {
             }
             int email_count = 0;
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                 PreparedStatement ps = con.prepareStatement("SELECT email from `student` WHERE email=? union SELECT email from `faculty` WHERE email=?");
                 ps.setString(1, this.email);
                 ps.setString(2, this.email);
@@ -62,39 +69,41 @@ public class otp extends HttpServlet {
 
                 java.util.Date now = new java.util.Date();
                 if (rs.next()) {
-                    String date[] = rs.getString(1).split("-");
-                    String time[] = rs.getString(2).split(":");
-                    java.util.Date then = new java.util.Date(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]), Integer.parseInt(time[0]), Integer.parseInt(time[1]) + 10, Integer.parseInt(time[2]));
-                    if (then.compareTo(now) < 0) {
-                        spam = 1;
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String dateInString = rs.getString(1) + " " + rs.getString(2);
+                        Date datetime = sdf.parse(dateInString);
+                        long diff = ((now.getTime() - datetime.getTime()) / 1000) / 60;
+                        if (diff < 10) {
+                            spam = 1;
+                        }
+                    } catch (SQLException | ParseException e) {
+                        e.printStackTrace();
                     }
+                    System.out.println(spam);
                 } else {
                     System.out.println("No data found");
                     ps = con.prepareStatement("DELETE from `otp` where email=?;");
                     ps.setString(1, this.email);
                     ps.executeUpdate();
                     if (email_count == 1) {
-                        String now_time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-                        String now_date = now.getYear() + "-" + now.getMonth() + "-" + now.getDate();
-                        // int timeID = getTimeID(now_time);
-                        // int dateID = getDateID(now_date);
-                        ps = con.prepareStatement("INSERT INTO `otp`(`email`, `OTP`, `dateID`, `timeID`) VALUES (?,?,?,?)");
+                        int timeID = getTimeID(getCurrTime());
+                        int dateID = getDateID(getCurrDate());
+                        System.out.println("date id : " + dateID);
+                        System.out.println("time id : " + timeID);
+                        ps = con.prepareStatement("INSERT INTO `otp`values (null, ?,?,?,?)");
                         ps.setString(1, this.email);
                         ps.setString(2, this.hashotp);
-                        //ps.setString(3, timeID);
-                        //ps.setString(4, dateID);
+                        ps.setInt(3, dateID);
+                        ps.setInt(4, timeID);
                         ps.executeUpdate();
                     }
                 }
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "false");
-                request.setAttribute("head", "Error");
-                request.setAttribute("body", e.getMessage());
-                request.setAttribute("fullpage", "false");
-                request.setAttribute("url", "resetpassword.html");
-                rd.forward(request, response);
+                e.printStackTrace();
+                messages b = new messages();
+                b.error(request, response, e.getMessage(), "resetpassword.html");
             }
             if (spam == 0) {
                 switch (email_count) {
@@ -114,7 +123,7 @@ public class otp extends HttpServlet {
                         Mailer mail = new Mailer();
                         mail.send(this.email, "Password for Cerberus", this.body);
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "true");
+                        request.setAttribute("redirect", "false");
                         request.setAttribute("head", "OTP Status");
                         request.setAttribute("body", "An One Time High Security Password has been sent to your registered e-mail account.<br>"
                                 + "The OTP is valid for only 10 minutes.<br>");
@@ -125,56 +134,35 @@ public class otp extends HttpServlet {
                         break;
                     }
                     case 0: {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Security Firewall");
-                        request.setAttribute("body", "An e-mail was not found for the provided username. Please check your username and try again");
-                        request.setAttribute("url", "index.jsp");
-                        request.setAttribute("fullpage", "false");
-                        rd.forward(request, response);
+                        messages c = new messages();
+                        c.firewall(request, response, "The email is not registered with this portal.<br>Please check your email and try again.", "index.jsp");
                         break;
                     }
                     default: {
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Security Firewall");
-                        request.setAttribute("body", "Multiple accounts have been registered with the same email. Please contact Administrator");
-                        request.setAttribute("url", "index.jsp");
-                        request.setAttribute("fullpage", "false");
-                        rd.forward(request, response);
+                        messages c = new messages();
+                        c.firewall(request, response, "Multiple accounts have been registered with the same email.<br>Please contact Administrator", "index.jsp");
                         break;
                     }
                 }
             } else {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "false");
-                request.setAttribute("head", "Security Firewall");
-                request.setAttribute("body", "An OTP with a validity of 10 minutes has already been sent to your email. Please check your email.");
-                request.setAttribute("url", "index.jsp");
-                request.setAttribute("fullpage", "false");
-                rd.forward(request, response);
+                messages c = new messages();
+                c.firewall(request, response, "An OTP with a validity of 10 minutes has already been sent to your email.<br>Please check your email.", "index.jsp");
             }
         } else {
-            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-            request.setAttribute("redirect", "false");
-            request.setAttribute("head", "Request Failed");
-            request.setAttribute("body", "An active Internet Connection was not found on the server. Please try again later.");
-            request.setAttribute("url", "index.jsp");
-            request.setAttribute("fullpage", "false");
-            rd.forward(request, response);
+            messages c = new messages();
+            c.error(request, response, "An active Internet Connection was not found on the server.<br>Please try again later.", "index.jsp");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-        request.setAttribute("redirect", "true");
-        request.setAttribute("head", "Security Firewall");
-        request.setAttribute("body", "Unauthorized access to this page has been detected.");
-        request.setAttribute("url", "index.jsp");
-        request.setAttribute("sec", "2");
-        rd.forward(request, response);
+        try {
+            messages c = new messages();
+            c.unauthaccess(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

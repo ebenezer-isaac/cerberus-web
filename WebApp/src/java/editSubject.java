@@ -54,13 +54,13 @@ public class editSubject extends HttpServlet {
                         out.print("<br><div align='center'><form action='addSubject' method='post'><table cellspacing='10'>"
                                 + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input required type='text' id='subid' onkeyup='checkValidations(3)' onchange='checkValidations(3)' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' minlength='7' maxlength='9' placeholder='BCAxxxx'/></td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Subject Name</td><td> : </td><td><input required type='text' name='subject' class=\"editSubjectForm\" placeholder='Artificial Intelligence'/></td></tr></tr><td colspan=2></td><td align='center'><font style=\"font-size: 12.5px; color: red;\"> *Please do not use abbreviations in Subject Name </font> </td></tr> "
-                                + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input required type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI' minlength='2' maxlength='3'/> </td></tr>"
+                                + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input required type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI' minlength='2' maxlength='5'/> </td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> <font style=\"font-size: 14.5px;\"> Odd </font>\n"
                                 + "  <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"0\"><font style=\"font-size: 14.5px;\"> Even </font> <br></td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Select Class</td><td> : </td><td><select name = 'class' id = 'class' class=\"editSelect\">");
                         try {
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             Statement stmt = con.createStatement();
                             ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                             while (rs.next()) {
@@ -85,8 +85,8 @@ public class editSubject extends HttpServlet {
                                     + "</script>");
                             out.print("<form action='deltSubject' method='post'>");
                             out.print("<div align='center'><br><font style=\"font-size: 17px; color: red;\"> Select the subject you want to delete : </font> <br><br>");
-                            Class.forName("com.mysql.cj.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                            Class.forName("com.mysql.jdbc.Driver");
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             Statement stmt = con.createStatement();
                             String sql = "SELECT `subjectID`,`subject` from `subject`;";
                             ResultSet rs = stmt.executeQuery(sql);
@@ -101,7 +101,9 @@ public class editSubject extends HttpServlet {
                                     + "<p> <font style=\"font-size: 15.5px;\"> 1. Subjects with alloted lab session cannot be deleted. </font> </p>"
                                     + "<p> <font style=\"font-size: 15.5px;\"> 2. A subject opted by any student cannot be deleted. </font> </p>"
                                     + "<br><table><tr><td><input type='checkbox' id='warn' onclick='myFunction()'><label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
-                                    + "<br></fieldset>");
+                                    + "<br></fieldset><style type='text/css'>\n"
+                                    + "@import url('css/checkbox.css');\n"
+                                    + "</style>");
                             out.print("<br><div id = 'butt' style='display:none;'><button type='Delete' style='width:200px;' class='btn btn-primary'>Delete Subject</button></div>");
                             out.print("</form></div>");
 

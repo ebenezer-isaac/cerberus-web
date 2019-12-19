@@ -25,8 +25,8 @@ public class delStudent extends HttpServlet {
             case 1:
                 String prn = request.getParameter("prn");
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                     PreparedStatement ps = con.prepareStatement("Select * from `attendance` where `prn` = ?");
                     ps.setString(1, prn);
                     ResultSet rs = ps.executeQuery();

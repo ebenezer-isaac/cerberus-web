@@ -35,7 +35,9 @@ public class newFacultyTimetable extends HttpServlet {
                         + "<p> <font style=\"font-size: 15.5px;\"> 2. Any attendance marked via the fingerprint system meanwhile, will be void. </font> </p>"
                         + "<p> <font style=\"font-size: 15.5px;\"> 3. Attendance marked by you will be overwritten with express authority. </font> </p>"
                         + "<br><table><tr><td><input type='checkbox' id='warn' onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
-                        + "<br></fieldset>");
+                        + "<br></fieldset><style type='text/css'>\n"
+                        + "@import url('css/checkbox.css');\n"
+                        + "</style>");
                 out.print("<br><div id = 'butt' style='display:none;'><form action='saveNewAttendance' method='post'>"
                         + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
                         + "<button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></form></div>");
@@ -53,8 +55,8 @@ public class newFacultyTimetable extends HttpServlet {
                     subjectflag = 1;
                 }
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                     Statement stmt = con.createStatement();
                     String sql = "SELECT `subjectID`,`abbreviation` from `subject`;";
                     ResultSet rs = stmt.executeQuery(sql);

@@ -25,8 +25,8 @@ public class deltFaculty extends HttpServlet {
             case 1:
                 String facultyID = request.getParameter("facultyID");
                 try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                     PreparedStatement ps = con.prepareStatement("Select * from `facultytimetable` where `facultyID` = ?");
                     ps.setString(1, facultyID);
                     ResultSet rs = ps.executeQuery();
@@ -45,11 +45,13 @@ public class deltFaculty extends HttpServlet {
                             name = rs.getString(2);
                             email = rs.getString(3);
                         }
-                        PreparedStatement stmt = con.prepareStatement("Delete from `faculty` where `facultyID` = ?;");
+                        PreparedStatement stmt = con.prepareStatement("Delete from `facultyfingerprint` where `facultyID` = ?;");
                         stmt.setString(1, facultyID);
                         stmt.executeUpdate();
-                        con.close();
-                        stmt = con.prepareStatement("Delete from `facultyfingerprint` where `facultyID` = ?;");
+                        stmt = con.prepareStatement("Delete from `facultysubject` where `facultyID` = ?;");
+                        stmt.setString(1, facultyID);
+                        stmt.executeUpdate();
+                        stmt = con.prepareStatement("Delete from `faculty` where `facultyID` = ?;");
                         stmt.setString(1, facultyID);
                         stmt.executeUpdate();
                         con.close();

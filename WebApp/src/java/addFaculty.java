@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,22 +49,33 @@ public class addFaculty extends HttpServlet {
                         }
                     }
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
-                        PreparedStatement ps = con.prepareStatement("INSERT INTO `faculty`(`name`, `email`, `password`, `photo`) VALUES (?,?,?,null)");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                        PreparedStatement ps = con.prepareStatement("INSERT INTO `faculty` (`facultyID`, `name`, `email`, `password`, `photo`) VALUES (NULL, ?,?,?,null)");
                         ps.setString(1, name);
                         ps.setString(2, email);
                         ps.setString(3, pass);
                         ps.executeUpdate();
+                        ps = con.prepareStatement("select facultyID from `faculty` where `name` = ? and `email` = ? and `password` = ?");
+                        ps.setString(1, name);
+                        ps.setString(2, email);
+                        ps.setString(3, pass);
+                        ResultSet rs = ps.executeQuery();
+                        String facultyID = "";
+                        while (rs.next()) {
+                            facultyID = rs.getString(1);
+                        }
                         int dateID = getDateID(getCurrDate());
                         int timeID = getTimeID(getCurrTime());
-                        ps = con.prepareStatement("INSERT INTO `faculty`(`templateID`, `template`, `dateID`, `timeID`) VALUES (1,null,?,?)");
-                        ps.setInt(1, dateID);
-                        ps.setInt(2, timeID);
+                        ps = con.prepareStatement("INSERT INTO `facultyfingerprint` VALUES (?,1,null,?,?)");
+                        ps.setString(1, facultyID);
+                        ps.setInt(2, dateID);
+                        ps.setInt(3, timeID);
                         ps.executeUpdate();
-                        ps = con.prepareStatement("INSERT INTO `faculty`(`templateID`, `template`, `dateID`, `timeID`) VALUES (2,null,?,?)");
-                        ps.setInt(1, dateID);
-                        ps.setInt(2, timeID);
+                        ps = con.prepareStatement("INSERT INTO `facultyfingerprint` VALUES (?,2,null,?,?)");
+                        ps.setString(1, facultyID);
+                        ps.setInt(2, dateID);
+                        ps.setInt(3, timeID);
                         ps.executeUpdate();
                         String body = "Hello " + name + ",\n    This mail is in response to a request to add you as a faculty at MSU-CA Department.\n\n"
                                 + "Email/Username : " + email + "\n"

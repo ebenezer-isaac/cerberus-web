@@ -1,5 +1,6 @@
 
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.oddEveSubs;
@@ -20,6 +21,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.IsoFields;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -31,7 +33,7 @@ public class editTimetable extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     LocalDate wks;
-    int week = 0;
+    int week = 0, year = 0;
     String date[] = new String[6];
     String subs[][];
 
@@ -44,8 +46,10 @@ public class editTimetable extends HttpServlet {
                     int currweek = getWeek(request);
                     try {
                         week = Integer.parseInt(request.getParameter("week"));
+                        year = Integer.parseInt(request.getParameter("year"));
                     } catch (NumberFormatException e) {
-                        week = currweek;
+                        week = getWeek(request);
+                        year = getCurrYear();
                     }
                     int labid = 0;
                     try {
@@ -58,8 +62,8 @@ public class editTimetable extends HttpServlet {
                     }
 
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         subs = oddEveSubs();
                         out.print("<style>"
                                 + "input[type=number]{"
@@ -92,15 +96,26 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).disabled=true;"
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
-                        wks = LocalDate.now().with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, week);
-                        date[0] = wks.plusDays(-1) + "";
-                        date[1] = wks.plusDays(0) + "";
-                        date[2] = wks.plusDays(1) + "";
-                        date[3] = wks.plusDays(2) + "";
-                        date[4] = wks.plusDays(3) + "";
-                        date[5] = wks.plusDays(4) + "";
-                        String heading = "<table><tr><td width = 33% align='left'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&lab=" + labid + "')\">"
-                                + "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
+                        LocalDate date1 = LocalDate.now()
+                                .withYear(year) // year
+                                .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
+                                .with(WeekFields.ISO.dayOfWeek(), 7);
+                        System.out.println("date stack : " + date);
+                        wks = date1.plusDays(-7);
+                        System.out.println("wks: " + wks);
+                        date[0] = wks.plusDays(1) + "";
+                        date[1] = wks.plusDays(2) + "";
+                        date[2] = wks.plusDays(3) + "";
+                        date[3] = wks.plusDays(4) + "";
+                        date[4] = wks.plusDays(5) + "";
+                        date[5] = wks.plusDays(6) + "";
+                        String heading = "<table><tr><td width = 33% align='left'><form action=\"";
+                        if (week == 1) {
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=52&year=" + (year - 1) + "')\" >";
+                        } else {
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
+                        }
+                        heading += "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
                         if (week <= currweek) {
                             heading += "disabled";
                         }
@@ -111,8 +126,13 @@ public class editTimetable extends HttpServlet {
 
                         heading += "<p align='center'>Displaying Timetable of Week : " + week + "</p>";
                         heading += "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wks.plusDays(7) + "</b></p>";
-                        heading += "</td><td width = 33% align='right'><form action=\"javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&lab=" + labid + "')\">"
-                                + "<button type=\"submit\"  style='width: 100px;' id=\"next\" class=\"btn btn-primary\"";
+                        heading += "</td><td width = 33% align='right'><form action=\"";
+                        if (week == 52) {
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=1&year=" + (year + 1) + "')\" >";
+                        } else {
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
+                        }
+                        heading += "<button type=\"submit\"  style='width: 100px;' id=\"next\" class=\"btn btn-primary\"";
                         if (week > currweek) {
                             heading += "disabled";
                         }
@@ -170,8 +190,8 @@ public class editTimetable extends HttpServlet {
         table += ("</tr>");
         table = tablehead(table);
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
 
             PreparedStatement ps = con.prepareStatement("SELECT slot.slotID, slot.startTime, slot.endTime, "
                     + "MAX(CASE WHEN dayID = 1 THEN concat(timetable.subjectID,' - ',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
@@ -219,7 +239,6 @@ public class editTimetable extends HttpServlet {
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
                     Date now = new Date();
-
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();
                     System.out.println("now : " + now);
