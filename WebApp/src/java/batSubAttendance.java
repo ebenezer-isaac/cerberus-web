@@ -53,7 +53,6 @@ public class batSubAttendance extends HttpServlet {
                             while (rs.next()) {
                                 no_of_dates++;
                             }
-                            System.out.println("NO of dates :" + no_of_dates);
                             dates = new String[no_of_dates][3];
                             rs.first();
                             rs.previous();
@@ -83,7 +82,6 @@ public class batSubAttendance extends HttpServlet {
                                 studs[index][2] = rs.getString(3);
                                 index++;
                             }
-                            System.out.println("NO of studs :" + no_of_studs);
                             out.print("<form action='saveAttendance' method='post'>");
                             ps = con.prepareStatement("select subject.subject from subject where subject.subjectID = ?");
                             ps.setString(1, subjectID);

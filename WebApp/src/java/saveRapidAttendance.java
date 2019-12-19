@@ -26,7 +26,6 @@ public class saveRapidAttendance extends HttpServlet {
                 try {
                     int scheduleid = Integer.parseInt(request.getParameter("scheduleid"));
                     int line = Integer.parseInt(request.getParameter("line"));
-                    System.out.println("no of students rapid att : " + line);
                     int timeID = getTimeID(getCurrTime());
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
@@ -47,7 +46,6 @@ public class saveRapidAttendance extends HttpServlet {
                                         dup = 1;
                                     }
                                     if (dup != 1) {
-                                        System.out.println("insert : " + prn);
                                         insert.setString(1, prn);
                                         insert.setInt(2, scheduleid);
                                         insert.setInt(3, timeID);
@@ -58,7 +56,6 @@ public class saveRapidAttendance extends HttpServlet {
                                 }
                             } else {
                                 try {
-                                    System.out.println("delete : " + prn);
                                     delete.setInt(1, scheduleid);
                                     delete.setString(2, prn);
                                     delete.executeUpdate();

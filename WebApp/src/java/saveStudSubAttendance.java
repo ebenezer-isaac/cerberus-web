@@ -38,7 +38,6 @@ public class saveStudSubAttendance extends HttpServlet {
                             PreparedStatement insert = con.prepareStatement("insert into attendance values(null,?,?,?)");
                             PreparedStatement delete = con.prepareStatement("delete from attendance where scheduleid=? and prn = ?");
                             String att = request.getParameter("att" + (x + 1) + "," + scheduleid);
-                            System.out.println("prn : " + prn + " " + scheduleid + " " + att);
                             if (att != null) {
                                 try {
                                     PreparedStatement select = con.prepareStatement("select attendance.attendanceID from attendance where prn = ? and scheduleid = ?");
@@ -48,10 +47,8 @@ public class saveStudSubAttendance extends HttpServlet {
                                     int dup = 0;
                                     while (check.next()) {
                                         dup = 1;
-                                        System.out.println("duplicate");
                                     }
                                     if (dup != 1) {
-                                        System.out.println("insert : " + prn);
                                         insert.setString(1, prn);
                                         insert.setInt(2, scheduleid);
                                         insert.setInt(3, timeID);
@@ -62,7 +59,6 @@ public class saveStudSubAttendance extends HttpServlet {
                                 }
                             } else {
                                 try {
-                                    System.out.println("delete : " + prn);
                                     delete.setInt(1, scheduleid);
                                     delete.setString(2, prn);
                                     delete.executeUpdate();

@@ -100,9 +100,7 @@ public class editTimetable extends HttpServlet {
                                 .withYear(year) // year
                                 .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
                                 .with(WeekFields.ISO.dayOfWeek(), 7);
-                        System.out.println("date stack : " + date);
                         wks = date1.plusDays(-7);
-                        System.out.println("wks: " + wks);
                         date[0] = wks.plusDays(1) + "";
                         date[1] = wks.plusDays(2) + "";
                         date[2] = wks.plusDays(3) + "";
@@ -241,10 +239,6 @@ public class editTimetable extends HttpServlet {
                     Date now = new Date();
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();
-                    System.out.println("now : " + now);
-                    System.out.println("tbd : " + datetime);
-                    System.out.println("now : " + nowmill);
-                    System.out.println("tbd : " + datetimemill);
                     String disabled = "";
                     String disabledstyl = "style='border:solid 1px green'";
                     if (nowmill > datetimemill) {
@@ -327,10 +321,6 @@ public class editTimetable extends HttpServlet {
                         Date now = new Date();
                         long nowmill = now.getTime();
                         long datetimemill = datetime.getTime();
-                        System.out.println("now : " + now);
-                        System.out.println("tbd : " + datetime);
-                        System.out.println("now : " + nowmill);
-                        System.out.println("tbd : " + datetimemill);
                         String disabled = "";
                         String disabledstyl = "style='border:solid 1px green'";
                         if (nowmill > datetimemill) {

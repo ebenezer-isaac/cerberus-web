@@ -80,17 +80,13 @@ public class otp extends HttpServlet {
                     } catch (SQLException | ParseException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(spam);
                 } else {
-                    System.out.println("No data found");
                     ps = con.prepareStatement("DELETE from `otp` where email=?;");
                     ps.setString(1, this.email);
                     ps.executeUpdate();
                     if (email_count == 1) {
                         int timeID = getTimeID(getCurrTime());
                         int dateID = getDateID(getCurrDate());
-                        System.out.println("date id : " + dateID);
-                        System.out.println("time id : " + timeID);
                         ps = con.prepareStatement("INSERT INTO `otp`values (null, ?,?,?,?)");
                         ps.setString(1, this.email);
                         ps.setString(2, this.hashotp);

@@ -33,7 +33,6 @@ public class saveAttendance extends HttpServlet {
                     for (int x = 0; x < no_of_subs; x++) {
                         int scheduleid = Integer.parseInt(schedules[x]);
                         int line = Integer.parseInt(request.getParameter("line"));
-                        System.out.println("no of students rapid att : " + line);
                         int timeID = getTimeID(getCurrTime());
                         try {
                             Class.forName("com.mysql.jdbc.Driver");
@@ -43,7 +42,6 @@ public class saveAttendance extends HttpServlet {
                             for (int i = 1; i < line; i++) {
                                 String prn = request.getParameter("prn" + i);
                                 String att = request.getParameter("att" + i + "," + scheduleid);
-                                System.out.println("prn : " + prn + " " + scheduleid + " " + att);
                                 if (att != null) {
                                     try {
                                         PreparedStatement select = con.prepareStatement("select attendance.attendanceID from attendance where prn = ? and scheduleid = ?");
@@ -53,10 +51,8 @@ public class saveAttendance extends HttpServlet {
                                         int dup = 0;
                                         while (check.next()) {
                                             dup = 1;
-                                            System.out.println("duplicate");
                                         }
                                         if (dup != 1) {
-                                            System.out.println("insert : " + prn);
                                             insert.setString(1, prn);
                                             insert.setInt(2, scheduleid);
                                             insert.setInt(3, timeID);
@@ -67,7 +63,6 @@ public class saveAttendance extends HttpServlet {
                                     }
                                 } else {
                                     try {
-                                        System.out.println("delete : " + prn);
                                         delete.setInt(1, scheduleid);
                                         delete.setString(2, prn);
                                         delete.executeUpdate();

@@ -210,7 +210,6 @@
                         <span>Student Progression</span></a>
                 </li>
             </ul>
-
             <%
                 Class.forName("com.mysql.jdbc.Driver");
                 try {

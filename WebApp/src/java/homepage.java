@@ -1,6 +1,7 @@
 
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_next_schedule;
+import static cerberus.AttFunctions.get_next_stud_schedule;
 import static cerberus.AttFunctions.no_of_labs;
 import cerberus.messages;
 import static cerberus.printer.error;
@@ -144,9 +145,7 @@ public class homepage extends HttpServlet {
                     out.print("</div>");
                     int labcount = 0;
                     String faculty_id = (String) session.getAttribute("user");
-                    System.out.println("fac" + faculty_id);
                     try {
-                        String subcode = request.getParameter("subcode");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         PreparedStatement ps = con.prepareStatement("SELECT count(facultytimetable.scheduleID) "
                                 + "from facultytimetable "
@@ -191,20 +190,20 @@ public class homepage extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print(tableend(null, 1));
+                            out.print(tableend(null, 0));
                         } else {
-                            out.print("No Data to show");
+                            out.print("You haven't conducted any labs yet");
                         }
                         con.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
                         error(e.getMessage());
                     }
-                    out.print("");
                     break;
                 case 0:
                     int count = 0;
                     String prn = (String) session.getAttribute("user");
+                    String student_name = (String) session.getAttribute("name");
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -221,9 +220,138 @@ public class homepage extends HttpServlet {
                         b.error(request, response, e.getMessage(), "homepage");
                     }
                     if (count < 1) {
-                       out.print("<script>window.location.replace('/Cerberus/details.jsp')</script>");
+                        out.print("<script>window.location.replace('/Cerberus/details.jsp')</script>");
                     } else {
-                        out.print("Homepage");
+                        out.print("<b> Welcome " + student_name + "</b><br><br><div class='row'>");
+                        labs = no_of_labs();
+                        for (int i = 1; i <= labs; i++) {
+                            String testing[] = get_next_stud_schedule(request, i, prn);
+                            switch (testing[0]) {
+                                case "0":
+                                    out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                            + "<div class='card text-white bg-primary o-hidden h-100'>"
+                                            + "<a class='card-header text-white clearfix'>"
+                                            + "<span class='float-middle'>Lab " + i + "</span>"
+                                            + "</a>"
+                                            + "<div class='card-body'>"
+                                            + "<div class='card-body-icon'>"
+                                            + "<i class=\"fas fa-times\"></i>"
+                                            + "</div>"
+                                            + "<div class='mr-2' align='center'><br>No Labs Today<br></div>"
+                                            + "</div>"
+                                            + "<br>"
+                                            + "</div>"
+                                            + "</div>");
+                                    break;
+                                case "1":
+                                    out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                            + "<div class='card text-white bg-primary o-hidden h-100'>"
+                                            + "<a class='card-header text-white clearfix'>"
+                                            + "<span class='float-middle'>Lab " + i + "</span>"
+                                            + "</a>"
+                                            + "<div class='card-body'>"
+                                            + "<div class='card-body-icon'>"
+                                            + "<i class='fas fa-check'></i>"
+                                            + "</div>"
+                                            + "<div class='mr-2' align='center'><br>All Labs are Over<br><br></div>"
+                                            + "</div>"
+                                            + "<br>"
+                                            + "</div>"
+                                            + "</div>");
+                                    break;
+                                case "2":
+                                    if (Integer.parseInt(testing[1].split(",")[1]) == 1) {
+                                        out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                                + "<div class='card text-white bg-success o-hidden h-100'>");
+                                    } else {
+                                        out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                                + "<div class='card text-white bg-danger o-hidden h-100'>");
+                                    }
+                                    out.print("<a class='card-header text-white clearfix'>"
+                                            + "<span class='float-middle'>Lab " + i + "</span>"
+                                            + "</a>"
+                                            + "<div class='card-body'>"
+                                            + "<div class='card-body-icon'>"
+                                            + "<i class='fas fa-desktop'></i>"
+                                            + "</div>"
+                                            + "<div class='mr-2' align='center'>" + testing[1].split(",")[0] + "</div>"
+                                            + "</div>"
+                                            + "<br>"
+                                            + "</div>"
+                                            + "</div>");
+                                    break;
+                                case "3":
+                                    out.print("<div class='col-xl-4 col-sm-6 mb-3' align='center'>"
+                                            + "<div class='card text-white bg-warning o-hidden h-100'>"
+                                            + "<a class='card-header text-white clearfix'>"
+                                            + "<span class='float-middle'>Lab " + i + "</span>"
+                                            + "</a>"
+                                            + "<div class='card-body'>"
+                                            + "<div class='card-body-icon'>"
+                                            + "<i class='fas fa-forward'></i>"
+                                            + "</div>"
+                                            + "<div class='mr-2' align='center'>" + testing[1] + "</div>"
+                                            + "</div>"
+                                            + "<br>"
+                                            + "</div>"
+                                            + "</div>");
+                                    break;
+                            }
+                        }
+                        out.print("</div>");
+                        labcount = 0;
+                        try {
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                            PreparedStatement ps = con.prepareStatement("SELECT count(attendance.attendanceID) "
+                                    + "from attendance "
+                                    + "where prn = ?");
+                            ps.setString(1, prn);
+                            ResultSet rs = ps.executeQuery();
+                            while (rs.next()) {
+                                labcount = rs.getInt(1);
+                            }
+                            out.print("<br>");
+                            if (labcount >= 1) {
+                                PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date, "
+                                        + "slot.startTime, slot.endTime,"
+                                        + "(select lab.name from lab where lab.labID=timetable.labID) as lab,"
+                                        + "(select subject.abbreviation from subject where subject.subjectID=timetable.subjectID) as Subject,"
+                                        + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,timetable.subjectID "
+                                        + "from timetable "
+                                        + "INNER JOIN attendance "
+                                        + "on timetable.scheduleID=attendance.scheduleID "
+                                        + "INNER JOIN slot "
+                                        + "on slot.slotID=timetable.slotID "
+                                        + "where attendance.prn =? order by date, slot.startTime;");
+                                ps1.setString(1, prn);
+                                ResultSet rs1 = ps1.executeQuery();
+                                out.print(tablestart("<b>Number of Lab Sessions attended by you </b>: " + labcount + "",
+                                        "hover", "studDetails", 1) + "");
+                                String header = "<tr align = center>";
+                                header += "<th>Date</th>";
+                                header += "<th>Start Time</th>";
+                                header += "<th>End Time</th>";
+                                header += "<th>Lab</th>";
+                                header += "<th>Subject</th>";
+                                header += "<th>Batch</th>";
+                                header += "</tr>";
+                                out.print(tablehead(header));
+                                while (rs1.next()) {
+                                    out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/studSubAttendance?sub=" + rs1.getString(7) + "');\">");
+                                    for (int i = 1; i <= 6; i++) {
+                                        out.print("<td>" + rs1.getString(i) + "</td>");
+                                    }
+                                    out.print("</tr>");
+                                }
+                                out.print(tableend(null, 0));
+                            } else {
+                                out.print("You haven't attended any labs yet");
+                            }
+                            con.close();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            error(e.getMessage());
+                        }
                     }
                     break;
                 default:

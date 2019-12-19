@@ -89,7 +89,7 @@ public class addFaculty extends HttpServlet {
                         mail.send(email, "Account Registration", body);
                         con.close();
                         messages a = new messages();
-                        a.success(request, response, name + " was added to the list of faculties. A mail has been sent to their registered email address.", "homepage");
+                        a.success(request, response, name + " has been added as a faculty and has been granted admin privilages.<br>A mail has been sent to their registered email address.", "homepage");
                     } catch (ClassNotFoundException | SQLException e) {
                         messages a = new messages();
                         a.dberror(request, response, e.getMessage(), "homepage");

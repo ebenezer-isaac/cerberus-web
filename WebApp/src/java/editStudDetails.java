@@ -54,13 +54,11 @@ public class editStudDetails extends HttpServlet {
                                 + "GROUP BY student.PRN "
                                 + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo;");
                         ps4.setInt(1, classID);
-                        System.out.println("hello");
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         int line = 0;
                         if (rs.next()) {
-                            System.out.println("hello");
                             out.print("<form action='saveStudDetails' method='post'>");
                             out.print(tablestart(cla.toUpperCase(), "hover", "studDetails", 0) + "");
                             String header = "<tr>";

@@ -15,7 +15,6 @@ public class ajaxContent extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int access = getAccess(request);
-        System.out.println(access);
         if (access == 1 || access == 0) {
             String url;
             try {

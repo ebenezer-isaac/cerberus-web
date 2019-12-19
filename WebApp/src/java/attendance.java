@@ -43,10 +43,6 @@ public class attendance extends HttpServlet {
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         int sem = getSem(oddeve, classID);
                         String[][] subs = semSubs(sem, classID);
-                        for (int i = 0; i < subs.length; i++) {
-                            System.out.println(subs[i][0]);
-                            System.out.println(subs[i][1]);
-                        }
                         int no_of_batch = no_of_batch();
                         int no_of_sub = subs.length - 1;
                         out.print(tablestart(cla, "hover", "studDetails", 0));
@@ -91,9 +87,8 @@ public class attendance extends HttpServlet {
                         for (String sub[] : subs) {
                             out.print("<option value= '" + sub[0] + "'>" + sub[0] + " " + sub[1] + "</option>");
                         }
-
                         out.print("</select>");
-                        out.print("<select style='width:200px; padding: 5px 5px 5px 5px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' "
+                        out.print("<br><select style='width:200px; padding: 5px 5px 5px 5px; border-radius: 4px; border: none; background: #e6e6e6; outline: none; margin: 6px; font-size: 14.5px;' "
                                 + "onchange = \"if(this.selectedIndex==0){document.getElementById('subject').selectedIndex=0; this.disabled= true;document.getElementById('newFacTime-btn').disabled=true;}\" class=\"editSelectTimeTable\" name = 'batch' id = 'batch' disabled  class='not-allowed';>"
                                 + "<option name='-' value='-' selected >No Batch</option>");
                         PreparedStatement ps11 = con.prepareStatement("Select name from batch where batchid>0");
@@ -124,7 +119,6 @@ public class attendance extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by rollcall.rollNo";
-                        System.out.println(sql);
                         ps = con.prepareStatement(sql);
                         rs = ps.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
@@ -142,7 +136,6 @@ public class attendance extends HttpServlet {
                             header += "</tr>";
                             out.print(tablehead(header));
                             rs.previous();
-
                             while (rs.next()) {
                                 line++;
                                 String prn = rs.getString(1);
@@ -163,7 +156,6 @@ public class attendance extends HttpServlet {
                                             temp = 1;
                                         }
                                     }
-                                    System.out.println("temp ::::::::::::::" + temp);
                                     if (result[0].equals("0")) {
                                         out.print("<td>N/A</td>");
                                     } else if (temp == 0) {

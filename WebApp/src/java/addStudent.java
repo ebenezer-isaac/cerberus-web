@@ -98,7 +98,7 @@ public class addStudent extends HttpServlet {
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Registration", body);
                         messages a = new messages();
-                        a.success(request, response, name + " was added to the list of Students. A mail has been sent containing the loign password.", "editStudDetails?class=" + classID);
+                        a.success(request, response, name + " has been added as a student.<br>A mail has been sent containing the login password.", "editStudDetails?class=" + classID);
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         e.printStackTrace();

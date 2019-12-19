@@ -14,15 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.IsoFields;
-import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
-import java.util.Calendar;
-import java.util.Date;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,22 +44,17 @@ public class viewTimetable extends HttpServlet {
             HttpSession session = request.getSession(false);
             String user = (String) session.getAttribute("user");
             try {
-                week = getWeek(request);
-
                 week = Integer.parseInt(request.getParameter("week"));
                 year = Integer.parseInt(request.getParameter("year"));
-
             } catch (NumberFormatException e) {
                 week = getWeek(request);
                 year = getCurrYear();
             }
             access = getAccess(request);
-
             LocalDate date = LocalDate.now()
                     .withYear(year) // year
                     .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
                     .with(WeekFields.ISO.dayOfWeek(), 7);
-            System.out.println("date stack : " + date);
             wks = date.plusDays(-7);
             mon = wks.plusDays(1);
             tue = wks.plusDays(2);
@@ -229,7 +217,6 @@ public class viewTimetable extends HttpServlet {
             }
             sql += "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;";
-            System.out.println(sql);
             PreparedStatement ps4 = con.prepareStatement(sql);
             if (access == 0) {
                 ps4.setInt(1, labid);

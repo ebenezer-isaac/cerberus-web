@@ -59,15 +59,14 @@
         <div id="particles-js"></div>
         <% try {
                 Integer access = AttFunctions.getAccess(request);
-                System.out.println(access);
                 if (access == 0) {
                     int count = 0;
                     String prn = (String) session.getAttribute("user");
+                    System.out.println(prn);
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         PreparedStatement ps = con.prepareStatement("select count(batchID) from studentsubject where prn = ? and batchID !=0");
-                        System.out.println(prn);
                         ps.setString(1, prn);
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
@@ -104,7 +103,8 @@
                                 out.print("<option name='batch" + rs4.getString(1) + "' value='" + rs4.getString(1) + "'>" + rs4.getString(2) + "</option>");
                             }
                             out.print("</select>\";return batch;}");
-                            PreparedStatement ps2 = con.prepareStatement("select classID from rollcall where prn = '2017033800104472'");
+                            PreparedStatement ps2 = con.prepareStatement("select classID from rollcall where prn = ?");
+                            ps2.setString(1, prn);
                             ResultSet rs2 = ps2.executeQuery();
                             int classID = 0;
                             while (rs2.next()) {
@@ -112,6 +112,8 @@
                             }
                             out.print("var division;");
                             int sem = AttFunctions.getSem(oddeve, classID);
+                            System.out.println(classID);
+                            System.out.println(sem);
                             PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
                             ps3.setInt(1, sem);
                             ResultSet rs3 = ps3.executeQuery();
@@ -125,7 +127,8 @@
                                 out.print("<td></tr>");
                             }
                             out.print("</table>\";");
-                            ps2 = con.prepareStatement("select name from student where prn = '2017033800104472'");
+                            ps2 = con.prepareStatement("select name from student where prn = ?");
+                            ps2.setString(1, prn);
                             rs2 = ps2.executeQuery();
                             String name = "";
                             while (rs2.next()) {

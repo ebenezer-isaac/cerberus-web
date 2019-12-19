@@ -50,7 +50,6 @@ public class ajaxSchedules extends HttpServlet {
                 ps.setString(2, batch);
                 rs = ps.executeQuery();
                 if (rs.next()) {
-                    System.out.println("ajax schedules");
                     out.print(tablestart("List of Lab Session scheduled for " + batchName + " of " + subjectName + ""
                             + "<div id='validations' style='color:red;font-size:14px;' class='mt-2 mb-2'>"
                             + "Select a Lab Session listed below to mark it as conducted and to edit its Attendance.</div>", "hover", "studDetails", 0));
@@ -62,7 +61,6 @@ public class ajaxSchedules extends HttpServlet {
                     header += "<th>Subject ID</th>";
                     header += "<th>Subject</th>";
                     header += "</tr>";
-                    System.out.println(header);
                     out.print(tablehead(header));
                     rs.previous();
                     while (rs.next()) {

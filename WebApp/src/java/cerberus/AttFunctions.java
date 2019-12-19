@@ -99,7 +99,6 @@ public class AttFunctions {
                 schedule[count][1] = rs.getString(2);
                 schedule[count][2] = rs.getString(3);
                 schedule[count][3] = rs.getString(4);
-                System.out.println(schedule[count][0] + " " + schedule[count][1] + " " + schedule[count][2] + " " + schedule[count][3]);
                 count++;
             }
             if (count > 0 && count > nullcount) {
@@ -127,7 +126,6 @@ public class AttFunctions {
                             try {
                                 final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
                                 final Date dateObj = sdf.parse(schedule[x][1]);
-                                System.out.println(dateObj);
                                 schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
                             } catch (final ParseException e) {
                                 e.printStackTrace();
@@ -164,7 +162,139 @@ public class AttFunctions {
                             try {
                                 final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
                                 final Date dateObj = sdf.parse(schedule[x][1]);
-                                System.out.println(dateObj);
+                                schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
+                            } catch (final ParseException e) {
+                                e.printStackTrace();
+                            }
+                            String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
+                            nextSchedule[1] = "Next Lab starts at " + schedule[x][1] + "<br>"
+                                    + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
+                                    + "Subject : " + details[5] + "<br>"
+                                    + "Batch : " + details[6];
+                            return nextSchedule;
+                        }
+                    }
+                }
+                nextSchedule[0] = "1";
+                nextSchedule[1] = "All Labs Over";
+                return nextSchedule;
+            } else {
+                nextSchedule[0] = "0";
+                nextSchedule[1] = "No Labs Today";
+                return nextSchedule;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return nextSchedule;
+    }
+
+    public static String[] get_next_stud_schedule(HttpServletRequest request, int labid, String prn) {
+        String nextSchedule[] = new String[2];
+        int week = getWeek(request);
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        String time = getCurrTime();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+            PreparedStatement ps = con.prepareStatement("SELECT slot.slotID,slot.startTime, slot.endTime, "
+                    + "MAX(CASE WHEN dayID = ? THEN timetable.scheduleID END) "
+                    + "FROM timetable "
+                    + "INNER JOIN slot "
+                    + "ON timetable.slotID = slot.slotID "
+                    + "INNER JOIN subject "
+                    + "ON timetable.subjectID = subject.subjectID "
+                    + "where labID=? and weekID=(select weekID from week where week = ?) and timetable.subjectID in (select subject.Abbreviation from studentsubject "
+                    + "inner join subject "
+                    + "on subject.subjectID=studentsubject.subjectID "
+                    + "where prn = ? and studentsubject.batchID != 0) "
+                    + "GROUP BY slot.startTime, slot.endTime ASC "
+                    + "ORDER BY slot.startTime, slot.endTime ASC;");
+            ps.setInt(1, day);
+            ps.setInt(2, labid);
+            ps.setInt(3, week);
+            ps.setString(4, prn);
+            ResultSet rs = ps.executeQuery();
+            int slots = no_of_slots();
+            String schedule[][] = new String[slots][4];
+            int count = 0;
+            int nullcount = 0;
+            while (rs.next()) {
+                if (rs.getString(4) == null) {
+                    nullcount++;
+                }
+                schedule[count][0] = rs.getString(1);
+                schedule[count][1] = rs.getString(2);
+                schedule[count][2] = rs.getString(3);
+                schedule[count][3] = rs.getString(4);
+                count++;
+            }
+            if (count > 0 && count > nullcount) {
+                long startmill = 0;
+                long timemill = 0;
+                long endmill = 0;
+                for (int x = 0; x < slots; x++) {
+                    try {
+                        String startDate = "2014/10/29 " + schedule[x][1];
+                        String timeDate = "2014/10/29 " + time;
+                        String endDate = "2014/10/29 " + schedule[x][2];
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date startD = sdf.parse(startDate);
+                        Date timeD = sdf.parse(timeDate);
+                        Date endD = sdf.parse(endDate);
+                        startmill = startD.getTime();
+                        timemill = timeD.getTime();
+                        endmill = endD.getTime();
+                    } catch (Exception e) {
+                    }
+                    if (startmill < timemill && timemill < endmill) {
+                        nextSchedule[0] = "2";
+                        if (schedule[x][3] != null) {
+                            String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
+                            try {
+                                final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                                final Date dateObj = sdf.parse(schedule[x][1]);
+                                schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
+                            } catch (final ParseException e) {
+                                e.printStackTrace();
+                            }
+                            int mark = 0;
+                            String marked = "Not Marked as Present";
+                            ps = con.prepareStatement("SELECT attendance.attendanceID from attendance where scheduleID = ? and prn = ?");
+                            ps.setString(1, schedule[x][3]);
+                            ps.setString(2, prn);
+                            rs = ps.executeQuery();
+                            if (rs.next()) {
+                                mark = 1;
+                                marked = "Marked as Present";
+                            }
+                            nextSchedule[1] = "Lab Started at " + schedule[x][1] + "<br>"
+                                    + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
+                                    + "Subject : " + details[5] + "<br>"
+                                    + "Batch : " + details[6] + "<br>"
+                                    + "Status : " + marked + "," + mark;
+                            return nextSchedule;
+                        }
+                    }
+                }
+                for (int x = 0; x < slots; x++) {
+                    if (schedule[x][3] != null) {
+                        try {
+                            String startDate = "2014/10/29 " + schedule[x][1];
+                            String timeDate = "2014/10/29 " + time;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date startD = sdf.parse(startDate);
+                            Date timeD = sdf.parse(timeDate);
+                            startmill = startD.getTime();
+                            timemill = timeD.getTime();
+                        } catch (ParseException e) {
+                        }
+                        if (timemill < startmill) {
+                            nextSchedule[0] = "3";
+                            try {
+                                final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+                                final Date dateObj = sdf.parse(schedule[x][1]);
                                 schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
                             } catch (final ParseException e) {
                                 e.printStackTrace();
@@ -318,11 +448,7 @@ public class AttFunctions {
                     presents = rs.getInt(1);
                 }
                 con.close();
-                System.out.println("prn : " + prn);
-                System.out.println("presents : " + presents);
-                System.out.println("labs : " + labs);
                 float perc = ((float) (presents) / (float) labs) * 100;
-                System.out.println("perc : " + perc);
                 return (perc);
             } else {
                 return 0;
@@ -480,7 +606,6 @@ public class AttFunctions {
                 e.printStackTrace();
             }
         }
-        System.out.println("asdfasdf : " + result + ".");
         return result;
     }
 

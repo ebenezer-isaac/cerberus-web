@@ -16,7 +16,6 @@
             type = "";
         }
     }
-    System.out.println(type);
     if (type.equals("login0")) {
         redirect = "false";
         head = "Security Firewall";

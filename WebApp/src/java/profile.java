@@ -1,6 +1,9 @@
 
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getSem;
+import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.oddEveSubs;
+import static cerberus.AttFunctions.semSubs;
 import static cerberus.printer.nouser;
 import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
@@ -32,6 +35,7 @@ public class profile extends HttpServlet {
             int access = getAccess(request);
             switch (access) {
                 case 1:
+                    out.print("<div class='row' align='center'><div class='col-xl-4 col-sm-6 mb-3' align='center'><br><br>");
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -46,13 +50,80 @@ public class profile extends HttpServlet {
                             blob = rs.getBytes("photo");
                             name = rs.getString("name");
                         }
+                        System.out.println(blob);
                         if (blob != null) {
+                            System.out.println("not null");
                             String imgString = DatatypeConverter.printBase64Binary(blob);
-                            out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><br>" + name);
+                            out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
+                        } else {
+                            System.out.println("null");
+                            out.print("<img style='width:160px;height:130px;' src='images/teacher.png'/><br><br><font size=4>" + name + "</font>");
                         }
-                        out.print("<br><br>");
+                        ps = con.prepareStatement("SELECT \n"
+                                + "MAX(CASE \n"
+                                + "WHEN facultyfingerprint.templateID = 1 and facultyfingerprint.template is not null THEN ' 1 '\n"
+                                + "WHEN facultyfingerprint.templateID = 1 and facultyfingerprint.template is null then '0'\n"
+                                + "END) as Template1, \n"
+                                + "MAX(CASE \n"
+                                + "WHEN facultyfingerprint.templateID = 2 and facultyfingerprint.template is not null THEN ' 1 '\n"
+                                + "WHEN facultyfingerprint.templateID = 2 and facultyfingerprint.template is null then '0'\n"
+                                + "END) as Template2 \n"
+                                + "FROM facultyfingerprint \n"
+                                + "where facultyfingerprint.facultyID = ?");
+                        ps.setString(1, facultyID);
+                        out.print("<br>Faculty ID : " + facultyID + "<br><br>");
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            for (int i = 1; i < 3; i++) {
+                                int flag;
+                                if (Integer.parseInt(rs.getString(i).trim()) == 0) {
+                                    flag = 0;
+                                } else {
+                                    flag = 1;
+                                }
+                                out.print("<div class='col-xl-10 col-sm-6 mb-3' align='center'>"
+                                        + "<div class='card text-white bg-");
+                                if (flag == 0) {
+                                    out.print("danger ");
+                                } else {
+                                    out.print("success ");
+                                }
+                                out.print("small o-hidden h-60'>"
+                                        + "<a class='card-header text-white clearfix'>"
+                                        + "<span class='float-middle'>Fingerprint " + i + "</span>"
+                                        + "</a>"
+                                        + "<div class='card-body'>"
+                                        + "<div class='card-body-icon'>"
+                                        + "<i class=\"fas fa-fingerprint\"></i>"
+                                        + "</div>"
+                                        + "<div class='mr-1' align='center'><br>");
+                                if (flag == 0) {
+                                    out.print("Unavailable");
+
+                                } else {
+                                    out.print("Available");
+                                }
+                                out.print("<br><br></div>"
+                                        + "</div>"
+                                        + "");
+                                if (flag == 1) {
+                                    out.print("<a class='card-footer text-white clearfix small z-1' "
+                                            + "href=\"javascript:setContent('/Cerberus/delFacFingerprint?id=" + i + "');\">"
+                                            + "<span class='float-left'>Delete Fingerprint</span>"
+                                            + "<span class='float-right'>"
+                                            + "<i class='fas fa-angle-right'></i>"
+                                            + "</span>"
+                                            + "</a>");
+                                }
+                                out.print(""
+                                        + ""
+                                        + "</div>"
+                                        + "</div>");
+                            }
+                        }
+                        out.print("</div><div class='col-xl-8 col-sm-6 mb-3' align='center'>");
                         out.print("<form action='savePref' method='post'>");
-                        out.print(tablestart("Subject Preferences", "hover", "preferences", 0));
+                        out.print(tablestart("<b>Subject Preferences</b>", "hover", "preferences", 0));
                         String header = "<tr>";
                         header += "<th style='vertical-align : middle;text-align:center;'>Subject Code</th>";
                         header += "<th style='vertical-align : middle;text-align:center;'>Abbreviation</th>";
@@ -95,9 +166,10 @@ public class profile extends HttpServlet {
                     } catch (IOException | ClassNotFoundException | SQLException e) {
                         e.printStackTrace();
                     }
-                    out.print("<br><h4>Change password by clicking 'Create a new Password' in the login page.</h4>");
+                    out.print("</div></div>");
                     break;
                 case 0:
+                    out.print("<div class='row' align='center'><div class='col-xl-4 col-sm-6 mb-3' align='center'><br><br>");
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -117,31 +189,122 @@ public class profile extends HttpServlet {
                         while (rs.next()) {
                             name = rs.getString("name");
                         }
+                        ps = con.prepareStatement("select rollcall.classID from rollcall where rollcall.prn = ?");
+                        ps.setString(1, prn);
+                        int classID = 0;
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            classID = rs.getInt(1);
+                        }
                         if (blob != null) {
                             String imgString = DatatypeConverter.printBase64Binary(blob);
-                            out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><font size=4>" + name + "</font>");
+                            out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
                         } else {
-                            out.print("<i class='fas fa-user-circle fa-5x'><i><br><font size=4>" + name + "</font>");
+                            out.print("<img style='width:160px;height:130px;' src='images/student.png'/ alt='We couldn't find your Photo'><br><br><font size=4>" + name + "</font>");
                         }
-                        out.print("<br><h4>Change password by clicking 'Create a new Password' in the login page.<br><br>List of Opted Subjects : </h4>");
-                        PreparedStatement ps1 = con.prepareStatement("select subject.subjectID, subject.Abbreviation from studentsubject "
+                        ps = con.prepareStatement("SELECT \n"
+                                + "MAX(CASE \n"
+                                + "WHEN studentfingerprint.templateID = 1 and studentfingerprint.template is not null THEN ' 1 '\n"
+                                + "WHEN studentfingerprint.templateID = 1 and studentfingerprint.template is null then '0'\n"
+                                + "END) as Template1, \n"
+                                + "MAX(CASE \n"
+                                + "WHEN studentfingerprint.templateID = 2 and studentfingerprint.template is not null THEN ' 1 '\n"
+                                + "WHEN studentfingerprint.templateID = 2 and studentfingerprint.template is null then '0'\n"
+                                + "END) as Template2 \n"
+                                + "FROM studentfingerprint \n"
+                                + "where studentfingerprint.prn = ?");
+                        ps.setString(1, prn);
+                        out.print("<br>PRN : " + prn + "<br><br>");
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            for (int i = 1; i < 3; i++) {
+                                int flag;
+                                if (Integer.parseInt(rs.getString(i).trim()) == 0) {
+                                    flag = 0;
+                                } else {
+                                    flag = 1;
+                                }
+                                out.print("<div class='col-xl-10 col-sm-6 mb-3' align='center'>"
+                                        + "<div class='card text-white bg-");
+                                if (flag == 0) {
+                                    out.print("danger ");
+                                } else {
+                                    out.print("success ");
+                                }
+                                out.print("small o-hidden h-60'>"
+                                        + "<a class='card-header text-white clearfix'>"
+                                        + "<span class='float-middle'>Fingerprint " + i + "</span>"
+                                        + "</a>"
+                                        + "<div class='card-body'>"
+                                        + "<div class='card-body-icon'>"
+                                        + "<i class=\"fas fa-fingerprint\"></i>"
+                                        + "</div>"
+                                        + "<div class='mr-1' align='center'><br>");
+                                if (flag == 0) {
+                                    out.print("Unavailable");
+
+                                } else {
+                                    out.print("Available");
+                                }
+                                out.print("<br><br></div>"
+                                        + "</div></div>"
+                                        + "</div>");
+                            }
+                        }
+                        out.print("</div><div class='col-xl-8 col-sm-6 mb-3' align='center'><br><br><br><br>");
+                        out.print(tablestart("<b>Subject Preferences</b>", "hover", "preferences", 0));
+                        String header = "<tr>";
+                        header += "<th style='vertical-align : middle;text-align:center;'>Subject Code</th>";
+                        header += "<th style='vertical-align : middle;text-align:center;'>Abbreviation</th>";
+                        header += "<th style='vertical-align : middle;text-align:center;'>Status</th>";
+                        header += "</tr>";
+                        out.print(tablehead(header));
+                        int sem = getSem(oddEve(), classID);
+                        subs = semSubs(sem, classID);
+                        ps = con.prepareStatement("select subject.subjectID, subject.Abbreviation from studentsubject "
                                 + "inner join subject "
                                 + "on subject.subjectID=studentsubject.subjectID "
                                 + "where PRN = ? and studentsubject.batchID!=0");
-                        ps1.setString(1, session.getAttribute("user").toString());
-                        rs = ps1.executeQuery();
-                        int index = 1;
+                        ps.setString(1, prn);
+                        rs = ps.executeQuery();
+                        int no_of_pref = 0;
                         while (rs.next()) {
-                            out.print("<a href=\"javascript:setContent('/Cerberus/studSubAttendance?sub=" + rs.getString(1) + "');\">"
-                                    + "<h5>" + rs.getString(2) + "</h5>"
-                                    + "</a>");
-
+                            no_of_pref++;
+                        }
+                        System.out.println(no_of_pref);
+                        prefSub = new String[no_of_pref];
+                        rs.first();
+                        rs.previous();
+                        int index = 0;
+                        while (rs.next()) {
+                            prefSub[index] = rs.getString(1);
                             index++;
                         }
-                        con.close();
+                        for (String[] sub : subs) {
+                            out.print("<tr><td style='vertical-align : middle;text-align:center;'>" + sub[0] + "</td>"
+                                    + "<td style='vertical-align : middle;text-align:center;'>" + sub[1] + "</td>"
+                                    + "<td style='vertical-align : middle;text-align:center;'>");
+                            if (isfav(sub[0])) {
+                                ps = con.prepareStatement("select (select batch.name from batch where batch.batchID = studentsubject.batchID) from studentsubject where prn = ? and subjectID = ?");
+                                ps.setString(1, prn);
+                                ps.setString(2, sub[0]);
+                                rs = ps.executeQuery();
+                                while (rs.next()) {
+                                    out.print("<a href=\"javascript:setContent('/Cerberus/studSubAttendance?sub=" + sub[0] + "');\">"
+                                            + rs.getString(1)
+                                            + "</a>");
+                                }
+                            } else {
+                                out.print("Not Opted");
+                            }
+                            out.print("</td><tr>");
+                            index++;
+                        }
                         if (index == 1) {
                             out.print("<h5>No Subjects Available</h5>");
                         }
+                        out.print(tableend(null, 0));
+                        con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         e.printStackTrace();
                     }
@@ -153,9 +316,7 @@ public class profile extends HttpServlet {
     }
 
     public boolean isfav(String subject) {
-        System.out.println("finding " + subject);
         for (String sub : prefSub) {
-            System.out.println("checking " + sub);
             int index = subject.indexOf(sub);
             if (index != -1) {
                 return true;

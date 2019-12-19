@@ -44,7 +44,6 @@ public class addSubject extends HttpServlet {
                     messages a = new messages();
                     a.success(request, response, "The subject was added successfully<br>Subject Code : " + sid, "homepage");
                 } catch (ClassNotFoundException | SQLException e) {
-                    System.out.println(e);
                     e.printStackTrace();
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "viewSubject");

@@ -39,7 +39,6 @@ public class rapidAttendance extends HttpServlet {
                             ResultSet rs = ps.executeQuery();
                             if (rs.next()) {
                                 String schedule[] = get_schedule_det(rs.getInt(1));
-                                System.out.println(schedule.length);
                                 out.print("<form action='saveRapidAttendance' method='post'>");
                                 String head = "";
                                 head += ("<div class='col-xl-6 col-sm-6 mb-3' align='center'><table align='center'>");

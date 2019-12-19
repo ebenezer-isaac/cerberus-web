@@ -59,7 +59,6 @@ public class studSubAttendance extends HttpServlet {
                             while (rs.next()) {
                                 no_of_dates++;
                             }
-                            System.out.println("NO of dates :" + no_of_dates);
                             dates = new String[no_of_dates][2];
                             rs.first();
                             rs.previous();
@@ -69,7 +68,6 @@ public class studSubAttendance extends HttpServlet {
                                 dates[index][1] = rs.getString(2);
                                 index++;
                             }
-                            System.out.println(index);
                             out.print("<form action='saveStudSubAttendance' method='post'>");
                             ps = con.prepareStatement("select subject.subject from subject where subject.subjectID = ?");
                             ps.setString(1, subjectID);

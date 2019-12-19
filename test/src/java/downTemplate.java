@@ -64,13 +64,13 @@ public class downTemplate extends HttpServlet {
                 }
             }
 
-            try (FileOutputStream fos = new FileOutputStream(new File("C:\\Users\\iamvr\\Desktop\\howtodoinjava_demo.xlsx"))) {
+            try (FileOutputStream fos = new FileOutputStream(new File("C:\\Users\\ebene\\Desktop\\howtodoinjava_demo.xlsx"))) {
                 wb.write(fos);
             }
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
 
             String filename = "data.xlsx";
-            String filepath = "C:\\Users\\iamvr\\Desktop\\howtodoinjava_demo.xlsx";
+            String filepath = "C:\\Users\\ebene\\Desktop\\howtodoinjava_demo.xlsx";
             response.setContentType("APPLICATION/OCTET-STREAM");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 

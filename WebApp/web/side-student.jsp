@@ -119,8 +119,10 @@
                     }
                     con.close();
                     if (blob != null) {
+                        System.out.println("not null");
                         String imgString = DatatypeConverter.printBase64Binary(blob);
-                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px'src='data:image/png;base64," + imgString + "\"/>\";"
+                        System.out.println(imgString);
+                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px'src='data:image/png;base64," + imgString + "'/>\";"
                                 + "var name='" + name + "';</script>");
                     } else {
                         out.print("<script>document.getElementById('pic').innerHTML=\"<i class='fas fa-user-circle fa-lg'><i>\";"
