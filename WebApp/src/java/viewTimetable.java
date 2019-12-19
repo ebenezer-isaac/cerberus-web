@@ -49,12 +49,11 @@ public class viewTimetable extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(false);
             try {
-<<<<<<< HEAD
                 week = getWeek(request);
-=======
+
                 week = Integer.parseInt(request.getParameter("week"));
                 year = Integer.parseInt(request.getParameter("year"));
->>>>>>> 79283f1f15db71e2afec11c67f3ecce7b250b91f
+
             } catch (NumberFormatException e) {
                 week = getWeek(request);
                 year = getCurrYear();
