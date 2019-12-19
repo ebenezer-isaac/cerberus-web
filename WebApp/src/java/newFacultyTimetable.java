@@ -1,9 +1,11 @@
 
 import static cerberus.AttFunctions.get_schedule_det;
+import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class newFacultyTimetable extends HttpServlet {
 
@@ -21,26 +24,52 @@ public class newFacultyTimetable extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
+                HttpSession session = request.getSession(false);
+                int currentFaculty = (int) session.getAttribute("user");;
+                int facultyID = 0;
+                String facultyName = "";
                 int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
-                String schedule[] = get_schedule_det(scheduleID);
-                out.print("<fieldset>");
-                out.print("<table align='center' width = 30%><tr><td align='center' width = 14%><b>Date</b></td><td align='center' width = 2%> : </td><td align='center' width = 14%>" + schedule[0] + "</td></tr>");
-                out.print("<tr><td align='center'><b>Start Time</b></td><td align='center'> : </td><td align='center'>" + schedule[1] + "</td></tr>");
-                out.print("<tr><td align='center'><b>End Time</b></td><td align='center'> : </td><td align='center'>" + schedule[2] + "</td></tr>");
-                out.print("<tr><td align='center'><b>Lab</b></td><td align='center'> : </td><td align='center'>" + schedule[3] + "</td></tr>");
-                out.print("<tr><td align='center'><b>Subject ID</b></td><td align='center'> : </td><td align='center'>" + schedule[4] + "</td></tr>");
-                out.print("<tr><td align='center'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[5] + "</td></tr></table>"
-                        + "<br><font style=\"font-size: 20px;\"><b> Warning - The following changes will be made:</b></font><br><br>"
-                        + "<p> <font style=\"font-size: 15.5px;\"> 1. The selected Lab will be marked as conducted. </font> </p>"
-                        + "<p> <font style=\"font-size: 15.5px;\"> 2. Any attendance marked via the fingerprint system meanwhile, will be void. </font> </p>"
-                        + "<p> <font style=\"font-size: 15.5px;\"> 3. Attendance marked by you will be overwritten with express authority. </font> </p>"
-                        + "<br><table><tr><td><input type='checkbox' id='warn' onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
-                        + "<br></fieldset><style type='text/css'>\n"
-                        + "@import url('css/checkbox.css');\n"
-                        + "</style>");
-                out.print("<br><div id = 'butt' style='display:none;'><form action='saveNewAttendance' method='post'>"
-                        + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
-                        + "<button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></form></div>");
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                    PreparedStatement ps = con.prepareStatement("select facultyID, (select faculty.name from faculty where faculty.facultyID = facultytimetable.facultyID) from facultyTimetable where scheduleID = ?");
+                    ps.setInt(1, scheduleID);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        facultyID = rs.getInt(1);
+                        facultyName = rs.getString(2);
+                    }
+                } catch (ClassNotFoundException | SQLException e) {
+                }
+                if (facultyID == 0) {
+                    if (currentFaculty == facultyID) {
+                        messages a = new messages();
+                        a.success(request, response, "You have already marked this Lab Session as conducted. Redirecting you the the Edit Attendance page for this Lab Session", "rapidAttendance?scheduleid=" + scheduleID);
+                    } else {
+                        messages a = new messages();
+                        a.success(request, response, facultyName + " already marked this Lab Session as conducted. Redirecting you the the Edit Attendance page for this Lab Session", "rapidAttendance?scheduleid=" + scheduleID);
+                    }
+                } else {
+                    String schedule[] = get_schedule_det(scheduleID);
+                    out.print("<fieldset>");
+                    out.print("<table align='center' width = 30%><tr><td align='center' width = 14%><b>Date</b></td><td align='center' width = 2%> : </td><td align='center' width = 14%>" + schedule[0] + "</td></tr>");
+                    out.print("<tr><td align='center'><b>Start Time</b></td><td align='center'> : </td><td align='center'>" + schedule[1] + "</td></tr>");
+                    out.print("<tr><td align='center'><b>End Time</b></td><td align='center'> : </td><td align='center'>" + schedule[2] + "</td></tr>");
+                    out.print("<tr><td align='center'><b>Lab</b></td><td align='center'> : </td><td align='center'>" + schedule[3] + "</td></tr>");
+                    out.print("<tr><td align='center'><b>Subject ID</b></td><td align='center'> : </td><td align='center'>" + schedule[4] + "</td></tr>");
+                    out.print("<tr><td align='center'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[5] + "</td></tr></table>"
+                            + "<br><font style=\"font-size: 20px;\"><b> Warning - The following changes will be made:</b></font><br><br>"
+                            + "<p> <font style=\"font-size: 15.5px;\"> 1. The selected Lab will be marked as conducted. </font> </p>"
+                            + "<p> <font style=\"font-size: 15.5px;\"> 2. Any attendance marked via the fingerprint system meanwhile, will be void. </font> </p>"
+                            + "<p> <font style=\"font-size: 15.5px;\"> 3. Attendance marked by you will be overwritten with express authority. </font> </p>"
+                            + "<br><table><tr><td><input type='checkbox' id='warn' onclick='myFunction()'/> <label for='warn'></label></td><td>&nbsp;&nbsp; <font style=\"font-size: 15px; color: green;\"> I have read all the Warnings! </font></td></tr></table>"
+                            + "<br></fieldset><style type='text/css'>\n"
+                            + "@import url('css/checkbox.css');\n"
+                            + "</style>");
+                    out.print("<br><div id = 'butt' style='display:none;'><form action='saveNewAttendance' method='post'>"
+                            + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
+                            + "<button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></form></div>");
+                }
             } catch (NumberFormatException e) {
                 int subjectflag = 0;
                 int batchflag = 0;

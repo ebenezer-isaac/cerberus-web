@@ -1,4 +1,5 @@
 
+import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_next_schedule;
 import static cerberus.AttFunctions.no_of_labs;
 import cerberus.messages;
@@ -38,15 +39,12 @@ public class homepage extends HttpServlet {
         request = reques;
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            access = (int) session.getAttribute("access");
-            if (access == 0) {
-
-            }
+            HttpSession session = request.getSession(false);
+            access = getAccess(request);
             switch (access) {
                 case 1:
                     String faculty_name = (String) session.getAttribute("name");
-                    out.print("<b>" + faculty_name + "</b><br><br><div class='row'>");
+                    out.print("<b> Welcome " + faculty_name + "</b><br><br><div class='row'>");
                     int labs = no_of_labs();
                     for (int i = 1; i <= labs; i++) {
                         String testing[] = get_next_schedule(request, i);
@@ -110,7 +108,7 @@ public class homepage extends HttpServlet {
                                         + "</div>"
                                         + "<span class='float-left'><i class='fas fa-user'></i> Students in Lab : " + testing[1].split(",")[2] + "</span>"
                                         + "<br>"
-                                        + "<a class='card-footer text-white clearfix small z-1' href=\"javascript:setContent('/Cerberus/rapidAttendance?scheduleid=" + testing[1].split(",")[1] + "');\">"
+                                        + "<a class='card-footer text-white clearfix small z-1' href=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + testing[1].split(",")[1] + "');\">"
                                         + "<span class='float-left'>Edit Attendance</span>"
                                         + "<span class='float-right'>"
                                         + "<i class='fas fa-angle-right'></i>"

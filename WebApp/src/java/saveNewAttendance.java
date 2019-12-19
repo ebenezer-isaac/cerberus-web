@@ -42,8 +42,8 @@ public class saveNewAttendance extends HttpServlet {
                             ps.setInt(2, facultyid);
                             ps.executeUpdate();
                         } catch (ClassNotFoundException | SQLException x) {
-                            messages a = new messages();
-                            a.success(request, response, "Lab has already been marked as conducted. Redirecting to edit page.", "rapidAttendance?scheduleid=" + scheduleid);
+                            messages b = new messages();
+                            b.error(request, response, x.getMessage(), "viewTimetable");
                         }
                         out.print(tableend(null, 1));
                         messages a = new messages();

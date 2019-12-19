@@ -17,6 +17,16 @@
         <link href="css/sb-admin.css" rel="stylesheet">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
         <link rel="stylesheet" href="css/dropdowns.css" type="text/css">
+        <style>
+            .body {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">

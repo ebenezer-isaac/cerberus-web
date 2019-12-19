@@ -43,7 +43,7 @@ public class messages extends HttpServlet {
     public void error(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
         this.redirect = "false";
-        this.head = "Error";
+        this.head = "Congrats!!<br>You successfully crashed our System";
         this.body = body;
         this.url = url;
         processRequest(request, response);
@@ -52,7 +52,7 @@ public class messages extends HttpServlet {
     public void dberror(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
         this.redirect = "false";
-        this.head = "Database Error";
+        this.head = "Congrats!!<br>You successfully crashed our System";
         this.body = body;
         this.url = url;
         processRequest(request, response);
@@ -60,9 +60,9 @@ public class messages extends HttpServlet {
 
     public void nouser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        this.redirect = "true";
+        this.redirect = "false";
         this.head = "Security Firewall";
-        this.body = "Please login to continue";
+        this.body = "<img src='images/police.gif' width='80px' height='80px' align='center'><br><br>" + "Please login to continue";
         this.url = "index.jsp";
         this.fullpage = "false";
         this.sec = 2;
@@ -102,8 +102,9 @@ public class messages extends HttpServlet {
         HttpSession session = request.getSession();
         int access = Integer.parseInt(session.getAttribute("access").toString());
         if (access == 2) {
+            this.redirect = "true";
             this.head = "Security Firewall";
-            this.body = "Unauthorized access detected";
+            this.body = "<img src='images/police.gif' width='80px' height='80px' align='center'><br><br>" + "Unauthorized access detected";
             this.url = "index.jsp";
             this.fullpage = "false";
         } else if (access == 1 || access == 0) {
@@ -119,7 +120,7 @@ public class messages extends HttpServlet {
             throws ServletException, IOException {
         this.redirect = "false";
         this.head = "Security Firewall";
-        this.body = body;
+        this.body = "<img src='images/police.gif' width='80px' height='80px' align='center'><br><br>" + body;
         this.url = url;
         this.fullpage = "false";
         processRequest(request, response);

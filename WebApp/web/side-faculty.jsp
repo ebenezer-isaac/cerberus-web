@@ -18,6 +18,16 @@
         <link href="css/dropdowns.css" rel="stylesheet">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
         <link rel="stylesheet" href="css/side.css" type="text/css">
+        <style>
+            .body {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
     </head>
     <body id="page-top">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
@@ -70,14 +80,17 @@
                         <h6 class="dropdown-header" align='center'>View : </h6>
                         <%
                             try {
+                                int oddEve = AttFunctions.oddEve();
                                 Class.forName("com.mysql.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                                 while (rs.next()) {
-                                    EnglishNumberToWords a = new EnglishNumberToWords();
-                                    String number = a.convert(rs.getInt(1));
-                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/attendance?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    if ((AttFunctions.getSem(AttFunctions.oddEve(), rs.getInt(1))) != 0) {
+                                        EnglishNumberToWords a = new EnglishNumberToWords();
+                                        String number = a.convert(rs.getInt(1));
+                                        out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/attendance?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    }
                                 }
                                 con.close();
                             } catch (Exception e) {
@@ -133,9 +146,11 @@
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                                 while (rs.next()) {
-                                    EnglishNumberToWords a = new EnglishNumberToWords();
-                                    String number = a.convert(rs.getInt(1));
-                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    if ((AttFunctions.getSem(AttFunctions.oddEve(), rs.getInt(1))) != 0) {
+                                        EnglishNumberToWords a = new EnglishNumberToWords();
+                                        String number = a.convert(rs.getInt(1));
+                                        out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    }
                                 }
                                 con.close();
                             } catch (Exception e) {
@@ -150,9 +165,11 @@
                                 Statement stmt = con.createStatement();
                                 ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
                                 while (rs.next()) {
-                                    EnglishNumberToWords a = new EnglishNumberToWords();
-                                    String number = a.convert(rs.getInt(1));
-                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    if ((AttFunctions.getSem(AttFunctions.oddEve(), rs.getInt(1))) != 0) {
+                                        EnglishNumberToWords a = new EnglishNumberToWords();
+                                        String number = a.convert(rs.getInt(1));
+                                        out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                    }
                                 }
                                 con.close();
                             } catch (Exception e) {

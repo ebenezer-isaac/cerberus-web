@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -103,7 +102,7 @@ public class AttFunctions {
                 System.out.println(schedule[count][0] + " " + schedule[count][1] + " " + schedule[count][2] + " " + schedule[count][3]);
                 count++;
             }
-            if (count > 0&& count>nullcount) {
+            if (count > 0 && count > nullcount) {
                 long startmill = 0;
                 long timemill = 0;
                 long endmill = 0;
@@ -548,7 +547,7 @@ public class AttFunctions {
     }
 
     public static int getAccess(HttpServletRequest request) {
-        int access = 0;
+        int access;
         HttpSession session = request.getSession(false);
         try {
             access = (int) session.getAttribute("access");
