@@ -47,7 +47,7 @@ public class viewTimetable extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(false);
             try {
-                week = Integer.parseInt(request.getParameter("week"));
+                week = getWeek(request);
             } catch (NumberFormatException e) {
                 week = getWeek(request);
             }
