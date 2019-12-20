@@ -6,8 +6,9 @@ import static cerberus.AttFunctions.getSem;
 import static cerberus.AttFunctions.no_of_batch;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.semSubs;
-import cerberus.messages;
 import static cerberus.printer.error;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
 import static cerberus.printer.tablestart;
@@ -198,12 +199,10 @@ public class attendance extends HttpServlet {
                     }
                     break;
                 case 0:
-                    messages a = new messages();
-                    a.kids(request, response);
+                    out.print(kids());
                     break;
                 default:
-                    messages b = new messages();
-                    b.nouser(request, response);
+                    out.print(nouser());
             }
         }
     }

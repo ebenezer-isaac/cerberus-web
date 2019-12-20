@@ -115,8 +115,8 @@ public class studSubAttendance extends HttpServlet {
                                 out.print("</td>");
                                 out.print("</tr>");
                             }
-                            if(temp==0){
-                            out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
+                            if (temp == 0) {
+                                out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
                             }
                             String schedules = "";
                             if (dates.length > 1) {
@@ -146,7 +146,6 @@ public class studSubAttendance extends HttpServlet {
                     }
                 }
                 break;
-
                 case 0:
                     HttpSession session = request.getSession();
                     String prn = (String) session.getAttribute("user");
@@ -209,7 +208,8 @@ public class studSubAttendance extends HttpServlet {
                             header += "</tr>";
                             out.print(tablehead(header));
                             int temp = 0;
-                            for (int i = 0; i < no_of_dates; i++) {temp++;
+                            for (int i = 0; i < no_of_dates; i++) {
+                                temp++;
                                 out.print("<tr><td>" + dates[i][0] + "</td><td>");
                                 ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
                                 ps.setString(1, prn);
@@ -223,8 +223,8 @@ public class studSubAttendance extends HttpServlet {
                                 out.print("</td>");
                                 out.print("</tr>");
                             }
-                            if(temp==0){
-                            out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
+                            if (temp == 0) {
+                                out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
                             }
                             out.print(tableend("No of Labs : " + (dates.length) + "<br><br>", 0));
                             con.close();

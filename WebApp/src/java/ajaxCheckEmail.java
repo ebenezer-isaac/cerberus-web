@@ -1,6 +1,7 @@
 
 import static cerberus.AttFunctions.getAccess;
-import cerberus.messages;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -23,42 +24,48 @@ public class ajaxCheckEmail extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
-            if (access == 1) {
-                String email = request.getParameter("email");
-                if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
-                    int flag = 0;
-                    try {
-                        Class.forName("com.mysql.jdbc.Driver");
-                        try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
-                            PreparedStatement ps = con.prepareStatement("select email from student where email=?");
-                            ps.setString(1, email);
-                            ResultSet rs = ps.executeQuery();
-                            while (rs.next()) {
-                                flag = 1;
-                            }
-                            if (flag == 0) {
-                                ps = con.prepareStatement("select email from faculty where email=?");
+            switch (access) {
+                case 1:
+                    String email = request.getParameter("email");
+                    System.out.println(email);
+                    if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
+                        int flag = 0;
+                        try {
+                            Class.forName("com.mysql.jdbc.Driver");
+                            try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
+                                PreparedStatement ps = con.prepareStatement("select email from student where email=?");
                                 ps.setString(1, email);
-                                rs = ps.executeQuery();
+                                ResultSet rs = ps.executeQuery();
                                 while (rs.next()) {
                                     flag = 1;
                                 }
+                                if (flag == 0) {
+                                    ps = con.prepareStatement("select email from faculty where email=?");
+                                    ps.setString(1, email);
+                                    rs = ps.executeQuery();
+                                    while (rs.next()) {
+                                        flag = 1;
+                                    }
+                                }
+                                con.close();
                             }
-                            con.close();
+                        } catch (ClassNotFoundException | SQLException e) {
+                            e.printStackTrace();
                         }
-                    } catch (ClassNotFoundException | SQLException e) {
-                    }
-                    if (flag == 0) {
-                        out.print("1");
+                        if (flag == 0) {
+                            out.print("1");
+                        } else {
+                            out.print("2");
+                        }
                     } else {
-                        out.print("2");
+                        out.print("0");
                     }
-                } else {
-                    out.print("0");
-                }
-            } else {
-                messages b = new messages();
-                b.unauthaccess(request, response);
+                    break;
+                case 0:
+                    out.print(kids());
+                    break;
+                default:
+                    out.print(nouser());
             }
         }
     }

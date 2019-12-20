@@ -3,7 +3,6 @@ import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getWeekID;
 import cerberus.messages;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -30,7 +29,7 @@ public class copyTimetable extends HttpServlet {
                 int week = (int) session.getAttribute("week");
                 week++;
                 int year = Calendar.getInstance().get(Calendar.YEAR);
-                int weekid = getWeekID(week,year);
+                int weekid = getWeekID(week, year);
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");

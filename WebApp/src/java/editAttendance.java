@@ -21,9 +21,9 @@ public class editAttendance extends HttpServlet {
             int access = getAccess(request);
             switch (access) {
                 case 1:
-                        int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
-                        HttpSession session = request.getSession(false);
-                        int facultyID = (int) session.getAttribute("user");
+                    int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
+                    HttpSession session = request.getSession(false);
+                    int facultyID = (int) session.getAttribute("user");
                     break;
                 case 0:
                     out.print(kids());

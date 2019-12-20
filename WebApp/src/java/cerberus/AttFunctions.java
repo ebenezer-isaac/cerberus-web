@@ -205,9 +205,12 @@ public class AttFunctions {
                     + "ON timetable.slotID = slot.slotID "
                     + "INNER JOIN subject "
                     + "ON timetable.subjectID = subject.subjectID "
+                    + "inner join studentsubject on "
+                    + "timetable.subjectID = studentsubject.subjectID "
                     + "where labID=? and weekID=(select weekID from week where week = ?) and timetable.subjectID in "
                     + "(select subjectID from studentsubject "
                     + "where prn = ? and batchID != 0) "
+                    + "and studentsubject.batchID = timetable.batchID "
                     + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;");
             ps.setInt(1, day);

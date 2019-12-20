@@ -1,5 +1,9 @@
 
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getCurrDate;
+import static cerberus.AttFunctions.getCurrTime;
+import static cerberus.AttFunctions.getDateID;
+import static cerberus.AttFunctions.getTimeID;
 import cerberus.messages;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,9 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class delFacultyTimetable extends HttpServlet {
+public class delFacFingerprint extends HttpServlet {
 
-    private static final long serialVersionUID = -4628778484796197771L;
+    private static final long serialVersionUID = 1016900730734897252L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -21,19 +25,22 @@ public class delFacultyTimetable extends HttpServlet {
         int access = getAccess(request);
         switch (access) {
             case 1:
-                String scheduleid = request.getParameter("scheduleid");
+                String facultyID = request.getParameter("facultyID");
                 try {
+                    int id = Integer.parseInt(request.getParameter("id").trim());
+                    int dateID = getDateID(getCurrDate());
+                    int timeID = getTimeID(getCurrTime());
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                    PreparedStatement ps = con.prepareStatement("Delete from `attendance` where `scheduleid` = ?;");
-                    ps.setString(1, scheduleid);
-                    ps.executeUpdate();
-                    ps = con.prepareStatement("Delete from `facultytimetable` where `scheduleid` = ?;");
-                    ps.setString(1, scheduleid);
-                    ps.executeUpdate();
+                    PreparedStatement stmt = con.prepareStatement("update `facultyfingerprint` SET template = null, SET dateID = ?, SET timeID = ? where `facultyID` = ? and templateID = ?;");
+                    stmt.setInt(1, dateID);
+                    stmt.setInt(2, timeID);
+                    stmt.setString(3, facultyID);
+                    stmt.setInt(4, id);
+                    stmt.executeUpdate();
                     con.close();
                     messages a = new messages();
-                    a.success(request, response, "The Lab Session has been marked as not conducted and its attendance has been deleted permanently.", "viewTimetable");
+                    a.success(request, response, "Fingerprint " + id + " was deleted successfully", "profile");
                 } catch (ClassNotFoundException | SQLException e) {
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "homepage");

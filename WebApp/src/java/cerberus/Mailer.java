@@ -38,7 +38,7 @@ public class Mailer implements Runnable {
         props.put("mail.smtps.starttls.enable", "true");
         props.put("mail.smtps.debug", "true");
         props.put("mail.smtps.auth", "true");
-        
+
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
             @Override

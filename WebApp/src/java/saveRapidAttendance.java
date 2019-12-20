@@ -4,18 +4,20 @@ import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getTimeID;
 import cerberus.messages;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class saveRapidAttendance extends HttpServlet {
+
+    private static final long serialVersionUID = -352552068166336225L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,14 +78,13 @@ public class saveRapidAttendance extends HttpServlet {
                     b.error(request, response, e.getMessage(), "viewTimetable");
                 }
                 break;
-
             case 0:
-                messages b = new messages();
-                b.kids(request, response);
+                RequestDispatcher rd = request.getRequestDispatcher("message.jsp?type=login2");
+                rd.forward(request, response);
                 break;
             default:
                 messages c = new messages();
-
+                c.nouser(request, response);
         }
     }
 

@@ -5,12 +5,12 @@ import static cerberus.AttFunctions.getTimeID;
 import static cerberus.AttFunctions.get_class_from_sub;
 import cerberus.messages;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -78,20 +78,20 @@ public class saveAttendance extends HttpServlet {
                         }
                     }
                     messages a = new messages();
-                    a.success(request, response, "Attendance has been saved", "attendance?class="+get_class_from_sub(subjectID));
+                    a.success(request, response, "Attendance has been saved", "attendance?class=" + get_class_from_sub(subjectID));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     messages b = new messages();
                     b.error(request, response, e.getMessage(), "viewTimetable");
                 }
                 break;
-
             case 0:
-                messages b = new messages();
-                b.kids(request, response);
+                RequestDispatcher rd = request.getRequestDispatcher("message.jsp?type=login2");
+                rd.forward(request, response);
                 break;
             default:
                 messages c = new messages();
+                c.nouser(request, response);
         }
     }
 

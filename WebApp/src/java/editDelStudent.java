@@ -22,10 +22,10 @@ public class editDelStudent extends HttpServlet {
                 case 1:
                     out.print("<form action='delStudent' method='post'>");
                     out.print("<br>Enter the PRN of the student: <br><br>");
-                    out.print("<table><tr><td>PRN : <input required type='text' name='prn' id='prn' onkeyup='checkPRN();' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td><div id='disp4' class=\"tooltipp\" style='width:100px' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i><span class=\"tooltiptext\">No Student with that PRN found</span></div></td></tr>"
-                            + "<tr><td class='text-center'><div id='validations' style='color:red;font-size:14px;'></div></td></tr></table>");
+                    out.print("<table align='center'><tr  align='center'><td  align='center'>PRN : <input required  align='center' type='text' name='prn' id='prn' onkeyup='checkPRN();' class=\"editSubjectForm\" placeholder='20xx03380010xxxx'/></td><td  align='center' width='30px' ><div id='disp4' class=\"tooltipp\" style='width:30px' ><i class=\"fa fa-times\" aria-hidden=\"true\"></i><span class=\"tooltiptext\">No Student with that PRN found</span></div></td></tr>"
+                            + "<tr><td  colspan = 2 align='center' class='text-center'><div id='validations' align='center' style='color:red;font-size:14px;'><br></div></td></tr></table>");
                     out.print("<fieldset>"
-                            + "<legend><br>Warning :<br></legend>"
+                            + "<legend>Warning :<br></legend>"
                             + "<p>1. Students with attendance records will not be deleted</p>"
                             + "<p>2. Subject selection of the student will be deleted.</p>"
                             + "<p>3. All fingerprint data of the student will be deleted permanently.</p>"

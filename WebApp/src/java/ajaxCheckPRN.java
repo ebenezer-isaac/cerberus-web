@@ -1,6 +1,7 @@
 
 import static cerberus.AttFunctions.getAccess;
-import cerberus.messages;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -23,34 +24,40 @@ public class ajaxCheckPRN extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
-            if (access == 1) {
-                String prn = request.getParameter("prn");
-                if (Pattern.matches("^20\\d{14}$", prn)) {
-                    int flag = 0;
-                    try {
-                        Class.forName("com.mysql.jdbc.Driver");
-                        try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
-                            PreparedStatement ps = con.prepareStatement("select prn from student where prn=?");
-                            ps.setString(1, prn);
-                            ResultSet rs = ps.executeQuery();
-                            while (rs.next()) {
-                                flag = 1;
+            switch (access) {
+                case 1:
+                    String prn = request.getParameter("prn");
+                    if (Pattern.matches("^20\\d{14}$", prn)) {
+                        int flag = 0;
+                        String name = "";
+                        try {
+                            Class.forName("com.mysql.jdbc.Driver");
+                            try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
+                                PreparedStatement ps = con.prepareStatement("select prn, name from student where prn=?");
+                                ps.setString(1, prn);
+                                ResultSet rs = ps.executeQuery();
+                                while (rs.next()) {
+                                    name = rs.getString(2);
+                                    flag = 1;
+                                }
+                                con.close();
                             }
-                            con.close();
+                        } catch (ClassNotFoundException | SQLException e) {
                         }
-                    } catch (ClassNotFoundException | SQLException e) {
-                    }
-                    if (flag == 0) {
-                        out.print("1");
+                        if (flag == 0) {
+                            out.print("1");
+                        } else {
+                            out.print("2," + name);
+                        }
                     } else {
-                        out.print("2");
+                        out.print("0");
                     }
-                } else {
-                    out.print("0");
-                }
-            } else {
-                messages b = new messages();
-                b.unauthaccess(request, response);
+                    break;
+                case 0:
+                    out.print(kids());
+                    break;
+                default:
+                    out.print(nouser());
             }
         }
     }

@@ -221,6 +221,9 @@ function checkPRN() {
 function getInf() {
     if (request.readyState == 4) {
         var val = request.responseText;
+        var name = val.split(",");
+        val = name[0];
+        name = name[1];
         if (val == 2) {
             document.getElementById('disp4').innerHTML = "<i class='fa fa-user' aria-hidden='true'></i><span class='tooltiptext'>Student found</span>";
             document.getElementById('prn').style.borderColor = "green";
@@ -233,7 +236,7 @@ function getInf() {
         }
         if (btnstatus4 == 1) {
             document.getElementById('studbtn2').disabled = false;
-            document.getElementById('validations').innerHTML = '<br>';
+            document.getElementById('validations').innerHTML = '' + name;
         } else {
             document.getElementById('studbtn2').disabled = true;
             document.getElementById('validations').innerHTML = 'Validations Error';

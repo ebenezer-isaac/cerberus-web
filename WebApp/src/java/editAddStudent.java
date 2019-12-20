@@ -1,7 +1,5 @@
 
-import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
-import static cerberus.AttFunctions.oddEve;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
@@ -9,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;

@@ -2,6 +2,8 @@
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
 import cerberus.messages;
+import static cerberus.printer.kids;
+import static cerberus.printer.nouser;
 import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
 import static cerberus.printer.tablestart;
@@ -146,12 +148,10 @@ public class rapidAttendance extends HttpServlet {
                     }
                     break;
                 case 0:
-                    messages b = new messages();
-                    b.kids(request, response);
+                    out.print(kids());
                     break;
                 default:
-                    messages c = new messages();
-                    c.nouser(request, response);
+                    out.print(nouser());
             }
         }
     }

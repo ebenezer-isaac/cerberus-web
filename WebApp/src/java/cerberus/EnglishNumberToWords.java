@@ -1,4 +1,5 @@
 package cerberus;
+
 import java.text.DecimalFormat;
 
 public class EnglishNumberToWords {
@@ -42,7 +43,7 @@ public class EnglishNumberToWords {
     public EnglishNumberToWords() {
     }
 
-   public static String convertLessThanOneThousand(int number) {
+    public static String convertLessThanOneThousand(int number) {
         String soFar;
 
         if (number % 100 < 20) {

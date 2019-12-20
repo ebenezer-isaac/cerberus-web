@@ -60,9 +60,9 @@ public class delStudent extends HttpServlet {
                             con.rollback();
                         }
                         con.close();
-                        String body = "Hey kiddo,\n    This mail is in response to a request to remove you as a Student at MSU-CA Department.\n\n"
+                        String body = "Hey kiddo,\n    This mail is in response to a request to remove your login access at MSU-CA Department Attendance portal\n\n"
                                 + "Email/Username : " + email + "\n\n"
-                                + "Note: You cannot login into the portal anymore 😎 \n\n"
+                                + "Note: You cannot login into the portal anymore\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
                                 + "Regards\nCerberus Support Team";
                         Mailer mail = new Mailer();

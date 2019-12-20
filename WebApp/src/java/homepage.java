@@ -21,8 +21,6 @@ import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
 import static cerberus.printer.tablestart;
 import java.sql.SQLException;
-import java.util.Date;
-import javax.servlet.RequestDispatcher;
 
 public class homepage extends HttpServlet {
 

@@ -1,18 +1,14 @@
 
 import static cerberus.AttFunctions.getAccess;
-import static cerberus.AttFunctions.get_schedule_det;
 import cerberus.messages;
 import static cerberus.printer.tableend;
-import static cerberus.printer.tablehead;
-import static cerberus.printer.tablestart;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,8 +38,8 @@ public class saveNewAttendance extends HttpServlet {
                             ps.setInt(2, facultyid);
                             ps.executeUpdate();
                         } catch (ClassNotFoundException | SQLException x) {
-                            messages b = new messages();
-                            b.error(request, response, x.getMessage(), "viewTimetable");
+                            messages a = new messages();
+                            a.success(request, response, "Lab has already been marked as conducted. Redirecting to edit page.", "rapidAttendance?scheduleid=" + scheduleid);
                         }
                         out.print(tableend(null, 1));
                         messages a = new messages();
@@ -53,10 +49,9 @@ public class saveNewAttendance extends HttpServlet {
                         b.error(request, response, e.getMessage(), "viewTimetable");
                     }
                     break;
-
                 case 0:
-                    messages b = new messages();
-                    b.kids(request, response);
+                    RequestDispatcher rd = request.getRequestDispatcher("message.jsp?type=login2");
+                    rd.forward(request, response);
                     break;
                 default:
                     messages c = new messages();

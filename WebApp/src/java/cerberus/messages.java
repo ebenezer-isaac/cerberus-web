@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 public class messages extends HttpServlet {
 
+    private static final long serialVersionUID = 9063935526804791052L;
+
     String redirect, head, body, url;
     String fullpage = "true";
     int sec = 0;
@@ -43,8 +45,8 @@ public class messages extends HttpServlet {
     public void error(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
         this.redirect = "false";
-        this.head = "Congrats!!<br>You successfully crashed our System";
-        this.body = body;
+        this.head = "Congrats!!</h2><br><h5>You just found an error</h5>";
+        this.body = body + "<br>Please report the above error message to us at :<br>+91 89807 77667<br>+91 98791 92084";
         this.url = url;
         processRequest(request, response);
     }
@@ -52,8 +54,8 @@ public class messages extends HttpServlet {
     public void dberror(HttpServletRequest request, HttpServletResponse response, String body, String url)
             throws ServletException, IOException {
         this.redirect = "false";
-        this.head = "Congrats!!<br>You successfully crashed our System";
-        this.body = body;
+        this.head = "Congrats!!</h2><br><h5>You just found an error</h5>";
+        this.body = body + "<br>Please report the above error message to us at :<br>+91 89807 77667<br>+91 98791 92084";
         this.url = url;
         processRequest(request, response);
     }

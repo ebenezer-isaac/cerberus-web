@@ -3,12 +3,10 @@ import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +24,8 @@ public class saveDetails extends HttpServlet {
         int access = getAccess(request);
         switch (access) {
             case 1:
-
+                messages a = new messages();
+                a.failed(request, response, "This page is only for Students", "homepage");
                 break;
             case 0:
                 String photoID = request.getParameter("msuid");
@@ -34,13 +33,13 @@ public class saveDetails extends HttpServlet {
                 String prn = (String) session.getAttribute("user");
                 InputStream inputStream = null;
                 try {
-                    URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/" + prn.substring(0, 4) + "/" + photoID + "_P.JPG");
+                    URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/20" + photoID.substring(1, 3) + "/" + photoID + "_P.JPG");
                     System.out.println(url);
                     inputStream = url.openStream();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println(inputStream);
+                //System.out.println(inputStream);
                 String subjects[] = request.getParameterValues("subjects");
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
@@ -61,11 +60,12 @@ public class saveDetails extends HttpServlet {
                         ps.executeUpdate();
                     }
                 } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+                    e.printStackTrace();
                     messages b = new messages();
                     b.error(request, response, e.getMessage(), "homepage");
                 }
-                messages a = new messages();
-                a.success(request, response, "Your Details have been saved successfully", "homepage");
+                messages d = new messages();
+                d.success(request, response, "Your Details have been saved successfully", "homepage");
                 break;
             default:
                 messages c = new messages();

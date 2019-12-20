@@ -54,7 +54,7 @@ public class viewSubject extends HttpServlet {
                             }
                             out.print("</tr>");
                         }
-                        out.print(tableend(null,0));
+                        out.print(tableend(null, 0));
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         error(e.getMessage());

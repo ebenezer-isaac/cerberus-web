@@ -1,8 +1,6 @@
 
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
-import static cerberus.printer.kids;
-import static cerberus.printer.nouser;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -16,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class savePref extends HttpServlet {
+
+    private static final long serialVersionUID = 6492765678472660378L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,7 +31,7 @@ public class savePref extends HttpServlet {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         PreparedStatement ps = con.prepareStatement("delete from facultysubject WHERE facultyID = ?");
-                         ps.setString(1, facultyID);
+                        ps.setString(1, facultyID);
                         ps.executeUpdate();
                         for (String subject : subjects) {
                             ps = con.prepareStatement("INSERT INTO `facultysubject` VALUES (?,?)");
