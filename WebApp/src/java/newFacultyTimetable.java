@@ -22,13 +22,17 @@ public class newFacultyTimetable extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        System.out.println("inside facultytimetable");
         try (PrintWriter out = response.getWriter()) {
+
             try {
                 HttpSession session = request.getSession(false);
-                int currentFaculty = (int) session.getAttribute("user");;
+                System.out.println(session.getAttribute("user"));
+                int currentFaculty = Integer.parseInt(session.getAttribute("user").toString().trim());
                 int facultyID = 0;
                 String facultyName = "";
                 int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
+                System.out.println(scheduleID);
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -40,14 +44,24 @@ public class newFacultyTimetable extends HttpServlet {
                         facultyName = rs.getString(2);
                     }
                 } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
                 }
-                if (facultyID == 0) {
+                System.out.println("currentFaculty : " + currentFaculty);
+                System.out.println("facultyID : " + facultyID);
+                if (facultyID != 0) {
                     if (currentFaculty == facultyID) {
-                        messages a = new messages();
-                        a.success(request, response, "You have already marked this Lab Session as conducted. Redirecting you the the Edit Attendance page for this Lab Session", "rapidAttendance?scheduleid=" + scheduleID);
+                        out.print("<font style=\"font-size: 20px;\">You have already marked this Lab Session as conducted."
+                                + "<br>Redirecting you the the Edit Attendance page for this Lab Session</font>"
+                                + "<form action='saveNewAttendance' method='post'>"
+                                + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
+                                + "<button type='submit' style='width:200px;' class='btn btn-primary'>Redirect</button></form>"
+                        );
+
                     } else {
-                        messages a = new messages();
-                        a.success(request, response, facultyName + " already marked this Lab Session as conducted. Redirecting you the the Edit Attendance page for this Lab Session", "rapidAttendance?scheduleid=" + scheduleID);
+                        out.print("<font style='font-size: 20px;'>" + facultyName + " already marked this Lab Session as conducted.<br>Redirecting you the the Edit Attendance page for this Lab Session</font>"
+                                + "<form action='saveNewAttendance' method='post'>"
+                                + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
+                                + "<button type='submit' style='width:200px;' class='btn btn-primary'>Redirect</button></form>");
                     }
                 } else {
                     String schedule[] = get_schedule_det(scheduleID);
@@ -71,6 +85,7 @@ public class newFacultyTimetable extends HttpServlet {
                             + "<button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></form></div>");
                 }
             } catch (NumberFormatException e) {
+                e.printStackTrace();
                 int subjectflag = 0;
                 int batchflag = 0;
                 String subjectid = request.getParameter("subjectid");

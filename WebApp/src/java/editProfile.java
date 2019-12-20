@@ -1,3 +1,4 @@
+
 import cerberus.messages;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,16 +46,11 @@ public class editProfile extends HttpServlet {
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
                 messages m = new messages();
-                m.dberror(request, response, "Selected Photo is too large", "homepage");
+                m.dberror(request, response, "Selected Photo is too large", "profile");
             }
             if (flag == 0) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "true");
-                request.setAttribute("head", "Request Successfull");
-                request.setAttribute("body", "Your Profile Picture has been changed");
-                request.setAttribute("url", "homepage");
-                request.setAttribute("sec", "2");
-                rd.forward(request, response);
+                messages m = new messages();
+                m.success(request, response, "Profile Picture has been saved", "profile");
             } else {
                 messages m = new messages();
                 m.dberror(request, response, "New Profile Picture is not supported", "homepage");

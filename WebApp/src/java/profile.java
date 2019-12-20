@@ -54,7 +54,7 @@ public class profile extends HttpServlet {
                         if (blob != null) {
                             System.out.println("not null");
                             String imgString = DatatypeConverter.printBase64Binary(blob);
-                            out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
+                            out.print("<img style='border-radius: 10%;height:130px; width:130px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
                         } else {
                             System.out.println("null");
                             out.print("<img style='width:160px;height:130px;' src='images/teacher.png'/><br><br><font size=4>" + name + "</font>");
@@ -98,7 +98,7 @@ public class profile extends HttpServlet {
                                         + "</div>"
                                         + "<div class='mr-1' align='center'><br>");
                                 if (flag == 0) {
-                                    out.print("Unavailable");
+                                    out.print("Unavailable<br><br>");
 
                                 } else {
                                     out.print("Available");
@@ -121,7 +121,14 @@ public class profile extends HttpServlet {
                                         + "</div>");
                             }
                         }
-                        out.print("</div><div class='col-xl-8 col-sm-6 mb-3' align='center'>");
+                        out.print("<div class='col-xl-9 col-sm-6 mb-3' style='border: solid black 1px;border-radius:4px'align='center'>");
+                        out.print("<form action='editProfile' method='post' enctype='multipart/form-data'>\n"
+                                + "<br><div style='border: solid #6D6A65 1px;border-radius:4px'><input type='file'  name='avatar-file'></div>\n"
+                                + "<br><div id='validations' style='color:red;font-size:14px;'>Picture should be less than 25 KB<br>and have a ratio of 1:1</div>"
+                                + "<br><button class='btn btn-primary form-btn' style='width:200px;' type='submit'>Upload</button>\n"
+                                + "</form><br>");
+                        out.print("</div>"
+                                + "</div><div class='col-xl-8 col-sm-6 mb-3' align='center'>");
                         out.print("<form action='savePref' method='post'>");
                         out.print(tablestart("<b>Subject Preferences</b>", "hover", "preferences", 0));
                         String header = "<tr>";
@@ -200,7 +207,7 @@ public class profile extends HttpServlet {
                             String imgString = DatatypeConverter.printBase64Binary(blob);
                             out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
                         } else {
-                            out.print("<img style='width:160px;height:130px;' src='images/student.png'/ alt='We couldn't find your Photo'><br><br><font size=4>" + name + "</font>");
+                            out.print("<img style='width:160px;height:130px;' src='images/student.jpg'/ alt='We couldn't find your Photo'><br><br><font size=4>" + name + "</font>");
                         }
                         ps = con.prepareStatement("SELECT \n"
                                 + "MAX(CASE \n"
