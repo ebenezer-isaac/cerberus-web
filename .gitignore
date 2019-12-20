@@ -7,8 +7,6 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 # Package Files #
-*.jar
-*.war
 *.nar
 *.ear
 *.zip
@@ -18,6 +16,7 @@
 hs_err_pid*
 /WebApp/nbproject/private/private.xml
 /WebApp/nbproject/private/private.properties
+/WebApp/nbproject/private/
 /WebApp Prototype/nbproject/
 /WebApp Prototype/build/
 /WebApp/build/
