@@ -229,7 +229,7 @@
                         out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='data:image/png;base64," + imgString + "'/>\";"
                                 + "var name='" + name + "';</script>");
                     } else {
-                        out.print("<script>document.getElementById('pic').innerHTML=\"<i class='fas fa-user-circle fa-lg'><i>\";"
+                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='images/student.png'/>\";"
                                 + "var name='" + name + "';</script>");
                     }
                 } catch (Exception e) {
