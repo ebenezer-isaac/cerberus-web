@@ -207,7 +207,7 @@ public class profile extends HttpServlet {
                             String imgString = DatatypeConverter.printBase64Binary(blob);
                             out.print("<img style='border-radius: 10%;width:80px;height:110px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
                         } else {
-                            out.print("<img style='width:160px;height:130px;' src='images/student.jpg'/ alt='We couldn't find your Photo'><br><br><font size=4>" + name + "</font>");
+                            out.print("<img style='width:150px;height:150px;' src='images/student.png'/ alt='We couldn't find your Photo'><br><br><font size=4>" + name + "</font>");
                         }
                         ps = con.prepareStatement("SELECT \n"
                                 + "MAX(CASE \n"

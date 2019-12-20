@@ -125,7 +125,7 @@
                         out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='25px' src='data:image/png;base64," + imgString + "'/>\";"
                                 + "var name='" + name + "';</script>");
                     } else {
-                        out.print("<script>document.getElementById('pic').innerHTML=\"<i class='fas fa-user-circle fa-lg'><i>\";"
+                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='width:160px;height:130px;' src='images/teacher.png'  style='border-radius:50%;'/>\";"
                                 + "var name='" + name + "';</script>");
                     }
                 } catch (Exception e) {
