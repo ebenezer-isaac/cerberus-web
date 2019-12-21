@@ -1,7 +1,9 @@
 
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrYear;
+import static cerberus.AttFunctions.getSem;
 import static cerberus.AttFunctions.getWeek;
+import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.prefSubs;
 import static cerberus.printer.nouser;
 import static cerberus.printer.tableend;
@@ -149,7 +151,9 @@ public class viewTimetable extends HttpServlet {
                         no_of_class = 0;
                         while (rs.next()) {
                             no_of_class++;
-                            out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
+                            if (getSem(oddEve(), no_of_class) != 0) {
+                                out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
+                            }
                         }
                     }
                     out.print("</select><br><br>");
@@ -164,7 +168,6 @@ public class viewTimetable extends HttpServlet {
                 } catch (ClassNotFoundException | SQLException e) {
                     e.printStackTrace();
                 }
-
                 out.print("<div id='lab_timetable'>");
                 out.print(lab_printTimetable(1));
                 out.print(lab_printTimetable(2));

@@ -10,53 +10,7 @@
 <%@page import="cerberus.*"%>
 <%@ page import = "java.io.*,java.util.*" %>
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title> Student Details </title>
-        <style> html {overflow: hidden;}</style>
-        <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
-        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-        <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css">
-        <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css">
-        <link rel="stylesheet" href="css/custom.css" type="text/css">
-        <link rel="stylesheet" href="css/dropdowns.css" type="text/css">
-        <link rel="stylesheet" href="css/checkbox.css" type="text/css">
-        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif">
-        <style>
-            .btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}.btn-primary.focus,.btn-primary:focus{-webkit-box-shadow:0 0 0 .2rem rgba(38,143,255,.5);box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.btn-primary.disabled,.btn-primary:disabled{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:not(:disabled):not(.disabled).active,.btn-primary:not(:disabled):not(.disabled):active,.show>.btn-primary.dropdown-toggle{color:#fff;background-color:#0062cc;border-color:#005cbf}.btn-primary:not(:disabled):not(.disabled).active:focus,.btn-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-primary.dropdown-toggle:focus{-webkit-box-shadow:0 0 0 .2rem rgba(38,143,255,.5);box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}
-            .body {
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container" >
-            <div class="reset_page" style=' margin-top: 40px;' >
-                <div class="form_reset" style='max-width: 320px;'>
-                    <div align="center">
-                        <h2 style="font-family: arno pro caption"><div id = 'name'></div></h2>
-                        <div id='validations' style='color:red;font-size:14px;'>Select the subject you have opted and their corresponding batch alloted to you carefully. This is the only time you will be asked to fill this form.</div>
-                        <br>
-                        <form action='saveDetails' method = 'post'>
-                            <div id='validations' style='color:black;font-size:14px;'>Enter your MSU Username Below</div>
-                            <input type='text' id='msuid' name='msuid' class='editSubjectForm' placeholder='DxxCJxxxxxxx' onkeyup='validateBtn();'>
-                            <div id='subs'></div><br>
-                            <button type='submit' style='width:200px; visibility: hidden;' id='studbtn1' class='btn btn-primary'>Save Details</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="particles-js"></div>
+<html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Student Details </title> <style>html{overflow: hidden;}</style> <link rel="stylesheet" href="css/bootstrap.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css"> <link rel="stylesheet" href="css/custom.css" type="text/css"> <link rel="stylesheet" href="css/dropdowns.css" type="text/css"> <link rel="stylesheet" href="css/checkbox.css" type="text/css"> <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif"> <style>.btn-primary{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:hover{color:#fff;background-color:#0069d9;border-color:#0062cc}.btn-primary.focus,.btn-primary:focus{-webkit-box-shadow:0 0 0 .2rem rgba(38,143,255,.5);box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.btn-primary.disabled,.btn-primary:disabled{color:#fff;background-color:#007bff;border-color:#007bff}.btn-primary:not(:disabled):not(.disabled).active,.btn-primary:not(:disabled):not(.disabled):active,.show>.btn-primary.dropdown-toggle{color:#fff;background-color:#0062cc;border-color:#005cbf}.btn-primary:not(:disabled):not(.disabled).active:focus,.btn-primary:not(:disabled):not(.disabled):active:focus,.show>.btn-primary.dropdown-toggle:focus{-webkit-box-shadow:0 0 0 .2rem rgba(38,143,255,.5);box-shadow:0 0 0 .2rem rgba(38,143,255,.5)}.body{-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}</style> </head> <body> <div class="container" > <div class="reset_page" style=' margin-top: 40px;' > <div class="form_reset" style='max-width: 320px;'> <div align="center"> <h2 style="font-family: arno pro caption"><div id='name'></div></h2> <div id='validations' style='color:red;font-size:14px;'>Select the subject you have opted and their corresponding batch alloted to you carefully. This is the only time you will be asked to fill this form.</div><br><form action='saveDetails' method='post'> <div id='validations' style='color:black;font-size:14px;'>Enter your MSU Username Below</div><input type='text' id='msuid' name='msuid' class='editSubjectForm' placeholder='DxxCJxxxxxxx' onkeyup='validateBtn();'> <div id='subs'></div><br><button type='submit' style='width:200px; visibility: hidden;' id='studbtn1' class='btn btn-primary'>Save Details</button> </form> </div></div></div></div><div id="particles-js"></div>
         <% try {
                 Integer access = AttFunctions.getAccess(request);
                 if (access == 0) {
@@ -179,9 +133,4 @@
                 e.printStackTrace();
             }
         %>
-        <script src="js/jquery.min.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/particles.js"></script>
-        <script src="js/app.js"></script>
-    </body>
-</html>
+ <script src="js/jquery.min.js"></script> <script src="js/main.js"></script> <script src="js/particles.js"></script> <script src="js/app.js"></script> </body></html>

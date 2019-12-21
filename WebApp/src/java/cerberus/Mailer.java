@@ -1,11 +1,11 @@
 package cerberus;
 
-import static java.lang.Thread.sleep;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -31,10 +31,11 @@ public class Mailer implements Runnable {
 
     @Override
     public void run() {
+        System.setProperty("java.net.preferIPv4Stack" , "true");
         Properties props = new Properties();
         props.put("mail.smtps.user", "cerberus.msubca@gmail.com");
         props.put("mail.smtps.host", "smtp.gmail.com");
-        props.put("mail.smtps.port", "465");
+        props.put("mail.smtps.port", "587");
         props.put("mail.smtps.starttls.enable", "true");
         props.put("mail.smtps.debug", "true");
         props.put("mail.smtps.auth", "true");
@@ -57,21 +58,29 @@ public class Mailer implements Runnable {
                 transport.sendMessage(msg, msg.getAllRecipients());
             }
         } catch (AddressException e) {
-        } catch (MessagingException e) {
-        }
-        try {
-            sleep(600000);
-        } catch (InterruptedException e) {
-        }
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            try (Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123")) {
-                PreparedStatement ps = con.prepareStatement("DELETE from `otp` WHERE email=");
-                ps.setString(1, this.to);
-                ps.executeUpdate();
-                con.close();
+            e.printStackTrace();
+            PrintStream o;
+            try {
+                o = new PrintStream(new File("D:\\A.txt"));
+                PrintStream console = System.out;
+                System.setOut(o);
+                System.out.println(e);
+            } catch (FileNotFoundException ex) {
+                
+                Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            PrintStream o;
+            try {
+                o = new PrintStream(new File("D:\\A.txt"));
+                PrintStream console = System.out;
+                System.setOut(o);
+                System.out.println(e);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
