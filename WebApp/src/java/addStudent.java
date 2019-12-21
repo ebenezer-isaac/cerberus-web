@@ -89,9 +89,15 @@ public class addStudent extends HttpServlet {
                                 + "Email/Username : " + email + "\n"
                                 + "One Time Password : " + rawpass + "\n\n"
                                 + "Class    : " + clas + "\n"
-                                + "Roll Number    : " + roll + "\n"
+                                + "PRN    : " + prn + "\n"
+                                + "Note: You can change your password in the Login Page.\n"
+                                + "You need to be connected to the BCA Intranet for the below link to work:\n"
+                                + "<a href='http://172.21.170.14:8080/Cerberus/'>http://172.21.170.14:8080/Cerberus/</a>\n\n"
                                 + "You can now login with given username and password at at CA Department's Intranet WebSite\n"
-                                + "and view timetable attendance through this portal. You will asked to select your subjects on first login.\n\n"
+                                + "and view timetable attendance through this portal. You will asked to provide your MSU Username and select your subjects on first login.\n\n"
+                                + "Note: You can change your password in the Login Page.\n"
+                                + "You need to be connected to the BCA Intranet for the below link to work:\n"
+                                + "<a href='http://172.21.170.14:8080/Cerberus/'>http://172.21.170.14:8080/Cerberus/</a>\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
                                 + "Regards\nCerberus Support Team";
 

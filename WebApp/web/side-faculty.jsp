@@ -16,10 +16,19 @@
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <link href="css/sb-admin.css" rel="stylesheet">
         <link href="css/dropdowns.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/loader.css" type="text/css">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
         <link rel="stylesheet" href="css/side.css" type="text/css">
         <style>
-            .body {
+            #wrapper {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+            #main {
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
                 -khtml-user-select: none;
@@ -99,6 +108,7 @@
                         <div class="dropdown-divider"></div>
                         <h6 class="dropdown-header" align='center'>Management : </h6>
                         <a class="dropdown-item" href="javascript:setContent('/Cerberus/newFacultyTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Attendance</a>
+                        <a class="dropdown-item" href="downAttendance"><i class="fas fa-file-download"></i>&nbsp;&nbsp;Download</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

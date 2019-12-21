@@ -224,13 +224,17 @@ public class editTimetable extends HttpServlet {
             }
             while (rs.next()) {
                 lines[rs.getInt(1) - 1] = ("<tr> ");
-                String time = rs.getString(2);
+                String time = rs.getString(3);
                 lines[rs.getInt(1) - 1] += ("<th>" + String.format("%02d", Integer.parseInt(rs.getString(2).substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(rs.getString(2).substring(3, 5))) + "</th>");
                 lines[rs.getInt(1) - 1] += ("<th>" + String.format("%02d", Integer.parseInt(rs.getString(3).substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(rs.getString(3).substring(3, 5))) + "</th>");
                 for (int j = 1; j <= 6; j++) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    if (time.equals("12:00:00")) {
+                        time = "11:59:59";
+                    }
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
+                    System.out.println(datetime);
                     Date now = new Date();
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();
@@ -311,7 +315,10 @@ public class editTimetable extends HttpServlet {
                     lines[y] += ("<th>" + String.format("%02d", Integer.parseInt(slots[y][1].substring(0, 2))) + " : " + String.format("%02d", Integer.parseInt(slots[y][1].substring(3, 5))) + "</th>");
                     for (int j = 1; j <= 6; j++) {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        String dateInString = date[j - 1] + " " + slots[y][0] + ":00";
+                        if (slots[y][1].equals("12:00:00")) {
+                            slots[y][1] = "11:59:59";
+                        }
+                        String dateInString = date[j - 1] + " " + slots[y][1] + ":00";
                         Date datetime = sdf.parse(dateInString);
                         Date now = new Date();
                         long nowmill = now.getTime();

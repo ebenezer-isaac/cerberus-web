@@ -104,12 +104,14 @@
                             }
                             out.print("</select>\";return batch;}");
                             PreparedStatement ps2 = con.prepareStatement("select classID from rollcall where prn = ?");
+                            System.out.println("PRN :"+prn);
                             ps2.setString(1, prn);
                             ResultSet rs2 = ps2.executeQuery();
                             int classID = 0;
                             while (rs2.next()) {
                                 classID = rs2.getInt(1);
                             }
+                            System.out.println("classID :"+classID);
                             out.print("var division;");
                             int sem = AttFunctions.getSem(oddeve, classID);
                             System.out.println(classID);
@@ -164,7 +166,7 @@
                                     + "}else{console.log('button disabled');"
                                     + "document.getElementById('studbtn1').style.visibility='hidden';"
                                     + "}"
-                                    + "}"
+                                    + "}validateBtn();"
                                     + "</script>");
                         } catch (Exception e) {
                             e.printStackTrace();

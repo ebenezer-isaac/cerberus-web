@@ -211,12 +211,15 @@ public class AttFunctions {
                     + "(select subjectID from studentsubject "
                     + "where prn = ? and batchID != 0) "
                     + "and studentsubject.batchID = timetable.batchID "
+                    + "and studentsubject.prn = ? "
+                    + "and studentsubject.batchID !=0 "
                     + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;");
             ps.setInt(1, day);
             ps.setInt(2, labid);
             ps.setInt(3, week);
             ps.setString(4, prn);
+            ps.setString(5, prn);
             ResultSet rs = ps.executeQuery();
             int slots = no_of_slots();
             String schedule[][] = new String[slots][4];

@@ -1,5 +1,6 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.generatePassword;
 import cerberus.Mailer;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrDate;
@@ -35,19 +36,15 @@ public class addFaculty extends HttpServlet {
                 String name = request.getParameter("title") + nameProcessor(request.getParameter("name"));
                 if (name.length() > 4) {
                     String email = request.getParameter("email");
-                    String pass = "";
-                    int index = email.indexOf("@");
-                    if (index != -1) {
-                        pass = email.substring(0, index);
+                    String rawpass = null;
+                    String pass = null;
+                    try {
+                        rawpass = generatePassword();
+                        pass = AttFunctions.hashIt(rawpass);
+                    } catch (NoSuchAlgorithmException ex) {
+                        Logger.getLogger(addStudent.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    String rawpass = pass;
-                    {
-                        try {
-                            pass = AttFunctions.hashIt(pass);
-                        } catch (NoSuchAlgorithmException ex) {
-                            Logger.getLogger(addFaculty.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+                    System.out.println(email +" : "+rawpass);
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -81,8 +78,10 @@ public class addFaculty extends HttpServlet {
                                 + "Email/Username : " + email + "\n"
                                 + "Password : " + rawpass + "\n\n"
                                 + "You can now login with given username and password at at CA Department's Intranet WebSite\n"
-                                + "and wield admin privileges to manage timetable, students' details and attendance amoung other things through this portal.\n\n"
-                                + "Note: You can change your password in the My Profie section.\n\n"
+                                + "and wield admin privileges to manage timetable, students' details and attendance among other things through this portal.\n\n"
+                                + "Note: You can change your password in the Login Page.\n"
+                                + "You need to be connected to the BCA Intranet for the below link to work:\n"
+                                + "<a href='http://172.21.170.14:8080/Cerberus/'>http://172.21.170.14:8080/Cerberus/</a>\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
                                 + "Regards\nCerberus Support Team";
                         Mailer mail = new Mailer();

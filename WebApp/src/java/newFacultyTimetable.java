@@ -54,18 +54,17 @@ public class newFacultyTimetable extends HttpServlet {
                         System.out.println("facultyID : " + facultyID);
                         if (facultyID != 0) {
                             if (currentFaculty == facultyID) {
-                                out.print("<font style=\"font-size: 20px;\">You have already marked this Lab Session as conducted."
+                                out.print("<br><br><font style=\"font-size: 20px;\">You have already marked this Lab Session as conducted."
                                         + "<br>Redirecting you the the Edit Attendance page for this Lab Session</font>"
-                                        + "<form action='rapidAttendance' method='post'>"
-                                        + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
-                                        + "<button type='submit' style='width:200px;' class='btn btn-primary'>Redirect</button></form>"
+                                        + "<br><br><button onclick=\"javascript:setContent('/Cerberus/rapidAttendance?scheduleid=" + scheduleID + "');\""
+                                        + " style='width:200px;' class='btn btn-primary'>Redirect</button>"
                                 );
 
                             } else {
-                                out.print("<font style='font-size: 20px;'>" + facultyName + " already marked this Lab Session as conducted.<br>Redirecting you the the Edit Attendance page for this Lab Session</font>"
-                                        + "<form action='rapidAttendance' method='post'>"
-                                        + "<input name='scheduleid' type='text' value='" + scheduleID + "' hidden>"
-                                        + "<button type='submit' style='width:200px;' class='btn btn-primary'>Redirect</button></form>");
+                                out.print("<br><br><font style='font-size: 20px;'>" + facultyName + " already marked this Lab Session as conducted."
+                                        + "<br>Redirecting you the the Edit Attendance page for this Lab Session</font>"
+                                        + "<br><br><button onclick=\"javascript:setContent('/Cerberus/rapidAttendance?scheduleid=" + scheduleID + "');\""
+                                        + " style='width:200px;' class='btn btn-primary'>Redirect</button>");
                             }
                         } else {
                             String schedule[] = get_schedule_det(scheduleID);

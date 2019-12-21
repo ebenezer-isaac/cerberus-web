@@ -57,7 +57,7 @@ public class profile extends HttpServlet {
                             out.print("<img style='border-radius: 10%;height:130px; width:130px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
                         } else {
                             System.out.println("null");
-                            out.print("<img style='width:160px;height:130px;' src='images/teacher.png'/><br><br><font size=4>" + name + "</font>");
+                            out.print("<img style='width:150px;height:150px;'src='images/student.png'/><br><br><font size=4>" + name + "</font>");
                         }
                         ps = con.prepareStatement("SELECT \n"
                                 + "MAX(CASE \n"
@@ -123,7 +123,7 @@ public class profile extends HttpServlet {
                         }
                         out.print("<div class='col-xl-9 col-sm-6 mb-3' style='border: solid black 1px;border-radius:4px'align='center'>");
                         out.print("<form action='editProfile' method='post' enctype='multipart/form-data'>\n"
-                                + "<br><div style='border: solid #6D6A65 1px;border-radius:4px'><input type='file'  name='avatar-file'></div>\n"
+                                + "<br><div style='border: solid #6D6A65 1px;border-radius:4px'><input type='file'  name='avatar-file' required></div>\n"
                                 + "<br><div id='validations' style='color:red;font-size:14px;'>Picture should be less than 25 KB<br>and have a ratio of 1:1</div>"
                                 + "<br><button class='btn btn-primary form-btn' style='width:200px;' type='submit'>Upload</button>\n"
                                 + "</form><br>");
@@ -173,7 +173,7 @@ public class profile extends HttpServlet {
                     } catch (IOException | ClassNotFoundException | SQLException e) {
                         e.printStackTrace();
                     }
-                    out.print("</div></div>");
+                    out.print("</div></div>To change password, Click 'Create a new Password' in Login Page.");
                     break;
                 case 0:
                     out.print("<div class='row' align='center'><div class='col-xl-4 col-sm-6 mb-3' align='center'><br><br>");
@@ -310,7 +310,7 @@ public class profile extends HttpServlet {
                         if (index == 1) {
                             out.print("<h5>No Subjects Available</h5>");
                         }
-                        out.print(tableend(null, 0));
+                        out.print(tableend(null, 0)+"To change password, Click 'Create a new Password' in Login Page.");
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         e.printStackTrace();

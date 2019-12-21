@@ -46,7 +46,7 @@ public class messages extends HttpServlet {
             throws ServletException, IOException {
         this.redirect = "false";
         this.head = "Congrats!!</h2><br><h5>You just found an error</h5>";
-        this.body = body + "<br>Please report the above error message to us at :<br>+91 89807 77667<br>+91 98791 92084";
+        this.body = body + "<br>Please report the above error<br>message to us at :<br>+91 89807 77667<br>+91 98791 92084";
         this.url = url;
         processRequest(request, response);
     }
@@ -55,7 +55,7 @@ public class messages extends HttpServlet {
             throws ServletException, IOException {
         this.redirect = "false";
         this.head = "Congrats!!</h2><br><h5>You just found an error</h5>";
-        this.body = body + "<br>Please report the above error message to us at :<br>+91 89807 77667<br>+91 98791 92084";
+        this.body = body + "<br>Please report the above error<br>message to us at :<br>+91 89807 77667<br>+91 98791 92084";
         this.url = url;
         processRequest(request, response);
     }

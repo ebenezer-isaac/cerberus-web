@@ -60,7 +60,7 @@ public class delStudent extends HttpServlet {
                             con.rollback();
                         }
                         con.close();
-                        String body = "Hey kiddo,\n    This mail is in response to a request to remove your login access at MSU-CA Department Attendance portal\n\n"
+                        String body = "Hey Kid,\n    This mail is in response to a request to remove your login access at MSU-CA Department Attendance portal\n\n"
                                 + "Email/Username : " + email + "\n\n"
                                 + "Note: You cannot login into the portal anymore\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"

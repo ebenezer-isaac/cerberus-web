@@ -1,7 +1,17 @@
 var mains = document.getElementById('main');
 var url_main;
-
 function setContent(url) {
+    $("#main").html("<br><br><br><br><br>"
+            + "<div class='loader'>"
+            + "<div class='duo duo1'>"
+            + "<div class='dot dot-a'></div>"
+            + "<div class='dot dot-b'></div>"
+            + "</div>"
+            + "<div class='duo duo2'>"
+            + "<div class='dot dot-a'></div>"
+            + "<div class='dot dot-b'></div>"
+            + "</div>"
+            + "</div>");
     url_main = url;
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
@@ -37,7 +47,7 @@ function setContent_main(url) {
     {
         his.push(url);
     }
-    $("#main").html("<div style='height: 100vh;vertical-align: middle;'><div class='loader'><div class='duo duo1'><div class='dot dot-a'></div><div class='dot dot-b'></div></div><div class='duo duo2'><div class='dot dot-a'></div><div class='dot dot-b'></div></div></div></div>");
+
     if (window.XMLHttpRequest) {
         request = new XMLHttpRequest();
     } else if (window.ActiveXObject) {
@@ -55,9 +65,11 @@ function setContent_main(url) {
 function getInfo() {
     if (request.readyState == 4) {
         var val = request.responseText;
-        $("#main").html("");
-        $("#main").html(val);
-        unfade(mains);
+        if (val.length > 3) {
+            $("#main").html("");
+            $("#main").html(val);
+            unfade(mains);
+        }
     }
 }
 

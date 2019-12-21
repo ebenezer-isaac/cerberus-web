@@ -15,6 +15,7 @@
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <link href="css/sb-admin.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/loader.css" type="text/css">
         <link rel="stylesheet" href="css/anim.css" type="text/css">
         <link rel="stylesheet" href="css/dropdowns.css" type="text/css">
         <style>
@@ -125,7 +126,7 @@
                         out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='25px' src='data:image/png;base64," + imgString + "'/>\";"
                                 + "var name='" + name + "';</script>");
                     } else {
-                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='width:160px;height:130px;' src='images/teacher.png'  style='border-radius:50%;'/>\";"
+                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='width:30px;height:30px;' src='images/student.png'  style='border-radius:50%;'/>\";"
                                 + "var name='" + name + "';</script>");
                     }
                 } catch (Exception e) {

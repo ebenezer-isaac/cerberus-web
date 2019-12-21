@@ -177,7 +177,10 @@ public class attendance extends HttpServlet {
                                 out.print("<td id='perc" + line + "'>" + String.format("%.02f", perc) + "%" + "</td></tr>");
                             }
                             out.print(tableend(null, 1));
-                            out.print("<script>var line =" + line + ";"
+                            out.print("<br>"
+                                    + "<input type='button' value='Download Attendance' class = 'btn btn-primary' onclick=\"document.getElementById('downattendance').click();\"/><br>"
+                                    + "<a id='downattendance' href='downAttendance'></a>"
+                                    + "<script>var line =" + line + ";"
                                     + "function checkPerc(criteria){"
                                     + "if(criteria>100){document.getElementById('criteriaPerc').value=100;checkPerc(100);}else{"
                                     + "for(var i=1;i<=line;i++){var value = document.getElementById('perc'+i).innerHTML;"
