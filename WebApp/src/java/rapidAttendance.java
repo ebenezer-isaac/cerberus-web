@@ -32,27 +32,21 @@ public class rapidAttendance extends HttpServlet {
             switch (access) {
                 case 1:
                     HttpSession session = request.getSession(false);
-                    System.out.println(session.getAttribute("user"));
                     int currentFaculty = Integer.parseInt(session.getAttribute("user").toString().trim());
                     int facultyID = 0;
-                    String facultyName = "";
                     int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
-                    System.out.println(scheduleID);
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                        PreparedStatement ps = con.prepareStatement("select facultyID, (select faculty.name from faculty where faculty.facultyID = facultytimetable.facultyID) from facultyTimetable where scheduleID = ?");
+                        PreparedStatement ps = con.prepareStatement("select facultyID from facultyTimetable where scheduleID = ?");
                         ps.setInt(1, scheduleID);
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
                             facultyID = rs.getInt(1);
-                            facultyName = rs.getString(2);
                         }
                     } catch (ClassNotFoundException | SQLException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("currentFaculty : " + currentFaculty);
-                    System.out.println("facultyID : " + facultyID);
                     if (facultyID == 0) {
                         out.print("<font style=\"font-size: 15px;\">This Lab Session has not been marked as conducted."
                                 + "<br>Please mark this Lab Session as conducted before you edit its Attendance"
@@ -70,7 +64,7 @@ public class rapidAttendance extends HttpServlet {
                                 ps.setInt(1, scheduleid);
                                 ResultSet rs = ps.executeQuery();
                                 if (rs.next()) {
-                                    String schedule[] = get_schedule_det(rs.getInt(1));
+                                    String schedule[] = get_schedule_det(scheduleID);
                                     out.print("<form action='saveRapidAttendance' method='post'>");
                                     String head = "";
                                     head += ("<div class='col-xl-6 col-sm-6 mb-3' align='center'><table align='center'>");

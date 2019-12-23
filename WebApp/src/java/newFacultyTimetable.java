@@ -24,19 +24,16 @@ public class newFacultyTimetable extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("inside facultytimetable");
         try (PrintWriter out = response.getWriter()) {
             int access = getAccess(request);
             switch (access) {
                 case 1:
                     try {
                         HttpSession session = request.getSession(false);
-                        System.out.println(session.getAttribute("user"));
                         int currentFaculty = Integer.parseInt(session.getAttribute("user").toString().trim());
                         int facultyID = 0;
                         String facultyName = "";
                         int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
-                        System.out.println(scheduleID);
                         try {
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -50,8 +47,6 @@ public class newFacultyTimetable extends HttpServlet {
                         } catch (ClassNotFoundException | SQLException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("currentFaculty : " + currentFaculty);
-                        System.out.println("facultyID : " + facultyID);
                         if (facultyID != 0) {
                             if (currentFaculty == facultyID) {
                                 out.print("<br><br><font style=\"font-size: 20px;\">You have already marked this Lab Session as conducted."

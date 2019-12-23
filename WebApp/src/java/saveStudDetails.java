@@ -24,104 +24,106 @@ public class saveStudDetails extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession(false);
-            try {
-                int access = (int) session.getAttribute("access");
-                int classID = Integer.parseInt(request.getParameter("division"));
-                switch (access) {
-                    case 1:
-                        try {
-                            Class.forName("com.mysql.jdbc.Driver");
-                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                            PreparedStatement ps4 = con.prepareStatement("SELECT rollcall.rollNo, student.PRN, student.name, student.email,"
-                                    + "MAX(CASE WHEN studentfingerprint.templateID = 1 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template1, "
-                                    + "MAX(CASE WHEN studentfingerprint.templateID = 2 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template2 "
-                                    + "FROM student "
-                                    + "INNER JOIN rollcall  on  rollcall.PRN = student.PRN "
-                                    + "INNER JOIN studentfingerprint  on  student.PRN = studentfingerprint.PRN "
-                                    + "where student.PRN in (select rollcall.PRN "
-                                    + "from rollcall "
-                                    + "where rollcall.classID = ?) "
-                                    + "GROUP BY student.PRN "
-                                    + "ORDER by rollcall.rollNo;");
-                            ps4.setInt(1, classID);
-                            ResultSet rs = ps4.executeQuery();
-                            int index = 1;
-                            while (rs.next()) {
-                                int eroll = rs.getInt(1);
-                                int troll = Integer.parseInt(request.getParameter("roll" + index));
-                                String tprn = request.getParameter("prn" + index);
-                                String ename = rs.getString(3);
-                                String tname = request.getParameter("name" + index);
-                                String eemail = rs.getString(4);
-                                String temail = request.getParameter("email" + index);
-                                if (ename.equals(tname)) {
-                                } else {
-                                    PreparedStatement pps = con.prepareStatement("UPDATE student SET name = ? where prn = ?");
-                                    pps.setString(1, tname);
-                                    pps.setString(2, tprn);
-                                    pps.executeUpdate();
-                                }
-                                if (eemail.equals(temail)) {
-                                } else {
-                                    PreparedStatement pps = con.prepareStatement("UPDATE student SET email = ? where prn = ?");
-                                    pps.setString(1, temail);
-                                    pps.setString(2, tprn);
-                                    pps.executeUpdate();
-                                }
-                                if (eroll == troll) {
-                                } else {
-                                    PreparedStatement pps = con.prepareStatement("UPDATE rollcall SET rollNo = ? where prn = ?");
-                                    pps.setInt(1, troll);
-                                    pps.setString(2, tprn);
-                                    pps.executeUpdate();
-                                }
-                                String et1 = rs.getString(6);
-                                if (et1 != null) {
-                                    int tt1 = Integer.parseInt(request.getParameter("t1" + index));
-                                    if (tt1 != 1) {
-                                        int dateID = getDateID(getCurrDate());
-                                        int timeID = getTimeID(getCurrTime());
-                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, SET dateID = ?, SET timeID = ? where prn = ? and templateID = 1");
-                                        pps.setString(1, tprn);
-                                        pps.setInt(2, dateID);
-                                        pps.setInt(3, timeID);
-                                        pps.executeUpdate();
-                                    }
-                                }
-                                String et2 = rs.getString(6);
-                                if (et2 != null) {
-                                    int tt2 = Integer.parseInt(request.getParameter("t2" + index));
-                                    if (tt2 != 1) {
-                                        int dateID = getDateID(getCurrDate());
-                                        int timeID = getTimeID(getCurrTime());
-                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, SET dateID = ?, SET timeID = ? where prn = ? and templateID = 2");
-                                        pps.setString(1, tprn);
-                                        pps.setInt(2, dateID);
-                                        pps.setInt(3, timeID);
-                                        pps.executeUpdate();
-                                    }
-                                }
-                                index++;
+        HttpSession session = request.getSession(false);
+        try {
+            int access = (int) session.getAttribute("access");
+            int classID = Integer.parseInt(request.getParameter("division"));
+            switch (access) {
+                case 1:
+                    try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                        PreparedStatement ps4 = con.prepareStatement("SELECT rollcall.rollNo, student.PRN, student.name, student.email,"
+                                + "MAX(CASE WHEN studentfingerprint.templateID = 1 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template1, "
+                                + "MAX(CASE WHEN studentfingerprint.templateID = 2 and studentfingerprint.template is not null THEN concat(' 1 ',' ') END) as Template2 "
+                                + "FROM student "
+                                + "INNER JOIN rollcall  on  rollcall.PRN = student.PRN "
+                                + "INNER JOIN studentfingerprint  on  student.PRN = studentfingerprint.PRN "
+                                + "where student.PRN in (select rollcall.PRN "
+                                + "from rollcall "
+                                + "where rollcall.classID = ?) "
+                                + "GROUP BY student.PRN "
+                                + "ORDER by rollcall.rollNo;");
+                        ps4.setInt(1, classID);
+                        ResultSet rs = ps4.executeQuery();
+                        int index = 1;
+                        while (rs.next()) {
+                            int eroll = rs.getInt(1);
+                            int troll = Integer.parseInt(request.getParameter("roll" + index));
+                            String tprn = request.getParameter("prn" + index);
+                            String ename = rs.getString(3);
+                            String tname = request.getParameter("name" + index);
+                            String eemail = rs.getString(4);
+                            String temail = request.getParameter("email" + index);
+                            if (ename.equals(tname)) {
+                            } else {
+                                PreparedStatement pps = con.prepareStatement("UPDATE student SET name = ? where prn = ?");
+                                pps.setString(1, tname);
+                                pps.setString(2, tprn);
+                                pps.executeUpdate();
                             }
-                            messages a = new messages();
-                            a.success(request, response, "Student Details has been saved", "editStudDetails?class=" + classID);
-                        } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                            messages a = new messages();
-                            a.dberror(request, response, e.getMessage(), "viewTimetable");
+                            if (eemail.equals(temail)) {
+                            } else {
+                                PreparedStatement pps = con.prepareStatement("UPDATE student SET email = ? where prn = ?");
+                                pps.setString(1, temail);
+                                pps.setString(2, tprn);
+                                pps.executeUpdate();
+                            }
+                            if (eroll == troll) {
+                            } else {
+                                PreparedStatement pps = con.prepareStatement("UPDATE rollcall SET rollNo = ? where prn = ?");
+                                pps.setInt(1, troll);
+                                pps.setString(2, tprn);
+                                pps.executeUpdate();
+                            }
+                            String et1 = rs.getString(5);
+                            if (et1 != null) {
+                                String tt1 = request.getParameter("t1" + index);
+                                if (tt1 == null) {
+                                    int dateID = getDateID(getCurrDate());
+                                    int timeID = getTimeID(getCurrTime());
+                                    try {
+                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, dateID = ?, timeID = ? where prn = ? and templateID = 1");
+                                        pps.setInt(1, dateID);
+                                        pps.setInt(2, timeID);
+                                        pps.setString(3, tprn);
+                                        pps.executeUpdate();
+                                    } catch (SQLException x) {
+                                        x.printStackTrace();
+                                    }
+                                }
+                            }
+                            String et2 = rs.getString(6);
+                            if (et2 != null) {
+                                String tt2 = request.getParameter("t2" + index);
+                                if (tt2 == null) {
+                                    int dateID = getDateID(getCurrDate());
+                                    int timeID = getTimeID(getCurrTime());
+                                    PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, dateID = ?, timeID = ? where prn = ? and templateID = 2");
+                                    pps.setInt(1, dateID);
+                                    pps.setInt(2, timeID);
+                                    pps.setString(3, tprn);
+                                    pps.executeUpdate();
+                                }
+                            }
+                            index++;
                         }
-                        break;
-                    default:
-                        messages b = new messages();
-                        b.kids(request, response);
-                        break;
-                }
-            } catch (IOException | ServletException e) {
-                messages a = new messages();
-                a.nouser(request, response);
+                        messages a = new messages();
+                        a.success(request, response, "Student Details has been saved", "editStudDetails?class=" + classID);
+                    } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+                        e.printStackTrace();
+                        messages a = new messages();
+                        a.dberror(request, response, e.getMessage(), "viewTimetable");
+                    }
+                    break;
+                default:
+                    messages b = new messages();
+                    b.kids(request, response);
+                    break;
             }
-
+        } catch (IOException | ServletException e) {
+            messages a = new messages();
+            a.nouser(request, response);
         }
     }
 

@@ -199,7 +199,7 @@ public class editStudDetails extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        error(e.getMessage());
+                        out.print(error(e.getMessage()));
                     }
                     break;
                 case 0:

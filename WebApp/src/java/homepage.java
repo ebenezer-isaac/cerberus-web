@@ -167,7 +167,7 @@ public class homepage extends HttpServlet {
                                     + "on timetable.scheduleID=facultytimetable.scheduleID "
                                     + "INNER JOIN slot "
                                     + "on slot.slotID=timetable.slotID "
-                                    + "where facultytimetable.facultyID =? order by date, slot.startTime;");
+                                    + "where facultytimetable.facultyID =? order by date, slot.startTime DESC;");
                             ps1.setString(1, faculty_id);
                             ResultSet rs1 = ps1.executeQuery();
                             out.print(tablestart("<b>Number of Lab Sessions conducted by you </b>: " + labcount + "",
@@ -188,7 +188,7 @@ public class homepage extends HttpServlet {
                                 }
                                 out.print("</tr>");
                             }
-                            out.print(tableend(null, 0));
+                            out.print(tableend(null, 1));
                         } else {
                             out.print("You haven't conducted any labs yet");
                         }

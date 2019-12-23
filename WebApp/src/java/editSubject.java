@@ -55,8 +55,8 @@ public class editSubject extends HttpServlet {
                                 + "<tr><td class=\"editSubjectStyle\">Subject Code</td><td> : </td><td><input required type='text' id='subid' onkeyup='checkValidations(3)' onchange='checkValidations(3)' name='subjectID' class=\"editSubjectForm\" pattern='^BCA\\d\\d\\d\\d$' minlength='7' maxlength='9' placeholder='BCAxxxx'/></td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Subject Name</td><td> : </td><td><input required type='text' name='subject' class=\"editSubjectForm\" placeholder='Artificial Intelligence'/></td></tr></tr><td colspan=2></td><td align='center'><font style=\"font-size: 12.5px; color: red;\"> *Please do not use abbreviations in Subject Name </font> </td></tr> "
                                 + "<tr><td class=\"editSubjectStyle\">Subject Abbreviation</td><td> : </td><td align=''><input required type='text' name='abbr' class=\"editSubjectForm\" placeholder='AI' minlength='2' maxlength='5'/> </td></tr>"
-                                + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> <font style=\"font-size: 14.5px;\"> Odd </font>\n"
-                                + "  <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"0\"><font style=\"font-size: 14.5px;\"> Even </font> <br></td></tr>"
+                                + "<tr><td class=\"editSubjectStyle\">Semester</td><td> : </td><td ><input type=\"radio\" name=\"sem\"  class=\"editSelect\" value=\"1\" checked> <font style=\"font-size: 14.5px;\"> Odd </font>\n"
+                                + " <input type=\"radio\" name=\"sem\" class=\"editSelect\" value=\"0\"><font style=\"font-size: 14.5px;\"> Even </font> </td></tr>"
                                 + "<tr><td class=\"editSubjectStyle\">Select Class</td><td> : </td><td><select name = 'class' id = 'class' class=\"editSelect\">");
                         try {
                             Class.forName("com.mysql.jdbc.Driver");

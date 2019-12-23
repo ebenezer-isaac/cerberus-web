@@ -126,7 +126,11 @@ public class attendance extends HttpServlet {
                         int cols = rsm.getColumnCount();
                         if (rs.next()) {
                             int line = 0;
-                            out.print(tablestart("Student Average Attendance<br>Percentage Criteria : <input type='number' min='0' max='100'  class=\"editSelectTimeTable\" id = 'criteriaPerc' value='80' onkeyup='checkPerc(this.value)' onchange='checkPerc(this.value)'>", "hover", "studDetails", 1));
+                            out.print(tablestart("Student Average Attendance<br>Percentage Criteria : "
+                                    + "<input type='number' min='0' max='100'  class=\"editSelectTimeTable\" id = 'criteriaPerc' value='80' "
+                                    + "onkeyup='checkPerc(this.value)' onchange='checkPerc(this.value)'>"
+                                    + "<br><input type='button' value='Download Attendance' class = 'btn btn-primary' onclick=\"document.getElementById('downattendance').href='downPercAtt?criteria='+document.getElementById('criteriaPerc').value; document.getElementById('downattendance').click();\"/><br>"
+                                    + "<div id='validations' style='color:red;font-size:14px;'>*Only Students with Average Attendance lesser than Criteria</div><a id='downattendance' href='downAttendance'></a>", "hover", "studDetails", 1));
                             header = "<tr>";
                             header += "<th> Roll </th>";
                             header += "<th> Name </th>";
@@ -177,10 +181,7 @@ public class attendance extends HttpServlet {
                                 out.print("<td id='perc" + line + "'>" + String.format("%.02f", perc) + "%" + "</td></tr>");
                             }
                             out.print(tableend(null, 1));
-                            out.print("<br>"
-                                    + "<input type='button' value='Download Attendance' class = 'btn btn-primary' onclick=\"document.getElementById('downattendance').click();\"/><br>"
-                                    + "<a id='downattendance' href='downAttendance'></a>"
-                                    + "<script>var line =" + line + ";"
+                            out.print("<script>var line =" + line + ";"
                                     + "function checkPerc(criteria){"
                                     + "if(criteria>100){document.getElementById('criteriaPerc').value=100;checkPerc(100);}else{"
                                     + "for(var i=1;i<=line;i++){var value = document.getElementById('perc'+i).innerHTML;"

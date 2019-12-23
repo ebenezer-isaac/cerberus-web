@@ -132,25 +132,26 @@ public class batSubAttendance extends HttpServlet {
                                     schedules += dates[x][1] + ",";
                                 }
                                 schedules += dates[dates.length - 1][1];
+                                out.print(tableend("No of students : " + (no_of_studs) + "<br><br>"
+                                        + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
+                                        + "<input type='text' name='line' value='" + (no_of_studs + 1) + "' hidden>"
+                                        + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
+                                        + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
+                                        + "</form><style type='text/css'>\n"
+                                        + "@import url('css/checkbox.css');\n"
+                                        + "</style>", 0));
                             } else {
-                                out.print("<tr><td colspan=3>No Students are who have opted for " + subject + " have been alloted to " + batch + "</td></tr>");
+                                out.print("<tr><td colspan=" + (dates.length + 2) + ">No Students are who have opted for " + subject + " have been alloted to " + batch + "</td></tr>");
+                                out.print(tableend("", 0));
                             }
-                            out.print(tableend("No of students : " + (no_of_studs) + "<br><br>"
-                                    + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
-                                    + "<input type='text' name='line' value='" + (no_of_studs + 1) + "' hidden>"
-                                    + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
-                                    + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
-                                    + "</form><style type='text/css'>\n"
-                                    + "@import url('css/checkbox.css');\n"
-                                    + "</style>", 0));
+
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
                             e.printStackTrace();
                             error(e.getMessage());
                         }
                     } else {
-                        out.print("<script>setContent('/Cerberus/homepage');</script>"
-                                + "");
+                        out.print("<script>setContent('/Cerberus/homepage');</script>");
                     }
                     break;
                 case 0:

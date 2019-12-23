@@ -24,6 +24,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class AttFunctions {
@@ -385,6 +387,14 @@ public class AttFunctions {
             e.printStackTrace();
         }
         return schedule;
+    }
+
+    public static Object[] appendValue(Object[] obj, Object newObj) {
+
+        ArrayList<Object> temp = new ArrayList<Object>(Arrays.asList(obj));
+        temp.add(newObj);
+        return temp.toArray();
+
     }
 
     public static String hashIt(String raw) throws NoSuchAlgorithmException {

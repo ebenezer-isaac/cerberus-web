@@ -50,13 +50,10 @@ public class profile extends HttpServlet {
                             blob = rs.getBytes("photo");
                             name = rs.getString("name");
                         }
-                        System.out.println(blob);
                         if (blob != null) {
-                            System.out.println("not null");
                             String imgString = DatatypeConverter.printBase64Binary(blob);
                             out.print("<img style='border-radius: 10%;height:130px; width:130px;' src='data:image/png;base64," + imgString + "'/><br><br><font size=4>" + name + "</font>");
                         } else {
-                            System.out.println("null");
                             out.print("<img style='width:150px;height:150px;'src='images/student.png'/><br><br><font size=4>" + name + "</font>");
                         }
                         ps = con.prepareStatement("SELECT \n"
@@ -145,7 +142,6 @@ public class profile extends HttpServlet {
                         while (rs.next()) {
                             no_of_pref++;
                         }
-                        System.out.println(no_of_pref);
                         prefSub = new String[no_of_pref];
                         rs.first();
                         rs.previous();
@@ -278,7 +274,6 @@ public class profile extends HttpServlet {
                         while (rs.next()) {
                             no_of_pref++;
                         }
-                        System.out.println(no_of_pref);
                         prefSub = new String[no_of_pref];
                         rs.first();
                         rs.previous();

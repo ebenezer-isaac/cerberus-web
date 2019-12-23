@@ -27,7 +27,6 @@ public class ajaxCheckEmail extends HttpServlet {
             switch (access) {
                 case 1:
                     String email = request.getParameter("email");
-                    System.out.println(email);
                     if (Pattern.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", email)) {
                         int flag = 0;
                         try {

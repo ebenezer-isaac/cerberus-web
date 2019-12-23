@@ -3,6 +3,7 @@ import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getSem;
 import static cerberus.AttFunctions.getWeek;
+import static cerberus.AttFunctions.no_of_labs;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.prefSubs;
 import static cerberus.printer.nouser;
@@ -169,9 +170,10 @@ public class viewTimetable extends HttpServlet {
                     e.printStackTrace();
                 }
                 out.print("<div id='lab_timetable'>");
-                out.print(lab_printTimetable(1));
-                out.print(lab_printTimetable(2));
-                out.print(lab_printTimetable(3));
+                int no_of_lab = no_of_labs();
+                for (int y = 1; y <= no_of_lab; y++) {
+                    out.print(lab_printTimetable(y));
+                }
                 out.print("</div>");
                 out.print("<div id='timetable' style='display: none;'>");
                 out.print(printTimetable());

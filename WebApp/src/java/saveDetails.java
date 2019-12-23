@@ -34,12 +34,10 @@ public class saveDetails extends HttpServlet {
                 InputStream inputStream = null;
                 try {
                     URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/20" + photoID.substring(1, 3) + "/" + photoID + "_P.JPG");
-                    System.out.println(url);
                     inputStream = url.openStream();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //System.out.println(inputStream);
                 String subjects[] = request.getParameterValues("subjects");
                 try {
                     Class.forName("com.mysql.jdbc.Driver");

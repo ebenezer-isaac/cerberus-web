@@ -234,7 +234,6 @@ public class editTimetable extends HttpServlet {
                     }
                     String dateInString = date[j - 1] + " " + time;
                     Date datetime = sdf.parse(dateInString);
-                    System.out.println(datetime);
                     Date now = new Date();
                     long nowmill = now.getTime();
                     long datetimemill = datetime.getTime();

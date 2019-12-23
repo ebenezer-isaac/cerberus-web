@@ -56,7 +56,7 @@ public class ajaxSchedules extends HttpServlet {
                         if (rs.next()) {
                             out.print(tablestart("List of Lab Session scheduled for " + batchName + " of " + subjectName + ""
                                     + "<div id='validations' style='color:red;font-size:14px;' class='mt-2 mb-2'>"
-                                    + "Select a Lab Session listed below to mark it as conducted and to edit its Attendance.</div>", "hover", "studDetails", 0));
+                                    + "Select a Lab Session listed below to mark it as conducted and to edit its Attendance.</div>", "hover", "studDetails", 1));
                             String header = "<tr>";
                             header += "<th>Date</th>";
                             header += "<th>Start Time</th>";
@@ -78,7 +78,7 @@ public class ajaxSchedules extends HttpServlet {
                                 out.print("<td>" + schedule[5] + "</td>");
                                 out.print("</tr>");
                             }
-                            out.print(tableend(null, 0));
+                            out.print(tableend(null, 1));
                         } else {
                             out.print("No Lab Sessions were Scheduled for " + subject + " " + batch + ".<br><br>You can schedule Lab Sessions from by <br><br>"
                                     + "<a href=\"javascript:setContent('/Cerberus/editTimetable');\">Editing Timetable</a>");
