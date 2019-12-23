@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="colorlib.com">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Student Progression</title>
+
+        <!-- Font Icon -->
+        <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div class="main">
+
+            <div class="container">
+                <form method="POST" id="signup-form" class="signup-form form-inline" action="#">
+                    <div>
+                        <h3>Data Backup</h3>
+                        <fieldset>
+                            <h2>Download Backup</h2>
+                            <p class="desc">Please download respective files to backup locally.</p>
+                            <div class="fieldset-content">
+                                <div class="form-row">
+                                    <label for="email" class="form-label">Class Wise Attendance</label>
+                                    <form target="_blank" action="downExcel">
+                                        <input type="submit" style="display:none"/>
+                                        <input type="button" style="width:200px" value ="Download" onclick="javascript:window.open('/test/downExcel', '_blank');" />
+                                        <span class="text-input">Download FY, SY, TY Consolidated Data</span>
+                                    </form>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Subject Wise Attendance</label>
+                                    <form target="_blank" action="">
+                                        <input type="submit" name="" id="" />
+                                        <span class="text-input">DownloadSubjectWiseData</span>
+                                    </form>
+                                    <span class="text-input">Please Read  :<span>  All the data will be available in excel file format. With sheets as classes/ Subjects.</span></span>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <h3>Delete Database</h3>
+                        <fieldset>
+                            <h2>Delete data from the server.</h2>
+                            <p class="desc">Once the data is deleted from the database server it could not be retrived. Kindly maintain the backup locally.	If data not backed up, go to previous menu. Proceed with caution.</p>
+                            <div class="fieldset-content">
+                                <div class="form-row">
+                                    <label class="form-label">These records will be removed permanantly: </label>
+                                    <span class="text-input">OTP Table</span>
+                                    <span class="text-input">Log Table</span>
+                                    <span class="text-input">Week Table</span>
+                                    <span class="text-input">StudentSubject Table</span>
+                                    <span class="text-input">FacultyTimetable Table</span>
+                                    <span class="text-input">FacultySubject Table</span>
+                                    <span class="text-input">datedata Table</span>
+                                    <span class="text-input">Attendance Table</span>
+                                    <span class="text-input">Timetable Table</span>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <h3>Download Template</h3>
+                        <fieldset>
+                            <h2>Download Template(Excel file) for uploading new FY data to database</h2>
+                            <form target="_blank" action="downTemplate">
+                                <input type="submit" name="" id="" />
+                                <span class="text-input">Download FY, SY, TY Consolidated Data</span>
+                            </form>
+                        </fieldset>
+
+                        <h3>Upload Excel data</h3>
+                        <fieldset>
+                            <h2>Upload Excel file with new student data</h2>
+                            <h3>File Upload:</h3>
+                            Select a file to upload: <br />
+                            <form target="_blank" action = "uploadExcel" method = "post" enctype = "multipart/form-data">
+                                <input type = "file" name = "file" size = "50" />
+                                <br />
+                                <input type = "submit" value = "Upload File" />
+                            </form>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- JS -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="vendor/jquery-validation/dist/additional-methods.min.js"></script>
+        <script src="vendor/jquery-steps/jquery.steps.min.js"></script>
+        <script src="vendor/minimalist-picker/dobpicker.js"></script>
+        <script src="vendor/nouislider/nouislider.min.js"></script>
+        <script src="vendor/wnumb/wNumb.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+
+</html>
