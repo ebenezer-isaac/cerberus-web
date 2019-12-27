@@ -77,11 +77,11 @@ public class addFaculty extends HttpServlet {
                         String body = "Hello " + name + ",\n    This mail is in response to a request to add you as a faculty at MSU-CA Department.\n\n"
                                 + "Email/Username : " + email + "\n"
                                 + "Password : " + rawpass + "\n\n"
-                                + "You can now login with given username and password at at CA Department's Intranet WebSite\n"
+                                + "You can now login with given username and password at CA Department's Intranet WebSite\n"
                                 + "and wield admin privileges to manage timetable, students' details and attendance among other things through this portal.\n\n"
-                                + "Note: You can change your password in the Login Page.\n"
+                                + "Note: You can change your password by clicking 'Create a New Password' in the Login Page.\n"
                                 + "You need to be connected to the BCA Intranet for the below link to work:\n"
-                                + "<a href='http://172.21.170.14:8080/Cerberus/'>http://172.21.170.14:8080/Cerberus/</a>\n\n"
+                                + "http://172.21.170.14:8080/Cerberus/\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
                                 + "Regards\nCerberus Support Team";
                         Mailer mail = new Mailer();

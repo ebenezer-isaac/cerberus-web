@@ -61,6 +61,24 @@ public class AttFunctions {
                         return 0;
 
                 }
+            //MSc IT FY
+            case 4:
+                switch (oddeve) {
+                    case 1:
+                        return 1;
+                    default:
+                        return 2;
+
+                }
+            //MSc IT SY
+            case 5:
+                switch (oddeve) {
+                    case 1:
+                        return 3;
+                    default:
+                        return 0;
+
+                }
             default:
                 return 0;
         }

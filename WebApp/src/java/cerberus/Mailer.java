@@ -35,7 +35,7 @@ public class Mailer implements Runnable {
         Properties props = new Properties();
         props.put("mail.smtps.user", "cerberus.msubca@gmail.com");
         props.put("mail.smtps.host", "smtp.gmail.com");
-        props.put("mail.smtps.port", "587");
+        props.put("mail.smtps.port", "465");
         props.put("mail.smtps.starttls.enable", "true");
         props.put("mail.smtps.debug", "true");
         props.put("mail.smtps.auth", "true");

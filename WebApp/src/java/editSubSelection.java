@@ -63,7 +63,7 @@ public class editSubSelection extends HttpServlet {
                         int no_of_sub = subs.length - 1;
                         String sql = "SELECT rollcall.rollNo,student.PRN,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN (select name from batch where batch.batchID = studentsubject.batchID ) END) as " + subs[index][1].replace('-', '_');
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN (select name from batch where batch.batchID = studentsubject.batchID ) END) as '" + subs[index][1].replace('-', '_')+"'";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -77,6 +77,7 @@ public class editSubSelection extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
+                        System.out.println(sql);
                         PreparedStatement ps4 = con.prepareStatement(sql);
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
@@ -169,6 +170,7 @@ public class editSubSelection extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
+                        e.printStackTrace();
                         error(e.getMessage());
                     }
                     break;

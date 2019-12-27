@@ -74,7 +74,7 @@ public class editStudDetails extends HttpServlet {
                             while (rs.next()) {
                                 line++;
                                 out.print("<tr id='row" + line + "'>");
-                                out.print("<td style='vertical-align : middle;text-align:center;'><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid green; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='120' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;'><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid green; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='150' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'>" + rs.getString(2) + "<input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='email' style='border: 2px solid green;'class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td style='vertical-align : middle;text-align:center;'>");
@@ -151,7 +151,7 @@ public class editStudDetails extends HttpServlet {
                                     + "document.getElementById('subBtn').disabled=false;"
                                     + "document.getElementById('validations').innerHTML = '<br>';"
                                     + "var valueRoll = parseInt(document.getElementById(rollNum).value,10);"
-                                    + "if (valueRoll<1 || valueRoll>120) {"
+                                    + "if (valueRoll<1 || valueRoll>150) {"
                                     + "console.log(valueRoll);"
                                     + "document.getElementById(rollNum).style.borderColor='red';"
                                     + "var element = document.getElementById(rowNum);\n"

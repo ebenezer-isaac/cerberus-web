@@ -119,7 +119,9 @@ public class attendance extends HttpServlet {
                                 + " on  rollcall.PRN = student.PRN "
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
-                                + "ORDER by rollcall.rollNo";
+                                + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
+                        System.out.println("hello");
+                        System.out.println(sql);
                         ps = con.prepareStatement(sql);
                         rs = ps.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
@@ -184,7 +186,7 @@ public class attendance extends HttpServlet {
                             out.print("<script>var line =" + line + ";"
                                     + "function checkPerc(criteria){"
                                     + "if(criteria>100){document.getElementById('criteriaPerc').value=100;checkPerc(100);}else{"
-                                    + "for(var i=1;i<=line;i++){var value = document.getElementById('perc'+i).innerHTML;"
+                                    + "for(var i=1;i<=line;i++){console.log(i);var value = document.getElementById('perc'+i).innerHTML;"
                                     + "value = value.substring(0, value.length - 1);"
                                     + "value = parseFloat(value);"
                                     + "if(value<criteria){"
@@ -199,6 +201,7 @@ public class attendance extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
+                        e.printStackTrace();
                         error(e.getMessage());
                     }
                     break;

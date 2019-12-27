@@ -108,8 +108,8 @@ public class viewTimetable extends HttpServlet {
                         + "document.getElementById('timetable').style.display = 'block';"
                         + "}}"
                         + "</script>");
-                heading = "<table width = 100%>"
-                        + "<tr><td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+                heading = "<div class='row'>"
+                        + "<div class='col-xl-4 col-sm-6 mb-3 mt-3' align='center'><form action=\"";
                 if (week == 1) {
                     heading += "javascript:setContent('/Cerberus/viewTimetable?week=52&year=" + (year - 1) + "')\" >";
                 } else {
@@ -118,9 +118,9 @@ public class viewTimetable extends HttpServlet {
                 heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
                         + "<span>Previous</span>"
                         + "</button>"
-                        + "</form></td>"
-                        + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></td>"
-                        + "<td style='vertical-align : middle;text-align:center;' width = 33% align='center'><form action=\"";
+                        + "</form></div>"
+                        + "<div class='col-xl-4 col-sm-6' align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></div>"
+                        + "<div class='col-xl-4 col-sm-6 mb-3' align='center'><form action=\"";
                 if (week == 52) {
                     heading += "javascript:setContent('/Cerberus/viewTimetable?week=1&year=" + (year + 1) + "')\" >";
                 } else {
@@ -132,8 +132,8 @@ public class viewTimetable extends HttpServlet {
                 }
                 heading += "><span>Next</span>"
                         + "</button>"
-                        + "</form></td>";
-                heading += "</tr></table>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
+                        + "</form></div>";
+                heading += "</div>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -189,7 +189,7 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-            timetable += (tablestart(heading + "<p align='center'>LAB " + labid + " <br></p>", "hover", "studDetails", 0));
+            timetable += (tablestart(heading + "<p align='center'><b>LAB " + labid + " </b><br></p>", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
             header += ("<th style='vertical-align : middle;text-align:center;'>End Time</th>");

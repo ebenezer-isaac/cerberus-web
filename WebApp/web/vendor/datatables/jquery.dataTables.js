@@ -10426,7 +10426,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"bPaginate": true,
+		"bPaginate": false,
 	
 	
 		/**

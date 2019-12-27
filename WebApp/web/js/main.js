@@ -30,7 +30,7 @@ $(".recaptcha_form").submit(function (event) {
     }
     event.preventDefault();
     $.post("grecaptcha.php", {
-        "secret": "6Ldki7oUAAAAAHU3TS5YFupA1E3Kiuuno3ge8uO7",
+        "secret": "6LcmWcoUAAAAADP_fXbw-uqDMKDQwmxtbAWtNHFX",
         "response": recaptcha
     }, function (ajaxResponse) {
         console.log(ajaxResponse);
