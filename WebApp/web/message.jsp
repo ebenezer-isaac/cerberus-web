@@ -50,7 +50,7 @@
         url = "index.jsp";
         sec = "2";
     } else if (type.equals("login3")) {
-        redirect = "true";
+        redirect = "false";
         fullpage = "false";
         head = "Security Firewall";
         body = "You have exceeded allowed number of login attempts";
@@ -73,7 +73,7 @@
         ajax = 1;
     }
 %>
-<html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Message </title> <style>html{overflow: hidden;}</style> <link rel="stylesheet" href="css/bootstrap.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css"> <link rel="stylesheet" href="css/custom.css" type="text/css"> <link rel="stylesheet" href="css/loader.css" type="text/css"> <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif"> <style>.body{-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}</style> </head> <body> <div class="container" > <div class="reset_page" > <div class="form_reset" style=" -webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;"> <div align="center"> <h2 style="font-family: arno pro caption"> <%out.print(head);%> </h2> <br><p><%out.print(body);%></p>
+<html lang="en"> <head> <meta charset="utf-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Message </title> <style>html{overflow: hidden;}</style> <link rel="stylesheet" href="css/bootstrap.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap-grid.css" type="text/css"> <link rel="stylesheet" href="css/bootstrap-grid.min.css" type="text/css"> <link rel="stylesheet" href="css/custom.css" type="text/css"> <link rel="stylesheet" href="css/loader.css" type="text/css"> <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> <link rel="icon" href="images/logo-circle-removebg.png" type="image/gif"> <style>.body{-webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;}</style> </head> <body> <div class="container" > <div class="reset_page" > <div class="form_reset" style=" -webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;min-height: 250px"> <div align="center"> <h2 style="font-family: arno pro caption"> <%out.print(head);%> </h2> <br><p><%out.print(body);%></p>
         <%if (redirect.equals("true")) {
                 out.print("<small><b>You will be redirected shortly</b></small>"
                         + "<div class='loader'>"
@@ -91,7 +91,7 @@
                         + "</div>"
                         + "</div><br>");
             } else {
-                out.print("<form action='");
+                out.print("<footer><form action='");
                 if (ajax == 1) {
                     out.print("ajaxContent' method='post'>"
                             + "<input name='url' type='text' value='" + url + "' hidden>");
@@ -99,7 +99,7 @@
                     out.print(url + "' method='post'>");
                 }
                 out.print("<button type ='submit' autofocus>Accept</button>"
-                        + "</form>");
+                        + "</form></footer>");
             }
         %>
 </div></div></div></div><div id="particles-js"></div><script src="js/jquery.min.js"></script> <script src="js/main.js"></script> <script src="js/particles.js"></script> <script src="js/app.js"></script> </body></html>

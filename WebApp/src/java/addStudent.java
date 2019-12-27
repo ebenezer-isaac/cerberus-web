@@ -87,7 +87,7 @@ public class addStudent extends HttpServlet {
                         }
                         String body = "Hello " + name + ",\n    This mail is in response to a request to add you as a student at MSU-CA Department.\n\n"
                                 + "Email/Username : " + email + "\n"
-                                + "One Time Password : " + rawpass + "\n\n"
+                                + "Password : " + rawpass + "\n\n"
                                 + "Class    : " + clas + "\n"
                                 + "PRN    : " + prn + "\n\n"
                                 + "Note: You can change your password by clicking 'Create a New Password' in the Login Page.\n"

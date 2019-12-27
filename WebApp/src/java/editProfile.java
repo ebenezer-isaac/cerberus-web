@@ -51,14 +51,14 @@ public class editProfile extends HttpServlet {
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         messages m = new messages();
-                        m.dberror(request, response, "Selected Photo is too large", "profile");
+                        m.failed(request, response, "Selected Photo is too large", "profile");
                     }
                     if (flag == 0) {
                         messages m = new messages();
                         m.success(request, response, "Profile Picture has been saved", "profile");
                     } else {
                         messages m = new messages();
-                        m.dberror(request, response, "New Profile Picture is not supported", "homepage");
+                        m.failed(request, response, "New Profile Picture is not supported", "homepage");
                     }
                     break;
                 case 0:

@@ -54,7 +54,7 @@ public class Mailer implements Runnable {
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to));
             msg.setText(this.body);
             try (Transport transport = session.getTransport("smtps")) {
-                transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Support Team", "cerberu$@123");
+                transport.connect("smtp.gmail.com", Integer.valueOf("465"), "Cerberus Team", "cerberu$@123");
                 transport.sendMessage(msg, msg.getAllRecipients());
             }
         } catch (AddressException e) {
