@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import cerberus.Mailer;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.checkInternetConnection;
@@ -22,6 +22,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
@@ -78,7 +80,7 @@ public class otp extends HttpServlet {
                             spam = 1;
                         }
                     } catch (SQLException | ParseException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                     }
                 } else {
                     ps = con.prepareStatement("DELETE from `otp` where email=?;");
@@ -97,37 +99,41 @@ public class otp extends HttpServlet {
                 }
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
+                errorLogger(e.getMessage());
                 messages b = new messages();
                 b.error(request, response, e.getMessage(), "resetpassword.html");
             }
             if (spam == 0) {
                 switch (email_count) {
                     case 1: {
-                        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-                        java.util.Date dateobj = new java.util.Date();
-                        String os = userInfo.substring(userInfo.indexOf("(") + 1, userInfo.indexOf(")"));
-                        this.body = "Hello Subscriber,\n    This mail is in response to your request for password reset.\n"
-                                + "\n"
-                                + "Your OTP for Password Reset is\n" + this.rawotp + "\n"
-                                + "This password will become invalid after 10 minutes from the time of request.\n\n"
-                                + "Details of the Recieved Request are as follows :\n"
-                                + "Date and Time : " + (df.format(dateobj)).trim() + "\n";
-                        this.body += "Operating System : " + os + "\n\n"
-                                + "This is an auto-generated e-mail, please do not reply.\n"
-                                + "Regards\nCerberus Support Team";
-                        Mailer mail = new Mailer();
-                        mail.send(this.email, "Password for Cerberus", this.body);
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "OTP Status");
-                        request.setAttribute("body", "An One Time High Security Password has been sent to your registered e-mail account.<br>"
-                                + "The OTP is valid for only 10 minutes.<br>");
-                        request.setAttribute("url", "resetpassword.html");
-                        request.setAttribute("fullpage", "false");
-                        request.setAttribute("sec", "3");
-                        rd.forward(request, response);
-                        break;
+                        try {
+                            DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                            java.util.Date dateobj = new java.util.Date();
+                            String os = userInfo.substring(userInfo.indexOf("(") + 1, userInfo.indexOf(")"));
+                            this.body = "Hello Subscriber,\n    This mail is in response to your request for password reset.\n"
+                                    + "\n"
+                                    + "Your OTP for Password Reset is\n" + this.rawotp + "\n"
+                                    + "This password will become invalid after 10 minutes from the time of request.\n\n"
+                                    + "Details of the Recieved Request are as follows :\n"
+                                    + "Date and Time : " + (df.format(dateobj)).trim() + "\n";
+                            this.body += "Operating System : " + os + "\n\n"
+                                    + "This is an auto-generated e-mail, please do not reply.\n"
+                                    + "Regards\nCerberus Support Team";
+                            Mailer mail = new Mailer();
+                            mail.send(this.email, "Password for Cerberus", this.body);
+                            RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
+                            request.setAttribute("redirect", "false");
+                            request.setAttribute("head", "OTP Status");
+                            request.setAttribute("body", "An One Time High Security Password has been sent to your registered e-mail account.<br>"
+                                    + "The OTP is valid for only 10 minutes.<br>");
+                            request.setAttribute("url", "resetpassword.html");
+                            request.setAttribute("fullpage", "false");
+                            request.setAttribute("sec", "3");
+                            rd.forward(request, response);
+                            break;
+                        } catch (InterruptedException ex) {
+                            errorLogger(ex.getMessage());
+                        }
                     }
                     case 0: {
                         messages c = new messages();
@@ -157,7 +163,7 @@ public class otp extends HttpServlet {
             messages c = new messages();
             c.unauthaccess(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
     }
 

@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class delSlot extends HttpServlet {
                     stmt.setString(1, slotID);
                     stmt.executeUpdate();
                     con.close();
+                    dbLog(currUserName(request) + " deleted a slot timing with slotID" + slotID);
                     messages a = new messages();
                     a.success(request, response, "Slot has been deleted", "viewTimetable");
                 } catch (ClassNotFoundException | SQLException e) {

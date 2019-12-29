@@ -1,5 +1,7 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
 import static cerberus.AttFunctions.oddEve;
@@ -85,8 +87,8 @@ public class saveSubSelection extends HttpServlet {
                                     pps.setString(2, prn);
                                     pps.setString(3, subs[i][0]);
                                     pps.executeUpdate();
+                                    dbLog(currUserName(request) + " changed batch of student with prn : " + prn + " for subjectID : " + subs[i][0] + " to batchID : " + subsele[i][1]);
                                 }
-
                             }
                             index++;
                         }

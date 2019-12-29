@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import static cerberus.printer.tableend;
@@ -43,6 +45,7 @@ public class saveNewAttendance extends HttpServlet {
                         }
                         out.print(tableend(null, 1));
                         messages a = new messages();
+                        dbLog(currUserName(request) + " marked Lab Session with scheduleID : " + scheduleid + " as conducted");
                         a.success(request, response, "Lab has been marked as conducted. Redirecting to edit page.", "rapidAttendance?scheduleid=" + scheduleid);
                     } catch (NumberFormatException e) {
                         messages b = new messages();

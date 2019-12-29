@@ -1,4 +1,6 @@
-
+import static cerberus.AttFunctions.errorLogger;
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
@@ -36,7 +38,7 @@ public class saveDetails extends HttpServlet {
                     URL url = new URL("http://msubcdndwn.digitaluniversity.ac/resources/public/msub/Photosign/Photo/20" + photoID.substring(1, 3) + "/" + photoID + "_P.JPG");
                     inputStream = url.openStream();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    errorLogger(e.getMessage());
                 }
                 String subjects[] = request.getParameterValues("subjects");
                 try {
@@ -58,10 +60,11 @@ public class saveDetails extends HttpServlet {
                         ps.executeUpdate();
                     }
                 } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                    e.printStackTrace();
+                    errorLogger(e.getMessage());
                     messages b = new messages();
                     b.error(request, response, e.getMessage(), "homepage");
                 }
+                dbLog("Student with prn : " + prn + " selected his/her subjects");
                 messages d = new messages();
                 d.success(request, response, "Your Details have been saved successfully", "homepage");
                 break;

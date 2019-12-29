@@ -73,7 +73,7 @@ public class editFaculty extends HttpServlet {
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             Statement stmt = con.createStatement();
-                            String sql = "SELECT `facultyID`,`name` from `faculty`;";
+                            String sql = "SELECT `facultyID`,`name` from `faculty` where facultyID >1;";
                             ResultSet rs = stmt.executeQuery(sql);
                             String select = "<select name = 'facultyID' class=\"editSelect\">";
                             while (rs.next()) {

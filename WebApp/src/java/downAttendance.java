@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.appendValue;
 import static cerberus.AttFunctions.calPercentage;
 import static cerberus.AttFunctions.getAccess;
@@ -129,7 +129,7 @@ public class downAttendance extends HttpServlet {
                                 }
                                 con.close();
                             } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                                e.printStackTrace();
+                                errorLogger(e.getMessage());
                             }
                             Set<String> keyset = data.keySet();
                             int rownum = 0;
@@ -148,11 +148,11 @@ public class downAttendance extends HttpServlet {
                             }
                         }
                     }
-                    try (FileOutputStream fos = new FileOutputStream(new File("D:\\temp.xlsx"))) {
+                    try (FileOutputStream fos = new FileOutputStream(new File("D:\\AttendanceSystem\\temp.xlsx"))) {
                         wb.write(fos);
                     }
                     String filename = "Attendance.xlsx";
-                    String filepath = "D:\\temp.xlsx";
+                    String filepath = "D:\\AttendanceSystem\\temp.xlsx";
                     response.setContentType("APPLICATION/OCTET-STREAM");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
                     try (FileInputStream fileInputStream = new FileInputStream(filepath)) {
@@ -161,7 +161,7 @@ public class downAttendance extends HttpServlet {
                             out.write(j);
                         }
                     }
-                    File xls = new File("D:\\temp.xlsx");
+                    File xls = new File("D:\\AttendanceSystem\\temp.xlsx");
                     xls.delete();
                     out.close();
                 }

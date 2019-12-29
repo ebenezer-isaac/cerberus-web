@@ -1,11 +1,29 @@
 
+import cerberus.AttFunctions;
+import static cerberus.AttFunctions.generatePassword;
+import static cerberus.AttFunctions.getClassName;
+import static cerberus.AttFunctions.getCurrDate;
+import static cerberus.AttFunctions.getCurrTime;
+import static cerberus.AttFunctions.getDateID;
+import static cerberus.AttFunctions.getSem;
+import static cerberus.AttFunctions.getTimeID;
+import static cerberus.AttFunctions.oddEve;
+import static cerberus.AttFunctions.semSubs;
+import cerberus.Mailer;
+import cerberus.messages;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +35,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class saveToDB extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,8 +48,8 @@ public class saveToDB extends HttpServlet {
             try {
                 //Delete Tables from database
 
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?zeroDateTimeBehavior=convertToNull", "root", "");
+                /*Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                 PreparedStatement stmt = con.prepareStatement("Delete from otp");
                 stmt.executeUpdate();
                 PreparedStatement stmt1 = con.prepareStatement("Delete from log");
@@ -60,8 +76,7 @@ public class saveToDB extends HttpServlet {
                 stmt9.executeUpdate();
                 //update classID from 1 to 2
                 PreparedStatement stmt10 = con.prepareStatement("update rollcall set classID=2 where classID=1");
-                stmt10.executeUpdate();
-
+                stmt10.executeUpdate();*/
                 //Add student data for FY from excel
                 try {
                     //obtaining input bytes from a file
@@ -72,9 +87,10 @@ public class saveToDB extends HttpServlet {
                     XSSFSheet sheet = wb.getSheetAt(0);
                     //evaluating cell type   
                     FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
-                    int roll = 0, prn = 0;
-                    String name = null;
-                    String email = null;
+                    int roll;
+                    String prn;
+                    String name;
+                    String email;
                     int rowno = 1;
 
                     for (Row row : sheet) //iteration over row using for each loop  
@@ -98,8 +114,78 @@ public class saveToDB extends HttpServlet {
 
                                 i++;
                             }
-                            String url = "/Cerberus/addStudent?roll=" + value[0] + "&prn=" + value[1] + "&name=" + value[2] + "&email=" + value[3] + "&class=1";
-                            System.out.println(url);
+                            float rol = Float.parseFloat(value[0]);
+                            int iroll = (int) rol;
+                            InputStream inputStream = null;
+                            String url = "http://172.21.170.14:8080/Cerberus/addStudent?roll=" + iroll + "&prn=" + value[1] + "&name=" + value[2] + "&email=" + value[3] + "&clas=1";
+                            email = value[3];
+                            name = value[2];
+                            int classID = 2;
+                            roll = iroll;
+                            prn = value[1] + "";
+                            String rawpass = null;
+                            String pass = null;
+                            try {
+                                rawpass = generatePassword();
+                                pass = AttFunctions.hashIt(rawpass);
+                            } catch (NoSuchAlgorithmException ex) {
+
+                            }
+                            try {
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                                PreparedStatement ps = con.prepareStatement("INSERT INTO `student`(`PRN` ,`name`, `email`, `password`) VALUES (?,?,?,?)");
+                                ps.setString(1, prn);
+                                ps.setString(2, name);
+                                ps.setString(3, email);
+                                ps.setString(4, pass);
+                                ps.executeUpdate();
+                                ps = con.prepareStatement("INSERT INTO `rollcall`(`classID`, `rollNo`, `PRN`) VALUES (?,?,?)");
+                                ps.setInt(1, classID);
+                                ps.setInt(2, roll);
+                                ps.setString(3, prn);
+                                ps.executeUpdate();
+                                int dateID = getDateID(getCurrDate());
+                                int timeID = getTimeID(getCurrTime());
+                                ps = con.prepareStatement("INSERT INTO `studentfingerprint` (`PRN`, `templateID`, `template`, `dateID`, `timeID`) VALUES (?, '1', NULL , ?, ?);");
+                                ps.setString(1, prn);
+                                ps.setInt(2, dateID);
+                                ps.setInt(3, timeID);
+                                ps.executeUpdate();
+                                ps = con.prepareStatement("INSERT INTO `studentfingerprint` (`PRN`, `templateID`, `template`, `dateID`, `timeID`) VALUES (?, '2', NULL , ?, ?);");
+                                ps.setString(1, prn);
+                                ps.setInt(2, dateID);
+                                ps.setInt(3, timeID);
+                                ps.executeUpdate();
+                                String clas = getClassName(classID);
+                                String subs[][] = semSubs(getSem(oddEve(), classID), classID);
+                                for (String[] sub : subs) {
+                                    ps = con.prepareStatement("INSERT INTO `studentsubject`(`PRN`, `subjectID`, `batchID`) VALUES (?,?,?)");
+                                    ps.setString(1, prn);
+                                    ps.setString(2, sub[0]);
+                                    ps.setInt(3, 0);
+                                    ps.executeUpdate();
+                                }
+                                String body = "Hello " + name + ",\n    This mail is in response to a request to add you as a student at MSU-CA Department.\n\n"
+                                        + "Email/Username : " + email + "\n"
+                                        + "Password : " + rawpass + "\n\n"
+                                        + "Class    : " + clas + "\n"
+                                        + "PRN    : " + prn + "\n\n"
+                                        + "Note: You can change your password by clicking 'Create a New Password' in the Login Page.\n"
+                                        + "You need to be connected to the BCA Intranet for the below link to work:\n"
+                                        + "http://172.21.170.14:8080/Cerberus/\n\n"
+                                        + "You can now login with given username and password at CA Department's Intranet Website\n"
+                                        + "and view timetable attendance through this portal. You will be asked to provide your MSU Username and select your subjects on first login.\n\n"
+                                        + "This is an auto-generated e-mail, please do not reply.\n"
+                                        + "Regards\nCerberus Support Team";
+
+                                Mailer mail = new Mailer();
+                                mail.send(email, "Account Registration", body);
+                                con.close();
+                            } catch (ClassNotFoundException | SQLException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                         rowno++;
                         System.out.println();
@@ -132,4 +218,10 @@ public class saveToDB extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+
 }

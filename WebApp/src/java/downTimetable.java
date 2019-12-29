@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.appendValue;
 import static cerberus.AttFunctions.calPercentage;
 import static cerberus.AttFunctions.getAccess;
@@ -107,7 +107,6 @@ public class downTimetable extends HttpServlet {
                         slots[no_of_slots][1] = rs1.getString(3).substring(0, 5);
                         no_of_slots++;
                     }
-                    System.out.println(no_of_slots);
                     no_of_slots--;
                     for (int labid = 1; labid <= no_of_lab; labid++) {
                         Object[][] lines;
@@ -136,7 +135,6 @@ public class downTimetable extends HttpServlet {
                         ps4.setInt(3, year);
                         ResultSet lab1 = ps4.executeQuery();
                         while (lab1.next()) {
-                            System.out.println(lab1.getInt(1));
                             lines[lab1.getInt(1) - 1] = appendValue(lines[lab1.getInt(1) - 1], slots[lab1.getInt(1) - 1][0]);
                             lines[lab1.getInt(1) - 1] = appendValue(lines[lab1.getInt(1) - 1], slots[lab1.getInt(1) - 1][1]);
                             for (int j = 1; j <= 6; j++) {
@@ -150,7 +148,6 @@ public class downTimetable extends HttpServlet {
                             }
                         }
                         for (int y = 0; y <= no_of_slots; y++) {
-                            System.out.println(y + " : " + lines[y].length);
                             if (lines[y].length == 0) {
                                 lines[y] = appendValue(lines[y], slots[y][0]);
                                 lines[y] = appendValue(lines[y], slots[y][1]);
@@ -218,9 +215,7 @@ public class downTimetable extends HttpServlet {
                                 temp++;
                             }
                         }
-                        System.out.println(no_of_slots);
                         for (int y = 0; y <= no_of_slots; y++) {
-                            System.out.println(y);
                             if (labs[l][y].equals("")) {
                                 labs[l][y] = "";
                                 for (int j = 1; j <= 6; j++) {
@@ -247,7 +242,6 @@ public class downTimetable extends HttpServlet {
                             combined = appendValue(combined, slots[slot][1]);
                             combined = appendValue(combined, "Lab " + (lab + 1));
                             String labdets = labs[lab][slot];
-                            System.out.println("labdets : " + labdets);
                             String labsplit[] = labdets.split(",");
                             for (int j = 0; j <= 5; j++) {
                                 combined = appendValue(combined, labsplit[j]);
@@ -276,14 +270,14 @@ public class downTimetable extends HttpServlet {
 
                     con.close();
                 } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                    e.printStackTrace();
+                    errorLogger(e.getMessage());
                 }
 
-                try (FileOutputStream fos = new FileOutputStream(new File("D:\\temp.xlsx"))) {
+                try (FileOutputStream fos = new FileOutputStream(new File("D:\\AttendanceSystem\\temp.xlsx"))) {
                     wb.write(fos);
                 }
                 String filename = "Timetable.xlsx";
-                String filepath = "D:\\temp.xlsx";
+                String filepath = "D:\\AttendanceSystem\\temp.xlsx";
                 response.setContentType("APPLICATION/OCTET-STREAM");
                 response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
                 try (FileInputStream fileInputStream = new FileInputStream(filepath)) {
@@ -292,7 +286,7 @@ public class downTimetable extends HttpServlet {
                         out.write(j);
                     }
                 }
-                File xls = new File("D:\\temp.xlsx");
+                File xls = new File("D:\\AttendanceSystem\\temp.xlsx");
                 xls.delete();
                 out.close();
 

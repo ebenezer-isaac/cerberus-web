@@ -16,8 +16,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 @MultipartConfig
 public class uploadExcel extends HttpServlet {
 
-    private static final long serialVersionUID = 4543189103546483061L;
-
     private final String UPLOAD_DIRECTORY = "D:";
 
     @Override

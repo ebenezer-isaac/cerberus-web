@@ -25,10 +25,10 @@ public class copyTimetable extends HttpServlet {
         int access = getAccess(request);
         switch (access) {
             case 1:
-                HttpSession session = request.getSession();
+                HttpSession session = request.getSession(false);
                 int week = (int) session.getAttribute("week");
                 week++;
-                int year = Calendar.getInstance().get(Calendar.YEAR);
+                int year = (int) session.getAttribute("year");
                 int weekid = getWeekID(week, year);
                 try {
                     Class.forName("com.mysql.jdbc.Driver");

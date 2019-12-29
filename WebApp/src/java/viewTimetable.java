@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getSem;
@@ -167,7 +167,7 @@ public class viewTimetable extends HttpServlet {
                         }
                     }
                 } catch (ClassNotFoundException | SQLException e) {
-                    e.printStackTrace();
+                    errorLogger(e.getMessage());
                 }
                 out.print("<div id='lab_timetable'>");
                 int no_of_lab = no_of_labs();
@@ -289,7 +289,7 @@ public class viewTimetable extends HttpServlet {
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
             timetable = e.getMessage();
         }
         return timetable;
@@ -414,7 +414,7 @@ public class viewTimetable extends HttpServlet {
             }
             timetable += (tableend(null, 0));
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return timetable;
     }

@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
 import static cerberus.printer.kids;
@@ -45,7 +45,7 @@ public class newFacultyTimetable extends HttpServlet {
                                 facultyName = rs.getString(2);
                             }
                         } catch (ClassNotFoundException | SQLException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                         }
                         if (facultyID != 0) {
                             if (currentFaculty == facultyID) {
@@ -83,7 +83,7 @@ public class newFacultyTimetable extends HttpServlet {
                                     + "<button type='submit' style='width:200px;' class='btn btn-primary'>Submit</button></form></div>");
                         }
                     } catch (NumberFormatException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                         int subjectflag = 0;
                         int batchflag = 0;
                         String subjectid = request.getParameter("subjectid");

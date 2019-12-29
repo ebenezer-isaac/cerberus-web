@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
@@ -39,6 +41,7 @@ public class addSlot extends HttpServlet {
                     pp.setString(3, etime);
                     pp.executeUpdate();
                     con.close();
+                    dbLog(currUserName(request)+" added a new slot timing "+stime+" - "+etime);
                     messages a = new messages();
                     a.success(request, response, "New Slot has been added", "viewTimetable");
                 } catch (ClassNotFoundException | SQLException e) {

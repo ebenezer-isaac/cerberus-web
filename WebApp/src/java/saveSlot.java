@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -41,6 +43,7 @@ public class saveSlot extends HttpServlet {
                                 pps.setString(2, etime);
                                 pps.setInt(3, rs.getInt(1));
                                 pps.executeUpdate();
+                                dbLog(currUserName(request) + " edited slot timings for slotID : " + rs.getInt(1) + " to " + stime + " - " + etime);
                             }
                         }
                         con.close();

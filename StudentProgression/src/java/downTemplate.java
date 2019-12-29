@@ -36,7 +36,6 @@ public class downTemplate extends HttpServlet {
             //Blank workbook
             XSSFWorkbook wb = new XSSFWorkbook();
 
-
             //Create a blank sheet
             XSSFSheet sheet = wb.createSheet("BCA FY");
             //This data needs to be written (Object[])
@@ -64,13 +63,13 @@ public class downTemplate extends HttpServlet {
                 }
             }
 
-            try (FileOutputStream fos = new FileOutputStream(new File("C:\\Users\\ebene\\Desktop\\howtodoinjava_demo.xlsx"))) {
+            try (FileOutputStream fos = new FileOutputStream(new File("D:\\AttendanceSystem\\temp.xlsx"))) {
                 wb.write(fos);
             }
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
 
             String filename = "data.xlsx";
-            String filepath = "C:\\Users\\ebene\\Desktop\\howtodoinjava_demo.xlsx";
+            String filepath = "D:\\AttendanceSystem\\temp.xlsx";
             response.setContentType("APPLICATION/OCTET-STREAM");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
@@ -80,6 +79,9 @@ public class downTemplate extends HttpServlet {
                     out.write(k);
                 }
             }
+            File xls = new File("D:\\AttendanceSystem\\temp.xlsx");
+            xls.delete();
+            out.close();
             out.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -129,16 +131,19 @@ public class downTemplate extends HttpServlet {
         }
         return cl;
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
+
     @Override
     public String getServletInfo() {
         return "Short description";

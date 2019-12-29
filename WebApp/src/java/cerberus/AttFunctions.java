@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -148,7 +151,7 @@ public class AttFunctions {
                                 final Date dateObj = sdf.parse(schedule[x][1]);
                                 schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
                             } catch (final ParseException e) {
-                                e.printStackTrace();
+                                errorLogger(e.getMessage());
                             }
                             int studs = 0;
                             ps = con.prepareStatement("SELECT count(attendance.attendanceID) from attendance where scheduleID = ?");
@@ -184,7 +187,7 @@ public class AttFunctions {
                                 final Date dateObj = sdf.parse(schedule[x][1]);
                                 schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
                             } catch (final ParseException e) {
-                                e.printStackTrace();
+                                errorLogger(e.getMessage());
                             }
                             String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
                             nextSchedule[1] = "Next Lab starts at " + schedule[x][1] + "<br>"
@@ -204,7 +207,7 @@ public class AttFunctions {
                 return nextSchedule;
             }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return nextSchedule;
     }
@@ -282,7 +285,7 @@ public class AttFunctions {
                                 final Date dateObj = sdf.parse(schedule[x][1]);
                                 schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
                             } catch (final ParseException e) {
-                                e.printStackTrace();
+                                errorLogger(e.getMessage());
                             }
                             int mark = 0;
                             String marked = "Not Marked as Present";
@@ -322,7 +325,7 @@ public class AttFunctions {
                                 final Date dateObj = sdf.parse(schedule[x][1]);
                                 schedule[x][1] = (new SimpleDateFormat("K:mm a").format(dateObj));
                             } catch (final ParseException e) {
-                                e.printStackTrace();
+                                errorLogger(e.getMessage());
                             }
                             String details[] = get_schedule_det(Integer.parseInt(schedule[x][3]));
                             nextSchedule[1] = "Next Lab starts at " + schedule[x][1] + "<br>"
@@ -342,7 +345,7 @@ public class AttFunctions {
                 return nextSchedule;
             }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return nextSchedule;
     }
@@ -357,6 +360,42 @@ public class AttFunctions {
             return false;
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    public static void errorLogger(String errorMessage) {
+        String text = "\n" + getCurrDate() + " - " + getCurrTime() + "\n" + errorMessage + "\n";
+        try {
+            Files.write(Paths.get("D:\\AttendanceSystem\\ErrorLog.txt"), text.getBytes(), StandardOpenOption.APPEND);
+        } catch (IOException e) {
+        }
+    }
+
+    public static void dbLog(String comment) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+            PreparedStatement ps = con.prepareStatement("insert into log values(null,?,?,?)");
+            int dateID = getDateID(getCurrDate());
+            int timeID = getTimeID(getCurrTime());
+            ps.setInt(1, dateID);
+            ps.setInt(2, timeID);
+            ps.setString(3, comment);
+            ps.executeUpdate();
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            errorLogger(e.getMessage());
+            errorLogger(e.getMessage());
+        }
+
+    }
+
+    public static String currUserName(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        try {
+            return session.getAttribute("name").toString();
+        } catch (Exception e) {
+            return "False";
         }
     }
 
@@ -402,7 +441,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return schedule;
     }
@@ -487,7 +526,7 @@ public class AttFunctions {
                 return 0;
             }
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return 0;
     }
@@ -504,7 +543,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return no_of_labs;
     }
@@ -521,7 +560,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return no_of_slots;
     }
@@ -538,7 +577,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return no_of_class;
     }
@@ -555,8 +594,8 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-            e.printStackTrace();
+            errorLogger(e.getMessage());
+            errorLogger(e.getMessage());
         }
         return no_of_batch;
     }
@@ -574,7 +613,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return classID;
     }
@@ -618,7 +657,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return prefsubs;
     }
@@ -626,7 +665,7 @@ public class AttFunctions {
     public static int oddEve() throws FileNotFoundException, IOException {
         int result = 0;
 
-        String fileName = "D:\\oddEve.txt";
+        String fileName = "D:\\AttendanceSystem\\oddEve.txt";
         File file = new File(fileName);
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
@@ -636,7 +675,7 @@ public class AttFunctions {
                 result = Integer.parseInt(text.trim());
                 break;
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                errorLogger(e.getMessage());
             }
         }
         return result;
@@ -668,7 +707,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return subs;
     }
@@ -699,7 +738,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return semsubs;
     }
@@ -737,6 +776,7 @@ public class AttFunctions {
             java.util.Date date = new java.util.Date();
             SimpleDateFormat ft = new SimpleDateFormat("w");
             week = Integer.parseInt(ft.format(date));
+            session.setAttribute("week", week);
         }
         return week;
     }
@@ -755,7 +795,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return cl;
     }
@@ -770,10 +810,10 @@ public class AttFunctions {
             ps.setInt(2, year);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                weekID = rs.getInt(1);
+                return rs.getInt(1);
             }
             if (weekID == 0) {
-                PreparedStatement ps2 = con.prepareStatement("insert into week(`week`,`year`) values(?,?)");
+                PreparedStatement ps2 = con.prepareStatement("insert into week values(null,?,?)");
                 ps2.setInt(1, week);
                 ps2.setInt(2, year);
                 ps2.executeUpdate();
@@ -785,6 +825,7 @@ public class AttFunctions {
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return weekID;
     }
@@ -821,7 +862,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return dateID;
     }
@@ -853,7 +894,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return timeID;
     }
@@ -880,7 +921,7 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return slots;
     }

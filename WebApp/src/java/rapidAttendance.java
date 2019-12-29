@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
 import cerberus.messages;
@@ -45,7 +45,7 @@ public class rapidAttendance extends HttpServlet {
                             facultyID = rs.getInt(1);
                         }
                     } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                     }
                     if (facultyID == 0) {
                         out.print("<font style=\"font-size: 15px;\">This Lab Session has not been marked as conducted."

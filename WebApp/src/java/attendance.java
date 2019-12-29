@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
@@ -201,7 +201,7 @@ public class attendance extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                         error(e.getMessage());
                     }
                     break;

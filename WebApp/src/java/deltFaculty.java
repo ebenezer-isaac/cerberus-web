@@ -1,4 +1,5 @@
 
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.Mailer;
 import cerberus.messages;
@@ -62,13 +63,14 @@ public class deltFaculty extends HttpServlet {
                                 + "Regards\nCerberus Support Team";
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Deletion", body);
+                        dbLog(name+" was removed from being a Faculty");
                         messages a = new messages();
                         a.success(request, response, "The faculty was deleted successfully", "homepage");
                     } else {
                         messages a = new messages();
                         a.failed(request, response, "The teacher cannot be deleted because teacher-log/teacher-fingerprint is dependent on it", "homepage");
                     }
-                } catch (ClassNotFoundException | SQLException e) {
+                } catch (InterruptedException | ClassNotFoundException | SQLException e) {
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "homepage");
                 }

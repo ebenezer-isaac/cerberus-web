@@ -30,13 +30,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class downExcel extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("hello , inside down excel");
         try (OutputStream out = response.getOutputStream()) {
+
             XSSFWorkbook wb = new XSSFWorkbook();
             int no_of_classes = no_of_class();
             for (int classID = 1; classID <= no_of_classes; classID++) {
@@ -157,15 +155,13 @@ public class downExcel extends HttpServlet {
                     }
                 }
             }
-            try (FileOutputStream fos = new FileOutputStream(new File("C:\\Users\\ebene\\Desktop\\howtodoinjava_demo.xlsx"))) {
+            try (FileOutputStream fos = new FileOutputStream(new File("D:\\AttendanceSystem\\temp.xlsx"))) {
                 wb.write(fos);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
             System.out.println("howtodoinjava_demo.xlsx written successfully on disk.");
 
             String filename = "data.xlsx";
-            String filepath = "C:\\Users\\ebene\\Desktop\\howtodoinjava_demo.xlsx";
+            String filepath = "D:\\AttendanceSystem\\temp.xlsx";
             response.setContentType("APPLICATION/OCTET-STREAM");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
@@ -174,12 +170,8 @@ public class downExcel extends HttpServlet {
                 while ((j = fileInputStream.read()) != -1) {
                     out.write(j);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
             out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -194,7 +186,7 @@ public class downExcel extends HttpServlet {
     public static int oddEve() throws FileNotFoundException, IOException {
         int result = 0;
 
-        String fileName = "D:\\oddEve.txt";
+        String fileName = "D:\\AttendanceSystem\\oddEve.txt";
         File file = new File(fileName);
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);

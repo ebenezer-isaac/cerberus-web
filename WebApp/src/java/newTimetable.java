@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class newTimetable extends HttpServlet {
 
@@ -26,7 +27,7 @@ public class newTimetable extends HttpServlet {
         try {
             String pwd = AttFunctions.hashIt(request.getParameter("pwd"));
             if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
-                int year = Calendar.getInstance().get(Calendar.YEAR);
+                int year = Integer.parseInt(request.getParameter("year"));
                 int weekid = getWeekID(week, year);
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");

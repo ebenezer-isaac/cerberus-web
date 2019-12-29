@@ -1,11 +1,7 @@
 package cerberus;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import static cerberus.AttFunctions.errorLogger;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -21,17 +17,18 @@ public class Mailer implements Runnable {
     String subject;
     String body;
 
-    public void send(String to, String subject, String body) {
+    public void send(String to, String subject, String body) throws InterruptedException {
         this.to = to;
         this.subject = subject;
         this.body = body;
         Thread thread = new Thread(this);
         thread.start();
+        Thread.sleep(500);
     }
 
     @Override
     public void run() {
-        System.setProperty("java.net.preferIPv4Stack" , "true");
+        System.setProperty("java.net.preferIPv4Stack", "true");
         Properties props = new Properties();
         props.put("mail.smtps.user", "cerberus.msubca@gmail.com");
         props.put("mail.smtps.host", "smtp.gmail.com");
@@ -50,7 +47,7 @@ public class Mailer implements Runnable {
         MimeMessage msg = new MimeMessage(session);
         try {
             msg.setSubject(this.subject);
-            msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com"));
+            msg.setFrom(new InternetAddress("cerberus.msubca@gmail.com", "Cerberus Team"));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(this.to));
             msg.setText(this.body);
             try (Transport transport = session.getTransport("smtps")) {
@@ -58,29 +55,11 @@ public class Mailer implements Runnable {
                 transport.sendMessage(msg, msg.getAllRecipients());
             }
         } catch (AddressException e) {
-            e.printStackTrace();
-            PrintStream o;
-            try {
-                o = new PrintStream(new File("D:\\A.txt"));
-                PrintStream console = System.out;
-                System.setOut(o);
-                System.out.println(e);
-            } catch (FileNotFoundException ex) {
-                
-                Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            errorLogger(e.getMessage());
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            PrintStream o;
-            try {
-                o = new PrintStream(new File("D:\\A.txt"));
-                PrintStream console = System.out;
-                System.setOut(o);
-                System.out.println(e);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Mailer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            errorLogger(e.getMessage());
+
         }
     }
 }

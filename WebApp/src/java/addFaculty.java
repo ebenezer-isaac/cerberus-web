@@ -1,5 +1,6 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.generatePassword;
 import cerberus.Mailer;
 import static cerberus.AttFunctions.getAccess;
@@ -44,7 +45,6 @@ public class addFaculty extends HttpServlet {
                     } catch (NoSuchAlgorithmException ex) {
                         Logger.getLogger(addStudent.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    System.out.println(email +" : "+rawpass);
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -87,9 +87,10 @@ public class addFaculty extends HttpServlet {
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Registration", body);
                         con.close();
+                        dbLog(name + " was added as a Faculty");
                         messages a = new messages();
                         a.success(request, response, name + " has been added as a faculty and has been granted admin privilages.<br>A mail has been sent to their registered email address.", "homepage");
-                    } catch (ClassNotFoundException | SQLException e) {
+                    } catch (InterruptedException | ClassNotFoundException | SQLException e) {
                         messages a = new messages();
                         a.dberror(request, response, e.getMessage(), "homepage");
                     }

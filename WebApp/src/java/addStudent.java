@@ -1,6 +1,9 @@
 
 import cerberus.Mailer;
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.generatePassword;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
@@ -97,18 +100,17 @@ public class addStudent extends HttpServlet {
                                 + "and view timetable attendance through this portal. You will be asked to provide your MSU Username and select your subjects on first login.\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
                                 + "Regards\nCerberus Support Team";
-
+                        dbLog(currUserName(request) + " added a new student with prn : " + prn);
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Registration", body);
                         messages a = new messages();
                         a.success(request, response, name + " has been added as a student.<br>A mail has been sent containing the login password.", "editStudDetails?class=" + classID);
                         con.close();
-                    } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                    } catch (InterruptedException | ClassNotFoundException | SQLException e) {
+                        errorLogger(e.getMessage());
                         messages a = new messages();
                         a.failed(request, response, e.getMessage(), "editStudDetails?class=" + classID);
                     }
-
                 } else {
                     messages a = new messages();
                     a.failed(request, response, "Student Name cannot be smaller than 5 letters", "editAddStudent?flow=add");

@@ -1,5 +1,6 @@
 
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class ajaxCheckEmail extends HttpServlet {
                                 con.close();
                             }
                         } catch (ClassNotFoundException | SQLException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                         }
                         if (flag == 0) {
                             out.print("1");

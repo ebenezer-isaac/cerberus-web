@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import cerberus.AttFunctions;
 import cerberus.messages;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class login extends HttpServlet {
                             access = 1;
                             con.close();
                         } catch (ClassNotFoundException | SQLException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                         }
                     }
                     if (corrpass.equals(pass)) {
@@ -99,7 +99,7 @@ public class login extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
             messages m = new messages();
             m.error(request, response, e.getMessage(), "index.jsp");
         }

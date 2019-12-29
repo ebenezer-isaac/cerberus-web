@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class delFacultyTimetable extends HttpServlet {
                     ps.setString(1, scheduleid);
                     ps.executeUpdate();
                     con.close();
+                    dbLog(currUserName(request) + " deleted the Lab Session with scheduleID " + scheduleid);
                     messages a = new messages();
                     a.success(request, response, "The Lab Session has been marked as not conducted and its attendance has been deleted permanently.", "viewTimetable");
                 } catch (ClassNotFoundException | SQLException e) {

@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.printer.error;
 import static cerberus.printer.nouser;
@@ -138,7 +138,7 @@ public class studSubAttendance extends HttpServlet {
 
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                             error(e.getMessage());
                         }
                     } else {
@@ -229,7 +229,7 @@ public class studSubAttendance extends HttpServlet {
                             out.print(tableend("No of Labs : " + (dates.length) + "<br><br>", 0));
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                             error(e.getMessage());
                         }
                     } else {

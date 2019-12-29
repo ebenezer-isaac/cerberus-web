@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_next_schedule;
 import static cerberus.AttFunctions.get_next_stud_schedule;
@@ -194,7 +194,7 @@ public class homepage extends HttpServlet {
                         }
                         con.close();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                         error(e.getMessage());
                     }
                     break;
@@ -347,7 +347,7 @@ public class homepage extends HttpServlet {
                             }
                             con.close();
                         } catch (SQLException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                             error(e.getMessage());
                         }
                     }

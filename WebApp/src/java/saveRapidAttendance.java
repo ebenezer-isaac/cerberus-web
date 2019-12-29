@@ -1,4 +1,7 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getTimeID;
@@ -52,17 +55,19 @@ public class saveRapidAttendance extends HttpServlet {
                                         insert.setInt(2, scheduleid);
                                         insert.setInt(3, timeID);
                                         insert.executeUpdate();
+                                        dbLog(currUserName(request) + " marked attendance for " + prn + " as present for scheduleID " + scheduleid + " using Rapid Attendance");
                                     }
                                 } catch (SQLException x) {
-                                    x.printStackTrace();
+                                    errorLogger(x.getMessage());
                                 }
                             } else {
                                 try {
                                     delete.setInt(1, scheduleid);
                                     delete.setString(2, prn);
                                     delete.executeUpdate();
+                                    dbLog(currUserName(request) + " marked attendance for " + prn + " as absent for scheduleID " + scheduleid + " using Rapid Attendance");
                                 } catch (SQLException x) {
-                                    x.printStackTrace();
+                                    errorLogger(x.getMessage());
                                 }
                             }
                         }

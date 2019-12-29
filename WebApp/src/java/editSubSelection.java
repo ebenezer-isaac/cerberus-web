@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getClassName;
@@ -77,7 +77,6 @@ public class editSubSelection extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
-                        System.out.println(sql);
                         PreparedStatement ps4 = con.prepareStatement(sql);
                         ResultSet rs = ps4.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
@@ -170,7 +169,7 @@ public class editSubSelection extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                         error(e.getMessage());
                     }
                     break;

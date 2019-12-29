@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class deltSubject extends HttpServlet {
                         PreparedStatement stmt = con.prepareStatement("Delete from `subject` where `subjectID` = ?;");
                         stmt.setString(1, subjectID);
                         stmt.executeUpdate();
+                        dbLog(currUserName(request) + " deleted a subject with subjectID : " + subjectID);
                         messages a = new messages();
                         a.success(request, response, "The subject was deleted successfully<br>SubjectID : " + subjectID, "viewSubject");
                     } else {

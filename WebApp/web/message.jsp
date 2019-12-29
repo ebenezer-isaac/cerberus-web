@@ -4,7 +4,6 @@
     try {
         access = Integer.parseInt(session.getAttribute("access").toString());
     } catch (Exception e) {
-        e.printStackTrace();
     }
     String redirect = "false", head = "Hi", body = "", fullpage = "true", sec = "", type = "", url = "index.jsp";
     try {
@@ -102,4 +101,4 @@
                         + "</form></footer>");
             }
         %>
-</div></div></div></div><div id="particles-js"></div><script src="js/jquery.min.js"></script> <script src="js/main.js"></script> <script src="js/particles.js"></script> <script src="js/app.js"></script> </body></html>
+                    </div></div></div></div><div id="particles-js"></div><script src="js/jquery.min.js"></script> <script src="js/main.js"></script> <script src="js/particles.js"></script> <script src="js/app.js"></script> </body></html>

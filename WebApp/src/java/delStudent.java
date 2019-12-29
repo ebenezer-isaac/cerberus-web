@@ -1,4 +1,7 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.Mailer;
 import cerberus.messages;
@@ -67,13 +70,15 @@ public class delStudent extends HttpServlet {
                                 + "Regards\nCerberus Support Team";
                         Mailer mail = new Mailer();
                         mail.send(email, "Student Deletion", body);
+                        dbLog(currUserName(request) + " deleted student with prn : " + prn);
                         messages a = new messages();
                         a.success(request, response, "The student was deleted successfully", "homepage");
                     } else {
                         messages a = new messages();
                         a.failed(request, response, "The student cannot be deleted because attendance is associated with him/her", "homepage");
                     }
-                } catch (ClassNotFoundException | SQLException e) {
+                } catch (InterruptedException | ClassNotFoundException | SQLException e) {
+                    errorLogger(e.getMessage());
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "homepage");
                 }

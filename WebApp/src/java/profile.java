@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getSem;
 import static cerberus.AttFunctions.oddEve;
@@ -167,7 +167,7 @@ public class profile extends HttpServlet {
                                 + "</style>", 0));
                         con.close();
                     } catch (IOException | ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                     }
                     out.print("</div></div>To change password, Click 'Create a new Password' in Login Page.");
                     break;
@@ -308,7 +308,7 @@ public class profile extends HttpServlet {
                         out.print(tableend(null, 0)+"To change password, Click 'Create a new Password' in Login Page.");
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                     }
                     break;
                 default:

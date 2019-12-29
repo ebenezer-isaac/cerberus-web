@@ -1,4 +1,5 @@
 
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getWeek;
@@ -52,10 +53,6 @@ public class editTimetable extends HttpServlet {
                     } catch (NumberFormatException e) {
                         labid = 1;
                     }
-                    if (labid >= 4 || labid <= 0) {
-                        labid = 1;
-                    }
-
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -104,13 +101,15 @@ public class editTimetable extends HttpServlet {
                         date[5] = wks.plusDays(6) + "";
                         String heading = "<table><tr><td width = 33% align='left'><form action=\"";
                         if (week == 1) {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=52&year=" + (year - 1) + "')\" >";
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=52&year=" + (year - 1) + "&lab=" + labid + "')\" >";
                         } else {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&year=" + (year) + "&lab=" + labid + "')\" >";
                         }
                         heading += "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
-                        if (week <= currweek) {
-                            heading += "disabled";
+                        if (getCurrYear() == year) {
+                            if (week <= currweek) {
+                                heading += "disabled";
+                            }
                         }
                         heading += "><span>Previous</span>"
                                 + "</button>"
@@ -121,12 +120,12 @@ public class editTimetable extends HttpServlet {
                         heading += "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wks.plusDays(7) + "</b></p>";
                         heading += "</td><td width = 33% align='right'><form action=\"";
                         if (week == 52) {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=1&year=" + (year + 1) + "')\" >";
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=1&year=" + (year + 1) + "&lab=" + labid + "')\" >";
                         } else {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
+                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&year=" + (year) + "&lab=" + labid + "')\" >";
                         }
                         heading += "<button type=\"submit\"  style='width: 100px;' id=\"next\" class=\"btn btn-primary\"";
-                        if (week > currweek) {
+                        if (week > currweek + 1) {
                             heading += "disabled";
                         }
                         heading += "><span>Next</span>"
@@ -142,6 +141,7 @@ public class editTimetable extends HttpServlet {
                         String end = "</table>"
                                 + "<input type='text' name='lab' value='" + labid + "' hidden>"
                                 + "<input type='text' name='week' value='" + week + "' hidden>"
+                                + "<input type='text' name='year' value='" + year+ "' hidden>"
                                 + "<button align='center' style='width: 200px;'type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
                                 + "<span>Save Timetable</span>"
                                 + "</button></form>"
@@ -353,7 +353,7 @@ public class editTimetable extends HttpServlet {
             }
             con.close();
         } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
         return table;
     }

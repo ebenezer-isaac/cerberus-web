@@ -1,5 +1,5 @@
 package cerberus;
-
+import static cerberus.AttFunctions.errorLogger;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -82,7 +82,7 @@ public class messages extends HttpServlet {
                 processRequest(request, response);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            errorLogger(e.getMessage());
         }
     }
 

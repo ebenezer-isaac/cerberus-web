@@ -29,7 +29,21 @@
             current: ''
         },
         onStepChanging: function(event, currentIndex, newIndex) {
-            
+            if (currentIndex === 0) {
+                form.parent().parent().parent().append('<div class="footer footer-' + currentIndex + '"></div>');
+            }
+            if (currentIndex === 1) {
+                form.parent().parent().parent().find('.footer').removeClass('footer-0').addClass('footer-' + currentIndex + '');
+            }
+            if (currentIndex === 2) {
+                form.parent().parent().parent().find('.footer').removeClass('footer-1').addClass('footer-' + currentIndex + '');
+            }
+            if (currentIndex === 3) {
+                form.parent().parent().parent().find('.footer').removeClass('footer-2').addClass('footer-' + currentIndex + '');
+            }
+            // if(currentIndex === 4) {
+            //     form.parent().parent().parent().append('<div class="footer" style="height:752px;"></div>');
+            // }
             form.validate().settings.ignore = ":disabled,:hidden";
             return form.valid();
         },

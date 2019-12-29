@@ -1,4 +1,6 @@
-
+import static cerberus.AttFunctions.errorLogger;
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getTimeID;
@@ -57,30 +59,33 @@ public class saveAttendance extends HttpServlet {
                                             insert.setInt(2, scheduleid);
                                             insert.setInt(3, timeID);
                                             insert.executeUpdate();
+                                            dbLog(currUserName(request) + " marked attendance for " + prn + " as present for scheduleID " + scheduleid);
                                         }
                                     } catch (SQLException y) {
-                                        y.printStackTrace();
+                                        errorLogger(y.getMessage());
                                     }
                                 } else {
                                     try {
                                         delete.setInt(1, scheduleid);
                                         delete.setString(2, prn);
                                         delete.executeUpdate();
+                                        dbLog(currUserName(request) + " marked attendance for " + prn + " as absent for scheduleID " + scheduleid);
                                     } catch (SQLException y) {
-                                        y.printStackTrace();
+                                       errorLogger(y.getMessage());
                                     }
                                 }
                             }
                         } catch (ClassNotFoundException | SQLException z) {
-                            z.printStackTrace();
+                            errorLogger(z.getMessage());
                             messages b = new messages();
                             b.error(request, response, z.getMessage(), "viewTimetable");
                         }
                     }
                     messages a = new messages();
+
                     a.success(request, response, "Attendance has been saved", "attendance?class=" + get_class_from_sub(subjectID));
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    errorLogger(e.getMessage());
                     messages b = new messages();
                     b.error(request, response, e.getMessage(), "viewTimetable");
                 }

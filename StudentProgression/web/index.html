@@ -11,15 +11,20 @@
         <!-- Font Icon -->
         <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
         <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css">
+
+        <!-- Main css -->
         <link rel="stylesheet" href="css/style.css">
+
     </head>
+
     <body>
+
         <div class="main">
 
             <div class="container">
                 <form method="POST" id="signup-form" class="signup-form form-inline" action="#">
                     <div>
-                        <h3>Data Backup</h3>
+                        <h3>Backup Previous Sem Data</h3>
                         <fieldset>
                             <h2>Download Backup</h2>
                             <p class="desc">Please download respective files to backup locally.</p>
@@ -27,8 +32,7 @@
                                 <div class="form-row">
                                     <label for="email" class="form-label">Class Wise Attendance</label>
                                     <form target="_blank" action="downExcel">
-                                        <input type="submit" style="display:none"/>
-                                        <input type="button" style="width:200px" value ="Download" onclick="javascript:window.open('/test/downExcel', '_blank');" />
+                                        <input type="submit"/>
                                         <span class="text-input">Download FY, SY, TY Consolidated Data</span>
                                     </form>
 
@@ -84,10 +88,17 @@
                                 <input type = "submit" value = "Upload File" />
                             </form>
                         </fieldset>
+                        
+                        <h3>Finish</h3>
+                        <fieldset>
+                            <h2>Click submit to end progression</h2>
+                        </fieldset>
                     </div>
                 </form>
             </div>
+
         </div>
+
         <!-- JS -->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>

@@ -1,4 +1,7 @@
 
+import static cerberus.AttFunctions.errorLogger;
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getCurrDate;
 import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getDateID;
@@ -61,6 +64,7 @@ public class saveStudDetails extends HttpServlet {
                                 pps.setString(1, tname);
                                 pps.setString(2, tprn);
                                 pps.executeUpdate();
+                                dbLog(currUserName(request) + " changed name of student with prn : " + tprn + " to " + tname);
                             }
                             if (eemail.equals(temail)) {
                             } else {
@@ -68,6 +72,7 @@ public class saveStudDetails extends HttpServlet {
                                 pps.setString(1, temail);
                                 pps.setString(2, tprn);
                                 pps.executeUpdate();
+                                dbLog(currUserName(request) + " changed email of student with prn : " + tprn + " to " + temail);
                             }
                             if (eroll == troll) {
                             } else {
@@ -75,6 +80,7 @@ public class saveStudDetails extends HttpServlet {
                                 pps.setInt(1, troll);
                                 pps.setString(2, tprn);
                                 pps.executeUpdate();
+                                dbLog(currUserName(request) + " changed Roll Number of student with prn : " + tprn + " to " + troll);
                             }
                             String et1 = rs.getString(5);
                             if (et1 != null) {
@@ -88,8 +94,9 @@ public class saveStudDetails extends HttpServlet {
                                         pps.setInt(2, timeID);
                                         pps.setString(3, tprn);
                                         pps.executeUpdate();
+                                        dbLog(currUserName(request) + " deleted fingerprint template : 1 of student with prn : " + tprn);
                                     } catch (SQLException x) {
-                                        x.printStackTrace();
+                                        errorLogger(x.getMessage());
                                     }
                                 }
                             }
@@ -104,6 +111,7 @@ public class saveStudDetails extends HttpServlet {
                                     pps.setInt(2, timeID);
                                     pps.setString(3, tprn);
                                     pps.executeUpdate();
+                                    dbLog(currUserName(request) + " deleted fingerprint template : 2 of student with prn : " + tprn);
                                 }
                             }
                             index++;
@@ -111,7 +119,7 @@ public class saveStudDetails extends HttpServlet {
                         messages a = new messages();
                         a.success(request, response, "Student Details has been saved", "editStudDetails?class=" + classID);
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                         messages a = new messages();
                         a.dberror(request, response, e.getMessage(), "viewTimetable");
                     }

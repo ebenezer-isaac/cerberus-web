@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
@@ -147,7 +147,7 @@ public class batSubAttendance extends HttpServlet {
 
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
-                            e.printStackTrace();
+                            errorLogger(e.getMessage());
                             error(e.getMessage());
                         }
                     } else {

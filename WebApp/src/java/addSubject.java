@@ -1,5 +1,8 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.errorLogger;
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
 import java.io.IOException;
@@ -41,10 +44,11 @@ public class addSubject extends HttpServlet {
                     ps.setInt(5, classID);
                     ps.executeUpdate();
                     con.close();
+                    dbLog(currUserName(request) + " added a new subject " + sid + " - " + abbreviation);
                     messages a = new messages();
                     a.success(request, response, "The subject was added successfully<br>Subject Code : " + sid, "homepage");
                 } catch (ClassNotFoundException | SQLException e) {
-                    e.printStackTrace();
+                    errorLogger(e.getMessage());
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "viewSubject");
                 }

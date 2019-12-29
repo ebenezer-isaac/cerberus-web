@@ -1,4 +1,4 @@
-
+import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
 import static cerberus.printer.error;
@@ -85,7 +85,7 @@ public class ajaxSchedules extends HttpServlet {
                         }
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
+                        errorLogger(e.getMessage());
                         error(e.getMessage());
                     }
                     break;

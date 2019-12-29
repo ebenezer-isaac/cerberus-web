@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.currUserName;
+import static cerberus.AttFunctions.dbLog;
 import cerberus.messages;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.getWeekID;
 import java.util.Calendar;
 import javax.servlet.ServletException;
@@ -37,7 +40,7 @@ public class saveTimetable extends HttpServlet {
                         while (rs1.next()) {
                             no_of_slots++;
                         }
-                        int year = Calendar.getInstance().get(Calendar.YEAR);
+                        int year = Integer.parseInt(request.getParameter("year"));
                         int weekID = getWeekID(week, year);
                         PreparedStatement ps4 = con.prepareStatement("SELECT timetable.slotID,"
                                 + "MAX(CASE WHEN dayID = 1 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Monday, "
@@ -76,6 +79,7 @@ public class saveTimetable extends HttpServlet {
                                         pps.setInt(5, weekID);
                                         pps.setInt(6, (j + 1));
                                         pps.executeUpdate();
+                                        dbLog(currUserName(request) + " scheduled a Lab Session for dayID:" + (j + 1) + " week:" + week + " slotID:" + (slot + 1) + " subjectID:" + arrOfStr[0] + " batchID:" + Integer.parseInt(arrOfStr[1]) + " labID:" + labid);
                                     }
                                 } else if (table.equals("null , null") || table.equals("- , -") || table.equals("- , null") || table.equals("null , -")) {
                                     String[] arrOfStr = exist.split(" , ");
@@ -85,6 +89,7 @@ public class saveTimetable extends HttpServlet {
                                     pps.setInt(3, weekID);
                                     pps.setInt(4, (j + 1));
                                     pps.executeUpdate();
+                                    dbLog(currUserName(request) + " deleted a scheduled Lab Session for dayID:" + (j + 1) + " week:" + week + " slotID:" + (slot + 1) + " labID:" + labid);
                                 } else if (exist.equals(table)) {
                                 } else {
                                     String[] arrOfStr = table.split(" , ");
@@ -96,6 +101,7 @@ public class saveTimetable extends HttpServlet {
                                     pps.setInt(5, weekID);
                                     pps.setInt(6, (j + 1));
                                     pps.executeUpdate();
+                                    dbLog(currUserName(request) + " updated a scheduled Lab Session for dayID:" + (j + 1) + " week:" + week + " slotID:" + (slot + 1) + " labID:" + labid + " to subjectID:" + arrOfStr[0] + " batchID: " + Integer.parseInt(arrOfStr[1]));
                                 }
                             }
                         }
@@ -115,6 +121,7 @@ public class saveTimetable extends HttpServlet {
                                         pps.setInt(5, weekID);
                                         pps.setInt(6, (j + 1));
                                         pps.executeUpdate();
+                                        dbLog(currUserName(request) + " scheduled a Lab Session for dayID:" + (j + 1) + " week:" + week + " slotID:" + (slot + 1) + " subjectID:" + arrOfStr[0] + " batchID:" + Integer.parseInt(arrOfStr[1]) + " labID:" + labid);
                                     }
                                 }
                             }
@@ -125,7 +132,7 @@ public class saveTimetable extends HttpServlet {
                         a.success(request, response, "Your changes to the timetable have been saved", "viewTimetable");
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages b = new messages();
-                        b.error(request, response, e.getMessage(), "/Cerberus/homepage");
+                        b.error(request, response, e.getMessage(), "homepage");
                     }
                     break;
                 case 0:

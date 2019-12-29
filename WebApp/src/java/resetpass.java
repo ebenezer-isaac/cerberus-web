@@ -1,4 +1,6 @@
 
+import static cerberus.AttFunctions.errorLogger;
+import cerberus.messages;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -76,12 +78,9 @@ public class resetpass extends HttpServlet {
                     con.close();
                 }
             } catch (ClassNotFoundException | SQLException e) {
-                RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                request.setAttribute("redirect", "false");
-                request.setAttribute("head", "Error");
-                request.setAttribute("body", e.getMessage());
-                request.setAttribute("url", "resetpassword.html");
-                rd.forward(request, response);
+                errorLogger(e.getMessage());
+                messages a = new messages();
+                a.dberror(request, response, e.getMessage(), "homepage");
             }
             if (otp_count == 1) {
                 if (corrotp.equals(otp)) {
@@ -109,14 +108,9 @@ public class resetpass extends HttpServlet {
                         request.setAttribute("fullpage", "false");
                         rd.forward(request, response);
                     } catch (ClassNotFoundException | SQLException e) {
-                        e.printStackTrace();
-                        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-                        request.setAttribute("redirect", "false");
-                        request.setAttribute("head", "Error");
-                        request.setAttribute("body", e.getMessage());
-                        request.setAttribute("url", "resetpassword.html");
-                        request.setAttribute("fullpage", "false");
-                        rd.forward(request, response);
+                        errorLogger(e.getMessage());
+                        messages a = new messages();
+                        a.dberror(request, response, e.getMessage(), "homepage");
                     }
                 } else {
                     RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
@@ -144,13 +138,8 @@ public class resetpass extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
-        request.setAttribute("redirect", "true");
-        request.setAttribute("head", "Security Firewall");
-        request.setAttribute("body", "Unauthorized access to this page has been detected.");
-        request.setAttribute("url", "index.jsp");
-        request.setAttribute("sec", "2");
-        rd.forward(request, response);
+        messages a = new messages();
+        a.failed(request, response, "Unauthorized Access to this page has been detected", "homepage");
     }
 
     @Override
