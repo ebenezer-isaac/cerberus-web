@@ -62,8 +62,14 @@ public class copyTimetable extends HttpServlet {
                             }
                         }
                         con.close();
-                        messages a = new messages();
-                        a.success(request, response, "TimeTable has copied into next week", "viewTimetable?week=" + week + "&year=" + year);
+                        if (weekid == 0) {
+                            messages a = new messages();
+                            a.success(request, response, "TimeTable has been copied into the Master Timetable", "viewMasterTimetable");
+                        } else {
+                            messages a = new messages();
+                            a.success(request, response, "TimeTable has been copied into the selected week", "viewTimetable?week=" + week + "&year=" + year);
+                        }
+
                     } else {
                         con.close();
                         messages a = new messages();

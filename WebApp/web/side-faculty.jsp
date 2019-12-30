@@ -20,41 +20,47 @@
     } catch (Exception e) {
     }
         %>
-                        <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/newFacultyTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Attendance</a> <a class="dropdown-item" href="downAttendance"><i class="fas fa-file-download"></i>&nbsp;&nbsp;&nbsp;Download</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-calendar-alt"></i> <span>TimeTable</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a><a class="dropdown-item" href="downTimetable"><i class="fas fa-file-download"></i>&nbsp;&nbsp;&nbsp;Download</a> <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Edit :</h6>
-                            <%
-                                try {
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                                    Statement stmt = con.createStatement();
-                                    ResultSet rs = stmt.executeQuery("SELECT labID, name FROM `lab` ORDER BY `labID` ASC");
-                                    while (rs.next()) {
-                                        EnglishNumberToWords a = new EnglishNumberToWords();
-                                        String number = a.convert(rs.getInt(1));
-                                        out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
-                                    }
-                                    con.close();
-                                } catch (Exception e) {
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Management : </h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/newFacultyTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Attendance</a> <a class="dropdown-item" href="downAttendance"><i class="fas fa-file-download"></i>&nbsp;&nbsp;&nbsp;Download</a> </div></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-calendar-alt"></i> <span>TimeTable</span> </a> 
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <h6 class="dropdown-header" align='center'>Master Timetable :</h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewMasterTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
+                        <a class='dropdown-item' href="javascript:setContent('/Cerberus/editMasterTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Regular Timetable :</h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
+                        <%
+                            try {
+                                Class.forName("com.mysql.jdbc.Driver");
+                                Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                                Statement stmt = con.createStatement();
+                                ResultSet rs = stmt.executeQuery("SELECT labID, name FROM `lab` ORDER BY `labID` ASC");
+                                while (rs.next()) {
+                                    EnglishNumberToWords a = new EnglishNumberToWords();
+                                    String number = a.convert(rs.getInt(1));
+                                    out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editTimetable?lab=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;Edit " + rs.getString(2) + "</a>");
                                 }
-                            %>
-                        <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Timings :</h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=edit');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timings</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Slot</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove Slot</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-users"></i> <span>Student</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <h6 class="dropdown-header" align='center'>Details : </h6>
-                            <%
-                                try {
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                                    Statement stmt = con.createStatement();
-                                    ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
-                                    while (rs.next()) {
-                                        if ((AttFunctions.getSem(AttFunctions.oddEve(), rs.getInt(1))) != 0) {
-                                            EnglishNumberToWords a = new EnglishNumberToWords();
-                                            String number = a.convert(rs.getInt(1));
-                                            out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
-                                        }
-                                    }
-                                    con.close();
-                                } catch (Exception e) {
-                                }
-                            %>
-                        <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Subject Selection : </h6>
+                                con.close();
+                            } catch (Exception e) {
+                            }
+                        %>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-clock"></i> <span>Timings</span> </a> 
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=edit');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timings</a>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Slot</a> 
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSlot?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Remove Slot</a>     
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-users"></i> <span>Student</span> </a> 
+                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                        <h6 class="dropdown-header" align='center'>Details : </h6>
                         <%
                             try {
                                 Class.forName("com.mysql.jdbc.Driver");
@@ -65,13 +71,31 @@
                                     if ((AttFunctions.getSem(AttFunctions.oddEve(), rs.getInt(1))) != 0) {
                                         EnglishNumberToWords a = new EnglishNumberToWords();
                                         String number = a.convert(rs.getInt(1));
-                                        out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                        out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editStudDetails?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
                                     }
                                 }
                                 con.close();
                             } catch (Exception e) {
                             }
                         %>
+                        <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Subject Selection : </h6>
+                            <%
+                                try {
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                                    Statement stmt = con.createStatement();
+                                    ResultSet rs = stmt.executeQuery("SELECT classID, class FROM `class` ORDER BY `class` ASC");
+                                    while (rs.next()) {
+                                        if ((AttFunctions.getSem(AttFunctions.oddEve(), rs.getInt(1))) != 0) {
+                                            EnglishNumberToWords a = new EnglishNumberToWords();
+                                            String number = a.convert(rs.getInt(1));
+                                            out.print("<a class='dropdown-item' href=\"javascript:setContent('/Cerberus/editSubSelection?class=" + rs.getInt(1) + "');\"><i class='fas fa-dice-" + number + "'></i>&nbsp;&nbsp;" + rs.getString(2) + "</a>");
+                                        }
+                                    }
+                                    con.close();
+                                } catch (Exception e) {
+                                }
+                            %>
                         <div class="dropdown-divider"></div><a class="dropdown-item" href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list-alt"></i> <span>Subject</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewSubject');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a> <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-chalkboard-teacher"></i> <span>Faculty</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a> </div></li><li class="nav-item"> <a class="nav-link" href="javascript:setContent('/Cerberus/studentProgression');"> <i class="fas fa-address-card"></i> <span>Student Progression</span></a> </li></ul>
                             <%
                                 Class.forName("com.mysql.jdbc.Driver");

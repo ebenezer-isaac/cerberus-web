@@ -27,7 +27,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -428,22 +431,27 @@ public class AttFunctions {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-            PreparedStatement ps = con.prepareStatement("select STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w'), \n"
-                    + "(select slot.startTime from slot where slot.slotID = timetable.slotID) ,\n"
-                    + "(select slot.endTime from slot where slot.slotID = timetable.slotID), \n"
-                    + "(select lab.name from lab where lab.labID = timetable.labID), \n"
-                    + "(select subject.subjectID from subject where subject.subjectID = timetable.subjectID), \n"
-                    + "(select subject.subject from subject where subject.subjectID = timetable.subjectID), \n"
-                    + "(select batch.name from batch where batch.batchID = timetable.batchID), \n"
-                    + "(select subject.classID from subject where subject.subjectID = timetable.subjectID),  \n"
-                    + "(select subject.abbreviation from subject where subject.subjectID = timetable.subjectID)  \n"
-                    + "from timetable where scheduleID = ?");
+            PreparedStatement ps = con.prepareStatement("select (select week.year from week where timetable.weekID = week.weekID),(select week.week from week where timetable.weekID = week.weekID),timetable.dayID,     \n"
+                    + "    (select slot.startTime from slot where slot.slotID = timetable.slotID) ,    \n"
+                    + "    (select slot.endTime from slot where slot.slotID = timetable.slotID),     \n"
+                    + "    (select lab.name from lab where lab.labID = timetable.labID),     \n"
+                    + "    (select subject.subjectID from subject where subject.subjectID = timetable.subjectID),     \n"
+                    + "    (select subject.subject from subject where subject.subjectID = timetable.subjectID),     \n"
+                    + "    (select batch.name from batch where batch.batchID = timetable.batchID),     \n"
+                    + "    (select subject.classID from subject where subject.subjectID = timetable.subjectID),      \n"
+                    + "    (select subject.abbreviation from subject where subject.subjectID = timetable.subjectID)      \n"
+                    + "    from timetable where scheduleID = ?");
             ps.setInt(1, scheduleID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int index = 0;
+                int index = 1;
+                LocalDate date = LocalDate.now()
+                        .with(WeekFields.ISO.weekBasedYear(), rs.getInt(1)) // year
+                        .with(WeekFields.ISO.weekOfWeekBasedYear(), rs.getInt(2)) // week of year
+                        .with(WeekFields.ISO.dayOfWeek(), rs.getInt(3));
+                schedule[0] = date + "";
                 while (index < 9) {
-                    schedule[index] = rs.getString(index + 1);
+                    schedule[index] = rs.getString(index + 3);
                     index = index + 1;
                 }
             }

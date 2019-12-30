@@ -49,7 +49,7 @@ public class ajaxSchedules extends HttpServlet {
                         if (rs.next()) {
                             batchName = rs.getString(1);
                         }
-                        ps = con.prepareStatement("select timetable.scheduleID from timetable where timetable.subjectID = ? and timetable.batchID = ? order by timetable.weekID and timetable.dayID DESC");
+                        ps = con.prepareStatement("select timetable.scheduleID from timetable where timetable.subjectID = ? and timetable.batchID = ? and weekID !=0 order by timetable.weekID and timetable.dayID DESC");
                         ps.setString(1, subject);
                         ps.setString(2, batch);
                         rs = ps.executeQuery();
@@ -68,6 +68,7 @@ public class ajaxSchedules extends HttpServlet {
                             out.print(tablehead(header));
                             rs.previous();
                             while (rs.next()) {
+                                System.out.println(rs.getInt(1));
                                 out.print("<tr onclick=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs.getString(1) + "');\">");
                                 String schedule[] = get_schedule_det(rs.getInt(1));
                                 out.print("<td>" + schedule[0] + "</td>");

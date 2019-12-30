@@ -1,10 +1,6 @@
 
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
-import static cerberus.AttFunctions.getCurrWeekYear;
-import static cerberus.AttFunctions.getCurrYear;
-import static cerberus.AttFunctions.getNextWeekYear;
-import static cerberus.AttFunctions.getPrevWeekYear;
 import static cerberus.AttFunctions.getSem;
 import static cerberus.AttFunctions.no_of_labs;
 import static cerberus.AttFunctions.oddEve;
@@ -21,22 +17,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.threeten.extra.YearWeek;
 
-public class viewTimetable extends HttpServlet {
+public class viewMasterTimetable extends HttpServlet {
 
     private static final long serialVersionUID = 1318699662544398556L;
 
     String heading;
-    int week = 0, year = 0;
     int temp = 0;
     String[] subs;
     int access;
@@ -44,33 +35,15 @@ public class viewTimetable extends HttpServlet {
     HttpServletResponse response;
     HttpServletRequest request;
     int no_of_class;
-    LocalDate wks, mon, tue, wed, thu, fri, sat, wke;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             access = getAccess(request);
-            if (access < 2) {
+            if (access == 1) {
                 HttpSession session = request.getSession(false);
                 String user = (String) session.getAttribute("user");
-                try {
-                    week = Integer.parseInt(request.getParameter("week"));
-                    year = Integer.parseInt(request.getParameter("year"));
-                } catch (NumberFormatException e) {
-                    String weekYear[] = getCurrWeekYear().split(",");
-                    week = Integer.parseInt(weekYear[1]);
-                    year = Integer.parseInt(weekYear[0]);
-                }
-                YearWeek weekYeardate = YearWeek.of(year, week);
-                mon = weekYeardate.atDay(DayOfWeek.MONDAY);
-                tue = weekYeardate.atDay(DayOfWeek.TUESDAY);
-                wed = weekYeardate.atDay(DayOfWeek.WEDNESDAY);
-                thu = weekYeardate.atDay(DayOfWeek.THURSDAY);
-                fri = weekYeardate.atDay(DayOfWeek.FRIDAY);
-                sat = weekYeardate.atDay(DayOfWeek.SATURDAY);
-                wks = weekYeardate.atDay(DayOfWeek.MONDAY).plusDays(-1);
-                wke = wks.plusDays(7);
                 out.print("<style>"
                         + ".bold {"
                         + " font-weight: bold;"
@@ -110,28 +83,7 @@ public class viewTimetable extends HttpServlet {
                         + "document.getElementById('timetable').style.display = 'block';"
                         + "}}"
                         + "</script>");
-                heading = "<div class='row'>"
-                        + "<div class='col-xl-4 col-sm-6 mb-3 mt-3' align='center'><form action=\"";
-                String prevweekYear[] = getPrevWeekYear(week, year).split(",");
-                int prevweek = Integer.parseInt(prevweekYear[1]);
-                int prevyear = Integer.parseInt(prevweekYear[0]);
-                String weekYear[] = getCurrWeekYear().split(",");
-                int currweek = Integer.parseInt(weekYear[1]);
-                String nextweekYear[] = getNextWeekYear(week, year).split(",");
-                int nextweek = Integer.parseInt(nextweekYear[1]);
-                int nextyear = Integer.parseInt(nextweekYear[0]);
-                heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + prevweek + "&year=" + prevyear + "')\" >";
-                heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
-                        + "<span>Previous</span>"
-                        + "</button>"
-                        + "</form></div>"
-                        + "<div class='col-xl-4 col-sm-6' align='center'>Current Week : " + currweek + "<p align='center'>Displaying Timetable of Week : " + week + "</p></div>"
-                        + "<div class='col-xl-4 col-sm-6 mb-3' align='center'><form action=\"";
-                heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + nextweek + "&year=" + nextyear + "')\" >";
-                heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"><span>Next</span>"
-                        + "</button>"
-                        + "</form></div>";
-                heading += "</div>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";
+
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -155,7 +107,7 @@ public class viewTimetable extends HttpServlet {
                             }
                         }
                     }
-                    out.print("</select><br><br><a href=\"downTimetable?week=" + week + "&year=" + year + "\"><i class=\"fas fa-file-download\"></i>&nbsp;&nbsp;&nbsp;Download</a><br><br>");
+                    out.print("</select><br><br><a href=\"downTimetable?week=0&year=0\"><i class=\"fas fa-file-download\"></i>&nbsp;&nbsp;&nbsp;Download</a><br><br>");
                     if (access == 0) {
                         PreparedStatement ps = con.prepareStatement("SELECT rollcall.classID from rollcall where prn=?");
                         ps.setString(1, user);
@@ -187,16 +139,16 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-            timetable += (tablestart(heading + "<p align='center'><b>LAB " + labid + " </b><br></p>", "hover", "studDetails", 0));
+            timetable += (tablestart("<p align='center'><b>LAB " + labid + " </b><br></p>", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
             header += ("<th style='vertical-align : middle;text-align:center;'>End Time</th>");
-            header += ("<th>Monday<br>" + mon + "</th>");
-            header += ("<th>Tuesday<br>" + tue + "</th>");
-            header += ("<th>Wednesday<br>" + wed + "</th>");
-            header += ("<th>Thursday<br>" + thu + "</th>");
-            header += ("<th>Friday<br>" + fri + "</th>");
-            header += ("<th>Saturday<br>" + sat + "</th>");
+            header += ("<th>Monday</th>");
+            header += ("<th>Tuesday</th>");
+            header += ("<th>Wednesday</th>");
+            header += ("<th>Thursday</th>");
+            header += ("<th>Friday</th>");
+            header += ("<th>Saturday</th>");
             header += ("</tr>");
             timetable += (tablehead(header));
             String sql = "SELECT slot.slotID,slot.startTime, slot.endTime, "
@@ -211,23 +163,11 @@ public class viewTimetable extends HttpServlet {
                     + "ON timetable.slotID = slot.slotID "
                     + "inner join subject "
                     + "on timetable.subjectID = subject.subjectID "
-                    + "where labID=? and weekID=(select weekID from week where week = ? and year=?) ";
-            if (access == 0) {
-                sql += " and subject.classID = ? ";
-            }
-            sql += "GROUP BY slot.startTime, slot.endTime ASC "
+                    + "where labID=? and weekID=0 "
+                    + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;";
             PreparedStatement ps4 = con.prepareStatement(sql);
-            if (access == 0) {
-                ps4.setInt(1, labid);
-                ps4.setInt(2, week);
-                ps4.setInt(3, year);
-                ps4.setInt(4, classID);
-            } else {
-                ps4.setInt(1, labid);
-                ps4.setInt(2, week);
-                ps4.setInt(3, year);
-            }
+            ps4.setInt(1, labid);
             ResultSet lab1 = ps4.executeQuery();
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();
@@ -258,9 +198,9 @@ public class viewTimetable extends HttpServlet {
                     if (lab1.getString(j + 3) != null) {
                         String[] arrOfStr = lab1.getString(j + 3).split(",");
                         if (isfav(lab1.getString(j + 3))) {
-                            lines[lab1.getInt(1) - 1] += ("<td><div id = 'fav" + temp + "'><div id = 'subclass" + arrOfStr[1] + "" + temp + "'><a href=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + arrOfStr[2] + "');\">" + arrOfStr[0] + " </a></div></div></td>");
+                            lines[lab1.getInt(1) - 1] += ("<td><div id = 'fav" + temp + "'><div id = 'subclass" + arrOfStr[1] + "" + temp + "'>" + arrOfStr[0] + " </div></div></td>");
                         } else {
-                            lines[lab1.getInt(1) - 1] += ("<td><div id = 'subclass" + arrOfStr[1] + "" + temp + "'><a href=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + arrOfStr[2] + "');\">" + arrOfStr[0] + " </a></div></td>");
+                            lines[lab1.getInt(1) - 1] += ("<td><div id = 'subclass" + arrOfStr[1] + "" + temp + "'>" + arrOfStr[0] + "</div></td>");
 
                         }
                     } else {
@@ -298,17 +238,17 @@ public class viewTimetable extends HttpServlet {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-            timetable += (tablestart(heading, "hover", "studDetails", 0));
+            timetable += (tablestart("", "hover", "studDetails", 0));
             String header = ("<tr align = center>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Start Time</th>");
             header += ("<th style='vertical-align : middle;text-align:center;'>End Time</th>");
             header += ("<th style='vertical-align : middle;text-align:center;'>Lab</th>");
-            header += ("<th>Monday<br>" + mon + "</th>");
-            header += ("<th>Tuesday<br>" + tue + "</th>");
-            header += ("<th>Wednesday<br>" + wed + "</th>");
-            header += ("<th>Thursday<br>" + thu + "</th>");
-            header += ("<th>Friday<br>" + fri + "</th>");
-            header += ("<th>Saturday<br>" + sat + "</th>");
+            header += ("<th>Monday</th>");
+            header += ("<th>Tuesday</th>");
+            header += ("<th>Wednesday</th>");
+            header += ("<th>Thursday</th>");
+            header += ("<th>Friday</th>");
+            header += ("<th>Saturday</th>");
             header += ("</tr>");
             timetable += (tablehead(header));
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
@@ -348,23 +288,11 @@ public class viewTimetable extends HttpServlet {
                         + "ON timetable.slotID = slot.slotID "
                         + "inner join subject "
                         + "on timetable.subjectID = subject.subjectID "
-                        + "where labID=? and weekID=(select weekID from week where week = ? and year = ?)";
-                if (access == 0) {
-                    sql += " and subject.classID = ? ";
-                }
-                sql += "GROUP BY slot.startTime, slot.endTime ASC "
+                        + "where labID=? and weekID=0 "
+                        + "GROUP BY slot.startTime, slot.endTime ASC "
                         + "ORDER BY slot.startTime, slot.endTime ASC;";
                 PreparedStatement ps4 = con.prepareStatement(sql);
-                if (access == 0) {
-                    ps4.setInt(1, l + 1);
-                    ps4.setInt(2, week);
-                    ps4.setInt(3, year);
-                    ps4.setInt(4, classID);
-                } else {
-                    ps4.setInt(1, l + 1);
-                    ps4.setInt(2, week);
-                    ps4.setInt(3, year);
-                }
+                ps4.setInt(1, l + 1);
                 ResultSet lab1 = ps4.executeQuery();
                 for (int y = 0; y <= no_of_slots; y++) {
                     labs[l][y] = "";
@@ -375,9 +303,9 @@ public class viewTimetable extends HttpServlet {
                         if (lab1.getString(j + 3) != null) {
                             String[] arrOfStr = lab1.getString(j + 3).split(",");
                             if (isfav(lab1.getString(j + 3))) {
-                                labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'fav" + temp + "'><div id = 'subclass" + arrOfStr[1] + "" + temp + "'><a href=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + arrOfStr[2] + "');\">" + arrOfStr[0] + " </a></div></div></td>");
+                                labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'fav" + temp + "'><div id = 'subclass" + arrOfStr[1] + "" + temp + "'>" + arrOfStr[0] + "</div></div></td>");
                             } else {
-                                labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'subclass" + arrOfStr[1] + "" + temp + "'><a href=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + arrOfStr[2] + "');\">" + arrOfStr[0] + " </a></div></td>");
+                                labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'subclass" + arrOfStr[1] + "" + temp + "'>" + arrOfStr[0] + "</div></td>");
                             }
                         } else {
                             labs[l][lab1.getInt(1) - 1] += ("<td><div id = 'nolab" + temp + "'>No Lab<br><br></div></td>");
@@ -396,7 +324,6 @@ public class viewTimetable extends HttpServlet {
                 }
             }
             con.close();
-
             int slot = 0;
             while (slot <= no_of_slots) {
                 timetable += ("<tr align='center'>");

@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getSem;
@@ -192,12 +193,14 @@ public class profile extends HttpServlet {
                         while (rs.next()) {
                             name = rs.getString("name");
                         }
-                        ps = con.prepareStatement("select rollcall.classID from rollcall where rollcall.prn = ?");
+                        ps = con.prepareStatement("select rollcall.rollNo, rollcall.classID from rollcall where rollcall.prn = ?");
                         ps.setString(1, prn);
                         int classID = 0;
+                        int rollNo = 0;
                         rs = ps.executeQuery();
                         while (rs.next()) {
-                            classID = rs.getInt(1);
+                            rollNo = rs.getInt(1);
+                            classID = rs.getInt(2);
                         }
                         if (blob != null) {
                             String imgString = DatatypeConverter.printBase64Binary(blob);
@@ -217,7 +220,7 @@ public class profile extends HttpServlet {
                                 + "FROM studentfingerprint \n"
                                 + "where studentfingerprint.prn = ?");
                         ps.setString(1, prn);
-                        out.print("<br>PRN : " + prn + "<br><br>");
+                        out.print("<br>PRN : " + prn + "<br>Roll No : "+rollNo+"<br><br>");
                         rs = ps.executeQuery();
                         while (rs.next()) {
                             for (int i = 1; i < 3; i++) {
@@ -305,7 +308,7 @@ public class profile extends HttpServlet {
                         if (index == 1) {
                             out.print("<h5>No Subjects Available</h5>");
                         }
-                        out.print(tableend(null, 0)+"To change password, Click 'Create a new Password' in Login Page.");
+                        out.print(tableend(null, 0) + "To change password, Click 'Create a new Password' in Login Page.");
                         con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         errorLogger(e.getMessage());

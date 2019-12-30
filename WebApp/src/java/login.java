@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import cerberus.AttFunctions;
 import cerberus.messages;
@@ -28,7 +29,7 @@ public class login extends HttpServlet {
                 trial = Integer.parseInt(session.getAttribute("count").toString());
                 trial++;
                 session.setAttribute("count", trial);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | NullPointerException e) {
                 session.setAttribute("count", 0);
             }
             if (trial > 5) {

@@ -40,6 +40,7 @@ public class saveTimetable extends HttpServlet {
                         }
                         int year = Integer.parseInt(request.getParameter("year"));
                         int weekID = getWeekID(week, year);
+                        System.out.println(weekID);
                         PreparedStatement ps4 = con.prepareStatement("SELECT timetable.slotID,"
                                 + "MAX(CASE WHEN dayID = 1 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Monday, "
                                 + "MAX(CASE WHEN dayID = 2 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Tuesday, "
@@ -50,10 +51,11 @@ public class saveTimetable extends HttpServlet {
                                 + "FROM timetable "
                                 + "INNER JOIN slot "
                                 + "ON timetable.slotID = slot.slotID "
-                                + "where labID=? and weekID=(select weekID from week where week = ?) "
+                                + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) "
                                 + "GROUP BY slot.startTime, slot.endTime;");
                         ps4.setInt(1, labid);
                         ps4.setInt(2, week);
+                        ps4.setInt(3, year);
                         ResultSet rs = ps4.executeQuery();
                         int done[] = new int[no_of_slots];
                         for (int y = 0; y < no_of_slots; y++) {
@@ -125,8 +127,13 @@ public class saveTimetable extends HttpServlet {
 
                         }
                         con.close();
-                        messages a = new messages();
-                        a.success(request, response, "Your changes to the timetable have been saved", "viewTimetable");
+                        if (weekID == 0) {
+                            messages a = new messages();
+                            a.success(request, response, "Your changes to the Master Timetable have been saved", "viewMasterTimetable");
+                        } else {
+                            messages a = new messages();
+                            a.success(request, response, "Your changes to the Timetable have been saved", "viewTimetable");
+                        }
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages b = new messages();
                         b.error(request, response, e.getMessage(), "homepage");

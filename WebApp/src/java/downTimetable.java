@@ -63,15 +63,18 @@ public class downTimetable extends HttpServlet {
                         week = Integer.parseInt(weekYear[1]);
                         year = Integer.parseInt(weekYear[0]);
                     }
-                    YearWeek weekYeardate = YearWeek.of(year, week);
-                    mon = weekYeardate.atDay(DayOfWeek.MONDAY);
-                    tue = weekYeardate.atDay(DayOfWeek.TUESDAY);
-                    wed = weekYeardate.atDay(DayOfWeek.WEDNESDAY);
-                    thu = weekYeardate.atDay(DayOfWeek.THURSDAY);
-                    fri = weekYeardate.atDay(DayOfWeek.FRIDAY);
-                    sat = weekYeardate.atDay(DayOfWeek.SATURDAY);
-                    wks = weekYeardate.atDay(DayOfWeek.MONDAY).plusDays(-1);
-                    wke = wks.plusDays(7);
+                    if (week != 0 && year != 0) {
+                        System.out.println("printing dates");
+                        YearWeek weekYeardate = YearWeek.of(year, week);
+                        mon = weekYeardate.atDay(DayOfWeek.MONDAY);
+                        tue = weekYeardate.atDay(DayOfWeek.TUESDAY);
+                        wed = weekYeardate.atDay(DayOfWeek.WEDNESDAY);
+                        thu = weekYeardate.atDay(DayOfWeek.THURSDAY);
+                        fri = weekYeardate.atDay(DayOfWeek.FRIDAY);
+                        sat = weekYeardate.atDay(DayOfWeek.SATURDAY);
+                        wks = weekYeardate.atDay(DayOfWeek.MONDAY).plusDays(-1);
+                        wke = wks.plusDays(7);
+                    }
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -98,8 +101,14 @@ public class downTimetable extends HttpServlet {
                             Object[][] lines;
                             lines = new Object[no_of_slots + 1][0];
                             XSSFSheet sheet = wb.createSheet("Lab - " + labid);
-                            Object[] head = new Object[]{"Start Time", "End Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-                            data.put("1", head);
+                            if (week != 0 && year != 0) {
+                                System.out.println("printing dates");
+                                Object[] head = new Object[]{"Start Time", "End Time", mon + "", tue + "", wed + "", thu + "", fri + "", sat + ""};
+                                data.put("1", head);
+                            } else {
+                                Object[] head = new Object[]{"Start Time", "End Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+                                data.put("1", head);
+                            }
                             String sql = "SELECT slot.slotID,slot.startTime, slot.endTime, "
                                     + "MAX(CASE WHEN dayID = 1 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),'-',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Monday, "
                                     + "MAX(CASE WHEN dayID = 2 THEN concat((select subject.abbreviation from subject where timetable.subjectID=subject.subjectID),'-',(select batch.name from batch where timetable.batchID=batch.batchID)) END) as Tuesday, "
@@ -212,13 +221,15 @@ public class downTimetable extends HttpServlet {
                                     }
                                 }
                             }
-
                         }
-
                         int slot = 0;
-
-                        Object[] head = new Object[]{"Start Time", "End Time", "Lab", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-                        data.put("1", head);
+                        if (week != 0 && year != 0) {
+                            Object[] head = new Object[]{"Start Time", "End Time", "Lab", mon + "", tue + "", wed + "", thu + "", fri + "", sat + ""};
+                            data.put("1", head);
+                        } else {
+                            Object[] head = new Object[]{"Start Time", "End Time", "Lab", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+                            data.put("1", head);
+                        }
                         int line = 2;
                         while (slot <= no_of_slots) {
                             for (int lab = 0; lab <= no_of_lab - 1; lab++) {
