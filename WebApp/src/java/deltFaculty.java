@@ -60,7 +60,7 @@ public class deltFaculty extends HttpServlet {
                                 + "Email/Username : " + email + "\n\n"
                                 + "Note: You cannot login into the portal anymore\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
-                                + "Regards\nCerberus Support Team";
+                                + "Regards\nCerberus Mail Server";
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Deletion", body);
                         dbLog(name+" was removed from being a Faculty");

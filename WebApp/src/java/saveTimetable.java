@@ -10,9 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static cerberus.AttFunctions.getAccess;
-import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.getWeekID;
-import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -82,7 +80,6 @@ public class saveTimetable extends HttpServlet {
                                         dbLog(currUserName(request) + " scheduled a Lab Session for dayID:" + (j + 1) + " week:" + week + " slotID:" + (slot + 1) + " subjectID:" + arrOfStr[0] + " batchID:" + Integer.parseInt(arrOfStr[1]) + " labID:" + labid);
                                     }
                                 } else if (table.equals("null , null") || table.equals("- , -") || table.equals("- , null") || table.equals("null , -")) {
-                                    String[] arrOfStr = exist.split(" , ");
                                     PreparedStatement pps = con.prepareStatement("DELETE from `timetable` where `slotID` = ? and `labID` = ? and `weekID` = ? and `dayID` = ?");
                                     pps.setInt(1, (slot + 1));
                                     pps.setInt(2, labid);

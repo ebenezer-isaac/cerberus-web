@@ -99,7 +99,7 @@ public class addStudent extends HttpServlet {
                                 + "You can now login with given username and password at CA Department's Intranet Website\n"
                                 + "and view timetable attendance through this portal. You will be asked to provide your MSU Username and select your subjects on first login.\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
-                                + "Regards\nCerberus Support Team";
+                                + "Regards\nCerberus Mail Server";
                         dbLog(currUserName(request) + " added a new student with prn : " + prn);
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Registration", body);

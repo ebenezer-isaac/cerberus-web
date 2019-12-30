@@ -8,12 +8,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class copyTimetable extends HttpServlet {
 
@@ -25,48 +23,52 @@ public class copyTimetable extends HttpServlet {
         int access = getAccess(request);
         switch (access) {
             case 1:
-                HttpSession session = request.getSession(false);
-                int week = (int) session.getAttribute("week");
-                week++;
-                int year = (int) session.getAttribute("year");
+                String asdf = request.getParameter("modweekyear");
+                String splitt[] = asdf.split("-W");
+                int modyear = Integer.parseInt(splitt[0]);
+                int modweek = Integer.parseInt(splitt[1]);
+                int year = Integer.parseInt(request.getParameter("year"));
+                int week = Integer.parseInt(request.getParameter("week"));
+                int labid = Integer.parseInt(request.getParameter("lab"));
+                int modlabid = Integer.parseInt(request.getParameter("modlab"));
+                int modweekid = getWeekID(modweek, modyear);
                 int weekid = getWeekID(week, year);
                 try {
                     Class.forName("com.mysql.jdbc.Driver");
                     Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                    int flag = 0;
-                    PreparedStatement ps = con.prepareStatement("DELETE FROM timetable where weekID = ?");
-                    ps.setInt(1, weekid);
-                    ps.executeUpdate();
-                    PreparedStatement ps10 = con.prepareStatement("SELECT weekID FROM `week` ORDER BY `week`.`weekID` DESC");
-                    ResultSet rs = ps10.executeQuery();
-                    while (rs.next() && flag == 0) {
-                        PreparedStatement ps9 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
-                        ps9.setInt(1, rs.getInt(1));
-                        ResultSet rs1 = ps9.executeQuery();
+                    PreparedStatement ps9 = con.prepareStatement("SELECT scheduleID, slotID, dayID FROM timetable where weekID = ? and labID = ?");
+                    ps9.setInt(1, modweekid);
+                    ps9.setInt(2, modlabid);
+                    ResultSet rs1 = ps9.executeQuery();
+                    if (rs1.next()) {
+                        rs1.first();
+                        rs1.previous();
                         while (rs1.next()) {
-                            PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID,? , dayID from timetable where weekID = ?;");
-                            ps3.setInt(1, weekid);
-                            ps3.setInt(2, rs.getInt(1));
-                            ps3.executeUpdate();
+                            System.out.println(rs1.getInt(1) + "," + rs1.getInt(2) + "," + rs1.getInt(3));
                             try {
-                                ps3 = con.prepareStatement("DELETE t1 FROM timetable t1 "
-                                        + "INNER JOIN timetable t2 "
-                                        + "WHERE "
-                                        + "t1.scheduleID < t2.scheduleID AND "
-                                        + "t1.slotID = t2.slotID AND "
-                                        + "t1.labID = t2.labID AND "
-                                        + "t1.weekID = t2.weekID AND "
-                                        + "t1.dayID = t2.dayID;");
+                                PreparedStatement ps = con.prepareStatement("DELETE FROM timetable where slotID = ? and labID = ? and weekID = ? and dayID = ?");
+                                ps.setInt(1, rs1.getInt(2));
+                                ps.setInt(2, labid);
+                                ps.setInt(3, weekid);
+                                ps.setInt(4, rs1.getInt(3));
+                                ps.executeUpdate();
+                                PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, ?, subjectID, batchID,? , dayID from timetable where scheduleID = ?");
+                                ps3.setInt(1, labid);
+                                ps3.setInt(2, weekid);
+                                ps3.setInt(3, rs1.getInt(1));
                                 ps3.executeUpdate();
-                            } catch (Exception e) {
+                            } catch (SQLException e) {
+                                e.printStackTrace();
                             }
-                            flag = 1;
-                            break;
                         }
+                        con.close();
+                        messages a = new messages();
+                        a.success(request, response, "TimeTable has copied into next week", "viewTimetable?week=" + week + "&year=" + year);
+                    } else {
+                        con.close();
+                        messages a = new messages();
+                        a.failed(request, response, "Timetable for Selected Week is already Empty", "viewTimetable?week=" + week + "&year=" + year);
                     }
-                    con.close();
-                    messages a = new messages();
-                    a.success(request, response, "TimeTable has copied into next week", "viewTimetable?week=" + week);
                 } catch (ClassNotFoundException | SQLException e) {
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "homepage");

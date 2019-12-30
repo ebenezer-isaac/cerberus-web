@@ -83,7 +83,7 @@ public class addFaculty extends HttpServlet {
                                 + "You need to be connected to the BCA Intranet for the below link to work:\n"
                                 + "http://172.21.170.14:8080/Cerberus/\n\n"
                                 + "This is an auto-generated e-mail, please do not reply.\n"
-                                + "Regards\nCerberus Support Team";
+                                + "Regards\nCerberus Mail Serverm";
                         Mailer mail = new Mailer();
                         mail.send(email, "Account Registration", body);
                         con.close();

@@ -12,7 +12,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpSession;
 
 public class login extends HttpServlet {
@@ -24,21 +23,12 @@ public class login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession(true);
-            try {
-                session.getAttribute("week");
-            } catch (Exception e) {
-                java.util.Date date = new java.util.Date();
-                SimpleDateFormat ft = new SimpleDateFormat("w");
-                int week = Integer.parseInt(ft.format(date));
-                session.setAttribute("week", week);
-                request.getRequestDispatcher("newTimetable?week=" + week + "&pwd=cerberus@123").include(request, response);
-            }
             int trial = 0;
             try {
                 trial = Integer.parseInt(session.getAttribute("count").toString());
                 trial++;
                 session.setAttribute("count", trial);
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 session.setAttribute("count", 0);
             }
             if (trial > 5) {

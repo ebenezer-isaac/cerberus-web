@@ -29,10 +29,7 @@ public class viewLogs extends HttpServlet {
             int access = getAccess(request);
             switch (access) {
                 case 1:
-                    out.print("<style>tr:hover {"
-                            + "background: #a8a3a3;"
-                            + "}</style>");
-                    out.print(tablestart("Logs", "hover", "logs", 1));
+                    out.print(tablestart("Logs<div id='validations' style='color:red;font-size:14px;'>All Logs will be automatically be cleared at the end of each semester.</div>", "hover", "logs", 1));
                     String header = "<tr>";
                     header += "<th>Log ID</th>";
                     header += "<th>Date</th>";
@@ -44,7 +41,7 @@ public class viewLogs extends HttpServlet {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                         Statement stmt = con.createStatement();
-                        ResultSet rs = stmt.executeQuery("Select logID, (select datedata.date from datedata where datedata.dateID = log.dateID) as Date,(select timedata.time from timedata where timedata.timeID = log.timeID)as Time, comments from `log` ORDER BY `date` and `time` ASC");
+                        ResultSet rs = stmt.executeQuery("Select logID, (select datedata.date from datedata where datedata.dateID = log.dateID) as Date,(select timedata.time from timedata where timedata.timeID = log.timeID)as Time, comments from `log` ORDER BY `date` and `time` DESC");
                         if (rs.next()) {
                             rs.previous();
                             while (rs.next()) {

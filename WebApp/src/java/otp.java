@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import cerberus.Mailer;
 import cerberus.AttFunctions;
@@ -48,11 +49,7 @@ public class otp extends HttpServlet {
                 HttpSession session = request.getSession(true);
                 this.email = (String) session.getAttribute("email");
             }
-            try {
-                this.rawotp = AttFunctions.generateOTP();
-                this.hashotp = AttFunctions.hashIt(this.rawotp);
-            } catch (NoSuchAlgorithmException e) {
-            }
+
             int email_count = 0;
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -68,7 +65,6 @@ public class otp extends HttpServlet {
                 ps = con.prepareStatement("SELECT (select datedata.date from datedata where otp.dateID = datedata.dateID) as dates,(select timedata.time from timedata where otp.timeID = timedata.timeID) as times from `otp` WHERE email=? order by dates,times desc");
                 ps.setString(1, this.email);
                 rs = ps.executeQuery();
-
                 java.util.Date now = new java.util.Date();
                 if (rs.next()) {
                     try {
@@ -76,29 +72,39 @@ public class otp extends HttpServlet {
                         String dateInString = rs.getString(1) + " " + rs.getString(2);
                         Date datetime = sdf.parse(dateInString);
                         long diff = ((now.getTime() - datetime.getTime()) / 1000) / 60;
+                        System.out.println(dateInString);
+                        System.out.println(datetime);
+                        System.out.println(diff);
                         if (diff < 10) {
                             spam = 1;
                         }
                     } catch (SQLException | ParseException e) {
                         errorLogger(e.getMessage());
                     }
-                } else {
-                    ps = con.prepareStatement("DELETE from `otp` where email=?;");
+                }
+                System.out.println("spam :" + spam);
+                System.out.println("email:" + email_count);
+                if (spam == 0 && email_count == 1) {
+                    try {
+                        this.rawotp = AttFunctions.generateOTP();
+                        this.hashotp = AttFunctions.hashIt(this.rawotp);
+                    } catch (NoSuchAlgorithmException e) {
+                    }
+                    int timeID = getTimeID(getCurrTime());
+                    int dateID = getDateID(getCurrDate());
+                    ps = con.prepareStatement("Delete from otp where email = ?;");
                     ps.setString(1, this.email);
                     ps.executeUpdate();
-                    if (email_count == 1) {
-                        int timeID = getTimeID(getCurrTime());
-                        int dateID = getDateID(getCurrDate());
-                        ps = con.prepareStatement("INSERT INTO `otp`values (null, ?,?,?,?)");
-                        ps.setString(1, this.email);
-                        ps.setString(2, this.hashotp);
-                        ps.setInt(3, dateID);
-                        ps.setInt(4, timeID);
-                        ps.executeUpdate();
-                    }
+                    ps = con.prepareStatement("INSERT INTO `otp` values (null, ?,?,?,?)");
+                    ps.setString(1, this.email);
+                    ps.setString(2, this.hashotp);
+                    ps.setInt(3, dateID);
+                    ps.setInt(4, timeID);
+                    ps.executeUpdate();
                 }
                 con.close();
             } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
                 errorLogger(e.getMessage());
                 messages b = new messages();
                 b.error(request, response, e.getMessage(), "resetpassword.html");
@@ -118,7 +124,7 @@ public class otp extends HttpServlet {
                                     + "Date and Time : " + (df.format(dateobj)).trim() + "\n";
                             this.body += "Operating System : " + os + "\n\n"
                                     + "This is an auto-generated e-mail, please do not reply.\n"
-                                    + "Regards\nCerberus Support Team";
+                                    + "Regards\nCerberus Mail Server";
                             Mailer mail = new Mailer();
                             mail.send(this.email, "Password for Cerberus", this.body);
                             RequestDispatcher rd = request.getRequestDispatcher("message.jsp");

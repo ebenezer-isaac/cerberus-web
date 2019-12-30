@@ -1,8 +1,11 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getCurrWeekYear;
 import static cerberus.AttFunctions.getCurrYear;
+import static cerberus.AttFunctions.getNextWeekYear;
+import static cerberus.AttFunctions.getPrevWeekYear;
 import static cerberus.AttFunctions.getSem;
-import static cerberus.AttFunctions.getWeek;
 import static cerberus.AttFunctions.no_of_labs;
 import static cerberus.AttFunctions.oddEve;
 import static cerberus.AttFunctions.prefSubs;
@@ -18,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import javax.servlet.ServletException;
@@ -25,6 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.threeten.extra.YearWeek;
 
 public class viewTimetable extends HttpServlet {
 
@@ -53,21 +58,19 @@ public class viewTimetable extends HttpServlet {
                     week = Integer.parseInt(request.getParameter("week"));
                     year = Integer.parseInt(request.getParameter("year"));
                 } catch (NumberFormatException e) {
-                    week = getWeek(request);
-                    year = getCurrYear();
+                    String weekYear[] = getCurrWeekYear().split(",");
+                    week = Integer.parseInt(weekYear[1]);
+                    year = Integer.parseInt(weekYear[0]);
                 }
                 access = getAccess(request);
-                LocalDate date = LocalDate.now()
-                        .withYear(year) // year
-                        .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
-                        .with(WeekFields.ISO.dayOfWeek(), 7);
-                wks = date.plusDays(-7);
-                mon = wks.plusDays(1);
-                tue = wks.plusDays(2);
-                wed = wks.plusDays(3);
-                thu = wks.plusDays(4);
-                fri = wks.plusDays(5);
-                sat = wks.plusDays(6);
+                YearWeek weekYeardate = YearWeek.of(year, week);
+                mon = weekYeardate.atDay(DayOfWeek.MONDAY);
+                tue = weekYeardate.atDay(DayOfWeek.TUESDAY);
+                wed = weekYeardate.atDay(DayOfWeek.WEDNESDAY);
+                thu = weekYeardate.atDay(DayOfWeek.THURSDAY);
+                fri = weekYeardate.atDay(DayOfWeek.FRIDAY);
+                sat = weekYeardate.atDay(DayOfWeek.SATURDAY);
+                wks = weekYeardate.atDay(DayOfWeek.MONDAY).plusDays(-1);
                 wke = wks.plusDays(7);
                 out.print("<style>"
                         + ".bold {"
@@ -110,27 +113,23 @@ public class viewTimetable extends HttpServlet {
                         + "</script>");
                 heading = "<div class='row'>"
                         + "<div class='col-xl-4 col-sm-6 mb-3 mt-3' align='center'><form action=\"";
-                if (week == 1) {
-                    heading += "javascript:setContent('/Cerberus/viewTimetable?week=52&year=" + (year - 1) + "')\" >";
-                } else {
-                    heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week - 1) + "&year=" + (year) + "')\" >";
-                }
+                String prevweekYear[] = getPrevWeekYear(week, year).split(",");
+                int prevweek = Integer.parseInt(prevweekYear[1]);
+                int prevyear = Integer.parseInt(prevweekYear[0]);
+                String weekYear[] = getCurrWeekYear().split(",");
+                int currweek = Integer.parseInt(weekYear[1]);
+                String nextweekYear[] = getNextWeekYear(week, year).split(",");
+                int nextweek = Integer.parseInt(nextweekYear[1]);
+                int nextyear = Integer.parseInt(nextweekYear[0]);
+                heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + prevweek + "&year=" + prevyear + "')\" >";
                 heading += "<button type=\"submit\" id=\"prev\" class=\"btn btn-primary\">"
                         + "<span>Previous</span>"
                         + "</button>"
                         + "</form></div>"
-                        + "<div class='col-xl-4 col-sm-6' align='center'>Current Week : " + session.getAttribute("week") + "<p align='center'>Displaying Timetable of Week : " + week + "</p></div>"
+                        + "<div class='col-xl-4 col-sm-6' align='center'>Current Week : " + currweek + "<p align='center'>Displaying Timetable of Week : " + week + "</p></div>"
                         + "<div class='col-xl-4 col-sm-6 mb-3' align='center'><form action=\"";
-                if (week == 52) {
-                    heading += "javascript:setContent('/Cerberus/viewTimetable?week=1&year=" + (year + 1) + "')\" >";
-                } else {
-                    heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + (week + 1) + "&year=" + (year) + "')\" >";
-                }
-                heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"";
-                if (week > Integer.parseInt(session.getAttribute("week").toString())) {
-                    heading += "";
-                }
-                heading += "><span>Next</span>"
+                heading += "javascript:setContent('/Cerberus/viewTimetable?week=" + nextweek + "&year=" + nextyear + "')\" >";
+                heading += "<button type=\"submit\" id=\"next\" class=\"btn btn-primary\"><span>Next</span>"
                         + "</button>"
                         + "</form></div>";
                 heading += "</div>" + "<p align='center'><b>" + wks + "</b> to <b>" + wke + "</b></p>";

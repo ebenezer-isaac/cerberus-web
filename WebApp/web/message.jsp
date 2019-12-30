@@ -18,7 +18,7 @@
     if (type.equals("login0")) {
         redirect = "false";
         head = "Security Firewall";
-        body = "Invalid Username or Password. Please check your credentials and try again";
+        body = "<img src='images/police.gif' width='80px' height='80px' align='center'><br><br>Invalid Username or Password. Please check your credentials and try again";
         url = "index.jsp";
         fullpage = "false";
     } else if (type.equals("login1")) {
@@ -33,7 +33,7 @@
         } else {
             redirect = "true";
             head = "Security Firewall";
-            body = "Please login to continue";
+            body = "<img src='images/police.gif' width='80px' height='80px' align='center'><br><br>Please login to continue";
             url = "index.jsp";
             fullpage = "false";
             sec = "2";
@@ -52,7 +52,7 @@
         redirect = "false";
         fullpage = "false";
         head = "Security Firewall";
-        body = "You have exceeded allowed number of login attempts";
+        body = "<img src='images/police.gif' width='80px' height='80px' align='center'><br><br>You have exceeded allowed number of login attempts";
         url = "index.jsp";
         sec = "2";
     } else {

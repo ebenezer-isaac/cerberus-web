@@ -1,5 +1,6 @@
 
 import static cerberus.AttFunctions.errorLogger;
+import cerberus.Mailer;
 import cerberus.messages;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -99,6 +100,13 @@ public class resetpass extends HttpServlet {
                         ps.setString(1, email);
                         ps.executeUpdate();
                         con.close();
+                        String body = "Dear Subscriber,\n    This mail is to alert you that your password has been reset recently.\n"
+                                + "\n"
+                                + "If you did not reset your password, please change your password immediately to prevent data leaks.\n\n"
+                                + "This is an auto-generated e-mail, please do not reply.\n"
+                                + "Regards\nCerberus Mail Server";
+                        Mailer mail = new Mailer();
+                        mail.send(email, "Security Alert", body);
                         RequestDispatcher rd = request.getRequestDispatcher("message.jsp");
                         request.setAttribute("redirect", "true");
                         request.setAttribute("head", "Security Message");
@@ -107,7 +115,7 @@ public class resetpass extends HttpServlet {
                         request.setAttribute("sec", "2");
                         request.setAttribute("fullpage", "false");
                         rd.forward(request, response);
-                    } catch (ClassNotFoundException | SQLException e) {
+                    } catch (InterruptedException | ClassNotFoundException | SQLException e) {
                         errorLogger(e.getMessage());
                         messages a = new messages();
                         a.dberror(request, response, e.getMessage(), "homepage");

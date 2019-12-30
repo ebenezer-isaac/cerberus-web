@@ -1,8 +1,11 @@
 
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
+import static cerberus.AttFunctions.getCurrWeekYear;
 import static cerberus.AttFunctions.getCurrYear;
-import static cerberus.AttFunctions.getWeek;
+import static cerberus.AttFunctions.getNextWeekYear;
+import static cerberus.AttFunctions.getPrevWeekYear;
+import static cerberus.AttFunctions.no_of_labs;
 import static cerberus.AttFunctions.oddEveSubs;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
@@ -17,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Date;
@@ -24,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.threeten.extra.YearWeek;
 
 public class editTimetable extends HttpServlet {
 
@@ -39,15 +44,23 @@ public class editTimetable extends HttpServlet {
             int access = getAccess(request);
             switch (access) {
                 case 1:
-                    int currweek = getWeek(request);
                     try {
                         week = Integer.parseInt(request.getParameter("week"));
                         year = Integer.parseInt(request.getParameter("year"));
                     } catch (NumberFormatException e) {
-                        week = getWeek(request);
-                        year = getCurrYear();
+                        String weekYear[] = getCurrWeekYear().split(",");
+                        week = Integer.parseInt(weekYear[1]);
+                        year = Integer.parseInt(weekYear[0]);
                     }
-                    int labid = 0;
+                    YearWeek weekYeardate = YearWeek.of(year, week);
+                    date[0] = weekYeardate.atDay(DayOfWeek.MONDAY) + "";
+                    date[1] = weekYeardate.atDay(DayOfWeek.TUESDAY) + "";
+                    date[2] = weekYeardate.atDay(DayOfWeek.WEDNESDAY) + "";
+                    date[3] = weekYeardate.atDay(DayOfWeek.THURSDAY) + "";
+                    date[4] = weekYeardate.atDay(DayOfWeek.FRIDAY) + "";
+                    date[5] = weekYeardate.atDay(DayOfWeek.SATURDAY) + "";
+                    wks = weekYeardate.atDay(DayOfWeek.MONDAY).plusDays(-1);
+                    int labid;
                     try {
                         labid = Integer.parseInt(request.getParameter("lab"));
                     } catch (NumberFormatException e) {
@@ -88,71 +101,58 @@ public class editTimetable extends HttpServlet {
                                 + "document.getElementById('batch' + id).disabled=true;"
                                 + "document.getElementById('batch' + id).classList.add('not-allowed');}"
                                 + "</script>");
-                        LocalDate date1 = LocalDate.now()
-                                .withYear(year) // year
-                                .with(WeekFields.ISO.weekOfWeekBasedYear(), week) // week of year
-                                .with(WeekFields.ISO.dayOfWeek(), 7);
-                        wks = date1.plusDays(-7);
-                        date[0] = wks.plusDays(1) + "";
-                        date[1] = wks.plusDays(2) + "";
-                        date[2] = wks.plusDays(3) + "";
-                        date[3] = wks.plusDays(4) + "";
-                        date[4] = wks.plusDays(5) + "";
-                        date[5] = wks.plusDays(6) + "";
-                        String heading = "<table><tr><td width = 33% align='left'><form action=\"";
-                        if (week == 1) {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=52&year=" + (year - 1) + "&lab=" + labid + "')\" >";
-                        } else {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week - 1) + "&year=" + (year) + "&lab=" + labid + "')\" >";
-                        }
+                        String heading = "<div class='row'><div class='col-xl-4 col-sm-6 mb-3 mt-3' align='center'><form action=\"";
+                        String prevweekYear[] = getPrevWeekYear(week, year).split(",");
+                        int prevweek = Integer.parseInt(prevweekYear[1]);
+                        int prevyear = Integer.parseInt(prevweekYear[0]);
+                        String weekYear[] = getCurrWeekYear().split(",");
+                        int currweek = Integer.parseInt(weekYear[1]);
+                        String nextweekYear[] = getNextWeekYear(week, year).split(",");
+                        int nextweek = Integer.parseInt(nextweekYear[1]);
+                        int nextyear = Integer.parseInt(nextweekYear[0]);
+                        heading += "javascript:setContent('/Cerberus/editTimetable?week=" + prevweek + "&year=" + prevyear + "&lab=" + labid + "')\" >";
                         heading += "<button type=\"submit\"  style='width: 100px;' id=\"prev\" class=\"btn btn-primary\"";
-                        if (getCurrYear() == year) {
-                            if (week <= currweek) {
-                                heading += "disabled";
-                            }
-                        }
                         heading += "><span>Previous</span>"
                                 + "</button>"
-                                + "</form></td>"
-                                + "<td width = 33% align='center'>Current Week : " + currweek + "";
-
+                                + "</form></div>"
+                                + "<div class='col-xl-4 col-sm-6 mb-3 mt-3' align='center'>Current Week : " + currweek + "";
                         heading += "<p align='center'>Displaying Timetable of Week : " + week + "</p>";
                         heading += "<p align='center'>LAB " + labid + " <br><b>" + wks + "</b> to <b>" + wks.plusDays(7) + "</b></p>";
-                        heading += "</td><td width = 33% align='right'><form action=\"";
-                        if (week == 52) {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=1&year=" + (year + 1) + "&lab=" + labid + "')\" >";
-                        } else {
-                            heading += "javascript:setContent('/Cerberus/editTimetable?week=" + (week + 1) + "&year=" + (year) + "&lab=" + labid + "')\" >";
-                        }
+                        heading += "</div><div class='col-xl-4 col-sm-6 mb-3 mt-3' align='center'><form action=\"";
+                        heading += "javascript:setContent('/Cerberus/editTimetable?week=" + nextweek + "&year=" + nextyear + "&lab=" + labid + "')\" >";
                         heading += "<button type=\"submit\"  style='width: 100px;' id=\"next\" class=\"btn btn-primary\"";
-                        if (week > currweek + 1) {
-                            heading += "disabled";
-                        }
                         heading += "><span>Next</span>"
                                 + "</button>"
-                                + "</form></td>";
-                        heading += "</tr></table>";
+                                + "</form></div>";
+                        heading += "</div>";
                         out.print("<div class='card'><div class='card-header'>" + heading + "</div>"
+                                + "<form id='ajaxform' action='saveTimetable' method='post' align='center'>"
                                 + "<div class='card-body'>"
                                 + "<div class='table-responsive'>"
-                                + "<form id='ajaxform' action='saveTimetable' method='post' align='center'>"
                                 + "<table class='table table-bordered table-striped' width='100%' cellspacing='0'>");
                         out.print(printTimetable(labid));
-                        String end = "</table>"
+                        String end = "</table></div></div>"
                                 + "<input type='text' name='lab' value='" + labid + "' hidden>"
                                 + "<input type='text' name='week' value='" + week + "' hidden>"
-                                + "<input type='text' name='year' value='" + year+ "' hidden>"
+                                + "<input type='text' name='year' value='" + year + "' hidden>"
                                 + "<button align='center' style='width: 200px;'type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
                                 + "<span>Save Timetable</span>"
-                                + "</button></form>"
-                                + "</div>"
-                                + "</div>";
-                        if (week == currweek + 1) {
-                            end += "<div class='card-footer small text-muted'><form action='copyTimetable' method='post' align='center'>"
+                                + "</button></form>";
+                        end += "<br><div class='card-footer small text-muted'><div id='validations' style='color:red;font-size:14px;'>Only Lab Sessions that have not been marked as conducted will be changed when using Copy Timetable Feature</div><br>"
+                                + "<div class='row'>";
+                        for (int lab = 1; lab <= no_of_labs(); lab++) {
+                            end += "<div class='col mb-3'>"
+                                    + "<form action='copyTimetable' method='post' align='center'>"
+                                    + "<input type='text' name='week' value='" + week + "' hidden>"
+                                    + "<input type='text' name='lab' value='" + labid + "' hidden>"
+                                    + "<input type='text' name='modlab' value='" + lab + "' hidden>"
+                                    + "<input type='text' name='year' value='" + year + "' hidden>"
+                                    + "<input type='week' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px; border-radius: 4px;' name='modweekyear' value='" + year + "-W" + String.format("%02d", week) + "'><br><br>"
                                     + "<button align='center' style='width: 200px;' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
-                                    + "<span>Copy From Previous Week</span>"
+                                    + "<span>Copy From Selected Week's Lab " + lab + "</span>"
                                     + "</button></form></div>";
                         }
+                        end += "</div></div>";
                         out.print(end + "</div>");
                         con.close();
                     } catch (ParseException | ClassNotFoundException | SQLException e) {
@@ -196,10 +196,11 @@ public class editTimetable extends HttpServlet {
                     + "FROM timetable "
                     + "INNER JOIN slot "
                     + "ON timetable.slotID = slot.slotID "
-                    + "where labID=? and weekID=(select weekID from week where week = ?) "
+                    + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) "
                     + "GROUP BY slot.startTime, slot.endTime;");
             ps.setInt(1, labID);
             ps.setInt(2, week);
+            ps.setInt(3, year);
             ResultSet rs = ps.executeQuery();
             PreparedStatement ps7 = con.prepareStatement("SELECT * from slot");
             ResultSet rs1 = ps7.executeQuery();

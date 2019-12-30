@@ -29,9 +29,6 @@ public class viewSubject extends HttpServlet {
             int access = getAccess(request);
             switch (access) {
                 case 1:
-                    out.print("<style>tr:hover {"
-                            + "background: #a8a3a3;"
-                            + "}</style>");
                     out.print(tablestart("Subjects<div id='validations' style='color:red;font-size:14px;' class='mt-2 mb-2'>"
                             + "Select a Subject to view list of Labs conducted.</div>", "hover", "studDetails", 0));
                     String header = "<tr>";

@@ -50,6 +50,9 @@ public class saveStudDetails extends HttpServlet {
                         ps4.setInt(1, classID);
                         ResultSet rs = ps4.executeQuery();
                         int index = 1;
+                        PreparedStatement pps = con.prepareStatement("Delete from rollcall where classID =?");
+                        pps.setInt(1, classID);
+                        pps.executeUpdate();
                         while (rs.next()) {
                             int eroll = rs.getInt(1);
                             int troll = Integer.parseInt(request.getParameter("roll" + index));
@@ -60,7 +63,7 @@ public class saveStudDetails extends HttpServlet {
                             String temail = request.getParameter("email" + index);
                             if (ename.equals(tname)) {
                             } else {
-                                PreparedStatement pps = con.prepareStatement("UPDATE student SET name = ? where prn = ?");
+                                pps = con.prepareStatement("UPDATE student SET name = ? where prn = ?");
                                 pps.setString(1, tname);
                                 pps.setString(2, tprn);
                                 pps.executeUpdate();
@@ -68,20 +71,18 @@ public class saveStudDetails extends HttpServlet {
                             }
                             if (eemail.equals(temail)) {
                             } else {
-                                PreparedStatement pps = con.prepareStatement("UPDATE student SET email = ? where prn = ?");
+                                pps = con.prepareStatement("UPDATE student SET email = ? where prn = ?");
                                 pps.setString(1, temail);
                                 pps.setString(2, tprn);
                                 pps.executeUpdate();
                                 dbLog(currUserName(request) + " changed email of student with prn : " + tprn + " to " + temail);
                             }
-                            if (eroll == troll) {
-                            } else {
-                                PreparedStatement pps = con.prepareStatement("UPDATE rollcall SET rollNo = ? where prn = ?");
-                                pps.setInt(1, troll);
-                                pps.setString(2, tprn);
-                                pps.executeUpdate();
-                                dbLog(currUserName(request) + " changed Roll Number of student with prn : " + tprn + " to " + troll);
-                            }
+                            pps = con.prepareStatement("Insert into rollcall values(?,?,?)");
+                            pps.setInt(1, classID);
+                            pps.setInt(2, troll);
+                            pps.setString(3, tprn);
+                            pps.executeUpdate();
+                            dbLog(currUserName(request) + " changed Roll Number of student with prn : " + tprn + " to " + troll);
                             String et1 = rs.getString(5);
                             if (et1 != null) {
                                 String tt1 = request.getParameter("t1" + index);
@@ -89,7 +90,7 @@ public class saveStudDetails extends HttpServlet {
                                     int dateID = getDateID(getCurrDate());
                                     int timeID = getTimeID(getCurrTime());
                                     try {
-                                        PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, dateID = ?, timeID = ? where prn = ? and templateID = 1");
+                                        pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, dateID = ?, timeID = ? where prn = ? and templateID = 1");
                                         pps.setInt(1, dateID);
                                         pps.setInt(2, timeID);
                                         pps.setString(3, tprn);
@@ -106,7 +107,7 @@ public class saveStudDetails extends HttpServlet {
                                 if (tt2 == null) {
                                     int dateID = getDateID(getCurrDate());
                                     int timeID = getTimeID(getCurrTime());
-                                    PreparedStatement pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, dateID = ?, timeID = ? where prn = ? and templateID = 2");
+                                    pps = con.prepareStatement("UPDATE studentfingerprint SET template = null, dateID = ?, timeID = ? where prn = ? and templateID = 2");
                                     pps.setInt(1, dateID);
                                     pps.setInt(2, timeID);
                                     pps.setString(3, tprn);
@@ -124,9 +125,13 @@ public class saveStudDetails extends HttpServlet {
                         a.dberror(request, response, e.getMessage(), "viewTimetable");
                     }
                     break;
-                default:
+                case 0:
                     messages b = new messages();
                     b.kids(request, response);
+                    break;
+                default:
+                    messages c = new messages();
+                    c.nouser(request, response);
                     break;
             }
         } catch (IOException | ServletException e) {

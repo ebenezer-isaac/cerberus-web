@@ -27,9 +27,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import org.threeten.extra.YearWeek;
 
 public class AttFunctions {
 
@@ -89,7 +91,9 @@ public class AttFunctions {
 
     public static String[] get_next_schedule(HttpServletRequest request, int labid) {
         String nextSchedule[] = new String[2];
-        int week = getWeek(request);
+        String weekYear[] = getCurrWeekYear().split(",");
+        int week = Integer.parseInt(weekYear[1]);
+        int year = Integer.parseInt(weekYear[0]);
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         String time = getCurrTime();
@@ -103,12 +107,13 @@ public class AttFunctions {
                     + "ON timetable.slotID = slot.slotID "
                     + "INNER JOIN subject "
                     + "ON timetable.subjectID = subject.subjectID "
-                    + "where labID=? and weekID=(select weekID from week where week = ?) "
+                    + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) "
                     + "GROUP BY slot.startTime, slot.endTime ASC "
                     + "ORDER BY slot.startTime, slot.endTime ASC;");
             ps.setInt(1, day);
             ps.setInt(2, labid);
             ps.setInt(3, week);
+            ps.setInt(4, year);
             ResultSet rs = ps.executeQuery();
             int slots = no_of_slots();
             String schedule[][] = new String[slots][4];
@@ -214,7 +219,9 @@ public class AttFunctions {
 
     public static String[] get_next_stud_schedule(HttpServletRequest request, int labid, String prn) {
         String nextSchedule[] = new String[2];
-        int week = getWeek(request);
+        String weekYear[] = getCurrWeekYear().split(",");
+        int week = Integer.parseInt(weekYear[1]);
+        int year = Integer.parseInt(weekYear[0]);
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         String time = getCurrTime();
@@ -230,7 +237,7 @@ public class AttFunctions {
                     + "ON timetable.subjectID = subject.subjectID "
                     + "inner join studentsubject on "
                     + "timetable.subjectID = studentsubject.subjectID "
-                    + "where labID=? and weekID=(select weekID from week where week = ?) and timetable.subjectID in "
+                    + "where labID=? and weekID=(select weekID from week where week = ? and year = ?) and timetable.subjectID in "
                     + "(select subjectID from studentsubject "
                     + "where prn = ? and batchID != 0) "
                     + "and studentsubject.batchID = timetable.batchID "
@@ -241,8 +248,9 @@ public class AttFunctions {
             ps.setInt(1, day);
             ps.setInt(2, labid);
             ps.setInt(3, week);
-            ps.setString(4, prn);
+            ps.setInt(4, year);
             ps.setString(5, prn);
+            ps.setString(6, prn);
             ResultSet rs = ps.executeQuery();
             int slots = no_of_slots();
             String schedule[][] = new String[slots][4];
@@ -762,23 +770,30 @@ public class AttFunctions {
 
     public static void createSession(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        int week = getWeek(request);
-        session.setAttribute("week", week);
         session.setAttribute("access", 2);
     }
 
-    public static int getWeek(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        int week;
-        try {
-            week = (int) session.getAttribute("week");
-        } catch (Exception e) {
-            java.util.Date date = new java.util.Date();
-            SimpleDateFormat ft = new SimpleDateFormat("w");
-            week = Integer.parseInt(ft.format(date));
-            session.setAttribute("week", week);
-        }
-        return week;
+    public static String getCurrWeekYear() {
+        ZoneId z = ZoneId.of("Asia/Kolkata");
+        YearWeek currentWeek = YearWeek.now(z);
+        String result[] = (currentWeek + "").split("-W");
+        return result[0] + "," + result[1];
+    }
+
+    public static String getPrevWeekYear(int week, int year) {
+        ZoneId z = ZoneId.of("Asia/Kolkata");
+        YearWeek currentWeek = YearWeek.of(year, week);
+        currentWeek = currentWeek.minusWeeks(1);
+        String result[] = (currentWeek + "").split("-W");
+        return result[0] + "," + result[1];
+    }
+
+    public static String getNextWeekYear(int week, int year) {
+        ZoneId z = ZoneId.of("Asia/Kolkata");
+        YearWeek currentWeek = YearWeek.of(year, week);
+        currentWeek = currentWeek.plusWeeks(1);
+        String result[] = (currentWeek + "").split("-W");
+        return result[0] + "," + result[1];
     }
 
     public static String getClassName(int classID) {
