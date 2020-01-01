@@ -4,7 +4,6 @@ import static cerberus.AttFunctions.getCurrDate;
 import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getDateID;
 import static cerberus.AttFunctions.getTimeID;
-import cerberus.messages;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;

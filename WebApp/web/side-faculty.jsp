@@ -26,11 +26,6 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-calendar-alt"></i> <span>TimeTable</span> </a> 
                     <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                        <h6 class="dropdown-header" align='center'>Master Timetable :</h6>
-                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewMasterTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
-                        <a class='dropdown-item' href="javascript:setContent('/Cerberus/editMasterTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header" align='center'>Regular Timetable :</h6>
                         <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
                         <%
                             try {
@@ -47,6 +42,10 @@
                             } catch (Exception e) {
                             }
                         %>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header" align='center'>Master Timetable :</h6>
+                        <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewMasterTimetable');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Timetable</a>
+                        <a class='dropdown-item' href="javascript:setContent('/Cerberus/editMasterTimetable');"><i class="fa fa-edit"></i>&nbsp;&nbsp;Edit Timetable</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -119,6 +118,7 @@
                                         out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='images/student.png'/>\";"
                                                 + "var name='" + name + "';</script>");
                                     }
+                                    con.close();
                                 } catch (Exception e) {
                                 }
                             %>

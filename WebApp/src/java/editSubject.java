@@ -66,6 +66,7 @@ public class editSubject extends HttpServlet {
                             while (rs.next()) {
                                 out.print("<option name='Sub' value= '" + rs.getInt(1) + "'>" + rs.getString(2) + "</option>");
                             }
+                            con.close();
                             out.print("</select>");
                         } catch (ClassNotFoundException | SQLException e) {
                             error(e.getMessage());

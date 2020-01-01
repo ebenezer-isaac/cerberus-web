@@ -75,6 +75,7 @@ public class saveAttendance extends HttpServlet {
                                     }
                                 }
                             }
+                            con.close();
                         } catch (ClassNotFoundException | SQLException z) {
                             errorLogger(z.getMessage());
                             messages b = new messages();

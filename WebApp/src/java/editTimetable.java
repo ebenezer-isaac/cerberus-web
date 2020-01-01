@@ -2,7 +2,6 @@
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrWeekYear;
-import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getNextWeekYear;
 import static cerberus.AttFunctions.getPrevWeekYear;
 import static cerberus.AttFunctions.no_of_labs;
@@ -22,7 +21,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

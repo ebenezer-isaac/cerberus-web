@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
@@ -44,6 +45,7 @@ public class rapidAttendance extends HttpServlet {
                         while (rs.next()) {
                             facultyID = rs.getInt(1);
                         }
+                        con.close();
                     } catch (ClassNotFoundException | SQLException e) {
                         errorLogger(e.getMessage());
                     }
@@ -60,7 +62,7 @@ public class rapidAttendance extends HttpServlet {
                             try {
                                 Class.forName("com.mysql.jdbc.Driver");
                                 Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                                PreparedStatement ps = con.prepareStatement("select rollcall.rollNo , student.name, studentsubject.prn from timetable inner join studentsubject on timetable.batchID = studentsubject.batchID and timetable.subjectID = studentsubject.subjectID inner join student on student.PRN = studentsubject.PRN inner join rollcall on student.PRN = rollcall.PRN where timetable.scheduleID=?");
+                                PreparedStatement ps = con.prepareStatement("select rollcall.rollNo , student.name, studentsubject.prn from timetable inner join studentsubject on timetable.batchID = studentsubject.batchID and timetable.subjectID = studentsubject.subjectID inner join student on student.PRN = studentsubject.PRN inner join rollcall on student.PRN = rollcall.PRN where timetable.scheduleID=? order by LENGTH(rollcall.rollNo),rollcall.rollNo");
                                 ps.setInt(1, scheduleid);
                                 ResultSet rs = ps.executeQuery();
                                 if (rs.next()) {
@@ -78,6 +80,8 @@ public class rapidAttendance extends HttpServlet {
                                             + "style='width: 200px;' align='center' id='subBtn'>"
                                             + "<input type='text' id = 'scheduleid' name='scheduleid' value='" + scheduleid + "' hidden>"
                                             + "<div class='col-xl-6 col-sm-6 mb-3' align='center' id='statistics'></div>"
+                                            + "<input type='button' onclick='selectAll()' value='Select All' class='btn btn-primary'"
+                                            + "style='width: 200px;' align='center' id='subBtn'>"
                                             + "<script>"
                                             + "function delFacTimetable() {if(confirm('Warning!! Are you sure you want to mark this Lab Session as not conducted?\\nAll attendance for this Lab Session will be deleted permanently')){"
                                             + "    var form = document.createElement('form');"
@@ -124,13 +128,18 @@ public class rapidAttendance extends HttpServlet {
                                             + "if(document.getElementById('warn'+i).checked){prs++;}else{abs++;}"
                                             + "}"
                                             + "document.getElementById('statistics').innerHTML='<br><b>Students Present : '+prs+'<br>Students Absent  : '+abs+'</b>';}"
-                                            + "stats();</script>No of students : " + (line - 1) + "<br><br>"
+                                            + "stats();"
+                                            + "function selectAll(){"
+                                            + "for (var i = 1;i<=studs;i++){"
+                                            + "document.getElementById('warn'+i).checked=true;}"
+                                            + "stats();}</script>No of students : " + (line - 1) + "<br><br>"
                                             + "<input type='submit' value='Save Attendance' class='btn btn-primary' style='width: 200px;' align='center'> <br><br>"
                                             + "<input type='text' name='line' value='" + line + "' hidden>"
                                             + "</form>", 1));
                                 } else {
                                     out.print("No students belonging to batch have opted for this subject");
                                 }
+                                con.close();
                             } catch (ClassNotFoundException | SQLException x) {
                                 messages b = new messages();
                                 b.error(request, response, x.getMessage(), "viewTimetable");

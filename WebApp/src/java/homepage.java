@@ -1,9 +1,11 @@
 
+import cerberus.AttFunctions;
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_next_schedule;
 import static cerberus.AttFunctions.get_next_stud_schedule;
 import static cerberus.AttFunctions.no_of_labs;
+import static cerberus.AttFunctions.prefStudSubs;
 import cerberus.messages;
 import static cerberus.printer.error;
 import java.io.IOException;
@@ -22,15 +24,14 @@ import static cerberus.printer.tableend;
 import static cerberus.printer.tablehead;
 import static cerberus.printer.tablestart;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import org.threeten.extra.YearWeek;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 
 public class homepage extends HttpServlet {
 
     private static final long serialVersionUID = -6020013234525993016L;
 
     int week;
-    String[] subs;
     int access;
     HttpServletResponse response;
     HttpServletRequest request;
@@ -160,7 +161,7 @@ public class homepage extends HttpServlet {
                         }
                         out.print("<br>");
                         if (labcount >= 1) {
-                            PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date, "
+                            PreparedStatement ps1 = con.prepareStatement("SELECT (select week.year from week where timetable.weekID = week.weekID) as year ,(select week.week from week where timetable.weekID = week.weekID) as week ,timetable.dayID as dayid, "
                                     + "slot.startTime, slot.endTime,"
                                     + "(select lab.name from lab where lab.labID=timetable.labID) as lab,"
                                     + "(select subject.abbreviation from subject where subject.subjectID=timetable.subjectID) as Subject,"
@@ -170,7 +171,7 @@ public class homepage extends HttpServlet {
                                     + "on timetable.scheduleID=facultytimetable.scheduleID "
                                     + "INNER JOIN slot "
                                     + "on slot.slotID=timetable.slotID "
-                                    + "where facultytimetable.facultyID =? order by date, slot.startTime DESC;");
+                                    + "where facultytimetable.facultyID =? order by year and week and dayid and slot.startTime DESC;");
                             ps1.setString(1, faculty_id);
                             ResultSet rs1 = ps1.executeQuery();
                             out.print(tablestart("<b>Number of Lab Sessions conducted by you </b>: " + labcount + "",
@@ -185,9 +186,14 @@ public class homepage extends HttpServlet {
                             header += "</tr>";
                             out.print(tablehead(header));
                             while (rs1.next()) {
-                                out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs1.getString(9) + "');\">");
-                                for (int i = 1; i <= 6; i++) {
-                                    out.print("<td>" + rs1.getString(i) + "</td>");
+                                out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs1.getString(11) + "');\">");
+                                LocalDate date = LocalDate.now()
+                                        .with(WeekFields.ISO.weekBasedYear(), rs1.getInt(1)) // year
+                                        .with(WeekFields.ISO.weekOfWeekBasedYear(), rs1.getInt(2)) // week of year
+                                        .with(WeekFields.ISO.dayOfWeek(), rs1.getInt(3));
+                                out.print("<td>" + date + "</td>");
+                                for (int i = 1; i <= 5; i++) {
+                                    out.print("<td>" + rs1.getString(i + 3) + "</td>");
                                 }
                                 out.print("</tr>");
                             }
@@ -197,6 +203,7 @@ public class homepage extends HttpServlet {
                         }
                         con.close();
                     } catch (SQLException e) {
+                        e.printStackTrace();
                         errorLogger(e.getMessage());
                         error(e.getMessage());
                     }
@@ -211,11 +218,10 @@ public class homepage extends HttpServlet {
                         PreparedStatement ps = con.prepareStatement("select count(batchID) from studentsubject where prn = ? and batchID !=0");
                         ps.setString(1, prn);
                         ResultSet rs = ps.executeQuery();
-
                         while (rs.next()) {
                             count = rs.getInt(1);
                         }
-
+                        con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages b = new messages();
                         b.error(request, response, e.getMessage(), "homepage");
@@ -223,7 +229,53 @@ public class homepage extends HttpServlet {
                     if (count < 1) {
                         out.print("<script>window.location.replace('/Cerberus/details.jsp')</script>");
                     } else {
-                        out.print("<b> Welcome " + student_name + "</b><br><br><div class='row'>");
+                        out.print("<b> Welcome " + student_name + "</b><br><br><div class='card'><div class='card-header'></div>"
+                                + "<div class='card-body'>"
+                                + "<div class='table-responsive'>"
+                                + "<style>"
+                                + "tr{vertical-align : middle;text-align:center;}"
+                                + "th{vertical-align : middle;text-align:center;}"
+                                + "td{vertical-align : middle;text-align:center;}"
+                                + "</style>"
+                                + "<table class='table table-bordered'  width='100%' cellspacing='0'><thead>");
+                        String subs[][] = prefStudSubs(prn);
+                        float total = 0;
+                        for (int i = 0; i < subs.length; i++) {
+                            out.print("<th>" + subs[i][2] + "</th>");
+                        }
+                        out.print("<th>Average</th></thead><tr>");
+                        try {
+                            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                            for (int i = 0; i < subs.length; i++) {
+                                PreparedStatement ps = con.prepareStatement("select count(facultytimetable.scheduleID) from facultytimetable inner join timetable on facultytimetable.scheduleID = timetable.scheduleID where subjectID = ? and batchID = ?");
+                                ps.setString(1, subs[i][0]);
+                                ps.setString(2, subs[i][1]);
+                                ResultSet rs_subject = ps.executeQuery();
+                                int temp = 0;
+                                while (rs_subject.next()) {
+                                    if (rs_subject.getInt(1) > 0) {
+                                        temp = 1;
+                                    }
+                                }
+                                if (subs[i][1].equals("0")) {
+                                    out.print("<td>N/A</td>");
+                                } else if (temp == 0) {
+                                    out.print("<td>No Labs</td>");
+                                } else {
+                                    count++;
+                                    out.print("<td >");
+                                    float currPerc = AttFunctions.calPercentage(prn, subs[i][0], subs[i][0]);
+                                    total = total + currPerc;
+                                    out.print(String.format("%.02f", currPerc) + "%");
+                                    out.print("</td>");
+                                }
+                            }
+                        } catch (SQLException e) {
+                        }
+                        out.print("<td>" + String.format("%.02f", total) + "%</td><tr></table>"
+                                + "</div>"
+                                + "</div>"
+                                + "</div><div class='row'>");
                         labs = no_of_labs();
                         for (int i = 1; i <= labs; i++) {
                             String testing[] = get_next_stud_schedule(request, i, prn);
@@ -313,7 +365,7 @@ public class homepage extends HttpServlet {
                             }
                             out.print("<br>");
                             if (labcount >= 1) {
-                                PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date, "
+                                PreparedStatement ps1 = con.prepareStatement("SELECT (select week.year from week where timetable.weekID = week.weekID) as year ,(select week.week from week where timetable.weekID = week.weekID) as week ,timetable.dayID as dayid, "
                                         + "slot.startTime, slot.endTime,"
                                         + "(select lab.name from lab where lab.labID=timetable.labID) as lab,"
                                         + "(select subject.abbreviation from subject where subject.subjectID=timetable.subjectID) as Subject,"
@@ -323,7 +375,7 @@ public class homepage extends HttpServlet {
                                         + "on timetable.scheduleID=attendance.scheduleID "
                                         + "INNER JOIN slot "
                                         + "on slot.slotID=timetable.slotID "
-                                        + "where attendance.prn =? order by date, slot.startTime;");
+                                        + "where attendance.prn =? order by year and week and dayid and slot.startTime DESC");
                                 ps1.setString(1, prn);
                                 ResultSet rs1 = ps1.executeQuery();
                                 out.print(tablestart("<b>Number of Lab Sessions attended by you </b>: " + labcount + "",
@@ -339,8 +391,13 @@ public class homepage extends HttpServlet {
                                 out.print(tablehead(header));
                                 while (rs1.next()) {
                                     out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/studSubAttendance?sub=" + rs1.getString(7) + "');\">");
-                                    for (int i = 1; i <= 6; i++) {
-                                        out.print("<td>" + rs1.getString(i) + "</td>");
+                                    LocalDate date = LocalDate.now()
+                                            .with(WeekFields.ISO.weekBasedYear(), rs1.getInt(1)) // year
+                                            .with(WeekFields.ISO.weekOfWeekBasedYear(), rs1.getInt(2)) // week of year
+                                            .with(WeekFields.ISO.dayOfWeek(), rs1.getInt(3));
+                                    out.print("<td>" + date + "</td>");
+                                    for (int i = 1; i <= 5; i++) {
+                                        out.print("<td>" + rs1.getString(i + 3) + "</td>");
                                     }
                                     out.print("</tr>");
                                 }

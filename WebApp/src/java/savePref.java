@@ -41,6 +41,7 @@ public class savePref extends HttpServlet {
                         }
                         messages a = new messages();
                         a.success(request, response, "Your preferences have been saved", "profile");
+                        con.close();
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                         messages b = new messages();
                         b.error(request, response, e.getMessage(), "profile");

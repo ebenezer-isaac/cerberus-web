@@ -71,6 +71,7 @@ public class saveRapidAttendance extends HttpServlet {
                                 }
                             }
                         }
+                        con.close();
                         messages a = new messages();
                         a.success(request, response, "Attendance has been saved", "viewTimetable");
                     } catch (ClassNotFoundException | SQLException x) {

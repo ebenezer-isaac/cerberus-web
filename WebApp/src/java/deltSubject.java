@@ -47,6 +47,7 @@ public class deltSubject extends HttpServlet {
                         messages a = new messages();
                         a.failed(request, response, "The subject cannot be deleted because timetable sessions are dependent on it", "homepage");
                     }
+                    con.close();
                 } catch (ClassNotFoundException | SQLException e) {
                     messages a = new messages();
                     a.dberror(request, response, e.getMessage(), "homepage");

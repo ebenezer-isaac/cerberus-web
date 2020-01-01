@@ -2,7 +2,6 @@
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.getCurrWeekYear;
-import static cerberus.AttFunctions.getCurrYear;
 import static cerberus.AttFunctions.getNextWeekYear;
 import static cerberus.AttFunctions.getPrevWeekYear;
 import static cerberus.AttFunctions.getSem;
@@ -23,7 +22,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -154,8 +152,8 @@ public class viewTimetable extends HttpServlet {
                                 out.print("<option name='clas' value= '" + no_of_class + "'>" + rs.getString(1) + "</option>");
                             }
                         }
+                        out.print("</select><br><br><a href=\"downTimetable?week=" + week + "&year=" + year + "\"><i class=\"fas fa-file-download\"></i>&nbsp;&nbsp;&nbsp;Download</a><br><br>");
                     }
-                    out.print("</select><br><br><a href=\"downTimetable?week=" + week + "&year=" + year + "\"><i class=\"fas fa-file-download\"></i>&nbsp;&nbsp;&nbsp;Download</a><br><br>");
                     if (access == 0) {
                         PreparedStatement ps = con.prepareStatement("SELECT rollcall.classID from rollcall where prn=?");
                         ps.setString(1, user);
@@ -164,6 +162,7 @@ public class viewTimetable extends HttpServlet {
                             classID = rs.getInt(1);
                         }
                     }
+                    con.close();
                 } catch (ClassNotFoundException | SQLException e) {
                     errorLogger(e.getMessage());
                 }

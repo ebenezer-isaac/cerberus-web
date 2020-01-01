@@ -172,7 +172,7 @@ public class attendance extends HttpServlet {
                                         out.print("<td ><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
                                         float currPerc = AttFunctions.calPercentage(prn, result[1], result[0]);
                                         total = total + currPerc;
-                                        out.print(String.format("%.02f", total) + "%");
+                                        out.print(String.format("%.02f", currPerc) + "%");
                                         out.print("</a></td>");
                                     }
                                 }

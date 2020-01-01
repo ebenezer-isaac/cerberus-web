@@ -1,5 +1,5 @@
+
 import static cerberus.AttFunctions.errorLogger;
-import static cerberus.AttFunctions.currUserName;
 import static cerberus.AttFunctions.dbLog;
 import static cerberus.AttFunctions.getAccess;
 import cerberus.messages;
@@ -59,11 +59,13 @@ public class saveDetails extends HttpServlet {
                         ps.setBlob(2, inputStream);
                         ps.executeUpdate();
                     }
+                    con.close();
                 } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
                     errorLogger(e.getMessage());
                     messages b = new messages();
                     b.error(request, response, e.getMessage(), "homepage");
                 }
+
                 dbLog("Student with prn : " + prn + " selected his/her subjects");
                 messages d = new messages();
                 d.success(request, response, "Your Details have been saved successfully", "homepage");

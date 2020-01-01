@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;
@@ -172,6 +171,8 @@ public class AttFunctions {
                                     + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
                                     + "Subject : " + details[5] + "<br>"
                                     + "Batch : " + details[6] + "," + schedule[x][3] + "," + studs;
+                            con.close();
+                            con.close();
                             return nextSchedule;
                         }
                     }
@@ -202,18 +203,22 @@ public class AttFunctions {
                                     + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
                                     + "Subject : " + details[5] + "<br>"
                                     + "Batch : " + details[6];
+                            con.close();
                             return nextSchedule;
                         }
                     }
                 }
                 nextSchedule[0] = "1";
                 nextSchedule[1] = "All Labs Over";
+                con.close();
                 return nextSchedule;
             } else {
                 nextSchedule[0] = "0";
                 nextSchedule[1] = "No Labs Today";
+                con.close();
                 return nextSchedule;
             }
+
         } catch (ClassNotFoundException | SQLException e) {
             errorLogger(e.getMessage());
         }
@@ -313,6 +318,7 @@ public class AttFunctions {
                                     + "Subject : " + details[5] + "<br>"
                                     + "Batch : " + details[6] + "<br>"
                                     + "Status : " + marked + "," + mark;
+                            con.close();
                             return nextSchedule;
                         }
                     }
@@ -343,16 +349,19 @@ public class AttFunctions {
                                     + "Class : " + getClassName(Integer.parseInt(details[7])) + "<br>"
                                     + "Subject : " + details[5] + "<br>"
                                     + "Batch : " + details[6];
+                            con.close();
                             return nextSchedule;
                         }
                     }
                 }
                 nextSchedule[0] = "1";
                 nextSchedule[1] = "All Labs Over";
+                con.close();
                 return nextSchedule;
             } else {
                 nextSchedule[0] = "0";
                 nextSchedule[1] = "No Labs Today";
+                con.close();
                 return nextSchedule;
             }
         } catch (ClassNotFoundException | SQLException e) {
@@ -632,6 +641,39 @@ public class AttFunctions {
             errorLogger(e.getMessage());
         }
         return classID;
+    }
+
+    public static String[][] prefStudSubs(String prn) {
+        String prefsubs[][] = null;
+        int access = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+            PreparedStatement ps = con.prepareStatement("select subject.subjectID, studentsubject.batchID, subject.abbreviation from studentsubject "
+                    + "inner join subject "
+                    + "on subject.subjectID=studentsubject.subjectID "
+                    + "where prn = ? and studentsubject.batchID != 0");
+            ps.setString(1, prn);
+            ResultSet rs = ps.executeQuery();
+            int no_of_pref = 0;
+            while (rs.next()) {
+                no_of_pref++;
+            }
+            prefsubs = new String[no_of_pref][3];
+            rs.first();
+            rs.previous();
+            no_of_pref = 0;
+            while (rs.next()) {
+                prefsubs[no_of_pref][0] = rs.getString(1);
+                prefsubs[no_of_pref][1] = rs.getString(2);
+                prefsubs[no_of_pref][2] = rs.getString(3);
+                no_of_pref++;
+            }
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            errorLogger(e.getMessage());
+        }
+        return prefsubs;
     }
 
     public static String[] prefSubs(HttpServletRequest request, String user) {

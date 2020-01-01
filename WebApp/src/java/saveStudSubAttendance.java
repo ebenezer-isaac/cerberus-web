@@ -73,6 +73,7 @@ public class saveStudSubAttendance extends HttpServlet {
                                     errorLogger(y.getMessage());
                                 }
                             }
+                            con.close();
                         } catch (ClassNotFoundException | SQLException z) {
                             errorLogger(z.getMessage());
                             messages b = new messages();

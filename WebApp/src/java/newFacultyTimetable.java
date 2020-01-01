@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.AttFunctions.get_schedule_det;
@@ -44,6 +45,7 @@ public class newFacultyTimetable extends HttpServlet {
                                 facultyID = rs.getInt(1);
                                 facultyName = rs.getString(2);
                             }
+                            con.close();
                         } catch (ClassNotFoundException | SQLException e) {
                             errorLogger(e.getMessage());
                         }
@@ -173,7 +175,7 @@ public class newFacultyTimetable extends HttpServlet {
                                     + "}"
                                     + "");
                             out.print("</script>");
-
+                            con.close();
                         } catch (ClassNotFoundException | SQLException x) {
                         }
                     }

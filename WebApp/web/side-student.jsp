@@ -28,6 +28,7 @@
                 if (index == 1) {
                     out.print("<a class='dropdown-header' href=''><i class='fas fa-book'></i>&nbsp;&nbsp;No Subjects Available</a>");
                 }
+                con.close();
             } catch (Exception e) {
             }
         %>

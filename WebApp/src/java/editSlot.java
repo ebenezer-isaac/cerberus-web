@@ -91,6 +91,7 @@ public class editSlot extends HttpServlet {
                                 out.print("</form><style type='text/css'>\n"
                                         + "@import url('css/checkbox.css');\n"
                                         + "</style>");
+                                con.close();
                             } catch (SQLException | ClassNotFoundException e) {
                                 error(e.getMessage());
                             }

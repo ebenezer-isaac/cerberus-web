@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import static cerberus.AttFunctions.getAccess;
 import static cerberus.printer.error;
@@ -13,6 +14,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +40,7 @@ public class batSubAttendance extends HttpServlet {
                         try {
                             Class.forName("com.mysql.jdbc.Driver");
                             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                            PreparedStatement ps = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date,"
+                            PreparedStatement ps = con.prepareStatement("SELECT (select week.year from week where timetable.weekID = week.weekID) as year ,(select week.week from week where timetable.weekID = week.weekID) as week ,timetable.dayID as dayid, "
                                     + " timetable.scheduleID as ScheduleID"
                                     + ",(select faculty.name from faculty where faculty.facultyID=facultytimetable.facultyID) as teacher "
                                     + "from facultytimetable\n"
@@ -45,7 +48,7 @@ public class batSubAttendance extends HttpServlet {
                                     + "on timetable.scheduleID=facultytimetable.scheduleID\n"
                                     + "INNER JOIN slot\n"
                                     + "on slot.slotID=timetable.slotID\n"
-                                    + "where timetable.subjectID =? and timetable.batchID=? order by date,slot.startTime;");
+                                    + "where timetable.subjectID =? and timetable.batchID=? order by year and week and dayid and slot.startTime;");
                             ps.setString(1, subjectID);
                             ps.setInt(2, batchID);
                             ResultSet rs = ps.executeQuery();
@@ -58,12 +61,16 @@ public class batSubAttendance extends HttpServlet {
                             rs.previous();
                             int index = 0;
                             while (rs.next()) {
-                                dates[index][0] = rs.getString(1);
-                                dates[index][1] = rs.getString(2);
-                                dates[index][2] = rs.getString(3);
+                                LocalDate date = LocalDate.now()
+                                        .with(WeekFields.ISO.weekBasedYear(), rs.getInt(1)) // year
+                                        .with(WeekFields.ISO.weekOfWeekBasedYear(), rs.getInt(2)) // week of year
+                                        .with(WeekFields.ISO.dayOfWeek(), rs.getInt(3));
+                                dates[index][0] = date + "";
+                                dates[index][1] = rs.getString(4);
+                                dates[index][2] = rs.getString(5);
                                 index++;
                             }
-                            ps = con.prepareStatement("select rollcall.rollNo, studentsubject.PRN, student.name from studentsubject INNER JOIN rollcall on studentsubject.PRN = rollcall.PRN INNER JOIN student on student.PRN = studentsubject.PRN where studentsubject.subjectID = ? and studentsubject.batchID = ?");
+                            ps = con.prepareStatement("select rollcall.rollNo, studentsubject.PRN, student.name from studentsubject INNER JOIN rollcall on studentsubject.PRN = rollcall.PRN INNER JOIN student on student.PRN = studentsubject.PRN where studentsubject.subjectID = ? and studentsubject.batchID = ? order by LENGTH(rollcall.rollNo),rollcall.rollNo");
                             ps.setString(1, subjectID);
                             ps.setInt(2, batchID);
                             rs = ps.executeQuery();
@@ -144,9 +151,9 @@ public class batSubAttendance extends HttpServlet {
                                 out.print("<tr><td colspan=" + (dates.length + 2) + ">No Students are who have opted for " + subject + " have been alloted to " + batch + "</td></tr>");
                                 out.print(tableend("", 0));
                             }
-
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
+                            e.printStackTrace();
                             errorLogger(e.getMessage());
                             error(e.getMessage());
                         }

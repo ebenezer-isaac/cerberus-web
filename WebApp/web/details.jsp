@@ -26,6 +26,7 @@
                         while (rs.next()) {
                             count = rs.getInt(1);
                         }
+                        con.close();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                         messages b = new messages();
@@ -122,6 +123,7 @@
                                     + "}"
                                     + "}validateBtn();"
                                     + "</script>");
+                            con.close();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

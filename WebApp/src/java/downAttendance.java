@@ -50,7 +50,7 @@ public class downAttendance extends HttpServlet {
                         if (sem != 0) {
                             XSSFSheet sheet = wb.createSheet(getClassName(classID));
                             Map<String, Object[]> data;
-                            data = new TreeMap<String, Object[]>();
+                            data = new TreeMap<>();
                             String cla = getClassName(classID);
                             try {
                                 Class.forName("com.mysql.cj.jdbc.Driver");

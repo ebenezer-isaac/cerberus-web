@@ -42,7 +42,7 @@ public class saveSubSelection extends HttpServlet {
                         int no_of_sub = subs.length - 1;
                         String sql = "SELECT student.PRN, ";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat('" + subs[index][0] + "',',',(studentsubject.batchID)) END) as " + subs[index][1].replace('-', '_');
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat('" + subs[index][0] + "',',',(studentsubject.batchID)) END) as '" + subs[index][1].replace('-', '_')+"' ";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -92,6 +92,7 @@ public class saveSubSelection extends HttpServlet {
                             }
                             index++;
                         }
+                        con.close();
                         messages a = new messages();
                         a.success(request, response, "Subject Selection has been saved", "editSubSelection?class=" + classID);
                     } catch (ClassNotFoundException | NumberFormatException | SQLException e) {
