@@ -6,6 +6,7 @@ import static cerberus.AttFunctions.getCurrDate;
 import static cerberus.AttFunctions.getCurrTime;
 import static cerberus.AttFunctions.getDateID;
 import static cerberus.AttFunctions.getTimeID;
+import static cerberus.AttFunctions.nameProcessor;
 import cerberus.messages;
 import java.io.IOException;
 import java.sql.Connection;
@@ -63,7 +64,7 @@ public class saveStudDetails extends HttpServlet {
                             if (ename.equals(tname)) {
                             } else {
                                 pps = con.prepareStatement("UPDATE student SET name = ? where prn = ?");
-                                pps.setString(1, tname);
+                                pps.setString(1, nameProcessor(tname));
                                 pps.setString(2, tprn);
                                 pps.executeUpdate();
                                 dbLog(currUserName(request) + " changed name of student with prn : " + tprn + " to " + tname);

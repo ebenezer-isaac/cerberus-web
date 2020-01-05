@@ -152,7 +152,7 @@ public class otp extends HttpServlet {
                 }
             } else {
                 messages c = new messages();
-                c.firewall(request, response, "An OTP with a validity of 10 minutes has already been sent to your email.<br>Please check your email.", "index.jsp");
+                c.firewall(request, response, "An OTP with a validity of 10 minutes has already been sent to your email.<br>Please check your email.", "resetpassword.html");
             }
         } else {
             messages c = new messages();

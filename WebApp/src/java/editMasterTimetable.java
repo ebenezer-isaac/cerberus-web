@@ -129,7 +129,17 @@ public class editMasterTimetable extends HttpServlet {
                                     + "<input type='week' style='background: #e6e6e6; font-size: 14.5px; padding: 3px 6px 3px 4px; border: none; margin: 6px; border-radius: 4px;' name='modweekyear' value='" + year + "-W" + String.format("%02d", week) + "'><br><br>"
                                     + "<button align='center' style='width: 200px;' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
                                     + "<span>Copy From Selected Week's Lab " + lab + "</span>"
-                                    + "</button></form></div>";
+                                    + "</button></form>"
+                                    + "<form action='copyTimetable' method='post' align='center'>"
+                                    + "<input type='text' name='lab' value='" + labid + "' hidden>"
+                                    + "<input type='text' name='modlab' value='" + lab + "' hidden>"
+                                    + "<input type='text' name='week' value='0' hidden>"
+                                    + "<input type='text' name='year' value='0' hidden>"
+                                    + "<input type='week' name='modweekyear' value='0-W0' hidden><br><br>"
+                                    + "<button align='center' style='width: 200px;' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
+                                    + "<span>Copy From Master Timetable's Lab " + lab + "</span>"
+                                    + "</button></form>"
+                                    + "</div>";
                         }
                         end += "</div></div>";
                         out.print(end + "</div>");

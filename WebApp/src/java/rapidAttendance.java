@@ -33,7 +33,6 @@ public class rapidAttendance extends HttpServlet {
             switch (access) {
                 case 1:
                     HttpSession session = request.getSession(false);
-                    int currentFaculty = Integer.parseInt(session.getAttribute("user").toString().trim());
                     int facultyID = 0;
                     int scheduleID = Integer.parseInt(request.getParameter("scheduleid"));
                     try {
@@ -69,19 +68,22 @@ public class rapidAttendance extends HttpServlet {
                                     String schedule[] = get_schedule_det(scheduleID);
                                     out.print("<form action='saveRapidAttendance' method='post'>");
                                     String head = "";
-                                    head += ("<div class='col-xl-6 col-sm-6 mb-3' align='center'><table align='center'>");
+                                    head += ("<div class='row'><div class='col-xl-6 col-sm-6' align='center'><br><table align='center'>");
                                     head += ("<tr><td align='left'><b>Date</b></td><td align='center'> : </td><td align='center'>" + schedule[0] + "</td></tr>");
                                     head += ("<tr><td align='left'><b>Start Time</b></td><td align='center'> : </td><td align='center'>" + schedule[1] + "</td></tr>");
                                     head += ("<tr><td align='left'><b>End Time</b></td><td align='center'> : </td><td align='center'>" + schedule[2] + "</td></tr>");
                                     head += ("<tr><td align='left'><b>Lab</b></td><td align='center'> : </td><td align='center'>" + schedule[3] + "</td></tr>");
                                     head += ("<tr><td align='left'><b>Subject ID</b></td><td align='center'> : </td><td align='center'>" + schedule[4] + "</td></tr>");
-                                    head += ("<tr><td align='left'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[8] + "</td></tr></table></div>"
-                                            + "<input type='button' onclick='delFacTimetable()' value='Delete Lab Session' class='btn btn-primary' "
+                                    head += ("<tr><td align='left'><b>Subject</b></td><td align='center'> : </td><td align='center'>" + schedule[8] + "</td></tr>"
+                                            + "<tr><td align='left'><b>Batch</b></td><td align='center'> : </td><td align='center'>" + schedule[6] + "</td></tr></table></div>"
+                                            + "<div class='col-xl-6 col-sm-6'><input type='button' onclick='delFacTimetable()' value='Delete Lab Session' class='btn btn-primary' "
                                             + "style='width: 200px;' align='center' id='subBtn'>"
                                             + "<input type='text' id = 'scheduleid' name='scheduleid' value='" + scheduleid + "' hidden>"
-                                            + "<div class='col-xl-6 col-sm-6 mb-3' align='center' id='statistics'></div>"
+                                            + "<div align='center' id='statistics'></div><br>"
                                             + "<input type='button' onclick='selectAll()' value='Select All' class='btn btn-primary'"
-                                            + "style='width: 200px;' align='center' id='subBtn'>"
+                                            + "style='width: 200px;' align='center' id='subBtn'><br><br>"
+                                            + "<input type='button' onclick='deselectAll()' value='Deselect All' class='btn btn-primary'"
+                                            + "style='width: 200px;' align='center' id='subBtn'></div></div>"
                                             + "<script>"
                                             + "function delFacTimetable() {if(confirm('Warning!! Are you sure you want to mark this Lab Session as not conducted?\\nAll attendance for this Lab Session will be deleted permanently')){"
                                             + "    var form = document.createElement('form');"
@@ -127,12 +129,19 @@ public class rapidAttendance extends HttpServlet {
                                             + "for (var i = 1;i<=studs;i++){"
                                             + "if(document.getElementById('warn'+i).checked){prs++;}else{abs++;}"
                                             + "}"
-                                            + "document.getElementById('statistics').innerHTML='<br><b>Students Present : '+prs+'<br>Students Absent  : '+abs+'</b>';}"
+                                            + "document.getElementById('statistics').innerHTML='<br><b>"
+                                            + "Students Present&nbsp: '+('0' + prs).slice(-2)+'<br>"
+                                            + "Students Absent&nbsp&nbsp: '+('0' + abs).slice(-2)+'</b>';}"
                                             + "stats();"
                                             + "function selectAll(){"
                                             + "for (var i = 1;i<=studs;i++){"
                                             + "document.getElementById('warn'+i).checked=true;}"
-                                            + "stats();}</script>No of students : " + (line - 1) + "<br><br>"
+                                            + "stats();}"
+                                            + "function deselectAll(){"
+                                            + "for (var i = 1;i<=studs;i++){"
+                                            + "document.getElementById('warn'+i).checked=false;}"
+                                            + "stats();}"
+                                            + "</script>No of students : " + (line - 1) + "<br><br>"
                                             + "<input type='submit' value='Save Attendance' class='btn btn-primary' style='width: 200px;' align='center'> <br><br>"
                                             + "<input type='text' name='line' value='" + line + "' hidden>"
                                             + "</form>", 1));

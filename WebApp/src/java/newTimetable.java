@@ -32,28 +32,12 @@ public class newTimetable extends HttpServlet {
                 PreparedStatement ps5 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
                 ps5.setInt(1, weekid);
                 ResultSet rs = ps5.executeQuery();
-                int flag = 0;
-                while (rs.next()) {
-                    flag = 1;
-                    break;
-                }
-                if (flag == 0) {
-                    PreparedStatement ps10 = con.prepareStatement("SELECT weekID FROM `week` ORDER BY `week`.`weekID` DESC");
-                    rs = ps10.executeQuery();
-                    while (rs.next() && flag == 0) {
-                        PreparedStatement ps9 = con.prepareStatement("SELECT * FROM timetable where weekID = ?");
-                        ps9.setInt(1, rs.getInt(1));
-                        ResultSet rs1 = ps9.executeQuery();
-                        while (rs1.next()) {
-                            PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = ?");
-                            ps3.setInt(1, weekid);
-                            ps3.setInt(2, rs.getInt(1));
-                            ps3.executeUpdate();
-                            flag = 1;
-                            break;
-                        }
-                        break;
-                    }
+                if (rs.next()) {
+                } else {
+                    PreparedStatement ps3 = con.prepareStatement("insert into timetable (slotID, labID, subjectID, batchID, weekID, dayID) select slotID, labID, subjectID, batchID, ?, dayID from timetable where weekID = ?");
+                    ps3.setInt(1, weekid);
+                    ps3.setInt(2, 0);
+                    ps3.executeUpdate();
                 }
                 con.close();
             }

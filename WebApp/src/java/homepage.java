@@ -264,7 +264,7 @@ public class homepage extends HttpServlet {
                                 } else {
                                     count++;
                                     out.print("<td >");
-                                    float currPerc = AttFunctions.calPercentage(prn, subs[i][0], subs[i][0]);
+                                    float currPerc = AttFunctions.calPercentage(prn, subs[i][0], subs[i][1]);
                                     total = total + currPerc;
                                     out.print(String.format("%.02f", currPerc) + "%");
                                     out.print("</td>");
