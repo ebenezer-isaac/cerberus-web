@@ -1,5 +1,6 @@
 
 import cerberus.AttFunctions;
+import static cerberus.AttFunctions.getCurrWeekYear;
 import static cerberus.AttFunctions.getWeekID;
 import static cerberus.printer.error;
 import java.io.IOException;
@@ -21,11 +22,12 @@ public class newTimetable extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int week = Integer.parseInt(request.getParameter("week"));
         try {
             String pwd = AttFunctions.hashIt(request.getParameter("pwd"));
             if (pwd.equals("0959aab211c167df361128977811cdf1a2a46e8e47200e11dadb68b9dcb6b2ad")) {
-                int year = Integer.parseInt(request.getParameter("year"));
+                String weekYear[] = getCurrWeekYear().split(",");
+                int week = Integer.parseInt(weekYear[1]);
+                int year = Integer.parseInt(weekYear[0]);
                 int weekid = getWeekID(week, year);
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -41,7 +43,9 @@ public class newTimetable extends HttpServlet {
                 }
                 con.close();
             }
+            System.out.println("done");
         } catch (NoSuchAlgorithmException | ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             error(e.getMessage());
         }
     }

@@ -154,7 +154,7 @@ public class editTimetable extends HttpServlet {
                                     + "<input type='text' name='lab' value='" + labid + "' hidden>"
                                     + "<input type='text' name='modlab' value='" + lab + "' hidden>"
                                     + "<input type='text' name='year' value='" + year + "' hidden>"
-                                    + "<input type='week' name='modweekyear' value='0-W0' hidden><br><br>"
+                                    + "<input type='text' name='modweekyear' value='0-W0' hidden><br><br>"
                                     + "<button align='center' style='width: 200px;' type=\"submit\" id=\"sub\" class=\"btn btn-primary\">"
                                     + "<span>Copy From Master Timetable's Lab " + lab + "</span>"
                                     + "</button></form>"

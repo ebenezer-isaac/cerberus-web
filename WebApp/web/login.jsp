@@ -5,13 +5,14 @@
         SimpleDateFormat ft = new SimpleDateFormat("w");
         int week = Integer.parseInt(ft.format(date));
         session.setAttribute("week", week);
-        request.getRequestDispatcher("newTimetable?week=" + week + "&pwd=cerberus@123").include(request, response);
+        request.getRequestDispatcher("newTimetable?pwd=cerberus@123").include(request, response);
         int access;
         try {
             access = Integer.parseInt(session.getAttribute("access").toString());
         } catch (Exception e) {
             session.setAttribute("access", 2);
         }
+        System.out.println("done");
     } catch (Exception m) {
     }
 

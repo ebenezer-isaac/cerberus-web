@@ -25,6 +25,7 @@ public class copyTimetable extends HttpServlet {
             case 1:
                 String asdf = request.getParameter("modweekyear");
                 String splitt[] = asdf.split("-W");
+                System.out.println("mod week year : "+asdf);
                 int modyear = Integer.parseInt(splitt[0]);
                 int modweek = Integer.parseInt(splitt[1]);
                 int year = Integer.parseInt(request.getParameter("year"));
