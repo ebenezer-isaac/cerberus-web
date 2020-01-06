@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import static cerberus.printer.error;
 import static cerberus.printer.kids;
 import static cerberus.printer.nouser;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 
 public class viewSubDetails extends HttpServlet {
 
@@ -45,7 +47,7 @@ public class viewSubDetails extends HttpServlet {
                         }
                         out.print("<br>Total number of labs Conducted : " + labcount + "<br>");
                         if (labcount >= 1) {
-                            PreparedStatement ps1 = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date, \n"
+                            PreparedStatement ps1 = con.prepareStatement("SELECT (select week.year from week where timetable.weekID = week.weekID) as year ,(select week.week from week where timetable.weekID = week.weekID) as week ,timetable.dayID as dayid, \n"
                                     + "slot.startTime, slot.endTime,\n"
                                     + "(select lab.name from lab where lab.labID=timetable.labID) as lab,\n"
                                     + "(select batch.name from batch where batch.batchID=timetable.batchID) as batch,\n"
@@ -55,7 +57,7 @@ public class viewSubDetails extends HttpServlet {
                                     + "on timetable.scheduleID=facultytimetable.scheduleID\n"
                                     + "INNER JOIN slot\n"
                                     + "on slot.slotID=timetable.slotID\n"
-                                    + "where timetable.subjectID =? order by date,slot.startTime;");
+                                    + "where timetable.subjectID =? order by year and week and dayid and slot.startTime;");
                             ps1.setString(1, subcode);
                             ResultSet rs1 = ps1.executeQuery();
                             out.print(tablestart(subcode + " Details", "hover", "studDetails", 1) + "");
@@ -70,7 +72,12 @@ public class viewSubDetails extends HttpServlet {
                             out.print(tablehead(header));
                             while (rs1.next()) {
                                 out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs1.getString(7) + "');\">");
-                                for (int i = 1; i <= 6; i++) {
+                                LocalDate date = LocalDate.now()
+                                        .with(WeekFields.ISO.weekBasedYear(), rs1.getInt(1)) // year
+                                        .with(WeekFields.ISO.weekOfWeekBasedYear(), rs1.getInt(2)) // week of year
+                                        .with(WeekFields.ISO.dayOfWeek(), rs1.getInt(3));
+                                out.print("<td>" + date + "</td>");
+                                for (int i = 4; i <= 8; i++) {
                                     out.print("<td>" + rs1.getString(i) + "</td>");
                                 }
                                 out.print("</tr>");

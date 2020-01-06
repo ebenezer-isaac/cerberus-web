@@ -54,7 +54,6 @@ public class saveStudDetails extends HttpServlet {
                         pps.setInt(1, classID);
                         pps.executeUpdate();
                         while (rs.next()) {
-                            int eroll = rs.getInt(1);
                             int troll = Integer.parseInt(request.getParameter("roll" + index));
                             String tprn = request.getParameter("prn" + index);
                             String ename = rs.getString(3);
@@ -82,7 +81,6 @@ public class saveStudDetails extends HttpServlet {
                             pps.setInt(2, troll);
                             pps.setString(3, tprn);
                             pps.executeUpdate();
-                            dbLog(currUserName(request) + " changed Roll Number of student with prn : " + tprn + " to " + troll);
                             String et1 = rs.getString(5);
                             if (et1 != null) {
                                 String tt1 = request.getParameter("t1" + index);

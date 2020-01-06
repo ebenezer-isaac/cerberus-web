@@ -108,7 +108,8 @@ public class rapidAttendance extends HttpServlet {
                                     rs.previous();
                                     int line = 1;
                                     while (rs.next()) {
-                                        out.print("<td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td>"
+                                        out.print("<tr id='row" + line + "' onclick=\"javascript:document.getElementById('warn'+"+line+").click();\">"
+                                                + "<td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td>"
                                                 + "<td><input type='text' name = 'prn" + line + "' value='" + rs.getString(3) + "' hidden>");
                                         ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
                                         ps.setString(1, rs.getString(3));
@@ -127,7 +128,11 @@ public class rapidAttendance extends HttpServlet {
                                             + "var prs = 0;"
                                             + "var abs = 0;"
                                             + "for (var i = 1;i<=studs;i++){"
-                                            + "if(document.getElementById('warn'+i).checked){prs++;}else{abs++;}"
+                                            + "if(document.getElementById('warn'+i).checked){prs++;"
+                                            + "document.getElementById('row'+i).classList.remove('table-danger');document.getElementById('row'+i).classList.add('table-success');"
+                                            + "}else{abs++;"
+                                            + "document.getElementById('row'+i).classList.add('table-danger');document.getElementById('row'+i).classList.remove('table-success');"
+                                            + "}"
                                             + "}"
                                             + "document.getElementById('statistics').innerHTML='<br><b>"
                                             + "Students Present&nbsp: '+('0' + prs).slice(-2)+'<br>"
