@@ -42,7 +42,7 @@ public class saveSubSelection extends HttpServlet {
                         int no_of_sub = subs.length - 1;
                         String sql = "SELECT student.PRN, ";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat('" + subs[index][0] + "',',',(studentsubject.batchID)) END) as '" + subs[index][1].replace('-', '_')+"' ";
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN concat('" + subs[index][0] + "',',',(studentsubject.batchID)) END) as '" + subs[index][1].replace('-', '_') + "' ";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -82,6 +82,18 @@ public class saveSubSelection extends HttpServlet {
                                 }
                                 if (subsele[i][1] == Integer.parseInt(arr[1])) {
                                 } else {
+                                    PreparedStatement ps = con.prepareStatement("SELECT timetable.scheduleID "
+                                            + "from timetable "
+                                            + "where timetable.subjectID =? and timetable.batchID=?");
+                                    ps.setString(1, subs[i][0]);
+                                    ps.setInt(2, Integer.parseInt(arr[1]));
+                                    rs = ps.executeQuery();
+                                    while (rs.next()) {
+                                        PreparedStatement delete = con.prepareStatement("delete from attendance where scheduleid=? and prn = ?");
+                                        delete.setInt(1, rs.getInt(1));
+                                        delete.setString(2, prn);
+                                        delete.executeUpdate();
+                                    }
                                     PreparedStatement pps = con.prepareStatement("update studentsubject set batchID=? where prn = ? and subjectID = ?");
                                     pps.setInt(1, subsele[i][1]);
                                     pps.setString(2, prn);

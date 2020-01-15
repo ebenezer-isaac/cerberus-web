@@ -108,19 +108,18 @@ public class rapidAttendance extends HttpServlet {
                                     rs.previous();
                                     int line = 1;
                                     while (rs.next()) {
-                                        out.print("<tr id='row" + line + "' onclick=\"javascript:document.getElementById('warn'+"+line+").click();\">"
+                                        out.print("<tr id='row" + line + "' onclick=\"javascript:if(document.getElementById('warn'+"+line+").checked){document.getElementById('warn'+"+line+").checked=false;}else{document.getElementById('warn'+"+line+").checked=true;}stats();\">"
                                                 + "<td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td>"
                                                 + "<td><input type='text' name = 'prn" + line + "' value='" + rs.getString(3) + "' hidden>");
                                         ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
                                         ps.setString(1, rs.getString(3));
                                         ps.setInt(2, scheduleid);
                                         ResultSet rs1 = ps.executeQuery();
+                                        out.print("<input type='checkbox' value='1' onclick=\"if(this.checked){this.checked=false;}else{this.checked=true;}stats();\" id='warn" + line + "' name='att" + line + "' ");
                                         if (rs1.next()) {
-                                            out.print("<center><input type='checkbox' value='1' onclick='stats()' id='warn" + line + "' name='att" + line + "' checked >");
-                                        } else {
-                                            out.print("<center><input type='checkbox' value='1' onclick='stats()' id='warn" + line + "' name='att" + line + "' >");
-                                        }
-                                        out.print("</td></tr>");
+                                            out.print("checked");
+                                        } 
+                                        out.print(" ></td></tr>");
                                         line++;
                                     }
                                     out.print(tableend("<script>var studs = " + (line - 1) + ";"

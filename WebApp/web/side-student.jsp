@@ -32,7 +32,7 @@
             } catch (Exception e) {
             }
         %>
-            </ul>
+            <div style="height:100%" onclick="javascript:document.getElementById('sidebarToggle').click();"></div></ul>
             <%
                 Class.forName(
                         "com.mysql.jdbc.Driver");

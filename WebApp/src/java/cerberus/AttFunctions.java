@@ -875,9 +875,10 @@ public class AttFunctions {
             ps.setInt(2, year);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                return rs.getInt(1);
+                weekID = rs.getInt(1);
             }
-            if (weekID == 0) {
+            if (weekID >= 0) {
+            } else {
                 PreparedStatement ps2 = con.prepareStatement("insert into week values(null,?,?)");
                 ps2.setInt(1, week);
                 ps2.setInt(2, year);
@@ -889,9 +890,9 @@ public class AttFunctions {
             }
             con.close();
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
             errorLogger(e.getMessage());
         }
+        System.out.println(weekID);
         return weekID;
     }
 

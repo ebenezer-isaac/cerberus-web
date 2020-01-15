@@ -47,17 +47,19 @@ public class delStudent extends HttpServlet {
                             while (rs.next()) {
                                 email = rs.getString(1);
                             }
-                            ps = con.prepareStatement("Delete `rollcall`, `studentfingerprint`,`studentsubject`, `studentphoto`\n"
-                                    + "    from student     \n"
-                                    + "    inner join studentsubject on student.prn = studentsubject.PRN     \n"
-                                    + "    inner join studentphoto on student.prn = studentphoto.PRN     \n"
-                                    + "    inner join rollcall on student.prn = rollcall.PRN     \n"
-                                    + "    inner join studentfingerprint on student.prn = studentfingerprint.PRN     \n"
-                                    + "    where student.prn = ?;\n"
-                                    + "    ");
+                            ps = con.prepareStatement("Delete from `rollcall` where prn = ?");
                             ps.setString(1, prn);
                             ps.executeUpdate();
-                            ps = con.prepareStatement("Delete from student where prn = ?; ");
+                            ps = con.prepareStatement("Delete from `studentfingerprint` where prn = ?");
+                            ps.setString(1, prn);
+                            ps.executeUpdate();
+                            ps = con.prepareStatement("Delete from `studentsubject` where prn = ?");
+                            ps.setString(1, prn);
+                            ps.executeUpdate();
+                            ps = con.prepareStatement("Delete from `studentphoto` where prn = ?");
+                            ps.setString(1, prn);
+                            ps.executeUpdate();
+                            ps = con.prepareStatement("Delete from `student` where prn = ?; ");
                             ps.setString(1, prn);
                             ps.executeUpdate();
                         } catch (SQLException e) {

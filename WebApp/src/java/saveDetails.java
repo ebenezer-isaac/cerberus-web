@@ -47,6 +47,14 @@ public class saveDetails extends HttpServlet {
                     PreparedStatement ps;
                     for (String subject : subjects) {
                         int batchid = Integer.parseInt(request.getParameter("batch" + subject));
+                        try {
+                            ps = con.prepareStatement("INSERT into `studentsubject` values (?,?,?)");
+                            ps.setString(1, prn);
+                            ps.setString(2, subject);
+                            ps.setInt(3, 0);
+                            ps.executeUpdate();
+                        } catch (SQLException e) {
+                        }
                         ps = con.prepareStatement("UPDATE `studentsubject` set `batchID` = ? where prn= ? and subjectID = ?");
                         ps.setInt(1, batchid);
                         ps.setString(2, prn);
@@ -54,10 +62,13 @@ public class saveDetails extends HttpServlet {
                         ps.executeUpdate();
                     }
                     if (inputStream != null) {
-                        ps = con.prepareStatement("INSERT INTO `studentphoto`(`PRN`, `photo`) VALUES (?,?)");
-                        ps.setString(1, prn);
-                        ps.setBlob(2, inputStream);
-                        ps.executeUpdate();
+                        try {
+                            ps = con.prepareStatement("INSERT INTO `studentphoto`(`PRN`, `photo`) VALUES (?,?)");
+                            ps.setString(1, prn);
+                            ps.setBlob(2, inputStream);
+                            ps.executeUpdate();
+                        } catch (SQLException e) {
+                        }
                     }
                     con.close();
                 } catch (ClassNotFoundException | NumberFormatException | SQLException e) {

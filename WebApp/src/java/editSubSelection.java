@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
@@ -63,7 +64,7 @@ public class editSubSelection extends HttpServlet {
                         int no_of_sub = subs.length - 1;
                         String sql = "SELECT rollcall.rollNo,student.PRN,student.name,";
                         while (index <= no_of_sub) {
-                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN (select name from batch where batch.batchID = studentsubject.batchID ) END) as '" + subs[index][1].replace('-', '_')+"'";
+                            sql += "MAX(CASE WHEN studentsubject.subjectID = '" + subs[index][0] + "' THEN (select name from batch where batch.batchID = studentsubject.batchID ) END) as '" + subs[index][1].replace('-', '_') + "'";
                             if (index <= (no_of_sub - 1)) {
                                 sql += ", ";
                             }
@@ -110,8 +111,7 @@ public class editSubSelection extends HttpServlet {
                                     } else {
                                         flag = 1;
                                     }
-                                    out.print("<td style='vertical-align : middle;text-align:center;'><input class='mt-6' type='checkbox' value='1' id='sub" + subs[i - 4][0] + "" + line + "' name='sub" + subs[i - 4][0] + "" + line + "' onchange='batchdisable(this.id)'");
-
+                                    out.print("<td class=\"tooltipp\" style='vertical-align : middle;text-align:center;'><input class='mt-6' type='checkbox' value='1' id='sub" + subs[i - 4][0] + "" + line + "' name='sub" + subs[i - 4][0] + "" + line + "' onchange='batchdisable(this.id)'");
                                     if (flag == 1) {
                                         out.print(" checked");
                                     }
@@ -136,7 +136,7 @@ public class editSubSelection extends HttpServlet {
                                         out.print(">" + rs4.getString(2) + "</option>");
                                     }
                                     out.print("</select>");
-                                    out.print("</td>");
+                                    out.print("<span class='tooltiptext'>" + subs[i - 4][1]  + "</span></td>");
                                 }
                                 out.print("</tr>");
                             }

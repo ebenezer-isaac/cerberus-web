@@ -95,31 +95,31 @@
                                 } catch (Exception e) {
                                 }
                             %>
-                        <div class="dropdown-divider"></div><a class="dropdown-item" href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list-alt"></i> <span>Subject</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewSubject');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a> <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-chalkboard-teacher"></i> <span>Faculty</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a> </div></li><li class="nav-item"> <a class="nav-link" href="javascript:setContent('/Cerberus/studentProgression');"> <i class="fas fa-address-card"></i> <span>Student Progression</span></a> </li></ul>
-                            <%
-                                Class.forName("com.mysql.jdbc.Driver");
-                                try {
-                                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
-                                    PreparedStatement ps2 = con.prepareStatement("SELECT name, photo FROM faculty WHERE facultyID = ?");
-                                    ps2.setString(1, session.getAttribute("user").toString());
-                                    byte[] blob = null;
-                                    String name = "";
-                                    ResultSet rs = ps2.executeQuery();
-                                    while (rs.next()) {
-                                        blob = rs.getBytes("photo");
-                                        name = rs.getString("name");
-                                    }
-                                    con.close();
-                                    if (blob != null) {
-                                        String imgString = DatatypeConverter.printBase64Binary(blob);
-                                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='data:image/png;base64," + imgString + "'/>\";"
-                                                + "var name='" + name + "';</script>");
-                                    } else {
-                                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='images/student.png'/>\";"
-                                                + "var name='" + name + "';</script>");
-                                    }
-                                    con.close();
-                                } catch (Exception e) {
-                                }
-                            %>
+                        <div class="dropdown-divider"></div><a class="dropdown-item" href="javascript:setContent('/Cerberus/editAddStudent');"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Student</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editDelStudent');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Student</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-list-alt"></i> <span>Subject</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <a class="dropdown-item" href="javascript:setContent('/Cerberus/viewSubject');"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Subject</a> <div class="dropdown-divider"></div><h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=add');"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add Subject</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editSubject?flow=del');"><i class="fa fa-times"></i>&nbsp;&nbsp;Delete Subject</a> </div></li><li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-chalkboard-teacher"></i> <span>Faculty</span> </a> <div class="dropdown-menu" aria-labelledby="pagesDropdown"> <h6 class="dropdown-header" align='center'>Management : </h6> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=add');"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Add Faculty</a> <a class="dropdown-item" href="javascript:setContent('/Cerberus/editFaculty?flow=del');"><i class="fas fa-user-minus"></i>&nbsp;&nbsp;Delete Faculty</a> </div></li><li class="nav-item"> <a class="nav-link" href="javascript:setContent('/Cerberus/studentProgression');"> <i class="fas fa-address-card"></i> <span>Student Progression</span></a> </li><div style="height:100%" onclick="javascript:document.getElementById('sidebarToggle').click();"></div></ul>
+            <%
+                Class.forName("com.mysql.jdbc.Driver");
+                try {
+                    Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
+                    PreparedStatement ps2 = con.prepareStatement("SELECT name, photo FROM faculty WHERE facultyID = ?");
+                    ps2.setString(1, session.getAttribute("user").toString());
+                    byte[] blob = null;
+                    String name = "";
+                    ResultSet rs = ps2.executeQuery();
+                    while (rs.next()) {
+                        blob = rs.getBytes("photo");
+                        name = rs.getString("name");
+                    }
+                    con.close();
+                    if (blob != null) {
+                        String imgString = DatatypeConverter.printBase64Binary(blob);
+                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='data:image/png;base64," + imgString + "'/>\";"
+                                + "var name='" + name + "';</script>");
+                    } else {
+                        out.print("<script>document.getElementById('pic').innerHTML=\"<img style='border-radius:50%;' height='30px' width='30px' src='images/student.png'/>\";"
+                                + "var name='" + name + "';</script>");
+                    }
+                    con.close();
+                } catch (Exception e) {
+                }
+            %>
             <div id="content-wrapper"> <div class="container-fluid"> <ol class="breadcrumb" id='navigator'> <li class="breadcrumb-item"> <a href="javascript:setContent('/Cerberus/homepage');">Homepage</a> </li><li class="breadcrumb-item active">Overview</li></ol> <div id='main' style='display: none;' align='center'> 

@@ -68,6 +68,7 @@ public class editStudDetails extends HttpServlet {
                             header += "<th style='vertical-align : middle;text-align:center;'> Email </th>";
                             header += "<th style='vertical-align : middle;text-align:center;' align='center'> Fingerprint <br>1 </th>";
                             header += "<th style='vertical-align : middle;text-align:center;' align='center'> Fingerprint <br>2 </th>";
+                            header += "<th style='vertical-align : middle;text-align:center;' align='center'> Reset <br> Password </th>";
                             header += "</tr>";
                             out.print(tablehead(header));
                             rs.previous();
@@ -91,7 +92,8 @@ public class editStudDetails extends HttpServlet {
                                     out.print("N/A");
                                 }
                                 out.print("</td>");
-
+                                out.print("<td><input type='button' value='Reset' class='btn btn-primary' style='width: 100px;' align='center' "
+                                        + "onclick=\"javascript:resetPass('"+rs.getString(2)+"');\"></td>");
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'><br></div>"
@@ -101,6 +103,12 @@ public class editStudDetails extends HttpServlet {
                                     + "@import url('css/checkbox.css');\n"
                                     + "</style>", 0));
                             out.print("<script>"
+                                    + "function resetPass(prn){"
+                                    + "$.ajax({url:\"http://172.21.170.14:8080/Cerberus/resetStudPassword?prn=\"+prn+\"\","
+                                    + "success:function(result){"
+                                    + "alert(\"Password for student with PRN : \"+prn+\" has been reset to 'student123' (without the quotes).\");"
+                                    + "}});"
+                                    + "}"
                                     + "var studs = " + line + ";"
                                     + "var btnstatus5 = 0;var line=0;"
                                     + "function checkdupEmail(id) {line=id;"

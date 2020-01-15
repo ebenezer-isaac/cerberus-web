@@ -1,3 +1,4 @@
+
 import static cerberus.AttFunctions.errorLogger;
 import cerberus.AttFunctions;
 import static cerberus.AttFunctions.getAccess;
@@ -169,11 +170,11 @@ public class attendance extends HttpServlet {
                                         out.print("<td>No Labs</td>");
                                     } else {
                                         count++;
-                                        out.print("<td ><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;'>");
+                                        out.print("<td><a href = \"javascript:setContent('/Cerberus/studSubAttendance?prn=" + prn + "&sub=" + result[1] + "');\" style='display:block;text-decoration:none;' class=\"tooltipp\">");
                                         float currPerc = AttFunctions.calPercentage(prn, result[1], result[0]);
                                         total = total + currPerc;
                                         out.print(String.format("%.02f", currPerc) + "%");
-                                        out.print("</a></td>");
+                                        out.print("<span class='tooltiptext'>" + rsm.getColumnLabel(i) + "</span></a></td>");
                                     }
                                 }
                                 float perc = 0;
