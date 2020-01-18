@@ -38,10 +38,8 @@ public class editMasterTimetable extends HttpServlet {
                     try {
                         labid = Integer.parseInt(request.getParameter("lab"));
                     } catch (NumberFormatException | NullPointerException e) {
-                        System.out.println("inside exception");
                         labid = 1;
                     }
-                    System.out.println(labid);
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");

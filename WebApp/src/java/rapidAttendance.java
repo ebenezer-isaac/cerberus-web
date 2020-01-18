@@ -66,7 +66,10 @@ public class rapidAttendance extends HttpServlet {
                                 ResultSet rs = ps.executeQuery();
                                 if (rs.next()) {
                                     String schedule[] = get_schedule_det(scheduleID);
-                                    out.print("<form action='saveRapidAttendance' method='post'>");
+                                    out.print("<style type='text/css'>\n"
+                                            + "@import url('css/spinner.css');\n"
+                                            + "</style>"
+                                            + "<form action='saveRapidAttendance' method='post'>");
                                     String head = "";
                                     head += ("<div class='row'><div class='col-xl-6 col-sm-6' align='center'><br><table align='center'>");
                                     head += ("<tr><td align='left'><b>Date</b></td><td align='center'> : </td><td align='center'>" + schedule[0] + "</td></tr>");
@@ -86,16 +89,16 @@ public class rapidAttendance extends HttpServlet {
                                             + "style='width: 200px;' align='center' id='subBtn'></div></div>"
                                             + "<script>"
                                             + "function delFacTimetable() {if(confirm('Warning!! Are you sure you want to mark this Lab Session as not conducted?\\nAll attendance for this Lab Session will be deleted permanently')){"
-                                            + "    var form = document.createElement('form');"
-                                            + "    form.method = 'POST';"
-                                            + "    form.action = 'delFacultyTimetable';"
-                                            + "    var textbox = document.createElement('input');"
-                                            + "    textbox.type = 'hidden';"
-                                            + "    textbox.value = document.getElementById('scheduleid').value;"
-                                            + "    textbox.name = 'scheduleid';"
-                                            + "    form.appendChild(textbox);"
-                                            + "    document.body.appendChild(form);"
-                                            + "    form.submit();}"
+                                            + "var form = document.createElement('form');"
+                                            + "form.method = 'POST';"
+                                            + "form.action = 'delFacultyTimetable';"
+                                            + "var textbox = document.createElement('input');"
+                                            + "textbox.type = 'hidden';"
+                                            + "textbox.value = document.getElementById('scheduleid').value;"
+                                            + "textbox.name = 'scheduleid';"
+                                            + "form.appendChild(textbox);"
+                                            + "document.body.appendChild(form);"
+                                            + "form.submit();}"
                                             + "}"
                                             + "</script>");
                                     out.print(tablestart("" + head, "hover", "studDetails", 0));
@@ -108,8 +111,9 @@ public class rapidAttendance extends HttpServlet {
                                     rs.previous();
                                     int line = 1;
                                     while (rs.next()) {
-                                        out.print("<tr id='row" + line + "' onclick=\"javascript:if(document.getElementById('warn'+"+line+").checked){document.getElementById('warn'+"+line+").checked=false;}else{document.getElementById('warn'+"+line+").checked=true;}stats();\">"
-                                                + "<td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td>"
+                                        out.print("<tr id='row" + line + "' onclick=\"javascript:if(document.getElementById('warn'+" + line + ").checked){document.getElementById('warn'+" + line + ").checked=false;}else{document.getElementById('warn'+" + line + ").checked=true;}stats();\">"
+                                                + "<td>" + rs.getString(1) + "</td>"
+                                                + "<td onmouseover=\"setImg('" + rs.getString(3) + "','photo" + line + "')\" class='tooltipp'>" + rs.getString(2) + "<span id = 'photo" + line + "' class='tooltiptext'></span></td>"
                                                 + "<td><input type='text' name = 'prn" + line + "' value='" + rs.getString(3) + "' hidden>");
                                         ps = con.prepareStatement("select attendance.attendanceID from attendance where attendance.PRN = ? and attendance.scheduleID=?");
                                         ps.setString(1, rs.getString(3));
@@ -118,7 +122,7 @@ public class rapidAttendance extends HttpServlet {
                                         out.print("<input type='checkbox' value='1' onclick=\"if(this.checked){this.checked=false;}else{this.checked=true;}stats();\" id='warn" + line + "' name='att" + line + "' ");
                                         if (rs1.next()) {
                                             out.print("checked");
-                                        } 
+                                        }
                                         out.print(" ></td></tr>");
                                         line++;
                                     }

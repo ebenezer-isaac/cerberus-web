@@ -71,7 +71,7 @@ public class viewSubDetails extends HttpServlet {
                             header += "</tr>";
                             out.print(tablehead(header));
                             while (rs1.next()) {
-                                out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs1.getString(7) + "');\">");
+                                out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs1.getString(9) + "');\">");
                                 LocalDate date = LocalDate.now()
                                         .with(WeekFields.ISO.weekBasedYear(), rs1.getInt(1)) // year
                                         .with(WeekFields.ISO.weekOfWeekBasedYear(), rs1.getInt(2)) // week of year

@@ -102,7 +102,7 @@ public class editSubSelection extends HttpServlet {
                                 line++;
                                 out.print("<tr>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'>" + String.format("%02d", Integer.parseInt(rs.getString(1))) + "<input type='text' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
-                                out.print("<td style='vertical-align : middle;text-align:center;'>" + rs.getString(3) + "</td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;' onmouseover=\"setImg('" + rs.getString(2) + "','photo" + line + "')\" class='tooltipp'>" + rs.getString(3) + "<span id = 'photo" + line + "' class='tooltiptext'></span></td>");
                                 for (int i = 4; i <= cols; i++) {
                                     index = 0;
                                     int flag = 0;
@@ -144,7 +144,7 @@ public class editSubSelection extends HttpServlet {
                                     + "<br><input class='btn-primary btn' type='submit' style='width: 200px;' value='Save Details' align='center'>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form><br><br><style type='text/css'>\n"
-                                    + "@import url('css/checkbox.css');\n"
+                                    + "@import url('css/checkbox.css');@import url('css/spinner.css');"
                                     + "</style>", 0));
                             out.print("<script>function batchdisable(id) {"
                                     + "if(document.getElementById(id).checked)"

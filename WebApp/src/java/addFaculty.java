@@ -96,7 +96,7 @@ public class addFaculty extends HttpServlet {
                     }
                 } else {
                     messages a = new messages();
-                    a.failed(request, response, "Teacher Name cannot be smaller than 5 letters", "editAddStudent?flow=add");
+                    a.failed(request, response, "Teacher's Name cannot be smaller than 5 letters", "editAddStudent?flow=add");
                 }
                 break;
             case 0:

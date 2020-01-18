@@ -245,6 +245,7 @@ public class homepage extends HttpServlet {
                         }
                         out.print("<th>Average</th></thead><tr>");
                         try {
+                            count = 0;
                             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
                             for (int i = 0; i < subs.length; i++) {
                                 PreparedStatement ps = con.prepareStatement("select count(facultytimetable.scheduleID) from facultytimetable inner join timetable on facultytimetable.scheduleID = timetable.scheduleID where subjectID = ? and batchID = ?");
@@ -272,10 +273,10 @@ public class homepage extends HttpServlet {
                             }
                         } catch (SQLException e) {
                         }
-                        out.print("<td>" + String.format("%.02f", total) + "%</td><tr></table>"
+                        out.print("<td>" + String.format("%.02f", ((float) total / (float) count)) + "%</td><tr></table>"
                                 + "</div>"
                                 + "</div>"
-                                + "</div><div class='row'>");
+                                + "</div><br><div class='row'>");
                         labs = no_of_labs();
                         for (int i = 1; i <= labs; i++) {
                             String testing[] = get_next_stud_schedule(request, i, prn);
@@ -390,7 +391,7 @@ public class homepage extends HttpServlet {
                                 header += "</tr>";
                                 out.print(tablehead(header));
                                 while (rs1.next()) {
-                                    out.print("<tr align='center' onclick = \"javascript:setContent('/Cerberus/studSubAttendance?sub=" + rs1.getString(7) + "');\">");
+                                    out.print("<tr align='center'>");
                                     LocalDate date = LocalDate.now()
                                             .with(WeekFields.ISO.weekBasedYear(), rs1.getInt(1)) // year
                                             .with(WeekFields.ISO.weekOfWeekBasedYear(), rs1.getInt(2)) // week of year
@@ -401,7 +402,7 @@ public class homepage extends HttpServlet {
                                     }
                                     out.print("</tr>");
                                 }
-                                out.print(tableend(null, 0));
+                                out.print(tableend(null, 1));
                             } else {
                                 out.print("You haven't attended any labs yet");
                             }

@@ -99,7 +99,7 @@ public class studSubAttendance extends HttpServlet {
                                 roll = rs.getString(1);
                                 name = rs.getString(2);
                             }
-                            out.print(tablestart("<b>PRN</b> : " + prn + "<br>" + "<b>Roll</b> : " + roll + "<br>" + "<b>Name</b> : " + name + "<br><b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 0) + "");
+                            out.print(tablestart("<b>PRN</b> : " + prn + "<br>" + "<b>Roll</b> : " + roll + "<br>" + "<b>Name</b> : " + name + "<br><b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 1) + "");
                             String header = "<tr align = center>";
                             header += "<th>Date</th>";
                             header += "<th>Status</th>";
@@ -136,14 +136,14 @@ public class studSubAttendance extends HttpServlet {
                             } else if (dates.length == 1) {
                                 schedules = dates[0][1];
                             }
-                            out.print(tableend("No of Presents : " + (present) + "<br>No of Labs Conducted : " + (dates.length) + "<br>Average Percentage : " + String.format("%.02f", (float)(((float)present / (float)dates.length) * 100)) + "%<br><br>"
+                            out.print(tableend("No of Presents : " + (present) + "<br>No of Labs Conducted : " + (dates.length) + "<br>Average Percentage : " + String.format("%.02f", (float) (((float) present / (float) dates.length) * 100)) + "%<br><br>"
                                     + "<input type='submit' value='Save' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='prn' value='" + prn + "' hidden>"
                                     + "<input type='text' name='schedules' value='" + schedules + "' hidden>"
                                     + "<input type='text' name='subjectid' value='" + subjectID + "' hidden>"
                                     + "</form><style type='text/css'>\n"
                                     + "@import url('css/checkbox.css');\n"
-                                    + "</style>", 0));
+                                    + "</style>", 1));
 
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
@@ -172,14 +172,14 @@ public class studSubAttendance extends HttpServlet {
                             while (rs.next()) {
                                 batchID = rs.getInt(1);
                             }
-                            ps = con.prepareStatement("SELECT (STR_TO_DATE(concat((select week.year from week where timetable.weekID = week.weekID),' ',(select week.week from week where timetable.weekID = week.weekID)-1,' ',timetable.dayID),'%X %V %w')) as date,"
+                            ps = con.prepareStatement("SELECT (select week.year from week where timetable.weekID = week.weekID) as year ,(select week.week from week where timetable.weekID = week.weekID) as week ,timetable.dayID as dayid,"
                                     + " timetable.scheduleID as ScheduleID "
                                     + "from facultytimetable\n"
                                     + "INNER JOIN timetable\n"
                                     + "on timetable.scheduleID=facultytimetable.scheduleID\n"
                                     + "INNER JOIN slot\n"
                                     + "on slot.slotID=timetable.slotID\n"
-                                    + "where timetable.subjectID =? and timetable.batchID=? order by date,slot.startTime;");
+                                    + "where timetable.subjectID =? and timetable.batchID=? order by year and week and dayid and slot.startTime;");
                             ps.setString(1, subjectID);
                             ps.setInt(2, batchID);
                             rs = ps.executeQuery();
@@ -192,8 +192,12 @@ public class studSubAttendance extends HttpServlet {
                             rs.previous();
                             int index = 0;
                             while (rs.next()) {
-                                dates[index][0] = rs.getString(1);
-                                dates[index][1] = rs.getString(2);
+                                LocalDate date = LocalDate.now()
+                                        .with(WeekFields.ISO.weekBasedYear(), rs.getInt(1)) // year
+                                        .with(WeekFields.ISO.weekOfWeekBasedYear(), rs.getInt(2)) // week of year
+                                        .with(WeekFields.ISO.dayOfWeek(), rs.getInt(3));
+                                dates[index][0] = date + "";
+                                dates[index][1] = rs.getString(4);
                                 index++;
                             }
                             ps = con.prepareStatement("select subject.subject from subject where subject.subjectID = ?");
@@ -210,7 +214,7 @@ public class studSubAttendance extends HttpServlet {
                             if (rs.next()) {
                                 batch = rs.getString(1);
                             }
-                            out.print(tablestart("<b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 0) + "");
+                            out.print(tablestart("<b>" + subject + " - " + batch + "</b>", "hover", "studDetails", 1) + "");
                             String header = "<tr align = center>";
                             header += "<th>Date</th>";
                             header += "<th>Status</th>";
@@ -237,9 +241,10 @@ public class studSubAttendance extends HttpServlet {
                             if (temp == 0) {
                                 out.print("<tr><td colspan=2>No Labs were conducted</td></tr>");
                             }
-                             out.print(tableend("No of Presents : " + (present) + "<br>No of Labs Conducted : " + (dates.length) + "<br>Average Percentage : " + String.format("%.02f", (float)(((float)present / (float)dates.length) * 100)) + "%<br><br>", 0));
+                            out.print(tableend("No of Presents : " + (present) + "<br>No of Labs Conducted : " + (dates.length) + "<br>Average Percentage : " + String.format("%.02f", (float) (((float) present / (float) dates.length) * 100)) + "%<br><br>", 1));
                             con.close();
                         } catch (SQLException | ClassNotFoundException e) {
+                            e.printStackTrace();
                             errorLogger(e.getMessage());
                             error(e.getMessage());
                         }

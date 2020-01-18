@@ -84,12 +84,9 @@ public class Mailer implements Runnable {
             folderInbox.close(expunge);
             store.close();
         } catch (NoSuchProviderException ex) {
-            System.out.println("No provider.");
             ex.printStackTrace();
         } catch (MessagingException ex) {
-            System.out.println("Could not connect to the message store.");
             ex.printStackTrace();
         }
-        System.out.println("And God said It is done");
     }
 }

@@ -866,7 +866,7 @@ public class AttFunctions {
     }
 
     public static int getWeekID(int week, int year) {
-        int weekID = 0;
+        int weekID = -1;
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -892,7 +892,6 @@ public class AttFunctions {
         } catch (ClassNotFoundException | SQLException e) {
             errorLogger(e.getMessage());
         }
-        System.out.println(weekID);
         return weekID;
     }
 

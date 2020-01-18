@@ -76,7 +76,8 @@ public class editStudDetails extends HttpServlet {
                                 line++;
                                 out.print("<tr id='row" + line + "'>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='number' style='padding: 3px 0 3px 20px; border-radius: 4px; border: 2px solid green; background: #e6e6e6;' id='roll" + line + "' name='roll" + line + "' min='1' max='150' onkeyup='checkRoll(this.id)' onchange='checkRoll(this.id)' value = '" + String.format("%03d", Integer.parseInt(rs.getString(1))) + "'></td>");
-                                out.print("<td style='vertical-align : middle;text-align:center;'>" + rs.getString(2) + "<input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
+                                out.print("<td style='vertical-align : middle;text-align:center;' onmouseover=\"setImg('" + rs.getString(2) + "','photo" + line + "')\" class='tooltipp'>" + rs.getString(2) + "<span id = 'photo" + line + "' class='tooltiptext'></span>"
+                                        + "<input type='text' id='prn" + line + "' name='prn" + line + "' value='" + rs.getString(2) + "' hidden></td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='text' class='editSubjectForm' name='name" + line + "' value='" + rs.getString(3) + "'></td>");
                                 out.print("<td style='vertical-align : middle;text-align:center;'><input type='email' style='border: 2px solid green;'class='editSubjectForm' id='email" + line + "' name='email" + line + "' onkeyup='checkdupEmail(" + line + ")' value='" + rs.getString(4) + "'><td style='vertical-align : middle;text-align:center;'>");
                                 if (rs.getString(5) != null) {
@@ -93,14 +94,15 @@ public class editStudDetails extends HttpServlet {
                                 }
                                 out.print("</td>");
                                 out.print("<td><input type='button' value='Reset' class='btn btn-primary' style='width: 100px;' align='center' "
-                                        + "onclick=\"javascript:resetPass('"+rs.getString(2)+"');\"></td>");
+                                        + "onclick=\"javascript:resetPass('" + rs.getString(2) + "');\"></td>");
                                 out.print("</tr>");
                             }
                             out.print(tableend("No of students : " + line + "<br><br><div id='validations' style='color:red;font-size:14px;'><br></div>"
                                     + "<input type='submit' value='Save Details' class='btn btn-primary' style='width: 200px;' align='center' id='subBtn'> <br><br>"
                                     + "<input type='text' name='division' value='" + classID + "' hidden>"
                                     + "</form><style type='text/css'>\n"
-                                    + "@import url('css/checkbox.css');\n"
+                                    + "@import url('css/checkbox.css');"
+                                    + "@import url('css/spinner.css');"
                                     + "</style>", 0));
                             out.print("<script>"
                                     + "function resetPass(prn){"

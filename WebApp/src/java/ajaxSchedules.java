@@ -68,7 +68,6 @@ public class ajaxSchedules extends HttpServlet {
                             out.print(tablehead(header));
                             rs.previous();
                             while (rs.next()) {
-                                System.out.println(rs.getInt(1));
                                 out.print("<tr onclick=\"javascript:setContent('/Cerberus/newFacultyTimetable?scheduleid=" + rs.getString(1) + "');\">");
                                 String schedule[] = get_schedule_det(rs.getInt(1));
                                 out.print("<td>" + schedule[0] + "</td>");
@@ -81,7 +80,7 @@ public class ajaxSchedules extends HttpServlet {
                             }
                             out.print(tableend(null, 1));
                         } else {
-                            out.print("No Lab Sessions were Scheduled for " + subject + " " + batch + ".<br><br>You can schedule Lab Sessions from by <br><br>"
+                            out.print("No Lab Sessions were Scheduled for " + subject + " " + batch + ".<br><br>You can schedule Lab Sessions by "
                                     + "<a href=\"javascript:setContent('/Cerberus/editTimetable');\">Editing Timetable</a>");
                         }
                         con.close();

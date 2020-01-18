@@ -121,19 +121,19 @@ public class attendance extends HttpServlet {
                                 + "where student.PRN in (select rollcall.PRN from rollcall where rollcall.classID = " + classID + ") "
                                 + "GROUP BY studentsubject.PRN "
                                 + "ORDER by LENGTH(rollcall.rollNo),rollcall.rollNo";
-                        System.out.println("hello");
-                        System.out.println(sql);
                         ps = con.prepareStatement(sql);
                         rs = ps.executeQuery();
                         ResultSetMetaData rsm = rs.getMetaData();
                         int cols = rsm.getColumnCount();
                         if (rs.next()) {
                             int line = 0;
-                            out.print(tablestart("Student Average Attendance<br>Percentage Criteria : "
-                                    + "<input type='number' min='0' max='100'  class=\"editSelectTimeTable\" id = 'criteriaPerc' value='80' "
-                                    + "onkeyup='checkPerc(this.value)' onchange='checkPerc(this.value)'>"
-                                    + "<br><input type='button' value='Download Attendance' class = 'btn btn-primary' onclick=\"document.getElementById('downattendance').href='downPercAtt?criteria='+document.getElementById('criteriaPerc').value; document.getElementById('downattendance').click();\"/><br>"
-                                    + "<div id='validations' style='color:red;font-size:14px;'>*Only Students with Average Attendance lesser than Criteria</div><a id='downattendance' href='downAttendance'></a>", "hover", "studDetails", 1));
+                            out.print("<style type='text/css'>\n"
+                                    + "@import url('css/spinner.css');\n"
+                                    + "</style>" + tablestart("Student Average Attendance<br>Percentage Criteria : "
+                                            + "<input type='number' min='0' max='100'  class=\"editSelectTimeTable\" id = 'criteriaPerc' value='80' "
+                                            + "onkeyup='checkPerc(this.value)' onchange='checkPerc(this.value)'>"
+                                            + "<br><input type='button' value='Download Attendance' class = 'btn btn-primary' onclick=\"document.getElementById('downattendance').href='downPercAtt?criteria='+document.getElementById('criteriaPerc').value; document.getElementById('downattendance').click();\"/><br>"
+                                            + "<div id='validations' style='color:red;font-size:14px;'>*Only Students with Average Attendance lesser than Criteria</div><a id='downattendance' href='downAttendance'></a>", "hover", "studDetails", 1));
                             header = "<tr>";
                             header += "<th> Roll </th>";
                             header += "<th> Name </th>";
@@ -149,7 +149,7 @@ public class attendance extends HttpServlet {
                                 String prn = rs.getString(1);
                                 out.print("<tr id='row" + line + "'>");
                                 out.print("<td>" + rs.getString(2) + "</td>");
-                                out.print("<td>" + rs.getString(3) + "</td>");
+                                out.print("<td onmouseover=\"setImg('" + prn + "','photo" + line + "')\" class='tooltipp'>" + rs.getString(3) + "<span id = 'photo" + line + "' class='tooltiptext'></span></td>");
                                 float total = 0;
                                 float count = 0;
                                 for (int i = 4; i <= cols; i++) {

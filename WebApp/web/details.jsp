@@ -16,7 +16,6 @@
                 if (access == 0) {
                     int count = 0;
                     String prn = (String) session.getAttribute("user");
-                    System.out.println(prn);
                     try {
                         Class.forName("com.mysql.jdbc.Driver");
                         Connection con = DriverManager.getConnection("jdbc:mysql://172.21.170.14:3306/cerberus?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "cerberus", "abc@123");
@@ -59,18 +58,14 @@
                             }
                             out.print("</select>\";return batch;}");
                             PreparedStatement ps2 = con.prepareStatement("select classID from rollcall where prn = ?");
-                            System.out.println("PRN :" + prn);
                             ps2.setString(1, prn);
                             ResultSet rs2 = ps2.executeQuery();
                             int classID = 0;
                             while (rs2.next()) {
                                 classID = rs2.getInt(1);
                             }
-                            System.out.println("classID :" + classID);
                             out.print("var division;");
                             int sem = AttFunctions.getSem(oddeve, classID);
-                            System.out.println(classID);
-                            System.out.println(sem);
                             PreparedStatement ps3 = con.prepareStatement("Select subjectID,abbreviation from subject where sem = ?");
                             ps3.setInt(1, sem);
                             ResultSet rs3 = ps3.executeQuery();

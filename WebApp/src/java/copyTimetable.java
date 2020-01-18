@@ -25,7 +25,6 @@ public class copyTimetable extends HttpServlet {
             case 1:
                 String asdf = request.getParameter("modweekyear");
                 String splitt[] = asdf.split("-W");
-                System.out.println("mod week year : "+asdf);
                 int modyear = Integer.parseInt(splitt[0]);
                 int modweek = Integer.parseInt(splitt[1]);
                 int year = Integer.parseInt(request.getParameter("year"));
@@ -45,7 +44,6 @@ public class copyTimetable extends HttpServlet {
                         rs1.first();
                         rs1.previous();
                         while (rs1.next()) {
-                            System.out.println(rs1.getInt(1) + "," + rs1.getInt(2) + "," + rs1.getInt(3));
                             try {
                                 PreparedStatement ps = con.prepareStatement("DELETE FROM timetable where slotID = ? and labID = ? and weekID = ? and dayID = ?");
                                 ps.setInt(1, rs1.getInt(2));

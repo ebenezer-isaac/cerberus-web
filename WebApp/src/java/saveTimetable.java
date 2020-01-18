@@ -40,7 +40,6 @@ public class saveTimetable extends HttpServlet {
                         }
                         int year = Integer.parseInt(request.getParameter("year"));
                         int weekID = getWeekID(week, year);
-                        System.out.println(weekID);
                         PreparedStatement ps4 = con.prepareStatement("SELECT timetable.slotID,"
                                 + "MAX(CASE WHEN dayID = 1 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Monday, "
                                 + "MAX(CASE WHEN dayID = 2 THEN concat(timetable.subjectID,' , ',timetable.batchID) END) as Tuesday, "

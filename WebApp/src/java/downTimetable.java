@@ -64,7 +64,6 @@ public class downTimetable extends HttpServlet {
                         year = Integer.parseInt(weekYear[0]);
                     }
                     if (week != 0 && year != 0) {
-                        System.out.println("printing dates");
                         YearWeek weekYeardate = YearWeek.of(year, week);
                         mon = weekYeardate.atDay(DayOfWeek.MONDAY);
                         tue = weekYeardate.atDay(DayOfWeek.TUESDAY);
@@ -102,7 +101,6 @@ public class downTimetable extends HttpServlet {
                             lines = new Object[no_of_slots + 1][0];
                             XSSFSheet sheet = wb.createSheet("Lab - " + labid);
                             if (week != 0 && year != 0) {
-                                System.out.println("printing dates");
                                 Object[] head = new Object[]{"Start Time", "End Time", mon + "", tue + "", wed + "", thu + "", fri + "", sat + ""};
                                 data.put("1", head);
                             } else {

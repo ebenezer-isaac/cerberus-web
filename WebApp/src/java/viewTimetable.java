@@ -161,9 +161,11 @@ public class viewTimetable extends HttpServlet {
                         while (rs.next()) {
                             classID = rs.getInt(1);
                         }
+                        out.print("</select><br><br>");
                     }
                     con.close();
                 } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
                     errorLogger(e.getMessage());
                 }
                 out.print("<div id='lab_timetable'>");
@@ -286,6 +288,7 @@ public class viewTimetable extends HttpServlet {
             con.close();
 
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             errorLogger(e.getMessage());
             timetable = e.getMessage();
         }
@@ -411,6 +414,7 @@ public class viewTimetable extends HttpServlet {
             }
             timetable += (tableend(null, 0));
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             errorLogger(e.getMessage());
         }
         return timetable;

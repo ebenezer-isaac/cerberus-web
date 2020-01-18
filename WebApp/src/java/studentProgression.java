@@ -22,7 +22,7 @@ public class studentProgression extends HttpServlet {
                 case 1:
                     out.println("Thank You for showing your interest"
                             + "<br><br>"
-                            + "<b>This section of the website is still under construction.<br>"
+                            + "<b>This section of the website is still under testing.<br>"
                             + "You will be notified when this page is available."
                             + "<br><br></b>"
                             + "The following features have will be implemented here :<br>"
@@ -36,7 +36,7 @@ public class studentProgression extends HttpServlet {
                             + "<br>Please contact anyone of us at:"
                             + "<br>+91 89807 77667"
                             + "<br>+91 98791 92084"
-                            + "<br>+91 99249 58115");
+                            + "<br><br><a href=\"http://172.21.170.14/phpmyadmin/db_export.php?db=cerberus\" target=\"_blank\">Click here to export Database manually</a><br>Username : cerberus<br>Password : abc@123");
                     break;
                 case 0:
                     out.print(kids());

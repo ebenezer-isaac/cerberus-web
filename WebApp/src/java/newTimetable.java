@@ -43,7 +43,7 @@ public class newTimetable extends HttpServlet {
             while (rs.next()) {
                 masterWeekScheduleCount = rs.getInt(1);
             }
-            if (currentWeekScheduleCount < masterWeekScheduleCount) {
+            if (currentWeekScheduleCount < masterWeekScheduleCount - 10) {
                 PreparedStatement ps9 = con.prepareStatement("SELECT scheduleID, slotID, dayID, labID FROM timetable where weekID = ?");
                 ps9.setInt(1, 0);
                 ResultSet rs1 = ps9.executeQuery();

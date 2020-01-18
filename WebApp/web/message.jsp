@@ -23,10 +23,9 @@
         fullpage = "false";
     } else if (type.equals("login1")) {
         if (access == 1 || access == 0) {
-            redirect = "false";
+            redirect = "true";
             head = "Login Successfull";
-            body = "<font size = '3'>We are still at testing phase.<br><br>If you find any bugs <i class='fas fa-bug fa-lg'></i> , please feel free to report to us. "
-                    + "We have hungry developers looking to eat some.<br><br>We would also love to hear your suggestions.</font>";
+            body = "Populating your profile";
             url = "homepage";
             sec = "2";
             fullpage = "true";

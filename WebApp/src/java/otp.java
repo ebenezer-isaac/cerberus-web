@@ -70,9 +70,6 @@ public class otp extends HttpServlet {
                         String dateInString = rs.getString(1) + " " + rs.getString(2);
                         Date datetime = sdf.parse(dateInString);
                         long diff = ((now.getTime() - datetime.getTime()) / 1000) / 60;
-                        System.out.println(dateInString);
-                        System.out.println(datetime);
-                        System.out.println(diff);
                         if (diff < 10) {
                             spam = 1;
                         }
@@ -80,8 +77,6 @@ public class otp extends HttpServlet {
                         errorLogger(e.getMessage());
                     }
                 }
-                System.out.println("spam :" + spam);
-                System.out.println("email:" + email_count);
                 if (spam == 0 && email_count == 1) {
                     try {
                         this.rawotp = AttFunctions.generateOTP();
